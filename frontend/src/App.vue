@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<Header></Header>
-		<div class="gradient r">
+		<!-- <div class="gradient r">
 			<div class="close-button" v-bind:style="{ gridTemplateColumns: closeButtonSize }">
 				<p 
 					class="close" 
@@ -21,8 +21,20 @@
 					:authenticated="authenticated">
 				</router-view>
 			</div>
-		</div>
-		<Footer></Footer>
+		</div> -->
+		<g-signin-button
+				v-if="isEmpty(user)"
+				:params="googleSignInParams"
+				@success="onGoogleSignInSuccess"
+				@error="onGoogleSignInError"
+          	>
+        	<button class="btn btn-block btn-success">
+              	Google Signin
+        	</button>
+        </g-signin-button>
+        <user-panel v-else :user="user"></user-panel>
+		<!-- <Footer></Footer> -->
+		
 	</div>
 </template>
 
@@ -31,11 +43,13 @@ import Header from './components/Header';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
 import AuthService from './auth/auth2'
+import axios from 'axios'
+import UserPanel from '@/components/UserPanel'
 const auth = new AuthService()
       
 export default {
 	name: 'App',
-	components: { Header, Footer, Menu },
+	components: { Header, Footer, Menu, UserPanel },
 	data () {
         return {
 			closeButtonSize: "300px auto",
@@ -45,15 +59,19 @@ export default {
 			textClose: "X СВЕРНУТЬ МЕНЮ",
 			msg: 'Welcome to Your Vue.js App',
 			auth,
-     		authenticated: auth.authenticated
+			authenticated: auth.authenticated,
+			user: {},
+			googleSignInParams: {
+				client_id: '418428102857-0ja9r62ggu43baf67gdfufoj6mjntku0.apps.googleusercontent.com'
+			}
     }
   },
-  created () {
-    auth.authNotifier.on('authChange', authState => {
-      this.authenticated = authState.authenticated
-    })
-    auth.renewSession()
-  },
+//   created () {
+//     auth.authNotifier.on('authChange', authState => {
+//       this.authenticated = authState.authenticated
+//     })
+//     auth.renewSession()
+//   },
 	computed: {
 		closeM: function () {
 			if(this.close){
@@ -78,6 +96,30 @@ export default {
 			this.close = !this.close;
 			console.log(this.close);
 		},
+			onGoogleSignInSuccess (resp) {
+				
+		const token = resp.Zi.access_token
+		console.log(token)
+		// После успешного входа через Google,
+		// отправляем токен доступа на бэкэнд и получаем взамен
+		// пользователя и JWT токен
+		// P.S. JWT токен в нашем примере не нужен, поэтому его не сохраняем
+		axios.post('http://localhost:8000/auth/google/', {
+			access_token: token
+		})
+			.then(resp => {
+			this.user = resp.data.user
+			})
+			.catch(err => {
+			console.log(err.response)
+			})
+		},
+		onGoogleSignInError (error) {
+		console.log('OH NOES', error)
+		},
+		isEmpty (obj) {
+		return Object.keys(obj).length === 0
+		}
     }
 }
 </script>

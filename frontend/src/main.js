@@ -4,11 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
+import GSignInButton from 'vue-google-signin-button'
 
 Vue.config.productionTip = false
 
-// import auth from '@/auth'
-// Vue.use(auth)
+Vue.use(GSignInButton)
 
 /* eslint-disable no-new */
 new Vue({
