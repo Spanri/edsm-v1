@@ -29,6 +29,7 @@ import Header from './components/Header';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
 import axios from 'axios'
+import {USER_REQUEST} from './store/mutation-types'
       
 export default {
 	name: 'App',
@@ -41,7 +42,12 @@ export default {
 			close: false,
 			textClose: "X СВЕРНУТЬ МЕНЮ",
     	}
-  	},
+	},
+	created: function () {
+		if (this.$store.getters.isAuthenticated) {
+		this.$store.dispatch(USER_REQUEST)
+		}
+	},
 	computed: {
 		closeM: function () {
 			if(this.close){

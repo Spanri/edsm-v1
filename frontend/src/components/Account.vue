@@ -1,11 +1,11 @@
 <template>
 	<div class="account">
-		<div class="headline">
-		<h1>Your doge profile</h1>
+		<div class="account2">
+			<h2 v-if="profile.name">
+				{{profile.title}} {{profile.name}}
+			</h2>
+			<p>Это аккаунт.</p>
 		</div>
-		<p v-if="profile.name">
-		<strong>Name:</strong> {{profile.title}} {{profile.name}}
-		</p>
 	</div>
 </template>
 
@@ -24,8 +24,11 @@ export default {
 	width: 100%;
 	background: white;
 }
-.headline{
-	margin-top: 1em;
-	display: flex;
+.account > *{
+	padding: 25px;
+}
+.account2{
+	max-width: 900px;
+	margin: auto;
 }
 </style>
