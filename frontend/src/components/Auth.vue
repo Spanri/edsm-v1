@@ -5,9 +5,5 @@
 <script>
 export default {
 	name: 'auth',
-	props: ['auth'],
-	created () {
-		this.auth.handleAuthentication()
-	}
 }
 </script>

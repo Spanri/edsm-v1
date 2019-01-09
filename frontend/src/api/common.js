@@ -1,9 +1,18 @@
-import axios from 'axios'
-
-export const HTTP = axios.create({
-    baseURL: 'http://localhost:8000/'
+const mocks = {
+    'auth': { 'POST': { token: 'This-is-a-mocked-token' } },
+    'user/me': { 'GET': { name: 'doggo', title: 'sir' } }
+}
+  
+const apiCall = ({url, method, ...args}) => new Promise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        resolve(mocks[url][method || 'GET'])
+        console.log(`Mocked '${url}' - ${method || 'GET'}`)
+        console.log('response: ', mocks[url][method || 'GET'])
+      } catch (err) {
+        reject(new Error(err))
+      }
+    }, 1000)
 })
-
-export const API_URL = 'http://localhost:3001/'
-export const LOGIN_URL = API_URL + 'sessions/create/'
-export const SIGNUP_URL = API_URL + 'users/'
+  
+export default apiCall

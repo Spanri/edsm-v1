@@ -5,18 +5,41 @@ import Auth from '@/components/Auth'
 
 Vue.use(Router)
 
+const ifNotAuthenticated = (to, from, next) => {
+	if (!store.getters.isAuthenticated) {
+	  next()
+	  return
+	}
+	next('/')
+}
+  
+  const ifAuthenticated = (to, from, next) => {
+	if (store.getters.isAuthenticated) {
+	  next()
+	  return
+	}
+	next('/login')
+}
+
 const router = new Router({
 	mode: 'history',
 	routes: [
 		{
 			path: '/',
 			name: 'main',
-			component: Main
+			component: Auth,
 		},
 		{
 			path: '/auth',
 			name: 'auth',
-			component: Auth
+			component: Main,
+			beforeEnter: ifNotAuthenticated,
+		},
+		{
+			path: '/account',
+			name: 'account',
+			component: UserPanel,
+			beforeEnter: ifAuthenticated,
 		}
 	]
 })

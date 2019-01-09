@@ -1,3 +1,8 @@
-export const ADD_NOTE = 'ADD_NOTE'
-export const REMOVE_NOTE = 'REMOVE_NOTE'
-export const SET_NOTES = 'SET_NOTES'
+export const AUTH_LOGOUT = 'AUTH_LOGOUT'
+export const AUTH_REQUEST = 'AUTH_REQUEST'
+export const AUTH_ERROR = 'AUTH_ERROR'
+export const AUTH_SUCCESS = 'AUTH_SUCCESS'
+
+export const USER_REQUEST = 'USER_REQUEST'
+export const USER_SUCCESS = 'USER_SUCCESS'
+export const USER_ERROR = 'USER_ERROR'

@@ -1,44 +1,44 @@
 <template>
 	<div class="main">
-		<h4 v-if="authenticated">
-			You are logged in!
-		</h4>
-		<h4 v-if="!authenticated">
-			You are not logged in! Please <a @click="auth.login()">Log In</a> to continue.
-		</h4>
+		<form class="login" @submit.prevent="login">
+			<h1>Sign in</h1>
+			<label>User name</label>
+			<input required v-model="username" type="text" placeholder="Snoopy"/>
+			<label>Password</label>
+			<input required v-model="password" type="password" placeholder="Password"/>
+			<hr/>
+			<button type="submit">Login</button>
+		</form>
+		<button type="submit" @click="logout()">Logout</button>
 	</div>
 </template>
 
 <script>
-import axios from 'axios'
+import {AUTH_REQUEST} from 'actions/auth'
 
 export default {
 	name: 'main',
 	data () {
 		return {
-			stories: []
+
 		}
 	},
-	props: ['auth', 'authenticated'],
 	computed: {
-        userName(){
-            if(this.$auth.isAuthenticated()){
-                return this.$auth.user.name;
-            }
-            else {
-                console.log(this.$auth.isAuthenticated());
-                return 'Нет имени';
-            }
-        }
-	},
-	mounted() {
-		axios.get('https://api.storyblok.com/v1/cdn/stories?starts_with=tp&excluding_fields=body&excluding_ids=48471,48547,60491&token=dtONJHwmxhdJOwKxyjlqAgtt').then((res) => {
-			this.stories = res.data.stories
-		})
+
 	},
 	methods: {
-		getStoryLink(story) {
-			return `https://www.storyblok.com/${story.full_slug}`
+		login() {
+			const { username, password } = this;
+			this.$store.dispatch(AUTH_REQUEST, { username, password })
+			.then(() => {
+				this.$router.push('/');
+			});
+		},
+		logout() {
+			this.$store.dispatch(AUTH_LOGOUT)
+			.then(() => {
+				this.$router.push('/login')
+			});
 		}
 	}
 }
