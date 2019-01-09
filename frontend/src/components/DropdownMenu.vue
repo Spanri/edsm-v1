@@ -1,55 +1,89 @@
 <template>
-    <div>
-        <button
-            @click="changeMenuVisibility">
-            sgsdfg
-        </button>
-        <div class="left-dropdown-menu" v-if = "visibleStatus">
-            <transition-group
-                    name="slideLeft">
-                <li class="dropdown-menu-item"
-                    v-for = "item in options"
-                    :key="item"
-                    @click="selectOptionHandler">
-                    {{item}}
-                </li>
-            </transition-group>
+    <div class="dropdownMenu">
+        <img 
+            class="profile-img"
+            src="../assets/logo.png"
+            alt="Профиль"
+            @click="changeMenuVisibility"
+        >
+        <div class="a" v-if = "visibleStatus">
+            <div class="left-dropdown-menu" v-if = "visibleStatus">
+                <transition-group
+                        name="slideLeft">
+                    <li class="registr"
+                        v-for = "item in options"
+                        :key="item"
+                        @click="dropdownMenuClick(item)">
+                        {{item}}
+                    </li>
+                </transition-group>
+            </div>
         </div>
 	</div>
 </template>
 
 <script>
-import DropdownMenu from './DropdownMenu';
 import {AUTH_LOGOUT} from '../store/mutation-types'
 
 export default {
     data: function () {
         return {
             visibleStatus: false,
-            options: ['options'],
+        }
+    },
+    props: ['options'],
+    computed: {
+        profileImg() {
+            return './assets/logo.png';
         }
     },
     methods: {
         changeMenuVisibility: function ( event ) {
             this.visibleStatus = !this.visibleStatus
         },
-        selectOptionHandler: function ( event ) {
+        logout () {
+			this.$store.dispatch(AUTH_LOGOUT)
+			.then(() => {
+				this.$router.push('/auth')
+			});
+        },
+        dropdownMenuClick(item) {
             this.visibleStatus = false
-            this.$parent.$emit ( 'menuSelect', event.target.innerHTML.trim() )
+            switch(item) {
+                case 'Профиль':
+                    this.$router.push('/account')
+                    break;
+                case 'Выйти':
+                    this.logout();
+                    break;
+                default:
+                    break;
+            }
         }
     },
 }
 </script>
 
 <style>
+.dropdownMenu {
+    position: relative;
+}
+.profile-img {
+    width: 40px;
+}
+
+.profile-img:hover{
+    cursor: pointer;
+}
+
 .dropdown-menu-item {
-    position:relative;
-    display:block;
-    text-decoration:none;
+    position: absolute;
+    display: block;
+    text-decoration: none;
     color:#555;
     padding: 10px;
     background-color:#ddd;
-    cursor:pointer;
+    cursor: pointer;
     text-overflow: ellipsis;
     animation: show-item-left 1s;
 }
@@ -66,13 +100,40 @@ export default {
 }
 
 .left-dropdown-menu {
-  position:fixed;
-  top:70px;
-  left:10px;
-  z-index:300;
-  margin:0;
-  background-color:transparent;
-  max-height:80%;
-  overflow:auto;
+    position: absolute;
+    top: 45px;
+    right: 0px;
+    z-index: 300;
+    margin: 0;
+    background-color: #7cb0c1;
+    min-width: 150px;
+    /* max-height: 80%; */
+    overflow: auto;
+}
+
+.registr{
+    text-align: center;
+    list-style-type: none;
+    border: 0;
+    padding: 10px;
+    margin: 0;
+    background-color: #7cb0c1;
+    color: white;
+}
+.a {
+    z-index: 300;
+}
+.a::after {
+    content: ''; 
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    border: 15px solid transparent;
+    border-bottom: 15px solid #7cb0c1;
+   }
+.registr:hover{
+    cursor: pointer;
+    background-color: #6393a3;
+    transition: background-color .3s ease-out;
 }
 </style>

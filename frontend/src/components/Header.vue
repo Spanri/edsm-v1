@@ -34,19 +34,9 @@
                     @click="login()">
                     Log In
                 </button>
-                <div v-else>
-                    <dropdown-menu 
-                        :options="mainMenuOptions">
-                    </dropdown-menu>
-                    <!-- <img 
-                        :src="userPicture"
-                        class="profile-img"
-                        alt="Профиль"
-                        @click="searchMethod()"
-                    > -->
-                    <!-- <span class="text-muted font-weight-light px-2">{{userName}}</span> -->
-                    <button type="button" class="registr" @click="logout()">Log out</button>
-                </div>
+                <dropdown-menu v-else
+                    :options="mainMenuOptions">
+                </dropdown-menu>
                 
             </div>
         </div>
@@ -64,11 +54,11 @@ export default {
         return {
             search: '',
             mainMenuOptions: [
-                "component props",
+                "Профиль",
                 "component data",
                 "component methods",
                 "component events",
-                "Vue instance"
+                "Выйти"
             ],
         }
 	},
@@ -92,7 +82,7 @@ export default {
 			.then(() => {
 				this.$router.push('/auth')
 			});
-		}
+        },
     }
 }
 </script>

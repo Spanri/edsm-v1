@@ -29,11 +29,10 @@ import Header from './components/Header';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
 import axios from 'axios'
-import UserPanel from './components/UserPanel'
       
 export default {
 	name: 'App',
-	components: { Header, Footer, Menu, UserPanel },
+	components: { Header, Footer, Menu },
 	data () {
         return {
 			closeButtonSize: "300px auto",

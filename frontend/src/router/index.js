@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
 import Auth from '@/components/Auth'
-import UserPanel from '@/components/UserPanel'
+import Account from '@/components/Account'
 import store from '../store'
 
 Vue.use(Router)
@@ -20,7 +20,7 @@ const ifNotAuthenticated = (to, from, next) => {
 	  next()
 	  return
 	}
-	next('/login')
+	next('/auth')
 }
 
 const router = new Router({
@@ -29,18 +29,18 @@ const router = new Router({
 		{
 			path: '/',
 			name: 'main',
-			component: Auth,
+			component: Main,
 		},
 		{
 			path: '/auth',
 			name: 'auth',
-			component: Main,
+			component: Auth,
 			beforeEnter: ifNotAuthenticated,
 		},
 		{
 			path: '/account',
 			name: 'account',
-			component: UserPanel,
+			component: Account,
 			beforeEnter: ifAuthenticated,
 		}
 	]

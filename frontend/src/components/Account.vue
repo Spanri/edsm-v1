@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="account">
 		<div class="headline">
 		<h1>Your doge profile</h1>
 		</div>
@@ -19,6 +19,11 @@ export default {
 </script>
 
 <style>
+.account{
+    height: 100%;
+	width: 100%;
+	background: white;
+}
 .headline{
 	margin-top: 1em;
 	display: flex;
