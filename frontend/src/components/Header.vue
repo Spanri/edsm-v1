@@ -30,18 +30,21 @@
                 </div>
                 <button
                     class="registr"
-                    v-if="!authenticated"
+                    v-if="!isAuthenticated"
                     @click="login()">
                     Log In
                 </button>
                 <div v-else>
-                    <img 
+                    <dropdown-menu 
+                        :options="mainMenuOptions">
+                    </dropdown-menu>
+                    <!-- <img 
                         :src="userPicture"
                         class="profile-img"
                         alt="Профиль"
                         @click="searchMethod()"
-                    >
-                    <span class="text-muted font-weight-light px-2">{{userName}}</span>
+                    > -->
+                    <!-- <span class="text-muted font-weight-light px-2">{{userName}}</span> -->
                     <button type="button" class="registr" @click="logout()">Log out</button>
                 </div>
                 
@@ -51,59 +54,44 @@
 </template>
 
 <script>
-import AuthService from '../auth/auth2'
-
-const auth = new AuthService()
+import DropdownMenu from './DropdownMenu';
+import {AUTH_LOGOUT} from '../store/mutation-types'
 
 export default {
     name: 'Header',
+    components: { DropdownMenu },
     data () {
         return {
             search: '',
-            msg: 'Welcome to Your Vue.js App',
-            // ses: this.$auth.authenticated,
-            auth,
-      		authenticated: auth.authenticated
+            mainMenuOptions: [
+                "component props",
+                "component data",
+                "component methods",
+                "component events",
+                "Vue instance"
+            ],
         }
-	},
-	created () {
-		auth.authNotifier.on('authChange', authState => {
-			this.authenticated = authState.authenticated
-		})
-		auth.renewSession()
 	},
     computed: {
-        reg(){
-            return sessionStorage.getItem('session') == "true" ? true : false;
-            //return this.$auth.isAuthenticated() ? true : false;
-        },
-        userPicture(){
-            if(this.$auth.isAuthenticated()){
-                return $auth.user.picture;
-            }
-            else {
-                return 'https://pp.userapi.com/c851524/v851524410/85b88/2TnUyrh5azw.jpg?ava=1';
-            }
-        },
-        userName(){
-            if(this.$auth.isAuthenticated()){
-                return this.$auth.user.name;
-            }
-            else {
-                console.log(this.$auth.isAuthenticated());
-                return 'Нет имени';
-            }
+        isAuthenticated(){ 
+            return this.$store.getters.isAuthenticated;
         }
+        // userPicture(){
+
+        // },
     },
     methods: {
         searchMethod(){
             console.log(this.search);
         },
 		login () {
-			auth.login()
+			this.$router.push('/auth');
 		},
 		logout () {
-			auth.logout()
+			this.$store.dispatch(AUTH_LOGOUT)
+			.then(() => {
+				this.$router.push('/auth')
+			});
 		}
     }
 }

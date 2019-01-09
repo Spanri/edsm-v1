@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
 import Auth from '@/components/Auth'
+import UserPanel from '@/components/UserPanel'
+import store from '../store'
 
 Vue.use(Router)
 

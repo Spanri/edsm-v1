@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<!-- <Header></Header> -->
+		<Header></Header>
 		<div class="gradient r">
 			<div class="close-button" v-bind:style="{ gridTemplateColumns: closeButtonSize }">
 				<p 
@@ -16,9 +16,7 @@
 			</div>
 			<div class="main-space" v-bind:style="{ gridTemplateColumns: menuSize }">
 				<Menu v-if="closeM == false"></Menu>
-				<router-view
-					:auth="auth"
-					:authenticated="authenticated">
+				<router-view>
 				</router-view>
 			</div>
 		</div>
@@ -31,7 +29,7 @@ import Header from './components/Header';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
 import axios from 'axios'
-import UserPanel from '@/components/UserPanel'
+import UserPanel from './components/UserPanel'
       
 export default {
 	name: 'App',
@@ -65,9 +63,7 @@ export default {
 	},
     methods: {
         closeMenu() {
-			console.log(this.close);
 			this.close = !this.close;
-			console.log(this.close);
 		},
     }
 }

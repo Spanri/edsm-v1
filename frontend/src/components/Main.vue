@@ -9,12 +9,11 @@
 			<hr/>
 			<button type="submit">Login</button>
 		</form>
-		<button type="submit" @click="logout()">Logout</button>
 	</div>
 </template>
 
 <script>
-import {AUTH_REQUEST} from 'actions/auth'
+import {AUTH_REQUEST} from '../store/mutation-types'
 
 export default {
 	name: 'main',
@@ -34,12 +33,6 @@ export default {
 				this.$router.push('/');
 			});
 		},
-		logout() {
-			this.$store.dispatch(AUTH_LOGOUT)
-			.then(() => {
-				this.$router.push('/login')
-			});
-		}
 	}
 }
 </script>

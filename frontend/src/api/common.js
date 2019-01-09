@@ -5,13 +5,13 @@ const mocks = {
   
 const apiCall = ({url, method, ...args}) => new Promise((resolve, reject) => {
     setTimeout(() => {
-      try {
-        resolve(mocks[url][method || 'GET'])
-        console.log(`Mocked '${url}' - ${method || 'GET'}`)
-        console.log('response: ', mocks[url][method || 'GET'])
-      } catch (err) {
-        reject(new Error(err))
-      }
+        try {
+            resolve(mocks[url][method || 'GET'])
+            console.log(`Mocked '${url}' - ${method || 'GET'}`)
+            console.log('response: ', mocks[url][method || 'GET'])
+        } catch (err) {
+            reject(new Error(err))
+        }
     }, 1000)
 })
   

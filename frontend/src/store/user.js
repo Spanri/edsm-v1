@@ -3,7 +3,7 @@ import {
     USER_ERROR, 
     USER_SUCCESS,
     AUTH_LOGOUT
-} from './user'
+} from './mutation-types'
 import Vue from 'vue'
 import apiCall from '../api/common'
 
