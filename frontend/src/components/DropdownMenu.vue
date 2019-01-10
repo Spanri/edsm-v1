@@ -1,12 +1,13 @@
 <template>
     <div class="dropdownMenu">
-        <img 
-            class="profile-img"
-            src="../assets/logo.png"
-            alt="Профиль"
-            @click="changeMenuVisibility"
-        >
-        <div class="a" v-if = "visibleStatus">
+        <div class="profile-box" v-focus @click="changeMenuVisibility">
+            <img
+                src="../assets/profile-img.jpg"
+                alt="Профиль"
+            >
+            <p>V</p>
+        </div>
+        <div class="a" @blur="visibleStatus=false" v-if = "visibleStatus">
             <div class="left-dropdown-menu" v-if = "visibleStatus">
                 <transition-group
                         name="slideLeft">
@@ -32,6 +33,14 @@ export default {
         }
     },
     props: ['options'],
+    directives: {
+        focus: {
+            // определение директивы
+            updated: function (el) {
+                el.focus()
+            }
+        }
+    },
     computed: {
         profileImg() {
             return './assets/logo.png';
@@ -68,14 +77,6 @@ export default {
 .dropdownMenu {
     position: relative;
 }
-.profile-img {
-    width: 40px;
-}
-
-.profile-img:hover{
-    cursor: pointer;
-}
-
 .dropdown-menu-item {
     position: absolute;
     display: block;
@@ -131,9 +132,27 @@ export default {
     border: 15px solid transparent;
     border-bottom: 15px solid #7cb0c1;
    }
-.registr:hover{
+.registr:hover, .profile-box:hover{
     cursor: pointer;
     background-color: #6393a3;
     transition: background-color .3s ease-out;
+}
+.profile-box{
+    display: grid;
+    grid-template-columns: auto max-content;
+}
+.profile-box:hover ~ .profile-box p{
+    color:yellow;
+    font-size: 50px;
+}
+.profile-box p{
+    margin: 15px;
+    margin-left: 0px;
+}
+.profile-box img{
+    width: 40px;
+    margin: 7px;
+    margin-left: 10px;
+    border-radius: 50%;
 }
 </style>
