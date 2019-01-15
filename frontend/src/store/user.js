@@ -6,6 +6,7 @@ import {
 } from './mutation-types'
 import Vue from 'vue'
 import apiCall from '../api/common'
+import axios from 'axios'
 
 const state = { 
     status: '', 
@@ -20,9 +21,12 @@ const getters = {
 const actions = {
     [USER_REQUEST]: ({commit, dispatch}) => {
         commit(USER_REQUEST)
-        apiCall({url: 'user/me'})
-        .then(resp => {
-            commit(USER_SUCCESS, resp)
+        axios
+        .post('http://127.0.0.1:8000/api-token-verify/', {
+            "token" : state.token
+        })
+        .then(response => {
+            commit(USER_SUCCESS, response)
         })
         .catch(resp => {
             commit(USER_ERROR)
