@@ -4,16 +4,16 @@
         <p class="link editLink">РЕДАКТИРОВАТЬ ПАПКИ</p>
         <div class="catalog">
             <div class="link">
-                <a href="">ВСЕ ДОКУМЕНТЫ</a>
+                <a href="/">ВСЕ ДОКУМЕНТЫ</a>
             </div>
             <div class="link">
-                <a href="">ОБЩИЙ ДОСТУП</a>
+                <a href="/d/common">ОБЩИЙ ДОСТУП</a>
             </div>
             <div class="link">
-                <a href="">МОИ ДОКУМЕНТЫ</a>
+                <a href="/d/mydoc">МОИ ДОКУМЕНТЫ</a>
             </div>
             <div class="link" v-for="item in items" :key='item'>
-                <a href="">{{item}}</a>
+                <a :href="item.ref">{{item.title}}</a>
             </div>
         </div>
     </div>
@@ -25,8 +25,8 @@ export default {
     data () {
         return {   
             items: [
-                "ДОКУМЕНТЫ СТУДЕНТОВ",
-                "ДРУГИЕ ДОКУМЕНТЫ"
+                {title: "ДОКУМЕНТЫ СТУДЕНТОВ", ref: "studentdoc"},
+                {title: "ДРУГИЕ ДОКУМЕНТЫ", ref: "otherdocument"}
             ]
         }
     },

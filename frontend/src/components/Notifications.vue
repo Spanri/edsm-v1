@@ -1,5 +1,6 @@
 <template>
 	<div class="account">
+		<h2 style="padding-top:0;padding-bottom:0">УВЕДОМЛЕНИЯ</h2>
 		<form id="search">
 			Поиск по всем столбцам <input name="query" v-model="searchQuery">
 		</form>

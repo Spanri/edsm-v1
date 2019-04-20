@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Main from '@/components/Main'
 import Auth from '@/components/Auth'
 import Profile from '@/components/Profile'
-import Grid from '@/components/Grid'
+import Docs from '@/components/Docs'
 import Document from '@/components/Document'
 import Notifications from '@/components/Notifications'
 import NotFound from '@/components/NotFound'
@@ -36,8 +36,12 @@ const router = new Router({
 			// name: 'main',
 			component: Main,
 			children: [
-				{ path: '', component: Grid },
-				{ path: 'd', component: Document },
+				{ path: '', component: Docs, props: {id: "all"} },
+				{
+					path: 'd/:id',
+					component: Docs,
+					props: true
+				},
 			],
 			beforeEnter: ifAuthenticated,
 		},
