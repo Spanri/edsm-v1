@@ -4,7 +4,7 @@ import user from './user'
 import auth from './auth'
 
 Vue.use(Vuex)
-
+import createPersistedState from 'vuex-persistedstate'
 const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
@@ -13,4 +13,5 @@ export default new Vuex.Store({
 		auth,
 	},
 	strict: debug,
+	plugins: [createPersistedState()],
 })

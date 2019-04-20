@@ -1,74 +1,51 @@
 <template>
     <div class="background">
         <div class="header">
-            <div class="logo">
-                <p style="color:white">CRM-система</p>
-                <p style="color:#d4e887">МКиИТ</p>
+            <div class="logo" @click="toMain()">
+                <svg width="30px" height="30px">
+                    <circle cx="15" cy="15" r="15" fill="white"/>
+                </svg>
+                <p style="color:white">СЭД МТУСИ</p>
             </div>
             <div></div>
-            <div class="search">
-                <input
-                    class="search-box"
-                    type="text" 
-                    v-model="search" 
-                    placeholder="Введите что-то..." />
-                <img 
-                    src="../assets/search.svg"
-                    class="search-img"
-                    alt="Поиск"
-                    @click="searchMethod()"
-                >
-            </div>
             <div class="header-right">
-                <div class="tasks">
-                    <p>Tasks</p>
+                <div class="add">
+                    <p>Add</p>
                 </div>
                 <div class="messages">
                     <p>Mess</p>
                 </div>
-                <button
-                    class="registr"
-                    v-if="!isAuthenticated"
-                    @click="login()">
-                    Вход / Регистрация
-                </button>
-                <dropdown-menu v-else
-                    :options="mainMenuOptions">
-                </dropdown-menu>
-                
+                <div class="profile" @click="profile()">
+                    <img >  
+                </div>        
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import DropdownMenu from './DropdownMenu';
 import {AUTH_LOGOUT} from '../store/mutation-types'
 
 export default {
     name: 'Header',
-    components: { DropdownMenu },
+    components: {  },
     data () {
         return {
             search: '',
-            mainMenuOptions: [
-                "Профиль",
-                "component data",
-                "component methods",
-                "component events",
-                "Выйти"
-            ],
         }
 	},
     computed: {
-        isAuthenticated(){ 
-            return this.$store.getters.isAuthenticated;
-        }
         // userPicture(){
 
         // },
     },
     methods: {
+        toMain(){
+            this.$router.push('/');
+        },
+        profile(){
+            this.$router.push('/profile');
+        },
         searchMethod(){
             console.log(this.search);
         },
@@ -85,57 +62,44 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+/* Фон */
 .background{
-    background-color: #3e5468;
-    height: 70px;
+    background-color: #347090;
+    height: 60px;
 }
+/* Основной стиль */
 .header{
     width: 100%;
+    height: 60px;
     max-width: 1400px;
 	margin: auto;
     margin-top: 0;
     display: grid;
-    grid-template-columns: max-content auto auto max-content;
-    color:aliceblue;
+    grid-template-columns: auto auto max-content;
+    color:white;
 }
-.header > *{
-    margin: 10px;
-    padding: 0;
-}
-.search{
-    background: #7cb0c1;
-    width: 100%;
-    max-width: 400px;
-    color: white;
+/* Логотип */
+.logo{
+    margin: 14px;
+    margin-left: 30px;
+    font-size: 24px;
+    text-align: center;
     display: grid;
-    grid-template-columns: auto max-content;
-    margin: 15px;
+    grid-template-columns: max-content max-content;
 }
-.search > *{
-    margin: 10px;
+.logo > *{
+    margin: 0;
+    margin-right: 10px;
 }
-.search-box{
-    background:#4c545700;
-    border: 0;
-    color: white;
-    font-size: 15px;
+.logo > p{
+    margin: 0;
+    margin-top: 3px;
 }
-.search-box:focus{
-    outline: none;
-}
-.search-img{
-    width: 20px;
-}
-.profile-img{
-    margin: 5px;
-    width: 40px;
-    border-radius: 50%;
-}
-.search-img:hover{
+.logo:hover{
     cursor: pointer;
 }
+/* Добавить документ, уведомления, профиль */
 .header-right{
     display: inline-grid;
     grid-template-columns: repeat(3, max-content);
@@ -146,21 +110,27 @@ export default {
     margin-left: 10px;
     padding: 0;
 }
-.logo{
-    margin: auto;
-    margin-left: 30px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 800;
-    font-size: 20px;
-    text-align: center;
+.header-right p{
+    padding: 5px;
 }
-.logo > *{
-    margin: 2px;
+/* Профиль */
+.profile{
+    margin: 12.5px;
+    width: 35px;
+    height: 35px;
+    background-color: white;
+    border-radius: 50%;
 }
+.profile:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 10px 0px white;
+}
+/* Уведомления */
 .messages{
     display: inline-grid;
     grid-template-columns: repeat(2, max-content);
 }
+/*  */
 .registr{
     border: 0;
     padding: 7px;

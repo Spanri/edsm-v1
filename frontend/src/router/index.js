@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
 import Auth from '@/components/Auth'
-import Account from '@/components/Account'
+import Profile from '@/components/Profile'
+import Document from '@/components/Document'
+import NotFound from '@/components/NotFound'
 import store from '../store'
 
 Vue.use(Router)
@@ -15,8 +17,9 @@ const ifNotAuthenticated = (to, from, next) => {
 	next('/')
 }
   
-  const ifAuthenticated = (to, from, next) => {
+const ifAuthenticated = (to, from, next) => {
 	if (store.getters.isAuthenticated) {
+		console.log(store.getters.getProfile)
 	  next()
 	  return
 	}
@@ -28,8 +31,13 @@ const router = new Router({
 	routes: [
 		{
 			path: '/',
-			name: 'main',
+			// name: 'main',
 			component: Main,
+			children: [
+				{ path: '', component: Profile },
+				{ path: 'a', component: Document },
+			],
+			beforeEnter: ifAuthenticated,
 		},
 		{
 			path: '/auth',
@@ -38,11 +46,12 @@ const router = new Router({
 			beforeEnter: ifNotAuthenticated,
 		},
 		{
-			path: '/account',
-			name: 'account',
-			component: Account,
+			path: '/profile',
+			name: 'profile',
+			component: Profile,
 			beforeEnter: ifAuthenticated,
-		}
+		},
+		{ path: '*', component: NotFound }
 	]
 })
 

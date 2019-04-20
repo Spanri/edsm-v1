@@ -1,55 +1,76 @@
 <template>
 	<div class="main">
-		<form class="login" @submit.prevent="login">
-			<h1>Вход</h1>
-			<label>Логин</label>
-			<input 
-				required
-				v-model="username" 
-				type="text" 
-				placeholder="Введите логин"
-				class="search-box"
-			/> <br>
-			<label>Пароль</label>
-			<input 
-				required 
-				v-model="password" 
-				type="password" 
-				placeholder="Введите пароль"
-				class="search-box"
-			/> <br>
-			<button type="submit">Войти</button>
-		</form>
-		<hr>
-		<form class="signup" @submit.prevent="signup">
-			<h1>Регистрация</h1>
-			<label>Придумайте логин</label>
-			<input 
-				required
-				v-model="usernameNew" 
-				type="text" 
-				placeholder="Введите логин"
-				class="search-box"
-			/> <br>
-			<label>Придумайте пароль</label>
-			<input 
-				required 
-				v-model="passwordNew" 
-				type="password" 
-				placeholder="Введите пароль"
-				class="search-box"
-			/> <br>
-			<label>Повторите пароль</label>
-			<input 
-				required 
-				v-model="password2New" 
-				type="password" 
-				placeholder="Повторите пароль"
-				class="search-box"
-			/> <br>
-			<button type="submit">Зарегистрироваться</button>
-			<p>{{error}}</p>
-		</form>
+		<div></div>
+		<div class="auth" :style="{ height: boxSize }">
+			<div class="switch">
+				<div></div>
+				<p 
+					@click="login=true;loginStyle1='underline';loginStyle2='none';boxSize='360px'"
+					:style="{ textDecoration: loginStyle1 }"
+					>ВХОД
+				</p>
+				<p
+					@click="login=false;loginStyle2='underline';loginStyle1='none';boxSize='480px'"
+					:style="{ textDecoration: loginStyle2 }"
+					>РЕГИСТРАЦИЯ
+				</p>
+				<div></div>
+			</div>
+			<form class="login" @submit.prevent="loginMethod" v-if="login">
+				<p>ЛОГИН</p>
+				<input
+					required
+					v-model="username" 
+					type="text"
+					placeholder="Введите логин"
+					class="search-box"
+				/>
+				<div style="height:15px;"></div>
+				<p>ПАРОЛЬ</p>
+				<input 
+					required 
+					v-model="password" 
+					type="password" 
+					placeholder="Введите пароль"
+					class="search-box"
+				/>
+				<div style="height:35px;"></div>
+				<button type="submit">ВОЙТИ</button>
+				<p>{{error}}</p>
+			</form>
+			<form class="signup" @submit.prevent="signupMethod" v-if="!login">
+				<p>ЛОГИН</p>
+				<input 
+					required
+					v-model="usernameNew" 
+					type="text" 
+					placeholder="Введите логин"
+					class="search-box"
+				/>
+				<div style="height:15px;"></div>
+				<p>ПАРОЛЬ</p>
+				<input 
+					required 
+					v-model="passwordNew" 
+					type="password" 
+					placeholder="Введите пароль"
+					class="search-box"
+				/>
+				<div style="height:15px;"></div>
+				<p>ПОВТОРИТЕ ПАРОЛЬ</p>
+				<input 
+					required 
+					v-model="password2New" 
+					type="password" 
+					placeholder="Повторите пароль"
+					class="search-box"
+				/>
+				<div style="height:40px;"></div>
+				<button type="submit">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+				<p>{{error}}</p>
+			</form>
+		</div>
+		<div></div>
 	</div>
 </template>
 
@@ -60,6 +81,10 @@ export default {
 	name: 'main',
 	data () {
 		return {
+			login: true,
+			loginStyle1: "underline",
+			loginStyle2: "none",
+			boxSize: "350px",
 			error: ''
 		}
 	},
@@ -67,14 +92,16 @@ export default {
 
 	},
 	methods: {
-		login() {
+		loginMethod() {
 			const { username, password } = this;
 			this.$store.dispatch(AUTH_REQUEST, { username, password })
 			.then(() => {
-				this.$router.push('/');
-			});
+				console.log('sdfgsdfg')
+				this.$router.push('/')
+			})
+			this.$router.push('/')
 		},
-		signup() {
+		signupMethod() {
 			const { usernameNew, passwordNew, password2New } = this;
 			var checkUsernameValid = /[a-zA-Z0-9]+$/i;
 			if (!checkUsernameValid.test(usernameNew)) {
@@ -100,21 +127,49 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+/* Основной экран */
 .main{
-    height: 100%;
-	width: 100%;
-	background: white;
+	width: 400px;
+	margin: 0 auto;
+	height: 100vh;
+	display: grid;
+    grid-template-rows: auto max-content auto;
 }
 .main > *{
 	text-align: center;
 }
-.login > *, .signup > * {
-	margin: 5px;
+.auth{
+	height: 400px;
+	background: #ADE0FC;
 }
-.search-box{
-    background:#a8c1d8;
-    border: 0;
-    color: #3e5468;
-    font-size: 15px;
+/* Кнопки переключения вход и регистрация */
+.switch{
+	font-size: 18px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.switch p:hover{
+	cursor: pointer;
+}
+/* Кнопки ВОЙТИ и ЗАРЕГЕСТРИРОВАТЬСЯ */
+button{
+	border: 0;
+	border-radius: 5px;
+	padding: 8px;
+	color: white;
+	background-color: #347090;
+}
+button:hover{
+	cursor: pointer;
+}
+/* Поля ввода */
+input{
+	border: 0;
+	height: 30px;
+	margin: 0 auto;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 </style>

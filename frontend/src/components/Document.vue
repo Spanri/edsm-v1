@@ -1,10 +1,7 @@
 <template>
 	<div class="account">
 		<div class="account2">
-			<h2 v-if="profile.name">
-				{{profile.title}} {{profile.name}}
-			</h2>
-			<p>Это аккаунт.</p>
+			<p>Это документ.</p>
 		</div>
 	</div>
 </template>
@@ -14,7 +11,6 @@ import { mapState } from 'vuex'
 
 export default {
     name: 'account',
-    computed: mapState({profile: state => state.user.profile})
 }
 </script>
 

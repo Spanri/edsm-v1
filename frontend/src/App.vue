@@ -1,30 +1,18 @@
 <template>
 	<div id="app">
-		<Header></Header>
-		<div class="gradient r">
-			<div class="close-button" v-bind:style="{ gridTemplateColumns: closeButtonSize }">
-				<p 
-					class="close" 
-					@click="closeMenu()"
-					>{{ textClose }}
-				</p>
-				<p 
-					class="name" 
-					v-bind:style="{ marginLeft: marginLeft + 'px' }"
-					>ГЛАВНАЯ
-				</p>
-			</div>
-			<div class="main-space" v-bind:style="{ gridTemplateColumns: menuSize }">
-				<Menu v-if="closeM == false"></Menu>
-				<router-view>
-				</router-view>
-			</div>
+		<div v-if="!this.$store.getters.isAuthenticated">
+			<Auth></Auth>
 		</div>
-		<Footer></Footer>
+		<div v-else class="a">
+			<Header></Header>
+			<router-view></router-view>
+			<Footer></Footer>
+		</div>
 	</div>
 </template>
 
 <script>
+import Auth from './components/Auth';
 import Header from './components/Header';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
@@ -33,7 +21,7 @@ import {USER_REQUEST} from './store/mutation-types'
       
 export default {
 	name: 'App',
-	components: { Header, Footer, Menu },
+	components: { Header, Footer, Menu, Auth },
 	data () {
         return {
 			closeButtonSize: "300px auto",
@@ -44,11 +32,21 @@ export default {
     	}
 	},
 	created: function () {
-		if (this.$store.getters.isAuthenticated) {
-		this.$store.dispatch(USER_REQUEST)
-		}
+		axios.interceptors.response.use(undefined, function (err) {
+			return new Promise(function (resolve, reject) {
+				if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+				// if you ever get an unauthorized, logout the user
+					this.$store.dispatch(AUTH_LOGOUT)
+				// you can also redirect to /login if needed !
+				}
+			throw err;
+		});
+});
 	},
 	computed: {
+		// login: function() {
+		// 	return this.$store.getters.login;
+		// },
 		closeM: function () {
 			if(this.close){
 				this.menuSize = "100%";
@@ -75,51 +73,10 @@ export default {
 </script>
 
 <style>
-#app {
+.a {
 	height: 100vh;
 	width: 100vw;
 	display: grid;
 	grid-template-rows: max-content auto max-content;
-	background: #7cb0c1; /* Old browsers */
-    background: -moz-linear-gradient(45deg, #7cb0c1 0%, #b1d887 48%, #f9f88e 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(45deg, #7cb0c1 0%,#b1d887 48%,#f9f88e 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(45deg, #7cb0c1 0%,#b1d887 48%,#f9f88e 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7cb0c1', endColorstr='#f9f88e',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-}
-.r{
-	width: 100%;
-	max-width: 1400px;
-	margin: auto;
-	margin-top: 0;
-	margin-bottom: 0;
-}
-.gradient{
-	
-}
-.main-space{
-	height: 100%;
-	width: 100%;
-	display: grid;
-}
-.close{
-    text-align: center;
-    height: 30px;
-    margin: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 15px;
-    color: white;
-}
-.close:hover{
-	cursor: pointer;
-}
-.close-button{
-	display: grid;
-}
-.name{
-    height: 30px;
-    margin: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 25px;
-    color: white;
 }
 </style>

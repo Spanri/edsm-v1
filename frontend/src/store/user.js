@@ -21,18 +21,20 @@ const getters = {
 const actions = {
     [USER_REQUEST]: ({commit, dispatch}) => {
         commit(USER_REQUEST)
-        axios
-        .post('http://127.0.0.1:8000/api-token-verify/', {
-            "token" : state.token
-        })
-        .then(response => {
-            commit(USER_SUCCESS, response)
-        })
-        .catch(resp => {
-            commit(USER_ERROR)
-            // if resp is unauthorized, logout, to
-            dispatch(AUTH_LOGOUT)
-        })
+        // axios
+        // .post('http://127.0.0.1:8000/api-token-verify/', {
+        //     "token" : state.token
+        // })
+        // .then(response => {
+        //     commit(USER_SUCCESS, response)
+        // })
+        // .catch(resp => {
+        //     commit(USER_ERROR)
+        //     // if resp is unauthorized, logout, to
+        //     dispatch(AUTH_LOGOUT)
+        // })
+        let response = {name:'TEST'};
+        commit(USER_SUCCESS, response)
     },
 }
 
