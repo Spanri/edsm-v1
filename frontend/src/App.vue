@@ -14,14 +14,13 @@
 <script>
 import Auth from './components/Auth';
 import Header from './components/Header';
-import Menu from './components/Menu';
 import Footer from './components/Footer';
 import axios from 'axios'
 import {USER_REQUEST} from './store/mutation-types'
       
 export default {
 	name: 'App',
-	components: { Header, Footer, Menu, Auth },
+	components: { Header, Footer, Auth },
 	data () {
         return {
 			closeButtonSize: "300px auto",

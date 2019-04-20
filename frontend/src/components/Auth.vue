@@ -1,5 +1,5 @@
 <template>
-	<div class="main">
+	<div class="mainAuth">
 		<div></div>
 		<div class="auth" :style="{ height: boxSize }">
 			<div class="switch">
@@ -128,14 +128,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 /* Основной экран */
-.main{
+.mainAuth{
 	width: 400px;
 	margin: 0 auto;
 	height: 100vh;
 	display: grid;
     grid-template-rows: auto max-content auto;
 }
-.main > *{
+.mainAuth > *{
 	text-align: center;
 }
 .auth{

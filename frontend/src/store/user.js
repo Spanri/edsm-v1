@@ -33,7 +33,11 @@ const actions = {
         //     // if resp is unauthorized, logout, to
         //     dispatch(AUTH_LOGOUT)
         // })
-        let response = {name:'TEST'};
+        let response = {
+            name:'Городничев Михаил Геннадьевич', 
+            position:'Кандидат технических наук, заведующий кафедрой',
+            adm: true,
+        };
         commit(USER_SUCCESS, response)
     },
 }

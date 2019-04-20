@@ -3,7 +3,9 @@ import Router from 'vue-router'
 import Main from '@/components/Main'
 import Auth from '@/components/Auth'
 import Profile from '@/components/Profile'
+import Grid from '@/components/Grid'
 import Document from '@/components/Document'
+import Notifications from '@/components/Notifications'
 import NotFound from '@/components/NotFound'
 import store from '../store'
 
@@ -34,8 +36,8 @@ const router = new Router({
 			// name: 'main',
 			component: Main,
 			children: [
-				{ path: '', component: Profile },
-				{ path: 'a', component: Document },
+				{ path: '', component: Grid },
+				{ path: 'd', component: Document },
 			],
 			beforeEnter: ifAuthenticated,
 		},
@@ -49,6 +51,11 @@ const router = new Router({
 			path: '/profile',
 			name: 'profile',
 			component: Profile,
+			children: [
+				{ path: '', component: Notifications },
+				{ path: 'edit', component: Profile },
+				{ path: 'adm', component: Document },
+			],
 			beforeEnter: ifAuthenticated,
 		},
 		{ path: '*', component: NotFound }

@@ -1,42 +1,18 @@
 <template>
 <div class="main">
-	<!-- <div class="gradient r">
-		<div class="close-button" v-bind:style="{ gridTemplateColumns: closeButtonSize }">
-			<p 
-				class="close" 
-				@click="closeMenu()"
-				>{{ textClose }}
-			</p>
-			<p 
-				class="name" 
-				v-bind:style="{ marginLeft: marginLeft + 'px' }"
-				>ГЛАВНАЯ
-			</p>
-		</div>
-		<div class="main-space" v-bind:style="{ gridTemplateColumns: menuSize }">
-			<Menu v-if="closeM == false"></Menu>
-			
-		</div> 
-	</div> -->
-	<!-- <h2>User {{ this.$route.params.id }}</h2> -->
-	<p>Current route name: {{ this.$route.name }}</p>
-	<button type="submit" @click="logout()">Logout</button>
+	<Menu></Menu>
 	<router-view></router-view>
 </div>
 </template>
 
 <script>
-import {AUTH_LOGOUT} from '../store/mutation-types'
+import Menu from '../components/Menu';
 
 export default {
 	name: 'auth',
+	components: { Menu },
 	methods: {
-		logout() {
-			this.$store.dispatch(AUTH_LOGOUT)
-			.then(() => {
-				this.$router.push('/auth')
-			});
-		}
+		
 	}
 }
 </script>
@@ -46,6 +22,8 @@ export default {
     height: 100%;
 	width: 100%;
 	background: white;
+	display: grid;
+    grid-template-columns: min-content auto;
 }
 .r{
 	width: 100%;
