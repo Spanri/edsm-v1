@@ -2,15 +2,12 @@
     <div class="background">
         <div class="header">
             <div class="logo" @click="toMain()" title="На главную">
-                <!-- <svg width="30px" height="30px">
-                    <circle cx="15" cy="15" r="15" fill="white"/>
-                </svg> -->
                 <img src="https://img.icons8.com/material-outlined/30/FFFFFF/student-center.png">
                 <p style="color:white">СЭД МТУСИ</p>
             </div>
             <div></div>
             <div class="header-right">
-                <div class="icon" title="Добавить документ">
+                <div class="icon" title="Добавить документ" @click="toAddDoc">
                     <div>+</div>
                     <img src="https://img.icons8.com/ios/30/FFFFFF/document-filled.png">
                 </div>
@@ -25,7 +22,7 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT} from '../store/mutation-types'
+import {AUTH_LOGOUT, DOC_REQUEST} from '../store/mutation-types'
 
 export default {
     name: 'Header',
@@ -33,12 +30,16 @@ export default {
     data () {
         return {
             search: '',
+            notif: '',
         }
-	},
+    },
+    created() {
+        this.$store.dispatch(DOC_REQUEST, "notif")
+            .then(()=>{
+                this.notif = this.$store.getters.getDoc.length;
+            });
+    },
     computed: {
-        notif(){
-            return 1;
-        },
         notifColor(){
             if (this.notif > 0) {
                 return "#ff7373"
@@ -51,19 +52,19 @@ export default {
             }
             else return "https://img.icons8.com/material/30/FFFFFF/bell.png";
         }
-        // userPicture(){
-
-        // },
     },
     methods: {
         toMain(){
             this.$router.push('/');
         },
         toNotif(){
-            this.$router.push('/profile/');
+            this.$router.push('/profile/notif');
+        },
+        toAddDoc(){
+            this.$router.push('/addDoc');
         },
         profile(){
-            this.$router.push('/profile');
+            this.$router.push('/profile/notif');
         },
         searchMethod(){
             console.log(this.search);

@@ -29,7 +29,7 @@ export default {
 	},
 	methods: {
 		notif() {
-			this.$router.push('/profile/')
+			this.$router.push('/profile/notif')
 		},
 		edit() {
 			this.$router.push('/profile/edit')

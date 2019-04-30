@@ -1,10 +1,14 @@
 <template>
 	<div class="account">
+        <p>ID {{id}}</p>
+		<form id="search">
+			Поиск по всем столбцам <input name="query" v-model="filterKey">
+		</form>
         <table>
             <thead>
                 <tr>
-                    <th v-for="key in columns"
-                        :key="key"
+                    <th v-for="(key,i) in columns"
+                        :key="i"
                         @click="sortBy(key)"
                         :class="{ active: sortKey == key }">
                         {{ key | capitalize }}
@@ -14,8 +18,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="entry in filteredHeroes" :key="entry">
-                    <td v-for="key in columns" :key="key">
+                <tr v-for="(entry,j) in filteredHeroes" :key="j">
+                    <td v-for="(key,i) in columns" :key="i">
                     {{entry[key]}}
                     </td>
                 </tr>
@@ -26,26 +30,27 @@
 
 <script>
 import { mapState } from 'vuex'
+import {DOC_REQUEST} from '../store/mutation-types'
 
 export default {
     name: 'account',
     props: {
-        heroes: Array,
+        id: String,
         columns: Array,
-        filterKey: String
     },
     data: function () {
         var sortOrders = {}
         this.columns.forEach(function (key) {
-        sortOrders[key] = 1
-        })
+            sortOrders[key] = 1
+        });
         return {
-        sortKey: '',
-        sortOrders: sortOrders
+            sortKey: '',
+            filterKey: '',
+            sortOrders: sortOrders
         }
     },
     computed: {
-        filteredHeroes: function () {
+        filteredHeroes() {
             // var sortKey = this.sortKey
             var sortKey = ''
             var sortOrders = {}
@@ -70,17 +75,21 @@ export default {
                 })
             }
             return heroes
-        }
+        },
+		heroes() {
+			this.$store.dispatch(DOC_REQUEST, this.id);
+			return this.$store.getters.getDoc;
+		}
     },
     filters: {
-        capitalize: function (str) {
+        capitalize(str) {
         return str.charAt(0).toUpperCase() + str.slice(1)
         }
     },
     methods: {
-        sortBy: function (key) {
-        this.sortKey = key
-        this.sortOrders[key] = this.sortOrders[key] * -1
+        sortBy(key) {
+            this.sortKey = key
+            this.sortOrders[key] = this.sortOrders[key] * -1
         }
     }
 }
@@ -88,9 +97,9 @@ export default {
 
 <style>
 .account{
-    /* height: 100%; */
 	width: 100%;
 	background: white;
+    padding: 25px;
 }
 .account > *{
 	padding: 25px;
@@ -108,5 +117,15 @@ td, th{
 .arrow{
     display: inline-block;
     
+}
+input{
+	border: #e0e0e0 3px solid;
+    border-radius: 5px;
+	height: 30px;
+	min-width: 250px;
+	margin: 0 auto;
+	margin-left: 20px;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 </style>

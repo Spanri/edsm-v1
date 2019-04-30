@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './user'
 import auth from './auth'
+import doc from './doc'
 
 Vue.use(Vuex)
 import createPersistedState from 'vuex-persistedstate'
@@ -11,6 +12,7 @@ export default new Vuex.Store({
 	modules: {
 		user,
 		auth,
+		doc
 	},
 	strict: debug,
 	plugins: [createPersistedState()],

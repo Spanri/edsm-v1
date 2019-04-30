@@ -3,9 +3,9 @@ import Router from 'vue-router'
 import Main from '@/components/Main'
 import Auth from '@/components/Auth'
 import Profile from '@/components/Profile'
-import Docs from '@/components/Docs'
+import Grid from '@/components/Grid'
 import Document from '@/components/Document'
-import Notifications from '@/components/Notifications'
+import AddDoc from '@/components/AddDoc'
 import NotFound from '@/components/NotFound'
 import store from '../store'
 
@@ -13,17 +13,16 @@ Vue.use(Router)
 
 const ifNotAuthenticated = (to, from, next) => {
 	if (!store.getters.isAuthenticated) {
-	  next()
-	  return
+		next()
+		return
 	}
 	next('/')
 }
   
 const ifAuthenticated = (to, from, next) => {
 	if (store.getters.isAuthenticated) {
-		console.log(store.getters.getProfile)
-	  next()
-	  return
+		next()
+		return
 	}
 	next('/auth')
 }
@@ -36,11 +35,27 @@ const router = new Router({
 			// name: 'main',
 			component: Main,
 			children: [
-				{ path: '', component: Docs, props: {id: "all"} },
+				{ 
+					path: '', 
+					component: Grid, 
+					props: {
+						id: "all", 
+						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования'],
+					} 
+				},
+				{
+					path: 'd/notif',
+					component: Grid,
+					props: {
+						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования', 'Прочитано'],
+					} 
+				},
 				{
 					path: 'd/:id',
-					component: Docs,
-					props: true
+					component: Grid,
+					props: {
+						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования'],
+					} 
 				},
 			],
 			beforeEnter: ifAuthenticated,
@@ -52,12 +67,25 @@ const router = new Router({
 			beforeEnter: ifNotAuthenticated,
 		},
 		{
+			path: '/addDoc',
+			name: 'addDoc',
+			component: AddDoc,
+			beforeEnter: ifAuthenticated,
+		},
+		{
 			path: '/profile',
 			name: 'profile',
 			component: Profile,
 			children: [
-				{ path: '', component: Notifications },
-				{ path: 'edit', component: Profile },
+				{
+					path: 'notif', 
+					component: Grid,
+					props: {
+						id: "notif",
+						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования'],
+					} 
+				},
+				{ path: 'edit', component: AddDoc },
 				{ path: 'adm', component: Document },
 			],
 			beforeEnter: ifAuthenticated,
