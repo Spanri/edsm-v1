@@ -3,7 +3,8 @@ import {
     USER_ERROR, 
     USER_SUCCESS,
     USER_NOTIF_REQUEST,
-    AUTH_LOGOUT
+    AUTH_LOGOUT,
+    USER_UPDATE
 } from './mutation-types'
 import Vue from 'vue'
 import apiCall from '../api/common'
@@ -64,7 +65,29 @@ const actions = {
             adm: true,
         };
         commit(USER_SUCCESS, response)
-    }
+    },
+    [USER_UPDATE]: ({commit, dispatch}, data) => {
+        // axios
+        // .post('http://127.0.0.1:8000/api-token-verify/', {
+        //     "token" : state.token
+        // })
+        // .then(response => {
+        //     commit(USER_SUCCESS, response)
+        // })
+        // .catch(resp => {
+        //     commit(USER_ERROR)
+        //     // if resp is unauthorized, logout, to
+        //     dispatch(AUTH_LOGOUT)
+        // })
+        let response = {};
+        Object.assign(response, 
+            data.password ? { password: data.password } : null,
+            data.image ? { image: data.image } : null,
+            data.email ? { email: data.email } : null,
+            data.name ? { name: data.name } : null,
+        );          
+        console.log(response);
+    },
 }
 
 const mutations = {

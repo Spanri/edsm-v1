@@ -6,7 +6,7 @@
                 <img :src="image || 'https://img.icons8.com/wired/512/000000/document.png'">
             </div>
             <div style="margin-left:25px">
-                <p v-if="error">{{error}}</p>
+                <p v-if="error" style="color: red">{{error}}</p>
                 <p>Выбрать новый аватар</p>
                 <input type="file" id="file" class="inputfile" name="file" @change="onFileChange">
                 <p>{{upload}}</p>
@@ -52,7 +52,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import { AUTH_REQUEST } from '../../store/mutation-types';
+import { USER_UPDATE } from '../../store/mutation-types';
 
 export default {
     name: 'account',
@@ -69,7 +69,7 @@ export default {
     },
     computed: {
 		profile: function(){
-            console.log(this.$store.getters.getProfile)
+            //console.log(this.$store.getters.getProfile)
 			return this.$store.getters.getProfile
 		}
 	},
@@ -79,25 +79,30 @@ export default {
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
             this.file = files[0];
-            console.log(this.file);
+            //console.log(this.file);
             this.upload = "";
         },
         editProfile(){
-            console.log('fgfg')
-            // this.$store.dispatch(DOC_UPLOAD, {
-            //     file: this.file,
-            //     image: this.image, 
-            //     description: this.description,
-            //     common: this.common
-            // })
-			// .then((resp) => {
-            //     console.log(resp)
-            //     this.$router.push({ 
-            //         name: 'doc',
-            //         params: { id: resp }
-            //     })
-            // })
-            this.$router.push('/profile/notif');
+            if(this.password && this.password != this.password2) {
+                this.error = 'Пароли не совпадают.'
+                return;
+            } else {
+                this.error = '';
+            }
+            this.$store.dispatch(USER_UPDATE, {
+                name: this.name,
+                image: this.image,
+                email: this.email,
+                password: this.password
+            })
+            .then(() => {
+                this.error = 'Данные профиля изменены.';
+                this.name = '';
+                this.image = '';
+                this.email = '';
+                this.password = '';
+                this.password2 = ''; 
+            })
         },
     }
 }
@@ -154,9 +159,6 @@ export default {
 .editProfile img{
     width: 150px;
     margin: 0 auto;
-}
-.editProfile img{
-    cursor: pointer;
 }
 .addDoc img:hover{
     cursor: pointer;
