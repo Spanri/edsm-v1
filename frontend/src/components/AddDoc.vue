@@ -3,17 +3,22 @@
 		<h3 class="header">ДОБАВЛЕНИЕ ДОКУМЕНТА</h3>
         <div class="addDoc2Colon">
             <div>
-                <img :src="image">
-                <a :href="file"></a>
+                <div @click="bigImage = 1">
+                    <img :src="image || 'https://img.icons8.com/wired/512/000000/document.png'">
+                </div>
+                <div v-if="bigImage == 1" @click="bigImage = 0">
+                    <img class="bigImage" :src="image">
+                    <div class="bigImageBackground"></div>
+                </div>
             </div>
             <div style="margin-left:25px">
-                <!-- <iframe id="viewer" :src="pdf" frameborder="0" scrolling="no" width="400" height="600"></iframe> -->
                 <form @submit.prevent="addDoc">
-                    <input type="file" id="file" name="file" @change="onFileChange">
+                    <input type="file" id="file" class="inputfile" name="file" @change="onFileChange">
+                    <p>{{upload}}</p>
                     <p>Имя файла</p>
                     <input 
                         required
-                        v-model="title" 
+                        v-model="title"
                         type="text" 
                         placeholder="Введите имя"
                         class="search-box"
@@ -37,9 +42,9 @@
                         placeholder="Опишите документ"
                         class="search-box"
                     ></textarea>
-                    <p></p> Общий доступ <input type="checkbox" name="common" true-value="1"  false-value="0" v-model="common">
+                    <p></p> Общий доступ <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="common">
                     <div style="height:35px;"></div>
-                    <button type="submit" @click="addDoc">СОЗДАТЬ</button> <br>
+                    <button type="submit" :class="{disabled: !this.image}" @click="addDoc">СОЗДАТЬ</button> <br>
                 </form>
                 <p v-if="error"> {{ error }} </p>
             </div>
@@ -49,6 +54,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import axios from 'axios'
+import { DOC_UPLOAD, DOC_REQUEST } from '../store/mutation-types';
 
 export default {
     name: 'account',
@@ -63,32 +70,62 @@ export default {
             ],
             common: 0,
             error: null,
-            image: "./src/assets/profile-img.jpg",
-            file:''
+            image: false,
+            file:'',
+            upload: '',
+            bigImage: '',
 		}
     },
     methods: {
         onFileChange(e) {
+            this.upload = "Загружается..."
             var files = e.target.files || e.dataTransfer.files;
-            if (!files.length)
-                return;
-            this.createImage(files[0]);
-            let title2 = files[0].name.split('.');
-            title2 = title2[title2.length-1];
-            title2 = files[0].name.replace("."+title2,"");
-            this.title = title2;
+            if (!files.length) return;
             this.file = files[0];
+            console.log(this.file);
+            /* Расширение файла */
+            let typeFile = files[0].name.split('.')
+            typeFile = typeFile[typeFile.length-1];
+            /* Проверка на соответствие файлу*/
+            let types = ['csv', 'doc', 
+                        'xls', 'xlsb', 'xlsx', 'xlt', 'xltx', 
+                        'jpg', 'jpeg', 'tif', 'tiff', 'png', 'bmp', 'mdi', 'gif', 'fax', 'ico',
+                        'odc', 'odf', 'ppt', 'pptx', 'pdf',
+                        'doc', 'docx', 'dot', 'dotx', 'wps', 'wpd', 'txt'];
+            if (!types.includes(typeFile)) {
+                this.upload = "Файл с таким расширением загрузить нельзя."
+            } else {
+                /* Имя файла без расширения */
+                let titleFile = files[0].name.replace("." + typeFile, "");
+                this.title = titleFile;
+                console.log(this.file);
+                /* Конвертирование файла в картинку для превью */
+                var formData = new FormData();
+                formData.append('File', files[0], files[0].name);
+                axios
+                .post('https://v2.convertapi.com/convert/'
+                    + typeFile
+                    + '/to/jpg?Secret=ib7pzQhZXO4wvQro&Token=411617234', 
+                    formData,
+                )
+                .then(data => {
+                    this.file = data.data.Files[0].FileData;
+                    let b64Data = data.data.Files[0].FileData;
+                    this.image = URL.createObjectURL(this.dataURItoBlob(b64Data));
+                    this.upload = ""
+                });
+            }
+            
         },
-        createImage(file) {
-            var image = new Image();
-            var reader = new FileReader();
-            var vm = this;
-
-            reader.onload = (e) => {
-                vm.image = e.target.result;
-                this.file = vm.image
-            };
-            reader.readAsDataURL(file);
+        /* Конвертирование файла в картинку для превью */
+        dataURItoBlob(dataURI) {
+            var byteString = atob(dataURI);
+            var ab = new ArrayBuffer(byteString.length);
+            var ia = new Uint8Array(ab);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], {type: 'image/png'});
         },
         addUser(){
             const {selectedUser} = this;
@@ -104,7 +141,19 @@ export default {
             this.users.push(item);
         },
         addDoc(){
-
+            this.$store.dispatch(DOC_UPLOAD, {
+                file: this.file,
+                image: this.image, 
+                description: this.description,
+                common: this.common
+            })
+			.then((resp) => {
+                console.log(resp)
+                this.$router.push({ 
+                    name: 'doc',
+                    params: { id: resp }
+                })
+            })
         },
     }
 }
@@ -119,7 +168,7 @@ export default {
 	background: white;
     padding: 25px;
 }
-.header{
+.addDoc .header{
     margin-top: 0;
 	margin-bottom: 30px;
 }
@@ -129,16 +178,18 @@ export default {
 	margin: 0 auto;
     padding: 10px;
     min-width: 350px;
-    background: #ADE0FC;
+    background: rgb(223, 243, 253);;
 }
 /* Кнопки ЗАГРУЗИТЬ и СОЗДАТЬ */
-.addDoc button, .addDoc input[type="submit"]{
+.addDoc button, .addDoc input[type="submit"], .fileContainer{
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
     margin-top: 15px;
     margin-bottom: 15px;
 	color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
 	background-color: #347090;
 }
 .addDoc button:hover, .addDoc a:hover{
@@ -157,8 +208,34 @@ export default {
 .addDoc img{
     width: 200px;
 }
+/* Картинка при увеличении*/
+.addDoc .bigImage{
+    position: fixed;
+    min-width:800px;
+    height:auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+}
+.addDoc img{
+    cursor: pointer;
+}
+.addDoc .bigImageBackground{
+    position: fixed;
+    width:100%;
+    height:100%;
+    padding: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: 0;
+    background-color: #2746578c;
+    z-index: 2;
+}
 /**/
-.deleteSelectedUser{
+.addDoc .deleteSelectedUser{
     border: 0;
 	border-radius: 5px;
 	padding: 3px;
@@ -168,32 +245,13 @@ export default {
 	background-color: #347090;
 }
 /**/
-/* .uploadForm {
-    outline: 2px dashed grey;  
-    outline-offset: -10px;
-    background: lightcyan;
-    color: dimgray;
-    padding: 10px 10px;
-    min-height: 200px; 
-    position: relative;
-    cursor: pointer;
-  }
-
-  #file {
-    opacity: 0; 
-    width: 100%;
-    height: 200px;
-    position: absolute;
-    cursor: pointer;
-  }
-
-  .uploadForm:hover {
-    background: lightblue; 
-  }
-
-  .uploadForm p {
-    font-size: 1.2em;
-    text-align: center;
-    padding: 50px 0;
-  } */
+.addDoc input[type="checkbox"]{
+    width: 15px;
+    height: 15px;
+}
+/**/
+.addDoc .disabled{
+    pointer-events: none;
+    background: rgb(133, 133, 133) !important;
+}
 </style>

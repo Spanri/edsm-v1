@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT} from '../store/mutation-types'
+import {AUTH_LOGOUT} from '../../store/mutation-types'
 
 export default {
 	name: 'account',
@@ -21,24 +21,7 @@ export default {
 		}
 	},
 	methods: {
-		myDocs() {
-			this.$router.push('/profile/')
-		},
-		notif() {
-			this.$router.push('/profile/notif')
-		},
-		edit() {
-			this.$router.push('/profile/edit')
-		},
-		adm() {
-			this.$router.push('/profile/adm')
-		},
-		logout() {
-			this.$store.dispatch(AUTH_LOGOUT)
-			.then(() => {
-				this.$router.push('/auth')
-			});
-		}
+		
 	}
 }
 </script>

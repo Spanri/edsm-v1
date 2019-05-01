@@ -54,7 +54,6 @@
 					type="text" 
 					placeholder="Введите логин"
 					class="search-box"
-					autocomplete = usernameNew
 				/>
 				<div style="height:15px;"></div>
 				<p>ПАРОЛЬ</p>
@@ -165,34 +164,34 @@ export default {
 .mainAuth > *{
 	text-align: center;
 }
-.auth{
+.mainAuth .auth{
 	height: 400px;
 	background: #ADE0FC;
 }
 /* Кнопки переключения вход и регистрация */
-.switch{
+.mainAuth .switch{
 	font-size: 18px;
 	margin-top: 20px;
 	margin-bottom: 20px;
 	display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
-.switch p:hover{
+.mainAuth .switch p:hover{
 	cursor: pointer;
 }
 /* Кнопки ВОЙТИ и ЗАРЕГЕСТРИРОВАТЬСЯ */
-button{
+.mainAuth button{
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
 	color: white;
 	background-color: #347090;
 }
-button:hover{
+.mainAuth button:hover{
 	cursor: pointer;
 }
 /* Поля ввода */
-input{
+.mainAuth input{
 	border: 0;
 	height: 30px;
 	margin: 0 auto;

@@ -1,6 +1,6 @@
 <template>
 	<div class="account">
-        <p>ID {{id}}</p>
+        <p>ID {{$route.params.id}}</p>
 		<form id="search">
 			Поиск по всем столбцам <input name="query" v-model="filterKey">
 		</form>
@@ -30,7 +30,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import {DOC_REQUEST} from '../store/mutation-types'
+import {DOCS_REQUEST} from '../store/mutation-types'
 
 export default {
     name: 'account',
@@ -77,7 +77,7 @@ export default {
             return heroes
         },
 		heroes() {
-			this.$store.dispatch(DOC_REQUEST, this.id);
+			this.$store.dispatch(DOCS_REQUEST, this.id);
 			return this.$store.getters.getDoc;
 		}
     },

@@ -60,7 +60,7 @@ export default {
         newFolderFun(){
             let newFolderItem = {
                 title: this.newFolder.toUpperCase(),
-                ref: Number(this.items[this.items.length-1].ref) + 1
+                ref: "/d/"+Number(this.items[this.items.length-1].ref) + 1
             }
             // this.items.push(newFolderItem);
             this.$store.dispatch(DOC_FOLDER_UPDATE, newFolderItem);

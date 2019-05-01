@@ -28,7 +28,7 @@ const actions = {
             commit(AUTH_REQUEST)
             // axios
             // .post('http://127.0.0.1:8000/api-token-auth/', {
-            //     "username": user.username,
+            //     "email": user.email,
             //     "password": "nysha2161"
             // })
             // .then(response => {

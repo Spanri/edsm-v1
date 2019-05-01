@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const HHTP = axios.create({
-    baseURL: 'http://127.0.0.1:8000',
+    baseURL: 'https://127.0.0.1:8000',
     headers: {
         Authorization: 'Bearer {token}'
     }
@@ -23,7 +23,7 @@ export const HHTP = axios.create({
 function fun() {
     var token = '';
     axios
-        .post('http://127.0.0.1:8000/api-token-auth/', {
+        .post('https://127.0.0.1:8000/api-token-auth/', {
             "username": "spanri",
 	        "password": "nysha2161"
         })

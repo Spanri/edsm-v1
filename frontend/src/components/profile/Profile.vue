@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT} from '../store/mutation-types'
-import HeaderProfile from '../components/HeaderProfile';
+import {AUTH_LOGOUT} from '../../store/mutation-types'
+import HeaderProfile from './HeaderProfile';
 
 export default {
 	name: 'account',
@@ -32,7 +32,7 @@ export default {
 			this.$router.push('/profile/notif')
 		},
 		edit() {
-			this.$router.push('/profile/edit')
+			this.$router.push('/editProfile')
 		},
 		adm() {
 			this.$router.push('/profile/adm')

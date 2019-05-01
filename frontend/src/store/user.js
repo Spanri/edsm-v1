@@ -37,6 +37,8 @@ const actions = {
         //     dispatch(AUTH_LOGOUT)
         // })
         let response = {
+            email: 'kozlova9v@mail.ru',
+            password: '123456', // может не надо? или в хешированном виде
             name:'Городничев Михаил Геннадьевич', 
             position:'Кандидат технических наук, заведующий кафедрой',
             adm: true,

@@ -12,6 +12,7 @@
   "dependencies": {
     "auth0-js": "^9.8.2",
     "axios": "^0.18.0",
+    "convertapi": "^1.2.0",
     "eventemitter3": "^3.1.0",
     "vue": "^2.5.2",
     "vue-axios": "^2.1.4",

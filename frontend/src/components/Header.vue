@@ -9,7 +9,10 @@
             <div class="header-right">
                 <div class="icon" title="Добавить документ" @click="toAddDoc">
                     <div>+</div>
-                    <img src="https://img.icons8.com/ios/30/FFFFFF/document-filled.png">
+                    <svg fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30px" height="30px">
+                        <path
+                            d="M13.172,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8.828c0-0.53-0.211-1.039-0.586-1.414l-4.828-4.828 C14.211,2.211,13.702,2,13.172,2z M15,18H9c-0.552,0-1-0.448-1-1v0c0-0.552,0.448-1,1-1h6c0.552,0,1,0.448,1,1v0 C16,17.552,15.552,18,15,18z M15,14H9c-0.552,0-1-0.448-1-1v0c0-0.552,0.448-1,1-1h6c0.552,0,1,0.448,1,1v0 C16,13.552,15.552,14,15,14z M13,9V3.5L18.5,9H13z"/>
+                    </svg>
                 </div>
                 <div class="icon" title="Уведомления" @click="toNotif">
                     <div :style="{ color: notifColor }">{{notif}}</div>
@@ -22,7 +25,7 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT, DOC_REQUEST} from '../store/mutation-types'
+import {AUTH_LOGOUT, DOCS_REQUEST} from '../store/mutation-types'
 
 export default {
     name: 'Header',
@@ -34,7 +37,7 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch(DOC_REQUEST, "notif")
+        this.$store.dispatch(DOCS_REQUEST, "notif")
             .then(()=>{
                 this.notif = this.$store.getters.getDoc.length;
             });
@@ -178,6 +181,9 @@ export default {
 .icon:hover{
     cursor: pointer;
     color: #7cb0c1;
+}
+.icon:hover svg{
+    fill: #7cb0c1;
 }
 .icon div{
     padding: 0px;
