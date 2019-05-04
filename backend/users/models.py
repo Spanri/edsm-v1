@@ -19,7 +19,7 @@ class UserProfile(models.Model):
     second_name = models.CharField(max_length=50, blank=True)
     patronymic = models.CharField(max_length=50, blank=True)
     position = models.CharField(max_length=200, blank=True)
-    adm = models.BooleanField(default=False, blank=True)
+    is_admin = models.BooleanField(default=False, blank=True)
     photo = models.ImageField(upload_to='uploads', blank=True)
 
     def get_full_name(self):

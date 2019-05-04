@@ -39,10 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'rest_framework_jwt',
     'rest_framework.authtoken',
     'users',
-
 ]
 
 MIDDLEWARE = [
@@ -129,26 +127,12 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authtoken'
+        'rest_framework.authtoken',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     )
 }
-
-# "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNTU2ODEyOTYwLCJlbWFpbCI6ImtvemxvdmE5dkBtYWlsLnJ1In0.7Fk53K0F-WyhpTSYGS6X4UXWd6XpJp_t8lgv9GBUQgE"
-# import datetime
-# JWT_AUTH = {
-#     'JWT_VERIFY': True,
-#     'JWT_AUTH_HEADER_PREFIX': 'JWT',
-#     'JWT_VERIFY_EXPIRATION': True,
-#     'JWT_LEEWAY': 0,
-#     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
-#     'JWT_ALLOW_REFRESH': True,
-#     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
-# }
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

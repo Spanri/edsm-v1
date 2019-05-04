@@ -10,7 +10,7 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
             'second_name', 
             'patronymic',
             'position', 
-            'adm',
+            'is_admin',
         )
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):    
@@ -46,9 +46,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         nested_serializer.update(nested_instance, nested_data)
         return nested_serializer.update(instance, validated_data)
 
-# from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.models import Token
 
-# users = User.objects.all()
-# for user in users:
-#     token, created = Token.objects.get_or_create(user=user)
-#     print(user.email, token.key)
+users = User.objects.all()
+for user in users:
+    token, created = Token.objects.get_or_create(user=user)
+    print(user.email, token.key)
