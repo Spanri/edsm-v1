@@ -26,7 +26,7 @@ const actions = {
     [USER_REQUEST]: ({commit, dispatch}) => {
         commit(USER_REQUEST)
         // axios
-        // .post('http://127.0.0.1:8000/api-token-verify/', {
+        // .post('http://127.0.0.1:8000/users', {
         //     "token" : state.token
         // })
         // .then(response => {
@@ -67,25 +67,23 @@ const actions = {
         commit(USER_SUCCESS, response)
     },
     [USER_UPDATE]: ({commit, dispatch}, data) => {
-        // axios
-        // .post('http://127.0.0.1:8000/api-token-verify/', {
-        //     "token" : state.token
-        // })
-        // .then(response => {
-        //     commit(USER_SUCCESS, response)
-        // })
-        // .catch(resp => {
-        //     commit(USER_ERROR)
-        //     // if resp is unauthorized, logout, to
-        //     dispatch(AUTH_LOGOUT)
-        // })
-        let response = {};
-        Object.assign(response, 
+        let request = {};
+        Object.assign(request, 
             data.password ? { password: data.password } : null,
-            data.image ? { image: data.image } : null,
             data.email ? { email: data.email } : null,
-            data.name ? { name: data.name } : null,
-        );          
+            data.name ? { first_name: data.name } : null,
+        );  
+        axios
+        .post('http://127.0.0.1:8000/update/user/', request)
+        .then(response => {
+            commit(USER_SUCCESS, response)
+        })
+        .catch(resp => {
+            commit(USER_ERROR)
+            // if resp is unauthorized, logout, to
+            dispatch(AUTH_LOGOUT)
+        })
+                
         console.log(response);
     },
 }
