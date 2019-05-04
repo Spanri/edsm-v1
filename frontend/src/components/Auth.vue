@@ -4,26 +4,17 @@
 		<div class="auth" :style="{ height: boxSize }">
 			<div class="switch">
 				<div></div>
-				<p 
-					@click="login=true;loginStyle1='underline';loginStyle2='none';boxSize='400px'"
-					:style="{ textDecoration: loginStyle1 }"
-					>ВХОД
-				</p>
-				<p
-					@click="login=false;loginStyle2='underline';loginStyle1='none';boxSize='480px'"
-					:style="{ textDecoration: loginStyle2 }"
-					>РЕГИСТРАЦИЯ
-				</p>
+				<p style="textDecoration: underline">ВХОД</p>
 				<div></div>
 			</div>
 			<form
 					class="login"
 					@submit.prevent="loginMethod();"
 					v-if="login">
-				<p>ЛОГИН</p>
+				<p>EMAIL</p>
 				<input
 					required
-					v-model="username" 
+					v-model="email" 
 					type="text"
 					placeholder="Введите логин"
 					class="search-box"
@@ -43,57 +34,21 @@
 					<a href="" style="color:#347090;font-size:14px;padding:10px">Забыли пароль?</a>
 				</p>
 			</form>
-			<form 
-					class="signup"
-					ref="signup"
-					v-if="!login">
-				<p>ЛОГИН</p>
-				<input 
-					required
-					v-model="usernameNew" 
-					type="text" 
-					placeholder="Введите логин"
-					class="search-box"
-				/>
-				<div style="height:15px;"></div>
-				<p>ПАРОЛЬ</p>
-				<input 
-					required 
-					v-model="passwordNew" 
-					type="password"
-					placeholder="Введите пароль"
-					class="search-box"
-				/>
-				<div style="height:15px;"></div>
-				<p>ПОВТОРИТЕ ПАРОЛЬ</p>
-				<input 
-					required 
-					v-model="password2New" 
-					type="password"
-					placeholder="Повторите пароль"
-					class="search-box"
-				/>
-				<div style="height:40px;"></div>
-				<button type="button" @click="signupMethod" id="signup">ЗАРЕГИСТРИРОВАТЬСЯ</button>
-			</form>
 		</div>
-		<p v-if="error"> {{ error }} </p>
+		<p v-if="error" style="color:red"> {{ error }} </p>
 		<div></div>
 	</div>
 </template>
 
 <script>
-import {AUTH_REQUEST} from '../store/mutation-types'
+import {AUTH_REQUEST, AUTH_SIGNUP} from '../store/mutation-types'
 
 export default {
 	name: 'main',
 	data () {
 		return {
-			username: null,
+			email: null,
 			password: null,
-			usernameNew: null,
-			passwordNew: null,
-			password2New: null,
 			login: true,
 			error: null,
 			loginStyle1: "underline",
@@ -105,23 +60,32 @@ export default {
 
 	},
 	methods: {
-		loginMethod() {
-			const { username, password } = this;
-			this.$store.dispatch(AUTH_REQUEST, { username, password })
+		loginMethod(e) {
+			const { email, password } = this;
+			this.$store.dispatch(
+				AUTH_REQUEST, { 
+					email, 
+					password 
+				}
+			)
 			.then(() => {
 				this.error = null;
-				e.preventDefault();
+				// e.preventDefault();
 				console.log('signin')
 				this.$router.push('/')
+				console.log('signin2')
+			})
+			.catch(err => {
+				this.error = "Неправильный Email или Пароль.";
 			})
 			this.$router.push('/')
 		},
 		signupMethod(e) {
-			const { usernameNew, passwordNew, password2New } = this;
+			const { emailNew, passwordNew, password2New } = this;
 			var checkValid = /[a-zA-Z0-9]{6,}/i;
-			if (!checkValid.test(usernameNew)) {
+			if (!checkValid.test(emailNew)) {
 				this.error = "Логин должен быть 6 и больше символов и состоять из английских букв";
-			} else if (!this.checkUsername(usernameNew)) {
+			} else if (!this.checkUsername(emailNew)) {
 				this.error = "Такой пользователь уже зарегистрирован.";
 			} else if (!checkValid.test(passwordNew)) {
 				this.error = "Пароль должен быть 6 и больше символов и состоять из английских букв";
@@ -132,7 +96,12 @@ export default {
 				console.log('signup');
 				const elem = this.$refs.signup;
 				elem.submit();
-				this.$store.dispatch(AUTH_REQUEST, { username: "username", password: "password" })
+				this.$store.dispatch(
+					AUTH_SIGNUP, { 
+						email: emailNew, 
+						password: passwordNew
+					}
+				)
 				.then(() => {
 					this.$router.push('/');
 				});
@@ -170,14 +139,9 @@ export default {
 }
 /* Кнопки переключения вход и регистрация */
 .mainAuth .switch{
-	font-size: 18px;
+	font-size: 26px;
 	margin-top: 20px;
 	margin-bottom: 20px;
-	display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-}
-.mainAuth .switch p:hover{
-	cursor: pointer;
 }
 /* Кнопки ВОЙТИ и ЗАРЕГЕСТРИРОВАТЬСЯ */
 .mainAuth button{

@@ -5,6 +5,7 @@ import Auth from '@/components/Auth'
 import Profile from '@/components/profile/Profile'
 import EditProfile from '@/components/profile/EditProfile'
 import Grid from '@/components/Grid'
+import Adm from '@/components/Adm'
 import Document from '@/components/Document'
 import AddDoc from '@/components/AddDoc'
 import NotFound from '@/components/NotFound'
@@ -99,7 +100,7 @@ const router = new Router({
 					} 
 				},
 				{ path: 'edit', component: EditProfile },
-				{ path: 'adm', component: Document },
+				{ path: 'adm', component: Adm },
 			],
 			beforeEnter: ifAuthenticated,
 		},

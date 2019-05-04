@@ -1,26 +1,28 @@
-"""django_auth URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
+from django.conf.urls import url, include
 from django.urls import path
-from django.conf.urls import url
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    url(r'^api-token-auth/', obtain_jwt_token),
-    url(r'^api-token-verify/', verify_jwt_token),
-    url(r'^api-token-refresh/', refresh_jwt_token),
+from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import refresh_jwt_token
+from rest_framework_jwt.views import verify_jwt_token
+
+from django.contrib import admin
+from users.views import UserViewSet, SendInviteView, UserUpdateView
+
+from rest_framework import routers
+router = routers.DefaultRouter(trailing_slash = False)
+router.register(r'^users', UserViewSet)
+
+urlpatterns = router.urls
+
+urlpatterns += [
+    url(r'^update/user/(?P<pk>\d+)/', UserUpdateView.as_view(), name='user_update'),
+    url(r'send_invite/$', SendInviteView.as_view({"post": "send_the_mail"})),
+    # url(r'^user/$', Login.as_view({'get': 'login'}), name='user-login'),
+    # auth-jwt принимает email и password, возвращается token
+    url(r'^auth/jwt/', obtain_jwt_token),
+    url(r'^auth/jwt-refresh/', refresh_jwt_token),
+    # auth-jwt-verify принимает токен и возвращает токен
+    url(r'^auth/jwt-verify/', verify_jwt_token),
+    # Для разработчика
+    url(r'^admin/', admin.site.urls),
 ]

@@ -1,5 +1,5 @@
 <template>
-<div class="main">
+<div class="maing">
 	<Menu></Menu>
 	<router-view></router-view>
 </div>
@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style>
-.main{
+.maing{
     height: 100%;
 	width: 100%;
 	background: white;
