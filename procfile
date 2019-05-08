@@ -1,1 +1,1 @@
-web: gunicorn edms-mtuci.wsgi
+web: gunicorn edms-mtuci:app
