@@ -24,9 +24,9 @@ SECRET_KEY = 'klc=#bj7qm#iiz%1ru-6y3%guc5_e(hq+3hm3&65dg6%c%@(*y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# if DEBUG:
-import mimetypes
-mimetypes.add_type("application/javascript", ".js", True)
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
