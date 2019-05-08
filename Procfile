@@ -1,1 +1,1 @@
-web: gunicorn edms-mtuci:app
+web: gunicorn django_auth:app
