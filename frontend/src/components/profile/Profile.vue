@@ -6,7 +6,7 @@
 				<div class="menuProfile">
 					<p @click="notif()">УВЕДОМЛЕНИЯ</p>
 					<p @click="edit()">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</p>
-					<p v-if="profile.adm" @click="adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
+					<p v-if="is_adm" @click="adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
 					<p @click="logout()">ВЫЙТИ</p>
 				</div>
 			</div>
@@ -22,11 +22,11 @@ import HeaderProfile from './HeaderProfile';
 export default {
 	name: 'account',
 	components: { HeaderProfile },
-	computed: {
-		profile: function(){
-			return this.$store.getters.getProfile
+	data () {
+		return {
+            is_adm: this.$store.getters.getProfile.is_staff,
 		}
-	},
+    },
 	methods: {
 		notif() {
 			this.$router.push('/profile/notif')

@@ -30,7 +30,7 @@ export default {
             this.error = 'Пользователь создается...'
             this.$store.dispatch(AUTH_SIGNUP, { email: this.email })
             .then((resp) => {
-                this.error = 'Пользователь создан. ' + resp
+                this.error = 'Пользователь создан. Пароль пользователя: ' + resp
             });
         },
     }
