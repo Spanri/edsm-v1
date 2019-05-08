@@ -1,1 +1,1 @@
-web: gunicorn django_auth:app
+web: gunicorn django_auth
