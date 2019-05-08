@@ -10,8 +10,10 @@ import Document from '@/components/Document'
 import AddDoc from '@/components/AddDoc'
 import NotFound from '@/components/NotFound'
 import store from '../store'
+import VeeValidate from 'vee-validate';
 
 Vue.use(Router)
+Vue.use(VeeValidate);
 
 const ifNotAuthenticated = (to, from, next) => {
 	if (!store.getters.isAuthenticated) {

@@ -14,33 +14,55 @@
                     <p>Email</p>
                     <input
                         v-model="email"
-                        type="text" 
-                        placeholder="Введите имя"
-                        class="search-box"
-                    />
-                    <p>ФИО</p>
-                    <input
-                        v-model="name"
-                        type="text" 
+                        type="email"
                         placeholder="Введите имя"
                         class="search-box"
                     />
                     <p>Пароль</p>
                     <input
                         v-model="password"
-                        type="text" 
+                        type="password" 
                         placeholder="Введите имя"
                         class="search-box"
+                        autocomplete="false"
                     />
                     <div v-if="password">
                         <p>Повторите пароль</p>
                         <input
                             v-model="password2"
-                            type="text" 
+                            type="password" 
                             placeholder="Введите имя"
                             class="search-box"
                         />
                     </div>
+                    <p>Имя</p>
+                    <input
+                        v-model="first_name"
+                        type="text" 
+                        placeholder="Введите имя"
+                        class="search-box"
+                    />
+                    <p>Фамилия</p>
+                    <input
+                        v-model="second_name"
+                        type="text" 
+                        placeholder="Введите фамилию"
+                        class="search-box"
+                    />
+                    <p>Отчество</p>
+                    <input
+                        v-model="patronymic"
+                        type="text" 
+                        placeholder="Введите отчество"
+                        class="search-box"
+                    />
+                    <p>Должность</p>
+                    <input
+                        v-model="position"
+                        type="text" 
+                        placeholder="Введите отчество"
+                        class="search-box"
+                    />
                     <div style="height:35px;"></div>
                     <button type="submit" @click="editProfile">РЕДАКТИРОВАТЬ</button> <br>
                 </form>
@@ -58,21 +80,18 @@ export default {
     name: 'account',
     data () {
 		return {
-            email: '',
-            name: '',
+            email: this.$store.getters.getProfile.email,
             password: '',
             password2: '',
-            image: '',
+            first_name: this.$store.getters.getProfile.profile.first_name,
+            second_name: this.$store.getters.getProfile.profile.second_name,
+            patronymic: this.$store.getters.getProfile.profile.patronymic,
+            position: this.$store.getters.getProfile.profile.position,
+            image: this.$store.getters.getProfile.profile.image,
             error: '',
-            upload: '',            
+            upload: '',
 		}
     },
-    computed: {
-		profile: function(){
-            //console.log(this.$store.getters.getProfile)
-			return this.$store.getters.getProfile
-		}
-	},
     methods: {
         onFileChange(e) {
             this.upload = "Загружается..."
@@ -90,18 +109,28 @@ export default {
                 this.error = '';
             }
             this.$store.dispatch(USER_UPDATE, {
-                name: this.name,
-                image: this.image,
-                email: this.email,
-                password: this.password
+                token: this.$store.getters.token,
+                data: {
+                    email: this.email,
+                    password: this.password,
+                    first_name: this.first_name,
+                    second_name: this.second_name,
+                    patronymic: this.patronymic,
+                    position: this.position,
+                }
             })
-            .then(() => {
+            .then(resp => {
                 this.error = 'Данные профиля изменены.';
-                this.name = '';
-                this.image = '';
-                this.email = '';
-                this.password = '';
+                this.email = resp.email;
+                this.password = resp.password;
+                this.first_name = resp.first_name;
+                this.second_name = resp.second_name;
+                this.patronymic = resp.patronymic;
+                this.position = resp.position;
                 this.password2 = ''; 
+            })
+            .catch(err=>{
+                this.error = 'Ошибка. Что-то пошло не так.'
             })
         },
     }
@@ -122,7 +151,7 @@ export default {
 	margin-bottom: 30px;
 }
 /* Поля ввода */
-.editProfile textarea, .editProfile input[type="text"]{
+.editProfile textarea, .editProfile [type]:not([type="submit"]):not([type="file"]){
 	border: 0;
 	margin: 0 auto;
     height: 30px;

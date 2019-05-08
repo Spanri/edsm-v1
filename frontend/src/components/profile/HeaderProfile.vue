@@ -2,8 +2,12 @@
     <div class="headerProfileGradient">
         <div class="headerProfile">
             <img class="avatar">
-            <div v-if="profile.name">
-                <p style="font-size:24px;">{{profile.name}}</p>
+            <div v-if="profile.first_name">
+                <p style="font-size:24px;">
+					{{profile.second_name}}
+					{{profile.first_name}}
+					{{profile.patronymic}}
+				</p>
                 <p>{{profile.position}}</p>
             </div>
         </div>
@@ -11,13 +15,16 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT} from '../../store/mutation-types'
+import {USER_REQUEST} from '../../store/mutation-types'
 
 export default {
 	name: 'account',
+	created(){
+		return this.$store.dispatch(USER_REQUEST, this.$store.getters.token)
+	},
 	computed: {
 		profile: function(){
-			return this.$store.getters.getProfile
+			return this.$store.getters.getProfile.profile
 		}
 	},
 	methods: {
