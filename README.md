@@ -34,7 +34,6 @@ npm run build --report
 pip3 install -r requirements.txt
 
 # сделать круто таблицам
-python manage.py makemigrations users
 python manage.py migrate
 
 # В командной строке указать password smtp сервера (вместо
