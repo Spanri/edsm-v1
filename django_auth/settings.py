@@ -113,7 +113,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# STATIC_URL = 'frontend/dist/static/'
+STATIC_URL = 'frontend/dist/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'public')
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, '/dist/static'),
