@@ -18,33 +18,22 @@ const getters = {
 }
 
 const actions = {
-    [AUTH_SIGNUP]: ({commit, dispatch}, user) => {
+    [AUTH_SIGNUP]: ({commit, dispatch, state}, user) => {
         return new Promise((resolve, reject) => {
             console.log(user);
             axios
             .post('http://127.0.0.1:8000/api/send_invite/', {
                 "email": user.email,
+                "is_staff": user.is_staff
+            },{
+                headers: { Authorization: "Token " + state.token }
             })
             .then(resp => {
-                console.log(resp)
-                axios
-                .post('http://127.0.0.1:8000/api/users', {
-                    "email": user.email,
-                    "password": resp.data.password,
-                    "profile": {}
-                })
-                .then(response => {
-                    console.log(response)
-                    resolve(resp.data.password)
-                })
-                .catch(err => {
-                    reject(err)
-                    console.log(err);
-                })
+                resolve(resp.data.password)
             })
             .catch(err => {
                 reject(err)
-                console.log(err);
+                // console.log(err);
             })
         })
     },
@@ -65,7 +54,7 @@ const actions = {
             .catch(err => {
                 localStorage.removeItem('user-token')
                 reject(err)
-                console.log(err);
+                // console.log(err);
             })
         })
     },

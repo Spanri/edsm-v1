@@ -6,7 +6,7 @@
 				<div class="menuProfile">
 					<p @click="notif()">УВЕДОМЛЕНИЯ</p>
 					<p @click="edit()">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</p>
-					<p v-if="is_adm" @click="adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
+					<p v-if="is_staff" @click="adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
 					<p @click="logout()">ВЫЙТИ</p>
 				</div>
 			</div>
@@ -24,7 +24,7 @@ export default {
 	components: { HeaderProfile },
 	data () {
 		return {
-            is_adm: this.$store.getters.getProfile.is_staff,
+            is_staff: this.$store.getters.getProfile.is_staff,
 		}
     },
 	methods: {

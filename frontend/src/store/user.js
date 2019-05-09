@@ -60,18 +60,18 @@ const actions = {
             commit(USER_SUCCESS, response)
         })
     },
-    [USER_UPDATE]: ({commit, dispatch}, data) => {
+    [USER_UPDATE]: ({commit, dispatch, state}, data) => {
         return new Promise((resolve, reject) => {
             axios
             .get('http://127.0.0.1:8000/api/get_user_from_token/', {
-                headers: { Authorization: "Token " + data.token }
+                headers: { Authorization: "Token " + state.token }
             })
             .then(response => {
                 console.log(response.data[0].id)
-                console.log(data.data)
+                console.log(data)
                 axios
-                .put('http://127.0.0.1:8000/api/users/'+response.data[0].id, data.data, {
-                    headers: { Authorization: "Token " + data.token }
+                .put('http://127.0.0.1:8000/api/users/'+response.data[0].id, data, {
+                    headers: { Authorization: "Token " + state.token }
                 })
                 .then(resp => {
                     commit(USER_SUCCESS, resp.data[0])
@@ -79,16 +79,15 @@ const actions = {
                 })
                 .catch(err => {
                     reject(err)
-                    console.log(err)
+                    // console.log(err)
                 })
             })
             .catch(err => {
                 reject(err)
-                console.log(err)
+                // console.log(err)
             })
         })
     },
-    // ПЕРЕДЕЛАТЬ
     [USER_CONFIRM_UPDATE_PASSWORD]: ({commit, dispatch}, email) => {
         return new Promise((resolve, reject) => {
             axios
@@ -97,22 +96,9 @@ const actions = {
             })
             .then(resp => {
                 resolve(resp)
-                // axios
-                // .put('http://127.0.0.1:8000/api/users/'+response.data[0].id, data.data, {
-                //     headers: { Authorization: "Token " + data.token }
-                // })
-                // .then(resp => {
-                //     commit(USER_SUCCESS, resp.data[0])
-                //     resolve(resp)
-                // })
-                // .catch(err => {
-                //     reject(err)
-                //     console.log(err)
-                // })
             })
             .catch(err => {
                 reject(err)
-                console.log(err)
             })
         })
     },

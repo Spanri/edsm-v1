@@ -2,6 +2,9 @@ from .models import User, UserProfile
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
+from django.core import exceptions
+from django.contrib.auth.forms import PasswordResetForm
+from django.conf import settings
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):    
     class Meta:
@@ -35,7 +38,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user = User.objects.create(**user_data)
         user.set_password(user_data['password'])
         user.save()
-        UserProfile.objects.create(user=user,**profile_data)
         return user
 
     def update(self, instance, validated_data):
@@ -54,8 +56,6 @@ users = User.objects.all()
 for user in users:
     token, created = Token.objects.get_or_create(user=user)
     print(user.email, token.key)
-
-from django.core import exceptions
 
 class AuthTokenSerializer(serializers.Serializer):
     '''
@@ -85,3 +85,26 @@ class AuthTokenSerializer(serializers.Serializer):
 
         data['user'] = user
         return data
+
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password_reset_form_class = PasswordResetForm
+    def validate_email(self, value):
+        self.reset_form = self.password_reset_form_class(data=self.initial_data)
+        if not self.reset_form.is_valid():
+            raise serializers.ValidationError(_('Error'))
+
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError(_('Invalid e-mail address'))
+        return value
+
+    def save(self):
+        request = self.context.get('request')
+        opts = {
+            'use_https': request.is_secure(),
+            'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL'),
+            'email_template_name': 'registration/password_reset_email.html',
+            'request': request,
+        }
+        self.reset_form.save(**opts)
+        

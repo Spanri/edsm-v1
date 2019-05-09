@@ -2,9 +2,9 @@
 
 > Vue.js/Django проект
 
-## Build
+## Построение
 
-### фронтенд, Vue.js
+### Фронтенд, Vue.js
 
 Не забудьте установить npm!
 
@@ -25,7 +25,7 @@ npm run build
 npm run build --report
 ```
 
-### бекенд, Django
+### Бекенд, Django
 
 Не забудьте установить python!
 
@@ -33,6 +33,16 @@ npm run build --report
 # установить зависимости
 pip3 install -r requirements.txt
 
+# В командной строке указать password smtp сервера (вместо 
+# password подставить пароль, он есть у разработчика приложения).
+# Вроде бы это не перманентно делается, я не поняла, но иначе не
+# работает
+set edms-mtuci-password=password
+
 # запустить
 python manage.py runserver
 ```
+
+## Другие штуки
+
+[Документация](edms-mtuci.herokuapp.ru/docs "edms-mtuci.herokuapp.ru/docs")
