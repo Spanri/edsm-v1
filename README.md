@@ -33,7 +33,7 @@ npm run build --report
 # установить зависимости
 pip3 install -r requirements.txt
 
-# сделать круто таблицам
+# Миграция таблиц
 python manage.py migrate
 
 # В командной строке указать password smtp сервера (вместо
@@ -42,8 +42,14 @@ python manage.py migrate
 # работает
 set edms-mtuci-password=password
 
+# Завести суперюзера (email любой, он не проверяется)
+python manage.py createsuperuser
+
 # запустить
 python manage.py runserver
+
+# зайти в администратора (данные суперюзера)
+http://localhost:8000/api/admin/login/?next=/api/admin/
 ```
 
 ## Другие штуки
