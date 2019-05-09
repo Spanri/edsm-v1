@@ -21,6 +21,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from django.views.generic import TemplateView
+from django.core import exceptions
+from rest_framework import status
 
 ## Работает
 from rest_framework.decorators import api_view
@@ -37,28 +39,17 @@ class Index(TemplateView):
 
 class ObtainAuthToken(views.APIView):
     '''
-    title:
-    Титл
-
     description:
     Переопределение получения токена, потому что по дефолту он 
     получается через username и пароль, а надо через email и пароль.
 
     post:
     Получить токен по email и password, возвращает token.
-     
     '''
     title="123456"
     description = "dfdgf"
     throttle_classes = ()
     permission_classes = ()
-    # parser_classes = (
-    #     parsers.FormParser,
-    #     parsers.MultiPartParser,
-    #     parsers.JSONParser,
-    # )
-
-    # renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request):
         serializer = AuthTokenSerializer(data=request.data)
@@ -106,6 +97,7 @@ class SendInviteView(viewsets.ModelViewSet):
 
     def send_the_mail(self, request):
         email = request.data['email']
+        is_staff = request.data['is_staff']
         password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
         message_text = (
             'Вашу почту зарегистрировали на '
@@ -120,10 +112,22 @@ class SendInviteView(viewsets.ModelViewSet):
         send_mail(
             'Приглашение от СЭД МТУСИ',
             message_text,
-            'nysha2161@gmail.com',
+            'edmsmtuci@gmail.com',
             [email,],
             fail_silently=False,
         )
+
+        user = User.objects.create_user(
+            email = email,
+            password = password,
+            username = email,
+            is_staff = is_staff
+        )
+        UserProfile.objects.filter(user_id=user.id).update(
+            first_name = email,
+            position = "Должность не указана"
+        )
+        user.save()
         
         return Response({'password':password})
 
@@ -141,8 +145,23 @@ class ConfirmUpdatePasswordView(viewsets.ModelViewSet):
     permission_classes = ()
     queryset = User.objects.all()
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
+        
     def confirm_update_password(self, request):
         email = request.data['email']
+        try:
+            User.objects.get(email=email)
+        except User.DoesNotExist:
+            content = {'error': 'Пользователь не создан.'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
         code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
         message_text = (
             'Код подтверждения: ' + code
@@ -152,7 +171,7 @@ class ConfirmUpdatePasswordView(viewsets.ModelViewSet):
         send_mail(
             'Смена пароля от СЭД МТУСИ',
             message_text,
-            'nysha2161@gmail.com',
+            'edmsmtuci@gmail.com',
             [email,],
             fail_silently=False,
         )

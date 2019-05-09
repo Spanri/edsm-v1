@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.db.models.signals import post_save
 
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
@@ -20,7 +21,12 @@ class UserProfile(models.Model):
     patronymic = models.CharField(max_length=50, blank=True)
     position = models.CharField(max_length=200, blank=True)
     photo = models.ImageField(upload_to='uploads', blank=True)
+    
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            UserProfile.objects.create(user=instance)
 
     def get_full_name(self):
         return self.first_name + " " + second_name + " " + patronymic
 
+    post_save.connect(create_user_profile, sender=User)

@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from django.urls import path
-from django.contrib import admin
+from django.contrib import admin, auth
+from django.contrib.auth import views as viewsR
 from rest_framework.authtoken.views import obtain_auth_token
 from django.views.generic import TemplateView
 from rest_framework.documentation import include_docs_urls
@@ -19,6 +20,12 @@ router.register(r'^api/users', UserViewSet)
 urlpatterns = router.urls
 
 urlpatterns += [
+    # для генерации в email ссылки сброса пароля
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', 
+        TemplateView.as_view(template_name="password_reset_confirm.html"),
+        name='password_reset_confirm'
+    ),
+    url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^api/send_invite/$', SendInviteView.as_view({"post": "send_the_mail"})),
     url(r'^api/confirm_update_password/$', ConfirmUpdatePasswordView.as_view({"post": "confirm_update_password"})),
     url(r'^api/get_auth_token/$', ObtainAuthToken.as_view()),

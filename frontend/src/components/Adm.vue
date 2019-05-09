@@ -8,6 +8,9 @@
                 type="email" 
                 placeholder="Введите email"
             />
+            <p style="display: inline-block;"> Администратор</p>
+            <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="is_staff">
+            <br>
             <button type="button" @click="addUser">СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ</button> <br>
             <p>{{error}}</p>
         </form>
@@ -22,13 +25,14 @@ export default {
     data () {
         return {
             email: '',
+            is_staff: false,
             error: ''
         }
     },
     methods: {
         addUser(){
             this.error = 'Пользователь создается...'
-            this.$store.dispatch(AUTH_SIGNUP, { email: this.email })
+            this.$store.dispatch(AUTH_SIGNUP, { email: this.email, is_staff: this.is_staff })
             .then((resp) => {
                 this.error = 'Пользователь создан. Пароль пользователя: ' + resp
             });
@@ -47,7 +51,7 @@ export default {
     margin: 15px;
 }
 /* Поле ввода */
-.adm input{
+.adm input [type]:not([type="checkbox"]){
 	border: 0;
 	margin: 15px;
     height: 30px;
@@ -66,5 +70,12 @@ export default {
 }
 .adm button:hover{
 	cursor: pointer;
+}
+/**/
+.adm input[type="checkbox"]{
+    height: 15px;
+    width: 15px;
+    margin: 0;
+    vertical-align: middle;
 }
 </style>

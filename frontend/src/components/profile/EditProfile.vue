@@ -109,15 +109,12 @@ export default {
                 this.error = '';
             }
             this.$store.dispatch(USER_UPDATE, {
-                token: this.$store.getters.token,
-                data: {
-                    email: this.email,
-                    password: this.password,
-                    first_name: this.first_name,
-                    second_name: this.second_name,
-                    patronymic: this.patronymic,
-                    position: this.position,
-                }
+                email: this.email,
+                password: this.password,
+                first_name: this.first_name,
+                second_name: this.second_name,
+                patronymic: this.patronymic,
+                position: this.position,
             })
             .then(resp => {
                 this.error = 'Данные профиля изменены.';

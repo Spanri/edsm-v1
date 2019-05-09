@@ -173,7 +173,7 @@ export default {
 	margin-bottom: 30px;
 }
 /* Поля ввода */
-.addDoc textarea, .addDoc input[type="text"]{
+.addDoc textarea, .addDoc input[type="text"] [type]:not([type="checkbox"]){
 	border: 0;
 	margin: 0 auto;
     padding: 10px;
@@ -181,7 +181,7 @@ export default {
     background: rgb(223, 243, 253);;
 }
 /* Кнопки ЗАГРУЗИТЬ и СОЗДАТЬ */
-.addDoc button, .addDoc input[type="submit"], .fileContainer{
+.addDoc button, .addDoc input[type="submit"] [type]:not([type="checkbox"]), .fileContainer{
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
@@ -246,7 +246,6 @@ export default {
 }
 /**/
 .addDoc input[type="checkbox"]{
-    width: 15px;
     height: 15px;
 }
 /**/

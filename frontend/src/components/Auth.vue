@@ -160,7 +160,8 @@ export default {
 				this.newPassword = 2;
 			})
 			.catch(err => {
-				this.error = "Неправильный Email или Пароль.";
+				this.processConfirm = false;
+				this.error = "Такой email не зарегистрирован в системе.";
 			})	
 		},
 		updatePassword(){
@@ -174,8 +175,12 @@ export default {
 					return;
 				}
 				this.error = "Круто клево";
+				this.processConfirm = true;
 				this.$store.dispatch(
-					USER_UPDATE, emailForConfirm
+					USER_UPDATE, {
+						email: emailForConfirm,
+						password: password1
+					}
 				)
 				.then((resp) => {
 					this.error = null;

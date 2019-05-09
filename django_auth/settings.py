@@ -72,7 +72,7 @@ ROOT_URLCONF = 'django_auth.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,6 +117,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 
+        'users.serializers.PasswordResetSerializer',
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -139,7 +144,7 @@ django_heroku.settings(locals())
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = 'frontend/dist/static/'
+# STATIC_URL = 'frontend/dist/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'public')
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, '/dist/static'),
@@ -158,8 +163,8 @@ REST_FRAMEWORK = {
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'nysha2161@gmail.com'
-EMAIL_HOST_PASSWORD = 'anya21612161.'
+EMAIL_HOST_USER = 'edmsmtuci@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get("EDMS-MAIL-PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
