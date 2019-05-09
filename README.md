@@ -37,7 +37,7 @@ pip3 install -r requirements.txt
 python manage.py makemigrations users
 python manage.py migrate
 
-# В командной строке указать password smtp сервера (вместо 
+# В командной строке указать password smtp сервера (вместо
 # password подставить пароль, он есть у разработчика приложения).
 # Вроде бы это не перманентно делается, я не поняла, но иначе не
 # работает

@@ -1,7 +1,6 @@
 from .models import User, UserProfile
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
 from django.core import exceptions
 from django.contrib.auth.forms import PasswordResetForm
 from django.conf import settings
@@ -18,7 +17,7 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
             'photo',
         )
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):    
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=False)
     class Meta:
         model = User
@@ -51,12 +50,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         nested_serializer.update(nested_instance, nested_data)
         return nested_serializer.update(instance, validated_data)
 
-# Вроде можно убрать, но на всякий случай
-# users = User.objects.all()
-# for user in users:
-#     token, created = Token.objects.get_or_create(user=user)
-#     print(user.email, token.key)
-
 class AuthTokenSerializer(serializers.Serializer):
     '''
     Переопределение получения токена, потому что по дефолту он 
@@ -87,6 +80,9 @@ class AuthTokenSerializer(serializers.Serializer):
         return data
 
 class PasswordResetSerializer(serializers.Serializer):
+    '''
+    Переопределение сброса пароля для красивого отображения email.
+    '''
     email = serializers.EmailField()
     password_reset_form_class = PasswordResetForm
     def validate_email(self, value):
