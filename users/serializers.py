@@ -52,10 +52,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return nested_serializer.update(instance, validated_data)
 
 # Вроде можно убрать, но на всякий случай
-users = User.objects.all()
-for user in users:
-    token, created = Token.objects.get_or_create(user=user)
-    print(user.email, token.key)
+# users = User.objects.all()
+# for user in users:
+#     token, created = Token.objects.get_or_create(user=user)
+#     print(user.email, token.key)
 
 class AuthTokenSerializer(serializers.Serializer):
     '''
