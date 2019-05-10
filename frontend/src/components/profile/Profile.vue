@@ -32,7 +32,7 @@ export default {
 			this.$router.push('/profile/notif')
 		},
 		edit() {
-			this.$router.push('/editProfile')
+			this.$router.push('/profile/edit')
 		},
 		adm() {
 			this.$router.push('/profile/adm')

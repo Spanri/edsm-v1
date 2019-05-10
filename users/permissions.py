@@ -13,4 +13,4 @@ class CustomIsAuthenticated(permissions.BasePermission):
         return request.user and request.user.is_authenticated and request.user.is_staff
 
     def has_object_permission(self, request, view, obj):
-        return request.user.is_authenticated and obj.id == request.user.id
+        return request.user.is_authenticated and (obj.id == request.user.id or request.user.is_staff)

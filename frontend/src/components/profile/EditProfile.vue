@@ -11,22 +11,15 @@
                 <input type="file" id="file" class="inputfile" name="file" @change="onFileChange">
                 <p>{{upload}}</p>
                 <form @submit.prevent="editProfile">
-                    <p>Email</p>
-                    <input
-                        v-model="email"
-                        type="email"
-                        placeholder="Введите имя"
-                        class="search-box"
-                    />
                     <p>Пароль</p>
                     <input
-                        v-model="password"
+                        v-model="password1"
                         type="password" 
                         placeholder="Введите имя"
                         class="search-box"
                         autocomplete="false"
                     />
-                    <div v-if="password">
+                    <div v-if="password1">
                         <p>Повторите пароль</p>
                         <input
                             v-model="password2"
@@ -80,14 +73,13 @@ export default {
     name: 'account',
     data () {
 		return {
-            email: this.$store.getters.getProfile.email,
-            password: '',
+            password1: '',
             password2: '',
-            first_name: this.$store.getters.getProfile.profile.first_name,
-            second_name: this.$store.getters.getProfile.profile.second_name,
-            patronymic: this.$store.getters.getProfile.profile.patronymic,
-            position: this.$store.getters.getProfile.profile.position,
-            image: this.$store.getters.getProfile.profile.image,
+            first_name: '',
+            second_name: '',
+            patronymic: '',
+            position: '',
+            image: '',
             error: '',
             upload: '',
 		}
@@ -102,29 +94,32 @@ export default {
             this.upload = "";
         },
         editProfile(){
-            if(this.password && this.password != this.password2) {
+            if(this.password1 && this.password1 != this.password2) {
                 this.error = 'Пароли не совпадают.'
                 return;
             } else {
                 this.error = '';
             }
+            let data = {
+                profile: {}
+            };
+            if(this.password1) data.password = this.password1;
+            if(this.first_name) data.profile.first_name = this.first_name;
+            if(this.second_name) data.profile.second_name = this.second_name;
+            if(this.patronymic) data.profile.patronymic = this.patronymic;
+            if(this.position) data.profile.position = this.position;
             this.$store.dispatch(USER_UPDATE, {
-                email: this.email,
-                password: this.password,
-                first_name: this.first_name,
-                second_name: this.second_name,
-                patronymic: this.patronymic,
-                position: this.position,
+                token: this.$store.getters.token,
+                data
             })
             .then(resp => {
                 this.error = 'Данные профиля изменены.';
-                this.email = resp.email;
-                this.password = resp.password;
-                this.first_name = resp.first_name;
-                this.second_name = resp.second_name;
-                this.patronymic = resp.patronymic;
-                this.position = resp.position;
-                this.password2 = ''; 
+                this.password1 = '';
+                this.password2 = '';
+                this.first_name = '';
+                this.second_name = '';
+                this.patronymic = '';
+                this.position = '';
             })
             .catch(err=>{
                 this.error = 'Ошибка. Что-то пошло не так.'

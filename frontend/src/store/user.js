@@ -5,9 +5,10 @@ import {
     AUTH_LOGOUT,
     USER_UPDATE,
     USER_CONFIRM_UPDATE_PASSWORD,
+    USER_ALL_EMAILS,
+    USER_UPDATE_STAFF,
 } from './mutation-types'
 import Vue from 'vue'
-import apiCall from '../api/common'
 import axios from 'axios'
 
 const state = {
@@ -60,31 +61,57 @@ const actions = {
             commit(USER_SUCCESS, response)
         })
     },
-    [USER_UPDATE]: ({commit, dispatch, state}, data) => {
+    [USER_UPDATE]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
             .get('http://127.0.0.1:8000/api/get_user_from_token/', {
-                headers: { Authorization: "Token " + state.token }
+                headers: { Authorization: "Token " + data.token }
             })
             .then(response => {
-                console.log(response.data[0].id)
-                console.log(data)
                 axios
-                .put('http://127.0.0.1:8000/api/users/'+response.data[0].id, data, {
-                    headers: { Authorization: "Token " + state.token }
+                .patch('http://127.0.0.1:8000/api/users/'+response.data[0].id, data.data, {
+                    headers: { Authorization: "Token " + data.token }
                 })
                 .then(resp => {
-                    commit(USER_SUCCESS, resp.data[0])
+                    console.log(resp)
+                    commit(USER_SUCCESS, resp.data)
                     resolve(resp)
                 })
                 .catch(err => {
                     reject(err)
-                    // console.log(err)
                 })
             })
             .catch(err => {
                 reject(err)
                 // console.log(err)
+            })
+        })
+    },
+    [USER_UPDATE_STAFF]: ({commit, dispatch}, data) => {
+        return new Promise((resolve, reject) => {
+            axios
+            .patch('http://127.0.0.1:8000/api/users/'+data.id, data.is_staff, {
+                headers: { Authorization: "Token " + data.token }
+            })
+            .then(resp => {
+                commit(USER_SUCCESS, resp.data[0])
+                resolve(resp)
+            })
+            .catch(err => {
+                reject(err)
+                // console.log(err)
+            })
+        })
+    },
+    [USER_ALL_EMAILS]: ({commit, dispatch, state}, data) => {
+        return new Promise((resolve, reject) => {
+            axios
+            .get('http://127.0.0.1:8000/api/all_emails/')
+            .then(response => {
+                resolve(response.data)
+            })
+            .catch(err => {
+                reject(err)
             })
         })
     },

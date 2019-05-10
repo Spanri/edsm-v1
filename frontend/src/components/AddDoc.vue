@@ -26,13 +26,14 @@
                     />
                     <p>Запросить подпись:</p>
                     <div>
-                        <div v-for="(user,i) in selectedUsers" :key="i" style="margin-bottom: 15px">
-                            {{user}}
+                        <div v-for="(user) in selectedUsers" :key="user.name" style="margin-bottom: 15px">
+                            {{user.name}}
                             <a class="deleteSelectedUser" @click="deleteSelectedUser(user)">x</a>
                             </div>
                         <select v-model="selectedUser">
-                            <option v-for="(user,i) in users" :key="i">{{user}}</option>
+                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.name}}</option>
                         </select>
+
                         <button type="button" @click="addUser">ДОБАВИТЬ</button> <br>
                     </div>
                     <div style="height:15px;"></div>
@@ -44,7 +45,7 @@
                     ></textarea>
                     <p></p> Общий доступ <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="common">
                     <div style="height:35px;"></div>
-                    <button type="submit" :class="{disabled: !this.image}" @click="addDoc">СОЗДАТЬ</button> <br>
+                    <button type="submit" :class="{disabled: !this.image}">СОЗДАТЬ</button> <br>
                 </form>
                 <p v-if="error"> {{ error }} </p>
             </div>
@@ -55,7 +56,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import { DOC_UPLOAD, DOC_REQUEST } from '../store/mutation-types';
+import { DOC_UPLOAD, DOC_REQUEST, USER_ALL_EMAILS } from '../store/mutation-types';
 
 export default {
     name: 'account',
@@ -65,9 +66,7 @@ export default {
             description: '',
             selectedUser: '',
             selectedUsers: [],
-            users: [
-                'A1', 'A2', 'A3'
-            ],
+            users: [],
             common: 0,
             error: null,
             image: false,
@@ -75,6 +74,13 @@ export default {
             upload: '',
             bigImage: '',
 		}
+    },
+    created(){
+        this.$store.dispatch(USER_ALL_EMAILS)
+        .then(resp=>{
+            console.log(resp)
+            this.users = resp
+        })
     },
     methods: {
         onFileChange(e) {
@@ -141,19 +147,20 @@ export default {
             this.users.push(item);
         },
         addDoc(){
-            this.$store.dispatch(DOC_UPLOAD, {
-                file: this.file,
-                image: this.image, 
-                description: this.description,
-                common: this.common
-            })
-			.then((resp) => {
-                console.log(resp)
-                this.$router.push({ 
-                    name: 'doc',
-                    params: { id: resp }
-                })
-            })
+            console.log(this.selectedUsers)
+            // this.$store.dispatch(DOC_UPLOAD, {
+            //     file: this.file,
+            //     image: this.image, 
+            //     description: this.description,
+            //     common: this.common
+            // })
+			// .then((resp) => {
+            //     console.log(resp)
+            //     this.$router.push({ 
+            //         name: 'doc',
+            //         params: { id: resp }
+            //     })
+            // })
         },
     }
 }

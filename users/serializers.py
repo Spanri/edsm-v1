@@ -40,15 +40,18 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        instance.set_password(validated_data['password'])
-        instance.save()
-        validated_data.pop('password')
-        nested_serializer = self.fields['profile']
-        nested_instance = instance.profile
-        nested_data = validated_data.pop('profile')
-        print(instance.password)
-        nested_serializer.update(nested_instance, nested_data)
-        return nested_serializer.update(instance, validated_data)
+        if('password' in validated_data):
+            instance.set_password(validated_data['password'])
+            instance.save()
+            validated_data.pop('password')
+        if('profile' in validated_data):
+            nested_serializer = self.fields['profile']
+            nested_instance = instance.profile
+            nested_data = validated_data.pop('profile')
+            nested_serializer.update(nested_instance, nested_data)
+            return nested_serializer.update(instance, validated_data)
+        else:
+            return super(UserSerializer, self).update(instance, validated_data)
 
 class AuthTokenSerializer(serializers.Serializer):
     '''

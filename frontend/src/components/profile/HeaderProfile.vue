@@ -3,12 +3,14 @@
         <div class="headerProfile">
             <img class="avatar">
             <div v-if="profile.first_name">
-                <p style="font-size:24px;">
+                <p style="font-size:20px;margin-bottom:0">
 					{{profile.second_name}}
 					{{profile.first_name}}
 					{{profile.patronymic}}
 				</p>
-                <p>{{profile.position}}</p>
+                <p style="font-size:16px;margin-top:5px">
+					{{profile.position}}
+				</p>
             </div>
         </div>
     </div>
@@ -47,10 +49,10 @@ export default {
 	grid-template-columns: max-content auto;
 }
 .avatar{
-	margin: 10px 60px;
+	margin: 8px 40px;
 	margin-left: 0;
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
 	background-color: white;
     border-radius: 50%;
 }
