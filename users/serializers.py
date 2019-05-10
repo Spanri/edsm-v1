@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate
 from django.core import exceptions
 from django.contrib.auth.forms import PasswordResetForm
 from django.conf import settings
+from django.core import exceptions
+from rest_framework import status
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):    
     class Meta:
@@ -29,10 +31,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'is_staff',
             'profile',
         )
-    
+
     # я не уверена, что будут загружаться картинки при создании
     def create(self, validated_data):
-        profile_data =  dict(validated_data.get('profile'))
+        profile_data = dict(validated_data.get('profile'))
         user_data = dict(validated_data)
         del user_data['profile']
         user = User.objects.create(**user_data)
@@ -41,23 +43,24 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        if('password' in validated_data):
-            instance.set_password(validated_data['password'])
-            instance.save()
-            validated_data.pop('password')
-        if('profile' in validated_data):
-            nested_serializer = self.fields['profile']
-            nested_instance = instance.profile
-            print(instance.profile.objects.all())
-            nested_data = validated_data.pop('profile')
-            # if('photo' in nested_instance):
-            #     print(nested_instance)
-            #     nested_instance.photo = nested_serializer.FILES['photo']
-            #     nested_instance.save()
-            nested_serializer.update(nested_instance, nested_data)
-            return nested_serializer.update(instance, validated_data)
-        else:
-            return super(UserSerializer, self).update(instance, validated_data)
+        try:
+            print(validated_data)
+            if('password' in validated_data):
+                instance.set_password(validated_data['password'])
+                instance.save()
+                validated_data.pop('password')
+            if('profile' in validated_data):
+                nested_serializer = self.fields['profile']
+                nested_instance = instance.profile
+                nested_data = validated_data.pop('profile')
+                print(nested_instance)
+                nested_serializer.update(nested_instance, nested_data)
+                return nested_serializer.update(instance, validated_data)
+            else:
+                return super(UserSerializer, self).update(instance, validated_data)
+        except:
+            content = {'error': 'Something else went wrong'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
 
 class AuthTokenSerializer(serializers.Serializer):
     '''

@@ -24,11 +24,13 @@ export default {
 	components: { HeaderProfile },
 	data () {
 		return {
-            is_staff: false,
+            // is_staff: false,
 		}
 	},
-	created(){
-		this.is_staff = this.$store.getters.getProfile.is_staff
+	computed: {
+		is_staff(){
+			return this.$store.getters.getProfile.is_staff
+		}
 	},
 	methods: {
 		notif() {
