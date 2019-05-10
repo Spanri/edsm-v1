@@ -73,7 +73,7 @@ const actions = {
                     headers: { Authorization: "Token " + data.token }
                 })
                 .then(resp => {
-                    console.log(resp)
+                    // console.log(resp)
                     commit(USER_SUCCESS, resp.data)
                     resolve(resp)
                 })
@@ -90,16 +90,13 @@ const actions = {
     [USER_UPDATE_STAFF]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
-            .patch('http://127.0.0.1:8000/api/users/'+data.id, data.is_staff, {
+            .patch('http://127.0.0.1:8000/api/users/'+data.id, {
+                "is_staff": data.is_staff
+            },{
                 headers: { Authorization: "Token " + data.token }
-            })
-            .then(resp => {
-                commit(USER_SUCCESS, resp.data[0])
-                resolve(resp)
             })
             .catch(err => {
                 reject(err)
-                // console.log(err)
             })
         })
     },

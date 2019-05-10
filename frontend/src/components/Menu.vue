@@ -4,16 +4,16 @@
         <p class="link editLink" @click="edit()">{{editMessage}}</p>
         <div class="catalog">
             <div class="link">
-                <a href="/">ВСЕ ДОКУМЕНТЫ</a>
+                <router-link :to="{ path: '/', }">ВСЕ ДОКУМЕНТЫ</router-link>
             </div>
             <div class="link">
-                <a href="/d/1">ОБЩИЙ ДОСТУП</a>
+                <router-link :to="{ path: '/d/1', }">ОБЩИЙ ДОСТУП</router-link>
             </div>
             <div class="link">
-                <a href="/d/2">МОИ ДОКУМЕНТЫ</a>
+                <router-link :to="{ path: '/d/2', }">МОИ ДОКУМЕНТЫ</router-link>
             </div>
             <div class="link" v-for="item in items" :key="item.title">
-                <a :href="item.ref">{{item.title}}</a>
+                <router-link :to="{ path: item.ref, }">{{item.title}}</router-link>
                 <a class="deleteMenu" @click="deleteMenu(item)" v-if="isEdit">X</a>
             </div>
             <div v-if="isEdit">

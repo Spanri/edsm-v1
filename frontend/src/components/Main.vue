@@ -58,4 +58,8 @@ export default {
     font-size: 25px;
     color: white;
 }
+router-view{
+	overflow-y: auto;
+	height: 100vh;
+}
 </style>
