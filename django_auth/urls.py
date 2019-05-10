@@ -10,6 +10,7 @@ from users.views import (
     UserFromTokenViewSet,
     Index,
     ConfirmUpdatePasswordView,
+    GetAllEmails,
 )
 
 # Создание пользователей, получение всего списка, получение 
@@ -23,6 +24,7 @@ urlpatterns += [
     url(r'^api/send_invite/$', SendInviteView.as_view({"post": "send_the_mail"})),
     url(r'^api/confirm_update_password/$', ConfirmUpdatePasswordView.as_view({"post": "confirm_update_password"})),
     url(r'^index/', Index.as_view()),
+    url(r'^api/all_emails/', GetAllEmails.as_view()),
     # url(r'', TemplateView.as_view(template_name='public/index.html'),  name='Home')
 ]
 
@@ -34,7 +36,7 @@ urlpatterns += [
 
 # Для сброса пароля
 urlpatterns += [
-    url(r'^rest-auth/', include('rest_auth.urls')),
+    url(r'^rest_auth/', include('rest_auth.urls')),
     # для генерации в email ссылки сброса пароля
     url(r'^reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', 
         TemplateView.as_view(template_name="password_reset_confirm.html"),

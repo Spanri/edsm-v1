@@ -1,5 +1,5 @@
 <template>
-	<div class="account">
+	<div class="grid">
         <p>ID {{$route.params.id}}</p>
 		<form id="search">
 			Поиск по всем столбцам <input name="query" v-model="filterKey">
@@ -96,29 +96,31 @@ export default {
 </script>
 
 <style>
-.account{
+.grid{
 	width: 100%;
 	background: white;
     padding: 25px;
 }
-.account > *{
+.grid > *{
 	padding: 25px;
 }
-table {
+.grid table {
     border-collapse: collapse;
 }
-table, th, td{
-    border: #e0e0e0 3px solid;
+.grid table, .grid th, .grid td{
+    border: #64b2db 2px solid;
     border-radius: 5px;
 }
-td, th{
+.grid td, .grid th{
     padding: 7px 15px;
 }
-.arrow{
-    display: inline-block;
-    
+.grid th{
+    background: rgb(223, 243, 253);
 }
-input{
+.grid .arrow{
+    display: inline-block;
+}
+.grid input{
 	border: #e0e0e0 3px solid;
     border-radius: 5px;
 	height: 30px;

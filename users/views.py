@@ -37,6 +37,34 @@ class Index(TemplateView):
         context = super(Index, self).get_context_data()
         return context
 
+from django.db.models import Count, F, Value
+
+class GetAllEmails(generics.ListAPIView):
+    '''
+    Получение списка всех email и имен. GET.
+    '''
+    permission_classes = ()
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+    def list(self, request):
+        uP = list(UserProfile.objects.filter(user_id='1').values_list('first_name',flat=True))
+        q = list()
+        queryset = User.objects.all()
+        for u in queryset:
+            i = {}
+            i["email"] = u.email
+            i["is_staff"] = u.is_staff
+            i["id"] = u.id
+            uP = list(UserProfile.objects.filter(user_id=u.id).values('first_name','second_name','patronymic'))
+            if (uP[0]['first_name'] != "" and uP[0]['patronymic'] != ""):
+                print()
+                i["name"] = uP[0]['second_name'] + " " + uP[0]['first_name'][0] + "." + uP[0]['patronymic'][0] + "."
+            else:
+                i["name"] = uP[0]['second_name']
+            q.append(i)
+        return Response(q)
+
 class ObtainAuthToken(views.APIView):
     '''
     description:
@@ -124,7 +152,7 @@ class SendInviteView(viewsets.ModelViewSet):
             is_staff = is_staff
         )
         UserProfile.objects.filter(user_id=user.id).update(
-            first_name = email,
+            second_name = email,
             position = "Должность не указана"
         )
         user.save()

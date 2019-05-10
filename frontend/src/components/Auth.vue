@@ -2,104 +2,106 @@
 	<div class="mainAuth">
 		<div></div>
 		<div class="login">
-			<div class="auth" v-if="newPassword==0" :style="{ height: boxSize }">	
-				<div class="switch">
-					<div></div>
-					<p style="textDecoration: underline">ВХОД</p>
-					<div></div>
+			<div></div>
+			<div>
+				<div class="auth" v-if="newPassword==0" :style="{ height: boxSize }">	
+					<div class="switch">
+						<div></div>
+						<p style="textDecoration: underline">ВХОД</p>
+						<div></div>
+					</div>
+					<div>
+						<p>EMAIL</p>
+						<input
+							v-validate.immediate="'required_if:!newPassword'"
+							v-model="email"
+							type="text"
+							placeholder="Введите логин"
+							class="search-box"
+						/>
+						<div style="height:15px;"></div>
+						<p>ПАРОЛЬ</p>
+						<input 
+							v-validate.immediate="'required_if:!newPassword'"
+							v-model="password" 
+							type="password" 
+							placeholder="Введите пароль"
+							class="search-box"
+						/>
+						<div style="height:35px;"></div>
+						<button type="submit" @click="doLogin()">ВОЙТИ</button> <br>
+						<div @click="newPassword=1" class="rememberPassword">
+							Забыли пароль?
+						</div>
+					</div>
 				</div>
-				<div>
+				<div class="auth" v-if="newPassword==1" :style="{ height: '360px' }">
+					<div class="switch">
+						<div></div>
+						<p style="textDecoration: underline">СМЕНА ПАРОЛЯ - ШАГ 1</p>
+						<div></div>
+					</div>
+					<p style="text-align: center;padding:10px;padding-top:0"> 
+						Это страница смены пароля. Чтобы подтвердить свою почту, впишите ее в поле.
+						Вам придет код на почту, который следует ввести на следующем шаге.
+					</p>
 					<p>EMAIL</p>
 					<input
 						v-validate.immediate="'required_if:!newPassword'"
-						v-model="email"
-						type="text"
-						placeholder="Введите логин"
+						v-model="emailForConfirm" 
+						type="email"
+						placeholder="Введите email"
 						class="search-box"
 					/>
-					<div style="height:15px;"></div>
-					<p>ПАРОЛЬ</p>
-					<input 
+					<div style="height:25px;"></div>
+					<div v-if="!processConfirm">
+						<button type="submit" @click="newPassword=0">ВЕРНУТЬСЯ</button>
+						<button type="submit" @click="rememberPassword()">ОТПРАВИТЬ</button>
+					</div>
+					<div v-if="processConfirm"> 
+						<p>Отправляется...</p>
+					</div>
+				</div>
+				<div class="auth" v-if="newPassword==2" :style="{ height: '500px' }">
+					<div class="switch">
+						<div></div>
+						<p style="textDecoration: underline">СМЕНА ПАРОЛЯ - ШАГ 2</p>
+						<div></div>
+					</div>
+					<p style="text-align: center;padding:10px;padding-top:0"> 
+						Введите код подтверждения и новый пароль, а также подтвердите его.
+					</p>
+					<p>КОД ПОДТВЕРЖДЕНИЯ</p>
+					<input
 						v-validate.immediate="'required_if:!newPassword'"
-						v-model="password" 
-						type="password" 
+						v-model="code" 
+						type="email"
+						placeholder="Введите email"
+						class="search-box"
+					/>
+					<p>НОВЫЙ ПАРОЛЬ</p>
+					<input
+						v-validate.immediate="'required_if:!newPassword'"
+						v-model="password1" 
+						type="password"
 						placeholder="Введите пароль"
 						class="search-box"
 					/>
-					<div style="height:35px;"></div>
-					<button type="submit" @click="doLogin()">ВОЙТИ</button> <br>
-					<div @click="newPassword=1" class="rememberPassword">
-						Забыли пароль?
-					</div>
-				</div>
-			</div>
-			<div class="auth" v-if="newPassword==1" :style="{ height: '360px' }">
-				<div class="switch">
-					<div></div>
-					<p style="textDecoration: underline">СМЕНА ПАРОЛЯ - ШАГ 1</p>
-					<div></div>
-				</div>
-				<p style="text-align: center;padding:10px;padding-top:0"> 
-					Это страница смены пароля. Чтобы подтвердить свою почту, впишите ее в поле.
-					Вам придет код на почту, который следует ввести на следующем шаге.
-				</p>
-				<p>EMAIL</p>
-				<input
-					v-validate.immediate="'required_if:!newPassword'"
-					v-model="emailForConfirm" 
-					type="email"
-					placeholder="Введите email"
-					class="search-box"
-				/>
-				<div style="height:25px;"></div>
-				<div v-if="!processConfirm">
+					<p>ПОДТВЕРЖДЕНИЕ ПАРОЛЯ</p>
+					<input
+						v-validate.immediate="'required_if:!newPassword'"
+						v-model="password2"
+						type="password"
+						placeholder="Подтвердите пароль"
+						class="search-box"
+					/>
+					<div style="height:25px;"></div>
 					<button type="submit" @click="newPassword=0">ВЕРНУТЬСЯ</button>
-					<button type="submit" @click="rememberPassword()">ОТПРАВИТЬ</button>
-				</div>
-				<div v-if="processConfirm"> 
-					<p>Отправляется...</p>
+					<button type="submit" @click="updatePassword()">ПОДТВЕРДИТЬ</button>
 				</div>
 			</div>
-			<div class="auth" v-if="newPassword==2" :style="{ height: '500px' }">
-				<div class="switch">
-					<div></div>
-					<p style="textDecoration: underline">СМЕНА ПАРОЛЯ - ШАГ 2</p>
-					<div></div>
-				</div>
-				<p style="text-align: center;padding:10px;padding-top:0"> 
-					Введите код подтверждения и новый пароль, а также подтвердите его.
-				</p>
-				<p>КОД ПОДТВЕРЖДЕНИЯ</p>
-				<input
-					v-validate.immediate="'required_if:!newPassword'"
-					v-model="code" 
-					type="email"
-					placeholder="Введите email"
-					class="search-box"
-				/>
-				<p>НОВЫЙ ПАРОЛЬ</p>
-				<input
-					v-validate.immediate="'required_if:!newPassword'"
-					v-model="password1" 
-					type="password"
-					placeholder="Введите пароль"
-					class="search-box"
-				/>
-				<p>ПОДТВЕРЖДЕНИЕ ПАРОЛЯ</p>
-				<input
-					v-validate.immediate="'required_if:!newPassword'"
-					v-model="password2"
-					type="password"
-					placeholder="Подтвердите пароль"
-					class="search-box"
-				/>
-				<div style="height:25px;"></div>
-				<button type="submit" @click="newPassword=0">ВЕРНУТЬСЯ</button>
-				<button type="submit" @click="updatePassword()">ПОДТВЕРДИТЬ</button>
-				
-			</div>
+			<p v-if="error" style="color:red"> {{ error }} </p>
 		</div>
-		<p v-if="error" style="color:red"> {{ error }} </p>
 		<div></div>
 	</div>
 </template>
@@ -201,16 +203,20 @@ export default {
 <style scoped>
 /* Основной экран */
 .mainAuth{
-	width: 400px;
 	margin: 0 auto;
 	height: 100vh;
 	display: grid;
-    grid-template-rows: auto max-content auto;
+    grid-template-columns: auto max-content auto;
+}
+.mainAuth .login{
+	display: grid;
+	grid-template-rows: 1fr max-content 2fr;
 }
 .mainAuth > *{
 	text-align: center;
 }
 .mainAuth .auth{
+	width: 400px;
 	background: #ADE0FC;
 }
 /* Кнопки переключения вход и регистрация */
