@@ -1,7 +1,7 @@
 <template>
     <div class="headerProfileGradient">
         <div class="headerProfile">
-            <img class="avatar">
+            <img class="avatar" :src="profile.photo">
             <div v-if="profile.first_name">
                 <p style="font-size:20px;margin-bottom:0">
 					{{profile.second_name}}
@@ -22,6 +22,7 @@ import {USER_REQUEST} from '../../store/mutation-types'
 export default {
 	name: 'account',
 	created(){
+		console.log(this.$store.getters.getProfile.profile);
 		return this.$store.dispatch(USER_REQUEST, this.$store.getters.token)
 	},
 	computed: {
@@ -54,6 +55,6 @@ export default {
     width: 70px;
     height: 70px;
 	background-color: white;
-    border-radius: 50%;
+    /* border-radius: 50%; */
 }
 </style>

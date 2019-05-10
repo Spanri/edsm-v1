@@ -57,7 +57,7 @@
                         class="search-box"
                     />
                     <div style="height:35px;"></div>
-                    <button type="submit" @click="editProfile">РЕДАКТИРОВАТЬ</button> <br>
+                    <button type="submit">РЕДАКТИРОВАТЬ</button> <br>
                 </form>
             </div>
         </div>
@@ -90,20 +90,52 @@ export default {
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
             let formData = new FormData();
-            formData.append(files[0].name, files[0]);
+            formData.append('profile.photo', files[0]); 
             this.file = formData;
-            //console.log(this.file);
+            this.createImage(files[0]);
             this.upload = "";
+        },
+        createImage(file) {
+            var image = new Image();
+            var reader = new FileReader();
+            var vm = this;
+
+            reader.onload = (e) => {
+                vm.image = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        },
+        isEmpty(obj) {
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
         },
         editProfile(){
             this.eror = 'Профиль обновляется...'
             try {
-                // this.file = this.$refs.file.files[0];
                 if(this.password1 && this.password1 != this.password2) {
                     this.error = 'Пароли не совпадают.'
                     return;
                 } else {
                     this.error = '';
+                }
+                if(this.file){
+                    axios
+                    .patch('http://127.0.0.1:8000/api/users/'+this.$store.getters.getProfile.id, 
+                        this.file, { headers: {
+                            Authorization: "Token " + this.$store.getters.token,
+                            'Content-Type': 'multipart/form-data' 
+                        }
+                    })
+                    .then(resp => {
+                        console.log(resp)
+                        // commit(USER_SUCCESS, resp.data)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
                 }
                 let data = {
                     profile: {}
@@ -113,54 +145,25 @@ export default {
                 if(this.second_name) data.profile.second_name = this.second_name;
                 if(this.patronymic) data.profile.patronymic = this.patronymic;
                 if(this.position) data.profile.position = this.position;
-                // if(this.file) data.profile.photo = this.file;
-                console.log(data)
-                this.$store.dispatch(USER_UPDATE, {
-                    token: this.$store.getters.token,
-                    data
-                })
-                .then(resp => {
-                    this.error = 'Данные профиля изменены.';
-                    this.password1 = '';
-                    this.password2 = '';
-                    this.first_name = '';
-                    this.second_name = '';
-                    this.patronymic = '';
-                    this.position = '';
-                })
-                .catch(err=>{
-                    this.error = 'Ошибка. Что-то пошло не так.'
-                })
-                console.log("Вот сейчас картинка будет")
-                axios
-                .get('http://127.0.0.1:8000/api/get_user_from_token/', {
-                    headers: { Authorization: "Token " + this.$store.getters.token }
-                })
-                .then(response => {
-                    axios
-                    .patch('http://127.0.0.1:8000/api/users/'+response.data[0].id, 
-                        {
-                            profile: {
-                                photo: this.file
-                            }
-                        },{ headers: { 
-                            Authorization: "Token " + this.$store.getters.token,
-                            'Content-Type': 'multipart/form-data' 
-                        }
+                if(data.profile.hasOwnProperty(first_name) || data.hasOwnProperty(password) || data.profile.hasOwnProperty(second_name) || data.profile.hasOwnProperty(patronymic) || data.profile.hasOwnProperty(position)){
+                    console.log('data')
+                    this.$store.dispatch(USER_UPDATE, {
+                        token: this.$store.getters.token,
+                        data
                     })
                     .then(resp => {
-                        console.log(resp)
-                        // commit(USER_SUCCESS, resp.data)
-                        // resolve(resp)
+                        this.error = 'Данные профиля изменены.';
+                        this.password1 = '';
+                        this.password2 = '';
+                        this.first_name = '';
+                        this.second_name = '';
+                        this.patronymic = '';
+                        this.position = '';
                     })
-                    .catch(err => {
-                        // reject(err)
-                        console.log(err)
+                    .catch(err=>{
+                        this.error = 'Ошибка. Что-то пошло не так.'
                     })
-                })
-                .catch(err => {
-                    reject(err)
-                })
+                }
             } catch (error) {
                 this.eror = 'Ошибка. Что-то пошло не так...'
             }

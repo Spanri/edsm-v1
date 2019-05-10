@@ -138,6 +138,10 @@ EMAIL_HOST_PASSWORD = os.environ.get("EDMS-MAIL-PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# Для файлов
+MEDIA_ROOT = os.path.join(BASE_DIR, '')
+MEDIA_URL = '/'
+
 # Не помню точно зачем, но надо
 AUTH_USER_MODEL = 'users.User'
 
