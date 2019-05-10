@@ -74,8 +74,16 @@ export default {
 <style>
 .a {
 	height: 100vh;
+	overflow-y: auto;
 	width: 100vw;
 	display: grid;
 	grid-template-rows: max-content auto max-content;
+}
+*:hover{
+	transition: all 0.2s;
+}
+router-view{
+	overflow-y: auto;
+	height: 100vh;
 }
 </style>

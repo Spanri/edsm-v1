@@ -99,10 +99,9 @@ export default {
 .grid{
 	width: 100%;
 	background: white;
-    padding: 25px;
 }
 .grid > *{
-	padding: 25px;
+	margin: 50px;
 }
 .grid table {
     border-collapse: collapse;

@@ -30,6 +30,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'profile',
         )
     
+    # я не уверена, что будут загружаться картинки при создании
     def create(self, validated_data):
         profile_data =  dict(validated_data.get('profile'))
         user_data = dict(validated_data)
@@ -47,7 +48,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         if('profile' in validated_data):
             nested_serializer = self.fields['profile']
             nested_instance = instance.profile
+            print(instance.profile.objects.all())
             nested_data = validated_data.pop('profile')
+            # if('photo' in nested_instance):
+            #     print(nested_instance)
+            #     nested_instance.photo = nested_serializer.FILES['photo']
+            #     nested_instance.save()
             nested_serializer.update(nested_instance, nested_data)
             return nested_serializer.update(instance, validated_data)
         else:

@@ -8,7 +8,7 @@
             <div style="margin-left:25px">
                 <p v-if="error" style="color: red">{{error}}</p>
                 <p>Выбрать новый аватар</p>
-                <input type="file" id="file" class="inputfile" name="file" @change="onFileChange">
+                <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange">
                 <p>{{upload}}</p>
                 <form @submit.prevent="editProfile">
                     <p>Пароль</p>
@@ -89,41 +89,81 @@ export default {
             this.upload = "Загружается..."
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
-            this.file = files[0];
+            let formData = new FormData();
+            formData.append(files[0].name, files[0]);
+            this.file = formData;
             //console.log(this.file);
             this.upload = "";
         },
         editProfile(){
-            if(this.password1 && this.password1 != this.password2) {
-                this.error = 'Пароли не совпадают.'
-                return;
-            } else {
-                this.error = '';
+            this.eror = 'Профиль обновляется...'
+            try {
+                // this.file = this.$refs.file.files[0];
+                if(this.password1 && this.password1 != this.password2) {
+                    this.error = 'Пароли не совпадают.'
+                    return;
+                } else {
+                    this.error = '';
+                }
+                let data = {
+                    profile: {}
+                };
+                if(this.password1) data.password = this.password1;
+                if(this.first_name) data.profile.first_name = this.first_name;
+                if(this.second_name) data.profile.second_name = this.second_name;
+                if(this.patronymic) data.profile.patronymic = this.patronymic;
+                if(this.position) data.profile.position = this.position;
+                // if(this.file) data.profile.photo = this.file;
+                console.log(data)
+                this.$store.dispatch(USER_UPDATE, {
+                    token: this.$store.getters.token,
+                    data
+                })
+                .then(resp => {
+                    this.error = 'Данные профиля изменены.';
+                    this.password1 = '';
+                    this.password2 = '';
+                    this.first_name = '';
+                    this.second_name = '';
+                    this.patronymic = '';
+                    this.position = '';
+                })
+                .catch(err=>{
+                    this.error = 'Ошибка. Что-то пошло не так.'
+                })
+                console.log("Вот сейчас картинка будет")
+                axios
+                .get('http://127.0.0.1:8000/api/get_user_from_token/', {
+                    headers: { Authorization: "Token " + this.$store.getters.token }
+                })
+                .then(response => {
+                    axios
+                    .patch('http://127.0.0.1:8000/api/users/'+response.data[0].id, 
+                        {
+                            profile: {
+                                photo: this.file
+                            }
+                        },{ headers: { 
+                            Authorization: "Token " + this.$store.getters.token,
+                            'Content-Type': 'multipart/form-data' 
+                        }
+                    })
+                    .then(resp => {
+                        console.log(resp)
+                        // commit(USER_SUCCESS, resp.data)
+                        // resolve(resp)
+                    })
+                    .catch(err => {
+                        // reject(err)
+                        console.log(err)
+                    })
+                })
+                .catch(err => {
+                    reject(err)
+                })
+            } catch (error) {
+                this.eror = 'Ошибка. Что-то пошло не так...'
             }
-            let data = {
-                profile: {}
-            };
-            if(this.password1) data.password = this.password1;
-            if(this.first_name) data.profile.first_name = this.first_name;
-            if(this.second_name) data.profile.second_name = this.second_name;
-            if(this.patronymic) data.profile.patronymic = this.patronymic;
-            if(this.position) data.profile.position = this.position;
-            this.$store.dispatch(USER_UPDATE, {
-                token: this.$store.getters.token,
-                data
-            })
-            .then(resp => {
-                this.error = 'Данные профиля изменены.';
-                this.password1 = '';
-                this.password2 = '';
-                this.first_name = '';
-                this.second_name = '';
-                this.patronymic = '';
-                this.position = '';
-            })
-            .catch(err=>{
-                this.error = 'Ошибка. Что-то пошло не так.'
-            })
         },
     }
 }

@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(entry,j) in users" :key="j">
+                <tr v-for="(entry,j) in filteredEvents" :key="j">
                     <td v-for="(key,i) in columns" :key="i">
                         {{entry[key.code]}}
                         <svg v-if="key.code=='is_staff'" @click="entry[key.code]=!entry[key.code];editStaff(entry)" class="editStaff" width="42" height="22" xmlns="http://www.w3.org/2000/svg">
@@ -42,12 +42,13 @@
 </template>
 
 <script>
-import {AUTH_SIGNUP, USER_ALL_EMAILS} from '../../store/mutation-types'
+import {AUTH_SIGNUP, USER_ALL_EMAILS, USER_UPDATE_STAFF} from '../../store/mutation-types'
 
 export default {
     name: 'Menu',
     data () {
         return {
+            self_id: this.$store.getters.getProfile.id,
             users: [],
             email: '',
             is_staff: false,
@@ -75,6 +76,13 @@ export default {
             this.users = resp
         })
     },
+    computed: {
+        filteredEvents() {
+            return this.users.filter(
+                user => this.self_id != user.id
+            )
+        }
+    },
     methods: {
         addUser(){
             let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
@@ -93,20 +101,10 @@ export default {
             }
         },
         editStaff(user){
-            this.$store.dispatch(USER_UPDATE, {
+            this.$store.dispatch(USER_UPDATE_STAFF, {
                 token: this.$store.getters.token,
                 id: user.id,
-                is_staff: this.is_staff
-            })
-            .then(resp => {
-                this.error = 'Данные профиля изменены.';
-                this.email = resp.email;
-                this.password = resp.password;
-                this.first_name = resp.first_name;
-                this.second_name = resp.second_name;
-                this.patronymic = resp.patronymic;
-                this.position = resp.position;
-                this.password2 = ''; 
+                is_staff: user.is_staff
             })
             .catch(err=>{
                 this.error = 'Ошибка. Что-то пошло не так.'

@@ -31,12 +31,20 @@ const ifAuthenticated = (to, from, next) => {
 	next('/auth')
 }
 
+const ifAdm = (to, from, next) => {
+	if (store.getters.getProfile.is_staff) {
+		next()
+		return
+	}
+	next('/')
+}
+
 const router = new Router({
 	mode: 'history',
 	routes: [
 		{
 			path: '/',
-			// name: 'main',
+			name: 'main',
 			component: Main,
 			children: [
 				{ 
@@ -102,7 +110,7 @@ const router = new Router({
 					} 
 				},
 				{ path: 'edit', component: EditProfile },
-				{ path: 'adm', component: Adm },
+				{ path: 'adm', component: Adm, beforeEnter: ifAdm, },
 			],
 			beforeEnter: ifAuthenticated,
 		},
