@@ -5,11 +5,14 @@ import {
     AUTH_LOGOUT,
     USER_UPDATE,
     USER_CONFIRM_UPDATE_PASSWORD,
+    USER_CHANGE_PASSWORD,
     USER_ALL_EMAILS,
     USER_UPDATE_STAFF,
+    USER_UPDATE_IMAGE,
 } from './mutation-types'
 import Vue from 'vue'
 import axios from 'axios'
+import { conditionalExpression } from 'babel-types';
 
 const state = {
     profile: {},
@@ -33,8 +36,7 @@ const actions = {
                 commit(USER_SUCCESS, response.data[0])
             })
             .catch(err => {
-                reject(err)
-                console.log(err)
+                reject(err.response.request.response)
                 dispatch(AUTH_LOGOUT)
             })
         })
@@ -82,8 +84,27 @@ const actions = {
                 })
             })
             .catch(err => {
-                reject(err)
+                reject(err.response.request.response)
                 // console.log(err)
+            })
+        })
+    },
+    [USER_UPDATE_IMAGE]: ({commit, dispatch, state}, data) => {
+        return new Promise((resolve, reject) => {
+            console.log(state.token)
+            axios
+            .patch('http://127.0.0.1:8000/api/users/' + state.profile.id, 
+                data.data, { headers: {
+                    Authorization: "Token " + data.token,
+                    'Content-Type': 'multipart/form-data' 
+                }
+            })
+            .then(resp => {
+                resolve(resp)
+                commit(USER_SUCCESS, resp.data)
+            })
+            .catch(err => {
+                reject(err.response.request.response)
             })
         })
     },
@@ -96,7 +117,7 @@ const actions = {
                 headers: { Authorization: "Token " + data.token }
             })
             .catch(err => {
-                reject(err)
+                reject(err.response.request.response)
             })
         })
     },
@@ -108,21 +129,39 @@ const actions = {
                 resolve(response.data)
             })
             .catch(err => {
-                reject(err)
+                reject(err.response.request.response)
             })
         })
     },
     [USER_CONFIRM_UPDATE_PASSWORD]: ({commit, dispatch}, email) => {
         return new Promise((resolve, reject) => {
             axios
-            .post('http://localhost:8000/api/confirm_update_password/', {
+            .post('http://localhost:8000/rest_auth/password/reset/', {
                 "email": email
             })
             .then(resp => {
                 resolve(resp)
             })
             .catch(err => {
-                reject(err)
+                reject(err.response.request.response)
+            })
+        })
+    },
+    [USER_CHANGE_PASSWORD]: ({commit, dispatch}, data) => {
+        return new Promise((resolve, reject) => {
+            console.log(data)
+            axios
+            .post('http://localhost:8000/rest_auth/password/reset/confirm/', {
+                "uid": data.uid,
+                "token": data.token,
+                "new_password1": data.password1,
+                "new_password2": data.password2,
+            })
+            .then(resp => {
+                resolve(resp)
+            })
+            .catch(err => {
+                reject(err.response.request.response)
             })
         })
     },

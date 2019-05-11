@@ -6,7 +6,7 @@
 				<div class="menuProfile">
 					<p @click="notif()">УВЕДОМЛЕНИЯ</p>
 					<p @click="edit()">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</p>
-					<p v-if="is_staff" @click="adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
+					<p v-if="getProfile.is_staff" @click="adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
 					<p @click="logout()">ВЫЙТИ</p>
 				</div>
 			</div>
@@ -18,6 +18,7 @@
 <script>
 import {AUTH_LOGOUT} from '../../store/mutation-types'
 import HeaderProfile from './HeaderProfile';
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'account',
@@ -28,10 +29,10 @@ export default {
 		}
 	},
 	computed: {
-		is_staff(){
-			return this.$store.getters.getProfile.is_staff
-		}
-	},
+		...mapGetters({
+			getProfile: 'getProfile'
+		})
+  	},
 	methods: {
 		notif() {
 			this.$router.push('/profile/notif')

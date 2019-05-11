@@ -32,7 +32,7 @@ const actions = {
                 resolve(resp.data.password)
             })
             .catch(err => {
-                reject(err)
+                reject(err.response.request.response)
                 // console.log(err);
             })
         })
@@ -49,11 +49,12 @@ const actions = {
                 commit(AUTH_TOKEN, response.data)
                 localStorage.setItem('user-token', token)
                 axios.defaults.headers.common['Authorization'] = token
+                dispatch(USER_REQUEST, token)
                 resolve(response)
             })
             .catch(err => {
                 localStorage.removeItem('user-token')
-                reject(err)
+                reject(err.response.request.response)
                 // console.log(err);
             })
         })

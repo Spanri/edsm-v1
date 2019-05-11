@@ -12,50 +12,57 @@
                 <p>{{upload}}</p>
                 <form @submit.prevent="editProfile">
                     <p>Пароль</p>
-                    <input
+                    <MaxInput
                         v-model="password1"
                         type="password" 
                         placeholder="Введите имя"
                         class="search-box"
                         autocomplete="false"
-                    />
+                        :max="50">
+                    </MaxInput>
                     <div v-if="password1">
                         <p>Повторите пароль</p>
-                        <input
+                        <MaxInput
                             v-model="password2"
                             type="password" 
+                            :max="50"
                             placeholder="Введите имя"
-                            class="search-box"
-                        />
+                            class="search-box">
+                        </MaxInput>
                     </div>
                     <p>Имя</p>
-                    <input
+                    <MaxInput
                         v-model="first_name"
                         type="text" 
+                        :max="50"
                         placeholder="Введите имя"
-                        class="search-box"
-                    />
+                        class="search-box">
+                    </MaxInput>
                     <p>Фамилия</p>
-                    <input
+                    <MaxInput
                         v-model="second_name"
                         type="text" 
+                        :max="50"
                         placeholder="Введите фамилию"
                         class="search-box"
-                    />
+                        @keydown="onKeyDown">
+                    </MaxInput>
                     <p>Отчество</p>
-                    <input
+                    <MaxInput
                         v-model="patronymic"
                         type="text" 
+                        :max="50"
                         placeholder="Введите отчество"
-                        class="search-box"
-                    />
+                        class="search-box">
+                    </MaxInput>
                     <p>Должность</p>
-                    <input
+                    <MaxInput
                         v-model="position"
                         type="text" 
+                        :max="200"
                         placeholder="Введите отчество"
-                        class="search-box"
-                    />
+                        class="search-box">
+                    </MaxInput>
                     <div style="height:35px;"></div>
                     <button type="submit">РЕДАКТИРОВАТЬ</button> <br>
                 </form>
@@ -67,10 +74,12 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import { USER_UPDATE } from '../../store/mutation-types';
+import { USER_UPDATE, USER_UPDATE_IMAGE } from '../../store/mutation-types';
+import MaxInput from '@/components/addit/MaxInput'
 
 export default {
     name: 'account',
+    components: { MaxInput },
     data () {
 		return {
             password1: '',
@@ -105,12 +114,12 @@ export default {
             };
             reader.readAsDataURL(file);
         },
-        isEmpty(obj) {
-            for(var key in obj) {
-                if(obj.hasOwnProperty(key))
-                    return false;
+        onKeyDown(evt){
+            if (this.second_name.length >= 50) {
+                evt.preventDefault();
+                console.log('keydown');
+                return
             }
-            return true;
         },
         editProfile(){
             this.eror = 'Профиль обновляется...'
@@ -122,30 +131,31 @@ export default {
                     this.error = '';
                 }
                 if(this.file){
-                    axios
-                    .patch('http://127.0.0.1:8000/api/users/'+this.$store.getters.getProfile.id, 
-                        this.file, { headers: {
-                            Authorization: "Token " + this.$store.getters.token,
-                            'Content-Type': 'multipart/form-data' 
-                        }
+                    this.$store.dispatch(USER_UPDATE_IMAGE, {
+                        token: this.$store.getters.token, 
+                        data: this.file
                     })
                     .then(resp => {
-                        console.log(resp)
-                        // commit(USER_SUCCESS, resp.data)
+                        // console.log(resp)
+                        this.error = 'Данные профиля изменены.';
+                        this.file = '';
                     })
                     .catch(err => {
                         console.log(err)
+                        this.error = 'Ошибка. Что-то пошло не так.'
                     })
                 }
                 let data = {
                     profile: {}
-                };
+                }
                 if(this.password1) data.password = this.password1;
                 if(this.first_name) data.profile.first_name = this.first_name;
                 if(this.second_name) data.profile.second_name = this.second_name;
                 if(this.patronymic) data.profile.patronymic = this.patronymic;
                 if(this.position) data.profile.position = this.position;
-                if(data.profile.hasOwnProperty(first_name) || data.hasOwnProperty(password) || data.profile.hasOwnProperty(second_name) || data.profile.hasOwnProperty(patronymic) || data.profile.hasOwnProperty(position)){
+                console.log(data)
+                if('first_name' in data.profile || 'password' in data || 'second_name' in data.profile 
+                        || 'patronymic' in data.profile || 'position' in data.profile){
                     console.log('data')
                     this.$store.dispatch(USER_UPDATE, {
                         token: this.$store.getters.token,

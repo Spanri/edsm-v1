@@ -44,10 +44,7 @@
                     </svg>
                     <!-- <img :src="notifIcon"> -->
                 </div>
-                <a href="/profile/notif">
-                    <img class="profile" title="Профиль" src="../assets/profile-img.jpg"> 
-                </a>
-                      
+                <img class="profile" @click="toProfile()" title="Профиль" :src="getProfile.profile.photo">
             </div>
         </div>
     </div>
@@ -55,6 +52,7 @@
 
 <script>
 import {AUTH_LOGOUT, DOCS_REQUEST} from '../store/mutation-types'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'Header',
@@ -74,6 +72,9 @@ export default {
         //     });
     },
     computed: {
+        ...mapGetters({
+			getProfile: 'getProfile'
+		}),
         notifColor(){
             if(this.notifHover){
                 return "#7cb0c1"
@@ -86,7 +87,7 @@ export default {
                 return "https://img.icons8.com/material/30/ff7373/bell.png"
             }
             else return "https://img.icons8.com/material/30/FFFFFF/bell.png";
-        }
+        },
     },
     methods: {
         toMain(){
@@ -98,6 +99,9 @@ export default {
         toAddDoc(){
             this.$router.push('/addDoc');
         },
+        toProfile(){
+            this.$router.push('/profile/notif');
+        }
     }
 }
 </script>

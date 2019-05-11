@@ -50,11 +50,11 @@ export default {
 	grid-template-columns: max-content auto;
 }
 .avatar{
-	margin: 8px 40px;
+	margin: 8px 30px;
 	margin-left: 0;
     width: 70px;
     height: 70px;
 	background-color: white;
-    /* border-radius: 50%; */
+    border-radius: 30%;
 }
 </style>

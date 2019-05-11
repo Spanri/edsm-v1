@@ -55,7 +55,7 @@
 					/>
 					<div style="height:25px;"></div>
 					<div v-if="!processConfirm">
-						<button type="submit" @click="newPassword=0">ВЕРНУТЬСЯ</button>
+						<button type="submit" @click="newPassword=0;error=''">ВЕРНУТЬСЯ</button>
 						<button type="submit" @click="rememberPassword()">ОТПРАВИТЬ</button>
 					</div>
 					<div v-if="processConfirm"> 
@@ -96,18 +96,18 @@
 						class="search-box"
 					/>
 					<div style="height:25px;"></div>
-					<button type="submit" @click="newPassword=0">ВЕРНУТЬСЯ</button>
+					<button type="submit" @click="newPassword=0;error=''">ВЕРНУТЬСЯ</button>
 					<button type="submit" @click="updatePassword()">ПОДТВЕРДИТЬ</button>
 				</div>
 			</div>
-			<p v-if="error" style="color:red"> {{ error }} </p>
+			<p v-if="error" style="color:red;max-width:400px"> {{ error }} </p>
 		</div>
 		<div></div>
 	</div>
 </template>
 
 <script>
-import {AUTH_REQUEST, USER_CONFIRM_UPDATE_PASSWORD, USER_UPDATE} from '../store/mutation-types'
+import {AUTH_REQUEST, USER_CONFIRM_UPDATE_PASSWORD, USER_CHANGE_PASSWORD} from '../store/mutation-types'
 
 export default {
 	name: 'main',
@@ -118,7 +118,6 @@ export default {
 			emailForConfirm: null,
 			processConfirm: false,
 			code: null,
-			codeFromEmail: null,
 			password1: null,
 			password2: null,
 			error: null,
@@ -145,7 +144,15 @@ export default {
 				this.$router.push('/')
 			})
 			.catch(err => {
-				this.error = "Неправильный Email или Пароль.";
+				if (err == '{"non_field_errors":["Unable to log in with provided credentials."]}' || err == '{"email":["Enter a valid email address."]}') {
+					this.error = "Неверный логин или пароль.";
+				} else {
+					if(err.length > 200){
+						this.error = err.substring(0,200) + "...";
+					} else {
+						this.error = err;
+					}
+				}
 			})
 			this.$router.push('/')
 		},
@@ -158,42 +165,56 @@ export default {
 			.then((resp) => {
 				this.error = null;
 				this.processConfirm = false;
-				this.codeFromEmail = resp.data.code;
 				this.newPassword = 2;
 			})
 			.catch(err => {
 				this.processConfirm = false;
-				this.error = "Такой email не зарегистрирован в системе.";
+				if(err.length > 200){
+					if(err.substring(0,39) == "NameError at /rest_auth/password/reset/"){
+						this.error = "Такой email не зарегестрирован в системе.";
+					} else {
+						this.error = err.substring(0,200) + "...";
+					}
+				} else {
+					this.error = err;
+				}
 			})	
 		},
 		updatePassword(){
-			const { codeFromEmail, code, password1, password2 } = this;
-			if (codeFromEmail != code) {
-				this.error = "Неправильный код подтверждения.";
+			const { code, password1, password2 } = this;
+			if(password1 != password2) {
+				this.error = "Пароли не совпадают.";
 				return;
-			} else {
-				if(password1 != password2) {
-					this.error = "Пароли не совпадают.";
-					return;
-				}
-				this.error = "Круто клево";
-				this.processConfirm = true;
-				this.$store.dispatch(
-					USER_UPDATE, {
-						email: emailForConfirm,
-						password: password1
-					}
-				)
-				.then((resp) => {
-					this.error = null;
-					this.processConfirm = false;
-					this.codeFromEmail = resp.data.code;
-					this.newPassword = 2;
-				})
-				.catch(err => {
-					this.error = "Неправильный Email или Пароль.";
-				})	
 			}
+			this.error = "Круто клево";
+			this.processConfirm = true;
+			this.$store.dispatch(
+				USER_CHANGE_PASSWORD, {
+					uid: code.split('/')[0],
+					token: code.split('/')[1],
+					password1: password1,
+					password2: password2,
+				}
+			)
+			.then((resp) => {
+				this.error = null;
+				this.processConfirm = false;
+				this.newPassword = 2;
+			})
+			.catch(err => {
+				console.log(err)
+				if(err=='{"uid":["Invalid value"]}' || err=='{"token":["Invalid value"]}'){
+					this.err = "Неверный код."
+				} else if(err=='{"new_password2":["This password is too short. It must contain at least 8 characters.","This password is too common.","This password is entirely numeric."]}'){
+					this.err = "Слишком короткий пароль."
+				} else {
+					if(err.length > 200){
+						this.error = err.substring(0,200) + "...";
+					} else {
+						this.error = err;
+					}
+				}
+			})
 		}
 	}
 }

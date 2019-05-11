@@ -5,6 +5,9 @@ from django.views.generic import TemplateView
 from rest_framework.documentation import include_docs_urls
 from django.conf.urls.static import static
 from django.conf import settings
+# from django.contrib.auth.views import PasswordResetConfirmView
+# from django.views.decorators.csrf import csrf_exempt
+# from django.contrib.auth.decorators import login_required, permission_required
 from users.views import (
     UserViewSet, 
     SendInviteView,
@@ -23,8 +26,6 @@ router.register(r'^api/users', UserViewSet)
 urlpatterns = router.urls
 
 urlpatterns += [
-    url(r'^api/send_invite/$', SendInviteView.as_view({"post": "send_the_mail"})),
-    url(r'^api/confirm_update_password/$', ConfirmUpdatePasswordView.as_view({"post": "confirm_update_password"})),
     url(r'^index/', Index.as_view()),
     url(r'^api/all_emails/', GetAllEmails.as_view()),
     # url(r'', TemplateView.as_view(template_name='public/index.html'),  name='Home')
@@ -39,11 +40,6 @@ urlpatterns += [
 # Для сброса пароля
 urlpatterns += [
     url(r'^rest_auth/', include('rest_auth.urls')),
-    # для генерации в email ссылки сброса пароля
-    url(r'^reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', 
-        TemplateView.as_view(template_name="password_reset_confirm.html"),
-        name='password_reset_confirm'
-    ),
 ]
 
 # Для файлов
