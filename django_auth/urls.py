@@ -1,13 +1,9 @@
 from django.conf.urls import url, include
 from django.contrib import admin
-# from django.contrib.auth import views as viewsR
 from django.views.generic import TemplateView
 from rest_framework.documentation import include_docs_urls
 from django.conf.urls.static import static
 from django.conf import settings
-# from django.contrib.auth.views import PasswordResetConfirmView
-# from django.views.decorators.csrf import csrf_exempt
-# from django.contrib.auth.decorators import login_required, permission_required
 from users.views import (
     UserViewSet, 
     SendInviteView,
@@ -22,13 +18,13 @@ from users.views import (
 # одного пользователя, patch, put
 from rest_framework import routers
 router = routers.DefaultRouter(trailing_slash = False)
-router.register(r'^api/users', UserViewSet)
-urlpatterns = router.urls
+router.register(r'^users', UserViewSet)
 
-urlpatterns += [
-    url(r'^index/', Index.as_view()),
-    url(r'^api/all_emails/', GetAllEmails.as_view()),
-    # url(r'', TemplateView.as_view(template_name='public/index.html'),  name='Home')
+urlpatterns = [
+    url(r'^api/', include(router.urls)),
+    url(r'^$', Index.as_view()),
+    url(r'^api/all_emails/$', GetAllEmails.as_view()),
+    url(r'^api/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),
 ]
 
 # Работа с токенами
@@ -44,11 +40,11 @@ urlpatterns += [
 
 # Для файлов
 urlpatterns += static(
-    settings.STATIC_URL, 
+    settings.STATIC_URL,
     document_root=settings.STATIC_ROOT
 )
 urlpatterns += static(
-    settings.MEDIA_URL, 
+    settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT
 )
 
@@ -66,5 +62,3 @@ urlpatterns += [
         )
     )
 ]
-
-# from django.contrib.staticfiles.urls import staticfiles_urlpatterns

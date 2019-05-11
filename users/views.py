@@ -30,7 +30,7 @@ from rest_framework import parsers, renderers
 from rest_framework import status
 
 class Index(TemplateView):
-    template_name = "dist/index.html"
+    template_name = "index.html"
     permission_classes = ()
 
     def get_context_data(self):
@@ -87,7 +87,6 @@ class ObtainAuthToken(views.APIView):
 
         return Response({"token": token.key})
 
-import base64
 class UserViewSet(viewsets.ModelViewSet):
     '''
     Универсальное представление для работы с пользователями.\n
@@ -100,17 +99,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated,)
-
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     userP = UserProfile.objects.filter(user_id=user.id)
-    #     photo = list(userP.values('photo'))[0]["photo"].decode('base64')
-    #     print(photo)
-    #     user = User.objects.filter(id=user.id)
-    #     # if('profile.photo' in user):
-    #     print(user)
-    #         # .decode('base64'), content_type='image/gif'
-    #     return user
 
 
 class UserFromTokenViewSet(viewsets.ModelViewSet):

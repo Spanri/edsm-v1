@@ -10,9 +10,6 @@ SECRET_KEY = 'klc=#bj7qm#iiz%1ru-6y3%guc5_e(hq+3hm3&65dg6%c%@(*y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-if DEBUG:
-    import mimetypes
-    mimetypes.add_type("application/javascript", ".js", True)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -45,7 +42,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -57,7 +54,7 @@ ROOT_URLCONF = 'django_auth.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'public')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,13 +113,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # Для деплоймента
 STATIC_ROOT = os.path.join(BASE_DIR, 'public/')
-# Для 
-STATIC_URL = 'frontend/dist/'
+STATIC_DIR = os.path.join(BASE_DIR, 'public/static/')
+STATIC_URL = 'public/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'frontend/dist/'),
 )
-MEDIA_URL = "media/"
-MEDIA_ROOT = "media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, '')
+MEDIA_URL = '/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -143,10 +140,6 @@ EMAIL_HOST_USER = 'edmsmtuci@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ.get("EDMS-MAIL-PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-# Для файлов
-MEDIA_ROOT = os.path.join(BASE_DIR, '')
-MEDIA_URL = '/'
 
 # Не помню точно зачем, но надо
 AUTH_USER_MODEL = 'users.User'
