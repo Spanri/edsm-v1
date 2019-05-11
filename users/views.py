@@ -30,7 +30,7 @@ from rest_framework import parsers, renderers
 from rest_framework import status
 
 class Index(TemplateView):
-    template_name = "index.html"
+    template_name = "dist/index.html"
     permission_classes = ()
 
     def get_context_data(self):

@@ -20,7 +20,7 @@ class UserProfile(models.Model):
     second_name = models.CharField(max_length=50, blank=True)
     patronymic = models.CharField(max_length=50, blank=True)
     position = models.CharField(max_length=200, blank=True)
-    photo = models.ImageField(upload_to='uploads', blank=True)
+    photo = models.ImageField(upload_to='media', blank=True)
     
     def create_user_profile(sender, instance, created, **kwargs):
         if created:

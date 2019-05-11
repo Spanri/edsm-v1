@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
                 ('patronymic', models.CharField(blank=True, max_length=50)),
                 ('position', models.CharField(blank=True, max_length=200)),
                 ('is_admin', models.BooleanField(blank=True, default=False)),
-                ('photo', models.ImageField(blank=True, upload_to='uploads')),
+                ('photo', models.ImageField(blank=True, upload_to='media')),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL)),
             ],
         ),
