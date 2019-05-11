@@ -25,7 +25,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 develop-eggs/
-# dist/
+staticfiles/
 downloads/
 eggs/
 .eggs/
