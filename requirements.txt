@@ -19,6 +19,7 @@ django-rest-passwordreset==1.0.0
 django-six==1.0.4
 djangorestframework==3.9.0
 djangotoolbox==1.8.0
+gunicorn==19.9.0
 idna==2.8
 isort==4.3.4
 itypes==1.1.0
