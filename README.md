@@ -57,5 +57,5 @@ http://localhost:8000/api/admin/login/?next=/api/admin/
 
 ## Другие штуки
 
-[Документация](http://edms-mtuci.herokuapp.ru/docs "edms-mtuci.herokuapp.ru/docs") 
-ссылка пока что не работает, но пусть будет, использовать [эту ссылку](http://localhost:8000/docs/), когда сервер запущен
+[Документация на сервер](http://localhost:8000/api/docs/) - использовать, 
+когда сервер запущен

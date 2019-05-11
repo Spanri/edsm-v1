@@ -22,7 +22,6 @@ router.register(r'^users', UserViewSet)
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),
-    url(r'^$', Index.as_view()),
     url(r'^api/all_emails/$', GetAllEmails.as_view()),
     url(r'^api/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),
 ]
@@ -38,6 +37,25 @@ urlpatterns += [
     url(r'^rest_auth/', include('rest_auth.urls')),
 ]
 
+# Для разработчика
+urlpatterns += [
+    url(r'^api/admin/', admin.site.urls),
+]
+
+# Документация
+urlpatterns += [
+    url(r'^api/docs/', include_docs_urls(
+            title='СЭД МТУСИ',
+            permission_classes=(),
+            patterns=urlpatterns
+        )
+    )
+]
+
+urlpatterns += [
+    url(r'^$', Index.as_view(), name='index'),
+]
+
 # Для файлов
 urlpatterns += static(
     settings.STATIC_URL,
@@ -47,18 +65,3 @@ urlpatterns += static(
     settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT
 )
-
-# Для разработчика
-urlpatterns += [
-    url(r'^api/admin/', admin.site.urls),
-]
-
-# Документация
-urlpatterns += [
-    url(r'^docs/', include_docs_urls(
-            title='СЭД МТУСИ',
-            permission_classes=(),
-            patterns=urlpatterns
-        )
-    )
-]

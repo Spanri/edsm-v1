@@ -116,7 +116,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'public/')
 STATIC_DIR = os.path.join(BASE_DIR, 'public/static/')
 STATIC_URL = 'public/static/'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'frontend/dist/'),
+    os.path.join(BASE_DIR, 'public/rest_framework'),
 )
 MEDIA_ROOT = os.path.join(BASE_DIR, '')
 MEDIA_URL = '/'
@@ -124,12 +124,10 @@ MEDIA_URL = '/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',
-        # 'rest_framework.permissions.IsAuthenticated',
-        # 'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAdminUser',
     )
 }
 
