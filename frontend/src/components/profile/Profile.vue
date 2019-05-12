@@ -4,9 +4,9 @@
 		<div class="mainProfile">
 			<div>
 				<div class="menuProfile">
-					<p @click="notif()">УВЕДОМЛЕНИЯ</p>
-					<p @click="edit()">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</p>
-					<p v-if="getProfile.is_staff" @click="adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
+					<p :class="{active: page==1 ? true : false}" @click="page=1;notif()">УВЕДОМЛЕНИЯ</p>
+					<p :class="{active: page==2 ? true : false}" @click="page=2;edit()">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</p>
+					<p v-if="getProfile.is_staff" :class="{active: page==3 ? true : false}" @click="page=3;adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
 					<p @click="logout()">ВЫЙТИ</p>
 				</div>
 			</div>
@@ -25,7 +25,7 @@ export default {
 	components: { HeaderProfile },
 	data () {
 		return {
-            // is_staff: false,
+            page: 1,
 		}
 	},
 	computed: {
@@ -78,5 +78,9 @@ export default {
 .menuProfile *:hover{
 	cursor: pointer;
 	color: #7cb0c1;
+}
+/**/
+.menuProfile .active{
+	text-decoration-line: underline;
 }
 </style>

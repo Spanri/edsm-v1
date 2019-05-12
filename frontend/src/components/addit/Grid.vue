@@ -1,6 +1,5 @@
 <template>
 	<div class="grid">
-        <h3>{{title[id] || title[$route.params.id]}}</h3>
 		<form id="search">
 			Поиск по всем столбцам <input name="query" v-model="filterKey">
 		</form>
@@ -87,7 +86,7 @@ export default {
             return heroes
         },
 		heroes() {
-            if(this.id == 'all'){
+            if(this.$route.params.id == 'all'){
 			    return this.getDocs;
             } else if(this.$route.params.id == 'common') {
                 return this.getDocs

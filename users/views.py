@@ -2,10 +2,11 @@ from rest_framework.response import Response
 from users.serializers import (
     UserSerializer, 
     AuthTokenSerializer, 
-    UserProfileSerializer
+    UserProfileSerializer,
+    NotifSerializer
 )
 from .permissions import CustomIsAuthenticated
-from .models import User, UserProfile
+from .models import User, UserProfile, Notif
 from rest_framework import (
     generics,
     mixins,
@@ -37,8 +38,6 @@ class Index(TemplateView):
     def get_context_data(self):
         context = super(Index, self).get_context_data()
         return context
-
-from django.db.models import Count, F, Value
 
 class GetAllEmails(generics.ListAPIView):
     '''
@@ -93,6 +92,14 @@ class UserViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated,)
 
+class NotifViewSet(viewsets.ModelViewSet):
+    '''
+    Универсальное представление для работы с пользователями.
+    (адрес без слеша в конце, где список получать)
+    '''
+    serializer_class = NotifSerializer
+    queryset = Notif.objects.all()
+    permission_classes = ()
 
 class UserFromTokenViewSet(viewsets.ModelViewSet):
     '''

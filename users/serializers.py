@@ -1,4 +1,4 @@
-from .models import User, UserProfile
+from .models import User, UserProfile, Notif
 from docs.serializers import DocSerializer
 from rest_framework import serializers
 from django.contrib.auth import authenticate
@@ -7,6 +7,19 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.conf import settings
 from django.core import exceptions
 from rest_framework import status
+
+class NotifSerializer(serializers.HyperlinkedModelSerializer):    
+    doc = DocSerializer(many=False)
+
+    class Meta:
+        model = Notif
+        fields = (
+            'id',
+            'doc',
+            'message',
+            'user_id',
+            'date',
+        )
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer):    
     class Meta:
@@ -23,6 +36,7 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=False)
     docs = DocSerializer(many=True)
+    notif = NotifSerializer(many=True)
 
     class Meta:
         model = User
@@ -33,7 +47,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'date_joined',
             'is_staff',
             'profile',
-            'docs'
+            'docs',
+            'notif'
         )
 
 

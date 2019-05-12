@@ -94,7 +94,7 @@ const actions = {
             })
             .then(response => {
                 axios
-                .patch(path + '/api/users/'+response.data[0].id, data.data, {
+                .patch(path + '/api/users/i/'+response.data[0].id, data.data, {
                     headers: { Authorization: "Token " + data.token }
                 })
                 .then(resp => {
@@ -116,7 +116,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             console.log(state.token)
             axios
-            .patch(path + '/api/users/' + state.profile.id, 
+            .patch(path + '/api/users/i/' + state.profile.id, 
                 data.data, { headers: {
                     Authorization: "Token " + data.token,
                     'Content-Type': 'multipart/form-data' 
@@ -134,7 +134,7 @@ const actions = {
     [USER_UPDATE_STAFF]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
-            .patch(path + '/api/users/'+data.id, {
+            .patch(path + '/api/users/i/'+data.id, {
                 "is_staff": data.is_staff
             },{
                 headers: { Authorization: "Token " + data.token }

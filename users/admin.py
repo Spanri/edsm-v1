@@ -2,11 +2,16 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import User, UserProfile
+from .models import User, UserProfile, Notif
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
+
+@admin.register(Notif)
+class NotifAdmin(admin.ModelAdmin):
+    # fields = ('title', 'owner', 'date', 'common')
+    pass
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):

@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from users.views import (
     UserViewSet, 
+    NotifViewSet, 
     SendInviteView,
     ObtainAuthToken,
     UserFromTokenViewSet,
@@ -21,7 +22,8 @@ from docs.views import (
 # одного пользователя, patch, put
 from rest_framework import routers
 router = routers.DefaultRouter(trailing_slash = False)
-router.register(r'^users', UserViewSet)
+router.register(r'^users/i', UserViewSet)
+router.register(r'^users/notif', NotifViewSet)
 router.register(r'^docs', DocViewSet)
 
 urlpatterns = [
@@ -48,7 +50,7 @@ urlpatterns += [
 
 # Для разработчика
 urlpatterns += [
-    url(r'^api/users/admin/', admin.site.urls),
+    url(r'^api/admin/', admin.site.urls),
 ]
 
 # Документация

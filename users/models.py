@@ -29,3 +29,9 @@ class UserProfile(models.Model):
         return self.first_name + " " + second_name + " " + patronymic
 
     post_save.connect(create_user_profile, sender=User)
+
+class Notif(models.Model):
+    user = models.ForeignKey(User, related_name="notif", on_delete=models.CASCADE)
+    docs = models.ForeignKey(Doc, related_name="docs", on_delete=models.CASCADE)
+    message = models.CharField(max_length=500, blank=True)
+    date = models.DateField(blank=True, null=True)
