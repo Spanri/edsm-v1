@@ -13,7 +13,6 @@ import {
 } from './mutation-types'
 import Vue from 'vue'
 import axios from 'axios'
-import { conditionalExpression } from 'babel-types';
 
 const state = {
     profile: {},
@@ -30,7 +29,7 @@ const actions = {
     [USER_REQUEST]: ({commit, dispatch, state}, token) => {
         return new Promise((resolve, reject) => {
             axios
-            .get(path + '/api/get_user_from_token/', {
+            .get(path + '/api/users/get_user_from_token/', {
                 headers: { Authorization: "Token " + token }
             })
             .then(response => {
@@ -67,7 +66,7 @@ const actions = {
     [USER_UPDATE]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
-            .get(path + '/api/get_user_from_token/', {
+            .get(path + '/api/users/get_user_from_token/', {
                 headers: { Authorization: "Token " + data.token }
             })
             .then(response => {
@@ -125,7 +124,7 @@ const actions = {
     [USER_ALL_EMAILS]: ({commit, dispatch, state}, data) => {
         return new Promise((resolve, reject) => {
             axios
-            .get(path + '/api/all_emails/')
+            .get(path + '/api/users/all_emails/')
             .then(response => {
                 resolve(response.data)
             })
@@ -137,7 +136,7 @@ const actions = {
     [USER_CONFIRM_UPDATE_PASSWORD]: ({commit, dispatch}, email) => {
         return new Promise((resolve, reject) => {
             axios
-            .post(path + '/rest_auth/password/reset/', {
+            .post(path + '/api/users/rest_auth/password/reset/', {
                 "email": email
             })
             .then(resp => {
@@ -152,7 +151,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             console.log(data)
             axios
-            .post(path + '/rest_auth/password/reset/confirm/', {
+            .post(path + '/api/users/rest_auth/password/reset/confirm/', {
                 "uid": data.uid,
                 "token": data.token,
                 "new_password1": data.password1,

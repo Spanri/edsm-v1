@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_rest_passwordreset',
     'users',
+    'docs',
 ]
 
 MIDDLEWARE = [
@@ -137,7 +138,7 @@ EMAIL_HOST_PASSWORD = os.environ.get("EDMS-MAIL-PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-# Не помню точно зачем, но надо
+# Для создания связей моделей в БД
 AUTH_USER_MODEL = 'users.User'
 
 # Хероку

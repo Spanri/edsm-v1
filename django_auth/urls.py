@@ -13,38 +13,47 @@ from users.views import (
     ConfirmUpdatePasswordView,
     GetAllEmails,
 )
+from docs.views import (
+    DocViewSet,
+)
 
 # Создание пользователей, получение всего списка, получение 
 # одного пользователя, patch, put
 from rest_framework import routers
 router = routers.DefaultRouter(trailing_slash = False)
 router.register(r'^users', UserViewSet)
+router.register(r'^docs', DocViewSet)
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),
-    url(r'^api/all_emails/$', GetAllEmails.as_view()),
-    url(r'^api/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),
+    url(r'^api/users/all_emails/$', GetAllEmails.as_view()),
+    url(r'^api/users/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),
 ]
 
 # Работа с токенами
 urlpatterns += [
-    url(r'^api/get_auth_token/$', ObtainAuthToken.as_view()),
-    url(r'^api/get_user_from_token/$', UserFromTokenViewSet.as_view({'get': 'list'})),
+    url(r'^api/users/get_auth_token/$', ObtainAuthToken.as_view()),
+    url(r'^api/users/get_user_from_token/$', UserFromTokenViewSet.as_view({'get': 'list'})),
 ]
 
 # Для сброса пароля
 urlpatterns += [
-    url(r'^rest_auth/', include('rest_auth.urls')),
+    url(r'^api/users/rest_auth/', include('rest_auth.urls')),
+]
+
+# Документы
+urlpatterns += [
+    
 ]
 
 # Для разработчика
 urlpatterns += [
-    url(r'^api/admin/', admin.site.urls),
+    url(r'^api/users/admin/', admin.site.urls),
 ]
 
 # Документация
 urlpatterns += [
-    url(r'^api/docs/', include_docs_urls(
+    url(r'^api/docsServer/', include_docs_urls(
             title='СЭД МТУСИ',
             permission_classes=(),
             patterns=urlpatterns

@@ -1,6 +1,5 @@
 <template>
     <div class="menu">
-        <input class="search" v-model="message" placeholder="Искать...">
         <p class="link editLink" @click="edit()">{{editMessage}}</p>
         <div class="catalog">
             <div class="link">

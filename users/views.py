@@ -23,13 +23,14 @@ from rest_framework.authtoken.models import Token
 from django.views.generic import TemplateView
 from django.core import exceptions
 from rest_framework import status
-
-## Работает
 from rest_framework.decorators import api_view
 from rest_framework import parsers, renderers
-from rest_framework import status
 
+## Работает
 class Index(TemplateView):
+    '''
+    Шаблон, показывает vue приложение на сервере.
+    '''
     template_name = "index.html"
     permission_classes = ()
 
@@ -41,7 +42,7 @@ from django.db.models import Count, F, Value
 
 class GetAllEmails(generics.ListAPIView):
     '''
-    Получение списка всех email и имен. GET.
+    Получение списка всех email и имен.
     '''
     permission_classes = ()
     serializer_class = UserSerializer
@@ -67,12 +68,8 @@ class GetAllEmails(generics.ListAPIView):
 
 class ObtainAuthToken(views.APIView):
     '''
-    description:
     Переопределение получения токена, потому что по дефолту он 
     получается через username и пароль, а надо через email и пароль.
-
-    post:
-    Получить токен по email и password, возвращает token.
     '''
     title="123456"
     description = "dfdgf"
@@ -89,11 +86,8 @@ class ObtainAuthToken(views.APIView):
 
 class UserViewSet(viewsets.ModelViewSet):
     '''
-    Универсальное представление для работы с пользователями.\n
-    + Создать пользователя - POST по адресу users (из urls.py) + 
-    email, password в теле запроса (адрес везде без слеша на конце).
-    + Посмотреть одного пользователя - GET по адресу user/{id пользователя}.
-    + Посмотреть всех пользователей - GET по адресу users
+    Универсальное представление для работы с пользователями.
+    (адрес без слеша в конце, где список получать)
     '''
     serializer_class = UserSerializer
     queryset = User.objects.all()

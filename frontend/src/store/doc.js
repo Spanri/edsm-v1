@@ -14,7 +14,6 @@ import {
     path,
 } from './mutation-types'
 import Vue from 'vue'
-import apiCall from '../api/common'
 import axios from 'axios'
 
 const state = {
