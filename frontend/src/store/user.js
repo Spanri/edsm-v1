@@ -9,6 +9,7 @@ import {
     USER_ALL_EMAILS,
     USER_UPDATE_STAFF,
     USER_UPDATE_IMAGE,
+    path,
 } from './mutation-types'
 import Vue from 'vue'
 import axios from 'axios'
@@ -29,7 +30,7 @@ const actions = {
     [USER_REQUEST]: ({commit, dispatch, state}, token) => {
         return new Promise((resolve, reject) => {
             axios
-            .get('http://127.0.0.1:8000/api/get_user_from_token/', {
+            .get(path + '/api/get_user_from_token/', {
                 headers: { Authorization: "Token " + token }
             })
             .then(response => {
@@ -66,12 +67,12 @@ const actions = {
     [USER_UPDATE]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
-            .get('http://127.0.0.1:8000/api/get_user_from_token/', {
+            .get(path + '/api/get_user_from_token/', {
                 headers: { Authorization: "Token " + data.token }
             })
             .then(response => {
                 axios
-                .patch('http://127.0.0.1:8000/api/users/'+response.data[0].id, data.data, {
+                .patch(path + '/api/users/'+response.data[0].id, data.data, {
                     headers: { Authorization: "Token " + data.token }
                 })
                 .then(resp => {
@@ -93,7 +94,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             console.log(state.token)
             axios
-            .patch('http://127.0.0.1:8000/api/users/' + state.profile.id, 
+            .patch(path + '/api/users/' + state.profile.id, 
                 data.data, { headers: {
                     Authorization: "Token " + data.token,
                     'Content-Type': 'multipart/form-data' 
@@ -111,7 +112,7 @@ const actions = {
     [USER_UPDATE_STAFF]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
-            .patch('http://127.0.0.1:8000/api/users/'+data.id, {
+            .patch(path + '/api/users/'+data.id, {
                 "is_staff": data.is_staff
             },{
                 headers: { Authorization: "Token " + data.token }
@@ -124,7 +125,7 @@ const actions = {
     [USER_ALL_EMAILS]: ({commit, dispatch, state}, data) => {
         return new Promise((resolve, reject) => {
             axios
-            .get('http://127.0.0.1:8000/api/all_emails/')
+            .get(path + '/api/all_emails/')
             .then(response => {
                 resolve(response.data)
             })
@@ -136,7 +137,7 @@ const actions = {
     [USER_CONFIRM_UPDATE_PASSWORD]: ({commit, dispatch}, email) => {
         return new Promise((resolve, reject) => {
             axios
-            .post('http://localhost:8000/rest_auth/password/reset/', {
+            .post(path + '/rest_auth/password/reset/', {
                 "email": email
             })
             .then(resp => {
@@ -151,7 +152,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             console.log(data)
             axios
-            .post('http://localhost:8000/rest_auth/password/reset/confirm/', {
+            .post(path + '/rest_auth/password/reset/confirm/', {
                 "uid": data.uid,
                 "token": data.token,
                 "new_password1": data.password1,

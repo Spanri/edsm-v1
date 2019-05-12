@@ -4,6 +4,7 @@ import {
     USER_REQUEST,
     AUTH_LOGOUT,
     AUTH_SIGNUP,
+    path,
 } from './mutation-types'
 // import apiCall from '../api/common'
 import axios from 'axios'
@@ -22,7 +23,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             console.log(user);
             axios
-            .post('http://127.0.0.1:8000/api/send_invite/', {
+            .post(path + '/api/send_invite/', {
                 "email": user.email,
                 "is_staff": user.is_staff
             },{
@@ -40,7 +41,7 @@ const actions = {
     [AUTH_REQUEST]: ({commit, dispatch, state}, user) => {
         return new Promise((resolve, reject) => {
             axios
-            .post('http://127.0.0.1:8000/api/get_auth_token/', {
+            .post(path + '/api/get_auth_token/', {
                 "email": user.email,
                 "password": user.password
             })

@@ -27,3 +27,4 @@ export const DOC_REQUEST = 'DOC_REQUEST'
 export const DOCS_SUCCESS = 'DOCS_SUCCESS'
 export const DOC_REQUEST_SUCCESS = 'DOC_REQUEST_SUCCESS'
 
+export const path = 'https://edms-mtuci.herokuapp.com'

@@ -10,7 +10,8 @@ import {
     DOC_UPLOAD_SUCCESS,
     DOC_REQUEST,
     DOC_REQUEST_SUCCESS,
-    DOCS_SUCCESS
+    DOCS_SUCCESS,
+    path,
 } from './mutation-types'
 import Vue from 'vue'
 import apiCall from '../api/common'
