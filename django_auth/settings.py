@@ -109,11 +109,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # Для деплоймента
-STATIC_ROOT = os.path.join(BASE_DIR, 'public/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 STATIC_DIR = os.path.join(BASE_DIR, 'public/static/')
 STATIC_URL = 'public/static/'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'public/rest_framework'),
+    os.path.join(BASE_DIR, 'frontend/dist/'),
 )
 MEDIA_ROOT = os.path.join(BASE_DIR, '')
 MEDIA_URL = '/'
