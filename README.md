@@ -36,7 +36,10 @@ npm run build --report
 # установить зависимости
 pip3 install -r requirements.txt
 
-# Миграция таблиц
+# собрать статические файлы
+python manage.py collectstatic
+
+# миграция таблиц
 python manage.py migrate
 
 # В командной строке указать password smtp сервера (вместо
