@@ -7,7 +7,6 @@ from django.db.models.signals import post_save
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=255, blank=True, null=True)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 

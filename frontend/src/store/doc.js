@@ -3,18 +3,21 @@ import {
     DOC_SUCCESS,
     DOC_FOLDER_SUCCESS,
     DOC_FOLDER_REQUEST,
-    DOC_FOLDER_UPDATE,
-    DOC_FOLDER_UPDATE_SUCCESS,
+    DOC_FOLDERS_REQUEST,
+    DOC_FOLDERS_UPDATE,
+    DOC_FOLDERS_UPDATE_SUCCESS,
     DOC_ERROR,
     DOC_UPLOAD,
     DOC_UPLOAD_SUCCESS,
     DOC_REQUEST,
     DOC_REQUEST_SUCCESS,
     DOCS_SUCCESS,
+    USER_ALL_EMAILS,
     path,
 } from './mutation-types'
 import Vue from 'vue'
 import axios from 'axios'
+import { conditionalExpression } from 'babel-types';
 
 const state = {
     docs: [],
@@ -28,10 +31,60 @@ const getters = {
     getFolder: state => state.folder,
 }
 
+function unique(arr) {
+    var obj = {};
+    for (var i = 0; i < arr.length; i++) {
+        var str = arr[i];
+        obj[str] = true;
+    }
+    console.log(Object.keys(obj))
+    return Object.keys(obj);
+}
+
+function uniqueArray (a) {
+    return [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s))
+}
+
 const actions = {
-    [DOCS_REQUEST]: ({commit, dispatch}, id) => {
+    [DOCS_REQUEST]: ({commit, dispatch, store}, docs) => {
+        return new Promise((resolve, reject) => {
+            axios
+            .get(`http://127.0.0.1:8000/api/docs`)
+            .then(response => {
+                docs = docs.concat(response.data);
+                let docs2 = docs.reduce((acc, c) => {
+                    if (acc.map[c.id]) return acc;
+                    acc.map[c.id] = true;
+                    acc.docs2.push(c);
+                    return acc;
+                }, {map: {}, docs2: []}).docs2;
+                dispatch(USER_ALL_EMAILS)
+                .then(resp=>{
+                    try {
+                        docs2.forEach(d => {
+                            try{
+                                let r = resp.find(x => x.id === d.owner_id);
+                                d.owner_email = r.email
+                                d.owner_name = r.name
+                            } catch(e){}
+                        });
+                        commit(DOCS_SUCCESS, docs2)
+                    } catch (err) {
+                        console.log(err)
+                    }
+                })
+                .catch(err => {
+                    reject(err.response.request.response)
+                })
+            })
+            .catch(err => {
+                reject(err.response.request.response)
+            })
+        })
+    },
+    [DOC_REQUEST]: ({commit, dispatch}, id) => {
         // axios
-        // .post(`http://127.0.0.1:8000/doc/docsRequest`, {
+        // .post(`http://127.0.0.1:8000/api/docs`, {
         //     "id" : id
         // })
         // .then(response => {
@@ -41,66 +94,24 @@ const actions = {
         //     commit(DOC_ERROR)
         // })
         let response = [
-            { 
-                id: 1,
-                'Номер': 'Chuck Norris1', 
-                'Название': Infinity,
-                'Инициатор': 'dfg11',
-                'Столбец': 'dfg'
+            {
+                "id": 1,
+                "owner_id": 1,
+                "title": "Файл1",
+                "file": "http://localhost:8000/uVyuTHdBDN8.jpg",
+                "date": "2019-05-12",
+                "signature": null
             },
-            { 
-                id: 2,
-                'Номер': 'Bruce Lee', 
-                'Название': 9000,
-                'Инициатор': 'dfkkkg',
-                'Столбец': 'dfg'
-            },
-            { 
-                id: 3,
-                'Номер': 'Jackie Chan', 
-                'Название': 7000,
-                'Инициатор': 'dbbbfg',
-                'Столбец': 'dfg'
-            },
-            { 
-                id: 4,
-                'Номер': 'Jet Li', 
-                'Название': 8000,
-                'Инициатор': 'dvvvfg',
-                'Столбец': 'dfg'
+            {
+                "id": 2,
+                "owner_id": 2,
+                "title": "Документиии",
+                "file": "http://localhost:8000/Profile3pdf.pdf",
+                "date": "2019-05-12",
+                "signature": null
             }
         ];
         commit(DOC_SUCCESS, response)
-    },
-    [DOC_FOLDER_REQUEST]: ({commit, dispatch}) => {
-        // axios
-        // .get(`http://127.0.0.1:8000/doc/folderRequest`)
-        // .then(response => {
-        //     commit(DOC_FOLDER_SUCCESS, response)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        let response = [
-            {title: "ДОКУМЕНТЫ СТУДЕНТОВ", ref: "3"},
-            {title: "ДРУГИЕ ДОКУМЕНТЫ", ref: "4"}
-        ]
-        commit(DOC_FOLDER_SUCCESS, response)
-    },
-    [DOC_FOLDER_UPDATE]: ({commit, dispatch}, newFolder) => {
-        state.folder.push(newFolder);
-        // axios
-        // .post(`http://127.0.0.1:8000/doc/folderUpdate`, {
-        //     "newFolder": newFolder
-        // })
-        // .then(response => {
-        //     commit(DOC_SUCCESS, response)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        commit(DOC_FOLDER_UPDATE_SUCCESS, newFolder)
-        console.log("Сделан UPDATE.")
     },
     [DOC_UPLOAD]: ({commit, dispatch}, data) => {
         // axios
@@ -120,57 +131,14 @@ const actions = {
         let response = '1234';
         return response;
     },
-    [DOC_REQUEST]: ({commit, dispatch}, id) => {
-        // axios
-        // .post(`http://127.0.0.1:8000/doc/request`, {
-        //     "id" : id
-        // })
-        // .then(response => {
-        //     commit(DOC_SUCCESS, response)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        let response = {
-            id: 1,
-            image: '',
-            title: 'Chuck Norris1', 
-            description: 'Infinity',
-            common: true,
-        };
-        commit(DOC_SUCCESS)
-        return response;
-    },
 }
 
 const mutations = {
-    [DOCS_REQUEST]: (state) => {
-        state.status = 'loading'
-    },
     [DOCS_SUCCESS]: (state, resp) => {
-        state.status = 'success'
-        Vue.set(state, 'doc', resp)
+        Vue.set(state, 'docs', resp)
     },
-    [DOC_SUCCESS]: (state) => {
-        state.status = 'success'
-    },
-    [DOC_FOLDER_SUCCESS]: (state, resp) => {
-        state.status = 'success'
-        Vue.set(state, 'folder', resp)
-    },
-    [DOC_UPLOAD_SUCCESS]: (state) => {
-        state.status = 'success'
-    },
-    [DOC_REQUEST_SUCCESS]: (state, resp) => {
-        state.status = 'success'
+    [DOC_REQUEST_SUCCESS]: (state, resp) => { 
         state.doc.push(resp)
-    },
-    [DOC_FOLDER_UPDATE_SUCCESS]: (state, resp) => {
-        state.status = 'success'
-        state.folder.push(resp)
-    },
-    [DOC_ERROR]: (state) => {
-        state.status = 'error'
     },
 }
 

@@ -17,7 +17,13 @@ from rest_framework.authentication import TokenAuthentication
 class DocViewSet(viewsets.ModelViewSet):
     '''
     Универсальное представление для работы с документами.
+    Возвращает список только из тех документов, которые в общем доступе.
     '''
     serializer_class = DocSerializer
     queryset = Doc.objects.all()
     permission_classes = ()
+
+    def list(self, request):
+        queryset = Doc.objects.filter(common=True)
+        serializer = DocSerializer(queryset, many=True)
+        return Response(serializer.data)

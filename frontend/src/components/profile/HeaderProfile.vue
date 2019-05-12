@@ -20,11 +20,7 @@
 import {USER_REQUEST} from '../../store/mutation-types'
 
 export default {
-	name: 'account',
-	created(){
-		console.log(this.$store.getters.getProfile.profile);
-		return this.$store.dispatch(USER_REQUEST, this.$store.getters.token)
-	},
+	name: 'headerProfile',
 	computed: {
 		profile: function(){
 			return this.$store.getters.getProfile.profile

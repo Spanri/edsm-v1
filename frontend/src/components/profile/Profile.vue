@@ -21,7 +21,7 @@ import HeaderProfile from './HeaderProfile';
 import { mapGetters } from 'vuex'
 
 export default {
-	name: 'account',
+	name: 'profile',
 	components: { HeaderProfile },
 	data () {
 		return {

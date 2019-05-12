@@ -2,6 +2,7 @@ import {
     USER_REQUEST,
     USER_SUCCESS,
     USER_NOTIF_REQUEST,
+    USER_NOTIF_SUCCESS,
     AUTH_LOGOUT,
     USER_UPDATE,
     USER_CONFIRM_UPDATE_PASSWORD,
@@ -10,9 +11,11 @@ import {
     USER_UPDATE_STAFF,
     USER_UPDATE_IMAGE,
     path,
+    DOCS_REQUEST,
 } from './mutation-types'
 import Vue from 'vue'
 import axios from 'axios'
+import { isDate } from 'util';
 
 const state = {
     profile: {},
@@ -34,6 +37,8 @@ const actions = {
             })
             .then(response => {
                 commit(USER_SUCCESS, response.data[0])
+                dispatch(DOCS_REQUEST, response.data[0].docs)
+                dispatch(USER_NOTIF_REQUEST)
             })
             .catch(err => {
                 reject(err.response.request.response)
@@ -55,12 +60,30 @@ const actions = {
             //     // if resp is unauthorized, logout, to
             //     dispatch(AUTH_LOGOUT)
             // })
-            let response = {
-                name:'Городничев Михаил Геннадьевич', 
-                position:'Кандидат технических наук, заведующий кафедрой',
-                adm: true,
-            };
-            commit(USER_SUCCESS, response)
+            let response = [
+                {
+                    user: 'Городничев Михаил Геннадьевич', 
+                    message: 'Кандидат технических наук, заведующий кафедрой',
+                    doc: 'dfdf',
+                    read: false,
+                    date: '12/12/1997',
+                },
+                {
+                    user: 'Городничев Михаил Геннадьевич', 
+                    message: 'Кандидат технических наук, заведующий кафедрой',
+                    doc: 'dfdf',
+                    read: false,
+                    date: '12/12/1997',
+                },
+                {
+                    user: 'Городничев Михаил Геннадьевич', 
+                    message: 'Кандидат технических наук, заведующий кафедрой',
+                    doc: 'dfdf',
+                    read: false,
+                    date: '12/12/1997',
+                },
+            ];
+            commit(USER_NOTIF_SUCCESS, response)
         })
     },
     [USER_UPDATE]: ({commit, dispatch}, data) => {
@@ -121,7 +144,7 @@ const actions = {
             })
         })
     },
-    [USER_ALL_EMAILS]: ({commit, dispatch, state}, data) => {
+    [USER_ALL_EMAILS]: ({commit, dispatch, state}) => {
         return new Promise((resolve, reject) => {
             axios
             .get(path + '/api/users/all_emails/')
@@ -170,6 +193,9 @@ const actions = {
 const mutations = {
     [USER_SUCCESS]: (state, resp) => {
         Vue.set(state, 'profile', resp)
+    },
+    [USER_NOTIF_SUCCESS]: (state, resp) => {
+        Vue.set(state, 'notif', resp)
     }
 }
 

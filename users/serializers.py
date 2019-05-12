@@ -1,4 +1,5 @@
 from .models import User, UserProfile
+from docs.serializers import DocSerializer
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.core import exceptions
@@ -13,7 +14,7 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'id',
             'first_name',
-            'second_name', 
+            'second_name',
             'patronymic',
             'position',
             'photo',
@@ -21,6 +22,8 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=False)
+    docs = DocSerializer(many=True)
+
     class Meta:
         model = User
         fields = (
@@ -30,7 +33,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'date_joined',
             'is_staff',
             'profile',
+            'docs'
         )
+
 
     # я не уверена, что будут загружаться картинки при создании
     def create(self, validated_data):

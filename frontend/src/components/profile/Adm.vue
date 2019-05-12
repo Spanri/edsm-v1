@@ -45,7 +45,7 @@
 import {AUTH_SIGNUP, USER_ALL_EMAILS, USER_UPDATE_STAFF} from '../../store/mutation-types'
 
 export default {
-    name: 'Menu',
+    name: 'adm',
     data () {
         return {
             self_id: this.$store.getters.getProfile.id,

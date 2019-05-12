@@ -78,7 +78,7 @@ import { USER_UPDATE, USER_UPDATE_IMAGE } from '../../store/mutation-types';
 import MaxInput from '@/components/addit/MaxInput'
 
 export default {
-    name: 'account',
+    name: 'edirProfile',
     components: { MaxInput },
     data () {
 		return {

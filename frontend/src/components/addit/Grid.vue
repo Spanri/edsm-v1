@@ -1,6 +1,6 @@
 <template>
 	<div class="grid">
-        <p>ID {{$route.params.id}}</p>
+        <h3>{{title[id] || title[$route.params.id]}}</h3>
 		<form id="search">
 			Поиск по всем столбцам <input name="query" v-model="filterKey">
 		</form>
@@ -9,18 +9,18 @@
                 <tr>
                     <th v-for="(key,i) in columns"
                         :key="i"
-                        @click="sortBy(key)"
+                        @click="sortBy(key.title)"
                         :class="{ active: sortKey == key }">
-                        {{ key | capitalize }}
+                        {{ key.title | capitalize }}
                     <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
                     </span>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(entry,j) in filteredHeroes" :key="j">
+                <tr v-for="(entry,j) in filteredHeroes" :key="j" @click="toDoc(entry.id)">
                     <td v-for="(key,i) in columns" :key="i">
-                    {{entry[key]}}
+                    {{entry[key.key]}}
                     </td>
                 </tr>
             </tbody>
@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import {DOCS_REQUEST} from '../../store/mutation-types'
+import { mapGetters, mapState } from 'vuex'
+import {DOCS_REQUEST, DOC_REQUEST, USER_REQUEST} from '../../store/mutation-types'
 
 export default {
     name: 'grid',
@@ -44,14 +44,24 @@ export default {
             sortOrders[key] = 1
         });
         return {
+            title: {
+                '': 'ВСЕ ДОКУМЕНТЫ',
+                'common': 'ОБЩИЙ ДОСТУП',
+                'myDocs': 'МОИ ДОКУМЕНТЫ'
+            },
             sortKey: '',
             filterKey: '',
             sortOrders: sortOrders
         }
     },
     computed: {
+        ...mapGetters({
+            getProfile: 'getProfile',
+            getDocs: 'getDocs',
+            token: 'token',
+            getNotif: 'getNotif',
+        }),
         filteredHeroes() {
-            // var sortKey = this.sortKey
             var sortKey = ''
             var sortOrders = {}
             this.columns.forEach(function (key) {
@@ -77,20 +87,43 @@ export default {
             return heroes
         },
 		heroes() {
-			this.$store.dispatch(DOCS_REQUEST, this.id);
-			return this.$store.getters.getDoc;
+            if(this.id == 'all'){
+			    return this.getDocs;
+            } else if(this.$route.params.id == 'common') {
+                return this.getDocs
+                .filter(d => d.common == true);
+            } else if(this.$route.params.id == 'myDocs') {
+                return this.getDocs
+                .filter(d => d.owner_id == this.getProfile.id);
+            } else if(this.id == 'notif') {
+                console.log(this.getNotif)
+                return this.getNotif;
+            } else {
+                // this.$store.dispatch(DOC_FOLDER_REQUEST, {
+                //     id: this.$route.params.id,
+                // })
+                // .then(resp => {
+                //     console.log(resp)
+                // })
+                // .catch(err => {
+                //     console.log(err)
+                // })
+            }
 		}
     },
     filters: {
         capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1)
+            return str.charAt(0).toUpperCase() + str.slice(1)
         }
     },
     methods: {
         sortBy(key) {
             this.sortKey = key
             this.sortOrders[key] = this.sortOrders[key] * -1
-        }
+        },
+        toDoc(id){
+            this.$router.push('/doc/'+id);
+        },
     }
 }
 </script>
@@ -114,6 +147,10 @@ export default {
     padding: 7px 15px;
 }
 .grid th{
+    background: rgb(223, 243, 253);
+}
+.grid tr:hover{
+    cursor: pointer;
     background: rgb(223, 243, 253);
 }
 .grid .arrow{

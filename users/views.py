@@ -49,7 +49,6 @@ class GetAllEmails(generics.ListAPIView):
     queryset = User.objects.all()
 
     def list(self, request):
-        uP = list(UserProfile.objects.filter(user_id='1').values_list('first_name',flat=True))
         q = list()
         queryset = User.objects.all()
         for u in queryset:

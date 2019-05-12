@@ -44,29 +44,22 @@ const router = new Router({
 	routes: [
 		{
 			path: '/',
-			name: 'main',
+			// name: 'main',
 			component: Main,
 			children: [
-				{ 
-					path: '', 
-					component: Grid, 
-					props: {
-						id: "all", 
-						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования'],
-					} 
-				},
 				{
-					path: 'd/notif',
-					component: Grid,
-					props: {
-						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования', 'Прочитано'],
-					} 
+					path: '',
+					redirect: '/d/all',
 				},
 				{
 					path: 'd/:id',
 					component: Grid,
 					props: {
-						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования'],
+						columns: [
+							{key: 'title', title: 'Название'},
+							{key: 'owner_name', title: 'Владелец'},
+							{key: 'date', title: 'Дата добавления'},
+						],
 					} 
 				},
 			],
@@ -98,15 +91,21 @@ const router = new Router({
 			beforeEnter: ifAuthenticated },
 		{
 			path: '/profile',
-			name: 'profile',
+			redirect: '/profile/notif',
 			component: Profile,
 			children: [
 				{
-					path: 'notif', 
+					path: 'notif',
+					name: 'notif',
 					component: Grid,
 					props: {
 						id: "notif",
-						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования'],
+						columns: [
+							{key: 'user', title: 'Инициатор'},
+							{key: 'message', title: 'Сообщение'},
+							{key: 'doc', title: 'Документ'},
+							{key: 'date', title: 'Дата добавления'},
+						],
 					} 
 				},
 				{ path: 'edit', component: EditProfile },

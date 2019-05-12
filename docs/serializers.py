@@ -6,13 +6,11 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
         model = Doc
         fields = (
             'id',
+            'owner_id',
             'title',
-            'owner', 
             'file',
             'date',
+            'common',
             'signature',
         )
-        extra_kwargs = {
-            'owner': {'lookup_field': 'email'}
-        }
         
