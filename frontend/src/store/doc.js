@@ -21,13 +21,13 @@ import { conditionalExpression } from 'babel-types';
 
 const state = {
     docs: [],
-    doc: {},
-    folder: [],
 }
 
 const getters = {
     getDocs: state => state.docs,
-    getDoc: state => state.doc,
+    getDoc: (state) => i => {
+        return state.docs.filter(d => d.id == i)[0]
+    },
     getFolder: state => state.folder,
 }
 
@@ -83,35 +83,43 @@ const actions = {
         })
     },
     [DOC_REQUEST]: ({commit, dispatch}, id) => {
-        // axios
-        // .post(`http://127.0.0.1:8000/api/docs`, {
-        //     "id" : id
-        // })
-        // .then(response => {
-        //     commit(DOCS_SUCCESS, response)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        let response = [
+        return new Promise((resolve, reject) => {
+            // axios
+            // .post(`http://127.0.0.1:8000/api/docs`, {
+            //     "id" : id
+            // })
+            // .then(response => {
+            //     commit(DOCS_SUCCESS, response)
+            // })
+            // .catch(resp => {
+            //     commit(DOC_ERROR)
+            // })
+            let response =
             {
                 "id": 1,
                 "owner_id": 1,
                 "title": "Файл1",
                 "file": "http://localhost:8000/uVyuTHdBDN8.jpg",
+                "description": "gngfnfghjhg fdg terte t",
                 "date": "2019-05-12",
+                "common": true,
                 "signature": null
-            },
-            {
-                "id": 2,
-                "owner_id": 2,
-                "title": "Документиии",
-                "file": "http://localhost:8000/Profile3pdf.pdf",
-                "date": "2019-05-12",
-                "signature": null
-            }
-        ];
-        commit(DOC_SUCCESS, response)
+            };
+            dispatch(USER_ALL_EMAILS)
+            .then(resp=>{
+                try {
+                    let r = resp.find(x => x.id === response.owner_id);
+                    response.owner_email = r.email
+                    response.owner_name = r.name
+                } catch (err) {
+                    console.log(err)
+                }
+            })
+            .catch(err => {
+                reject(err.response.request.response)
+            })
+            resolve(response)
+        })
     },
     [DOC_UPLOAD]: ({commit, dispatch}, data) => {
         // axios

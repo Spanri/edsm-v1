@@ -101,9 +101,8 @@ const router = new Router({
 					props: {
 						id: "notif",
 						columns: [
-							{key: 'user', title: 'Инициатор'},
+							{key: 'user_id', title: 'Инициатор'},
 							{key: 'message', title: 'Сообщение'},
-							{key: 'doc', title: 'Документ'},
 							{key: 'date', title: 'Дата добавления'},
 						],
 					} 

@@ -8,16 +8,13 @@ from django.conf import settings
 from django.core import exceptions
 from rest_framework import status
 
-class NotifSerializer(serializers.HyperlinkedModelSerializer):    
-    doc = DocSerializer(many=False)
-
+class NotifSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Notif
         fields = (
             'id',
-            'doc',
-            'message',
             'user_id',
+            'message',
             'date',
         )
 

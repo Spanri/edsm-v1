@@ -1,6 +1,6 @@
 <template>
 	<div class="document">
-		<h3 class="header">{{this.title}}</h3>
+		<h3 class="header">{{doc.title}}</h3>
 		<div class="document2Colon">
 			<div>
                 <div @click="bigImage = 1" class="imageScale">
@@ -13,9 +13,10 @@
 				<button @click="edith">РЕДАКТИРОВАТЬ</button> <br>
             </div>
 			<div style="margin-left:25px">
+				<p>Владелец: {{doc.owner_name}} ({{doc.owner_email}})</p>
 				<p>Описание:</p>
-				{{description}}
-				<p>Общий доступ: {{common ? 'да' : 'нет'}} </p>
+				{{doc.description}}
+				<p>Общий доступ: {{doc.common ? 'да' : 'нет'}} </p>
 			</div>
 		</div>
 	</div>
@@ -33,22 +34,23 @@ export default {
 	},
 	data () {
         return {
-			title: '',
+			doc: {},
 			bigImage: '',
 			image: '',
-			description: '',
-			common: ''
         }
 	},
 	created(){
-		console.log(this.id);
-		this.$store.dispatch(DOC_REQUEST, this.id)
-		.then((resp) => {
-			this.title = resp.title,
-			this.image = resp.image;
-			this.description = resp.description;
-			this.common = resp.common;
-		})
+		try {
+			this.doc = this.$store.getters.getDoc(this.id)
+		} catch (e) {
+			console.log(e)
+			try {
+				this.$store.dispatch(DOC_REQUEST, this.id)
+				.then(resp => this.doc = resp)
+			} catch (e) {
+				console.log(e)
+			}
+		}
 	},
 	methods: {
 		edith(){

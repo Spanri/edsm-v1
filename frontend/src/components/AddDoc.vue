@@ -101,6 +101,7 @@ export default {
             if (!types.includes(typeFile)) {
                 this.upload = "Файл с таким расширением загрузить нельзя."
             } else {
+                this.image = '';
                 /* Имя файла без расширения */
                 let titleFile = files[0].name.replace("." + typeFile, "");
                 this.title = titleFile;

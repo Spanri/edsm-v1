@@ -44,7 +44,7 @@
                     </svg>
                     <!-- <img :src="notifIcon"> -->
                 </div>
-                <img class="profile" @click="toProfile()" title="Профиль" :src="getProfile.profile.photo">
+                <img class="profile" @click="toProfile()" :title="title" :src="getProfile.profile.photo">
             </div>
         </div>
     </div>
@@ -60,12 +60,14 @@ export default {
     data () {
         return {
             search: '',
+            title: '',
             notif: '',
             notifHover: false,
         }
     },
     created() {
         this.notif = 5;
+        this.title = 'Открыть профиль\n' + this.getProfile.email;
         // this.$store.dispatch(DOCS_REQUEST, "notif")
         //     .then(()=>{
         //         this.notif = this.$store.getters.getDoc.length;

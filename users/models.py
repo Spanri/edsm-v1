@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.db.models.signals import post_save
+# from docs.models import Doc
 
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
@@ -32,6 +33,5 @@ class UserProfile(models.Model):
 
 class Notif(models.Model):
     user = models.ForeignKey(User, related_name="notif", on_delete=models.CASCADE)
-    docs = models.ForeignKey(Doc, related_name="docs", on_delete=models.CASCADE)
     message = models.CharField(max_length=500, blank=True)
     date = models.DateField(blank=True, null=True)

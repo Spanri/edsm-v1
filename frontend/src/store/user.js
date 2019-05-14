@@ -1,8 +1,6 @@
 import { 
     USER_REQUEST,
     USER_SUCCESS,
-    USER_NOTIF_REQUEST,
-    USER_NOTIF_SUCCESS,
     AUTH_LOGOUT,
     USER_UPDATE,
     USER_CONFIRM_UPDATE_PASSWORD,
@@ -19,12 +17,12 @@ import { isDate } from 'util';
 
 const state = {
     profile: {},
-    notif: []
+    // notif: []
 }
 
 const getters = {
     getProfile: state => state.profile,
-    getNotif: state => state.notif,
+    // getNotif: state => state.notif,
     isProfileLoaded: state => !!state.profile.name,
 }
 
@@ -38,7 +36,6 @@ const actions = {
             .then(response => {
                 commit(USER_SUCCESS, response.data[0])
                 dispatch(DOCS_REQUEST, response.data[0].docs)
-                dispatch(USER_NOTIF_REQUEST)
             })
             .catch(err => {
                 reject(err.response.request.response)
@@ -46,46 +43,43 @@ const actions = {
             })
         })
     },
-    [USER_NOTIF_REQUEST]: ({commit, dispatch}) => {
-        return new Promise((resolve, reject) => {
-            // axios
-            // .post('http://127.0.0.1:8000/api-token-verify/', {
-            //     "token" : state.token
-            // })
-            // .then(response => {
-            //     commit(USER_SUCCESS, response)
-            // })
-            // .catch(resp => {
-            //     commit(USER_ERROR)
-            //     // if resp is unauthorized, logout, to
-            //     dispatch(AUTH_LOGOUT)
-            // })
-            let response = [
-                {
-                    user: 'Городничев Михаил Геннадьевич', 
-                    message: 'Кандидат технических наук, заведующий кафедрой',
-                    doc: 'dfdf',
-                    read: false,
-                    date: '12/12/1997',
-                },
-                {
-                    user: 'Городничев Михаил Геннадьевич', 
-                    message: 'Кандидат технических наук, заведующий кафедрой',
-                    doc: 'dfdf',
-                    read: false,
-                    date: '12/12/1997',
-                },
-                {
-                    user: 'Городничев Михаил Геннадьевич', 
-                    message: 'Кандидат технических наук, заведующий кафедрой',
-                    doc: 'dfdf',
-                    read: false,
-                    date: '12/12/1997',
-                },
-            ];
-            commit(USER_NOTIF_SUCCESS, response)
-        })
-    },
+    // [USER_NOTIF_REQUEST]: ({commit, dispatch}) => {
+    //     return new Promise((resolve, reject) => {
+    //         axios
+    //         .post('http://127.0.0.1:8000/api/users/notif')
+    //         .then(response => {
+    //             console.log(response)
+    //             commit(USER_NOTIF_SUCCESS, response)
+    //         })
+    //         .catch(err => {
+    //             reject(err.response.request.response)
+    //         })
+    //         // let response = [
+    //         //     {
+    //         //         user: 'Городничев Михаил Геннадьевич', 
+    //         //         message: 'Кандидат технических наук, заведующий кафедрой',
+    //         //         doc: 'dfdf',
+    //         //         read: false,
+    //         //         date: '12/12/1997',
+    //         //     },
+    //         //     {
+    //         //         user: 'Городничев Михаил Геннадьевич', 
+    //         //         message: 'Кандидат технических наук, заведующий кафедрой',
+    //         //         doc: 'dfdf',
+    //         //         read: false,
+    //         //         date: '12/12/1997',
+    //         //     },
+    //         //     {
+    //         //         user: 'Городничев Михаил Геннадьевич', 
+    //         //         message: 'Кандидат технических наук, заведующий кафедрой',
+    //         //         doc: 'dfdf',
+    //         //         read: false,
+    //         //         date: '12/12/1997',
+    //         //     },
+    //         // ];
+    //         // commit(USER_NOTIF_SUCCESS, response)
+    //     })
+    // },
     [USER_UPDATE]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
@@ -194,9 +188,9 @@ const mutations = {
     [USER_SUCCESS]: (state, resp) => {
         Vue.set(state, 'profile', resp)
     },
-    [USER_NOTIF_SUCCESS]: (state, resp) => {
-        Vue.set(state, 'notif', resp)
-    }
+    // [USER_NOTIF_SUCCESS]: (state, resp) => {
+    //     Vue.set(state, 'notif', resp)
+    // }
 }
 
 export default {

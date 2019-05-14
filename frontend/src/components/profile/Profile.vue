@@ -7,6 +7,7 @@
 					<p :class="{active: page==1 ? true : false}" @click="page=1;notif()">УВЕДОМЛЕНИЯ</p>
 					<p :class="{active: page==2 ? true : false}" @click="page=2;edit()">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</p>
 					<p v-if="getProfile.is_staff" :class="{active: page==3 ? true : false}" @click="page=3;adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
+					<hr style="height:0px; border:solid 1.6px #e0e0e0; ">
 					<p @click="logout()">ВЫЙТИ</p>
 				</div>
 			</div>
@@ -72,10 +73,10 @@ export default {
 	border: #e0e0e0 3px solid;
 	border-radius: 5px;
 }
-.menuProfile *{
+.menuProfile p{
 	padding: 3px 30px;
 }
-.menuProfile *:hover{
+.menuProfile p:hover{
 	cursor: pointer;
 	color: #7cb0c1;
 }

@@ -53,6 +53,10 @@ export default {
             sortOrders: sortOrders
         }
     },
+    created(){
+        this.$store.dispatch(USER_REQUEST, this.token)
+        this.$store.dispatch(DOCS_REQUEST, this.getProfile.docs)
+    },
     computed: {
         ...mapGetters({
             getProfile: 'getProfile',
@@ -95,18 +99,7 @@ export default {
                 return this.getDocs
                 .filter(d => d.owner_id == this.getProfile.id);
             } else if(this.id == 'notif') {
-                console.log(this.getNotif)
-                return this.getNotif;
-            } else {
-                // this.$store.dispatch(DOC_FOLDER_REQUEST, {
-                //     id: this.$route.params.id,
-                // })
-                // .then(resp => {
-                //     console.log(resp)
-                // })
-                // .catch(err => {
-                //     console.log(err)
-                // })
+                return this.getProfile.notif;
             }
 		}
     },
