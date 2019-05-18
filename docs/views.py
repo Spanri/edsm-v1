@@ -2,6 +2,9 @@ from rest_framework.response import Response
 from .serializers import (
     DocSerializer,
 )
+from users.serializers import (
+    UserSerializer,
+)
 from .permissions import CustomIsAuthenticated
 from .models import Doc
 from rest_framework import (

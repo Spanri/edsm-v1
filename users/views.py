@@ -39,6 +39,41 @@ class Index(TemplateView):
         context = super(Index, self).get_context_data()
         return context
 
+
+class NotifViewSet2(generics.ListAPIView):
+    '''
+    Унив
+    '''
+    serializer_class = NotifSerializer
+    queryset = Notif.objects.all()
+    permission_classes = ()
+
+    def get_queryset(self):
+        return Notif.objects.filter(user_id=self.kwargs['pk'], owner=False)
+
+class DocViewSet2(generics.ListAPIView):
+    '''
+    Возвр
+    '''
+    serializer_class = NotifSerializer
+    queryset = Notif.objects.all()
+    permission_classes = ()
+
+    def get_queryset(self):
+        return Notif.objects.filter(user_id=self.kwargs['pk'],owner=True)
+
+
+class DocViewSet3(generics.ListAPIView):
+    '''
+    Возвр
+    '''
+    serializer_class = NotifSerializer
+    queryset = Notif.objects.all()
+    permission_classes = ()
+    # СДЕЛАТЬ ТАК, ЧТОБЫ ВОЗВРАЩАЛИСЬ ТОЛЬКО ОБЩИЕ ДОКУМЕНТЫ, ПРОБЛЕМА ВО ВЛОЖЕННОСТИ
+    def get_queryset(self):
+        return Notif.objects.filter(user_id=self.kwargs['pk'], doc['common']=True)
+
 class GetAllEmails(generics.ListAPIView):
     '''
     Получение списка всех email и имен.
@@ -100,6 +135,9 @@ class NotifViewSet(viewsets.ModelViewSet):
     serializer_class = NotifSerializer
     queryset = Notif.objects.all()
     permission_classes = ()
+
+    def get_queryset(self):
+        return Notif.objects.filter(owner=False)
 
 class UserFromTokenViewSet(viewsets.ModelViewSet):
     '''

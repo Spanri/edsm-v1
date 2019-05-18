@@ -79,9 +79,9 @@ export default {
 		}),
         notifColor(){
             if(this.notifHover){
-                return "#7cb0c1"
+                return "#aaa9f8"
             } else if (this.notif > 0) {
-                return "#ff7373"
+                return "#ff7391"
             } else return "#FFFFFF"
         },
         notifIcon(){
@@ -109,11 +109,15 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=El+Messiri:700&display=swap');
+
 /* Фон */
 .background{
     background-color: #347090;
-    /* background-color: #ff7373; */
+    color: #aaa9f8;
     height: 60px;
+    font-family: 'El Messiri', sans-serif;
+    font-weight: 700;
 }
 /* Основной стиль */
 .header{
@@ -139,16 +143,12 @@ export default {
     grid-template-columns: max-content max-content;
 }
 .header .logo:hover{
-    fill: #7cb0c1;
-    color: #7cb0c1;
+    fill: #aaa9f8;
+    color: #aaa9f8;
 }
 .header .logo > *{
     margin: 0;
     margin-right: 10px;
-}
-.header .logo > p{
-    margin: 0;
-    margin-top: 3px;
 }
 .header .logo:hover{
     cursor: pointer;
@@ -180,7 +180,7 @@ export default {
 }
 .header .profile:hover{
     cursor: pointer;
-    box-shadow: 0px 0px 10px 0px white;
+    box-shadow: 0px 0px 10px 0px #aaa9f8;
 }
 /* Уведомления */
 .header .messages{
@@ -197,7 +197,7 @@ export default {
 }
 .header .registr:hover{
     cursor: pointer;
-    background-color: #6393a3;
+    background-color: #aaa9f8;
     transition: background-color .3s ease-out;
 }
 /**/
@@ -210,15 +210,14 @@ export default {
 }
 .header .icon:hover{
     cursor: pointer;
-    color: #7cb0c1;
+    color: #aaa9f8;
 }
 .header .icon:hover svg{
-    fill: #7cb0c1;
+    fill: #aaa9f8;
 }
 .header .icon div{
     padding: 0px;
     margin: 0;
-    margin-top: 3px;
     margin-left: 2px;
 }
 </style>

@@ -29,7 +29,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import {DOCS_REQUEST, DOC_REQUEST, USER_REQUEST} from '../../store/mutation-types'
+import {DOCS_REQUEST, DOC_REQUEST, USER_REQUEST, USER_NOTIF_REQUEST} from '../../store/mutation-types'
 
 export default {
     name: 'grid',
@@ -48,6 +48,7 @@ export default {
                 'common': 'ОБЩИЙ ДОСТУП',
                 'myDocs': 'МОИ ДОКУМЕНТЫ'
             },
+            h: [],
             sortKey: '',
             filterKey: '',
             sortOrders: sortOrders
@@ -55,7 +56,7 @@ export default {
     },
     created(){
         this.$store.dispatch(USER_REQUEST, this.token)
-        this.$store.dispatch(DOCS_REQUEST, this.getProfile.docs)
+        this.$store.dispatch(DOCS_REQUEST, this.getProfile.id)
     },
     computed: {
         ...mapGetters({
@@ -72,7 +73,7 @@ export default {
             });
             var filterKey = this.filterKey && this.filterKey.toLowerCase()
             var order = this.sortOrders[sortKey] || 1
-            var heroes = this.heroes
+            var heroes = this.heroes || this.h
             if (filterKey) {
                 heroes = heroes.filter(function (row) {
                 return Object.keys(row).some(function (key) {
@@ -99,7 +100,11 @@ export default {
                 return this.getDocs
                 .filter(d => d.owner_id == this.getProfile.id);
             } else if(this.id == 'notif') {
-                return this.getProfile.notif;
+                this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
+                .then(resp=>{
+                    this.h = resp;
+                })
+                return null;
             }
 		}
     },

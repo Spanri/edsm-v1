@@ -46,39 +46,66 @@ function uniqueArray (a) {
 }
 
 const actions = {
-    [DOCS_REQUEST]: ({commit, dispatch, store}, docs) => {
+    [DOCS_REQUEST]: ({commit, dispatch, store}, id) => {
         return new Promise((resolve, reject) => {
             axios
-            .get(`http://127.0.0.1:8000/api/docs`)
-            .then(response => {
-                docs = docs.concat(response.data);
-                let docs2 = docs.reduce((acc, c) => {
-                    if (acc.map[c.id]) return acc;
-                    acc.map[c.id] = true;
-                    acc.docs2.push(c);
-                    return acc;
-                }, {map: {}, docs2: []}).docs2;
-                dispatch(USER_ALL_EMAILS)
-                .then(resp=>{
-                    try {
-                        docs2.forEach(d => {
-                            try{
-                                let r = resp.find(x => x.id === d.owner_id);
-                                d.owner_email = r.email
-                                d.owner_name = r.name
-                            } catch(e){}
-                        });
-                        commit(DOCS_SUCCESS, docs2)
-                    } catch (err) {
-                        console.log(err)
-                    }
+            .get('http://127.0.0.1:8000/api/docs')
+            .then(respCommon => {
+                axios
+                .get('http://127.0.0.1:8000/api/users/'+id+'/docs/')
+                .then(respUser => {
+                    let docs = respCommon.data;
+                    docs = docs.concat(respUser.data);
+                    let docs2 = docs.reduce((acc, c) => {
+                        if (acc.map[c.id]) return acc;
+                        acc.map[c.id] = true;
+                        acc.docs2.push(c);
+                        return acc;
+                    }, { map: {}, docs2: [] }).docs2;
+                    dispatch(USER_ALL_EMAILS)
+                    .then(resp => {
+                        console.log(docs2)
+                        try {
+                            docs2.forEach(d => {
+                                try {
+                                    let r = resp.find(x => x.id === d.owner_id);
+                                    d.owner_email = r.email
+                                    d.owner_name = r.name
+                                } catch (e) { }
+                                console.log('after 1',docs2)
+                                try {
+                                    let r = resp.find(x => x.id === d.user.id);
+                                    d.owner_email = r.email
+                                    d.owner_name = r.name
+                                } catch (e) { }
+                            });
+                            commit(DOCS_SUCCESS, docs2)
+                        } catch (err) {
+                            console.log(err)
+                        }
+                    })
+                    .catch(err => {
+                        try {
+                            reject(err.response.request.response)
+                        } catch (error) {
+                            reject(err)
+                        }
+                    })
                 })
                 .catch(err => {
-                    reject(err.response.request.response)
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
                 })
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },

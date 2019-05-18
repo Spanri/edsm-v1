@@ -8,7 +8,7 @@
 					{{profile.first_name}}
 					{{profile.patronymic}}
 				</p>
-                <p style="font-size:16px;margin-top:5px">
+                <p style="font-size:16px;margin-top:2px">
 					{{profile.position}}
 				</p>
             </div>
@@ -37,13 +37,18 @@ export default {
 	background: radial-gradient(1448.86px at 0% 100%, #ADE0FC 0%, #93ADDF 53.65%, #DFB8FE 100%);
 }
 .headerProfile{
+	font-family: 'El Messiri', sans-serif;
     max-width: 900px;
 	margin: auto;
 	color: white;
 	font-size: 18px;
-	font-family: serif;
 	display: grid;
 	grid-template-columns: max-content auto;
+}
+.headerProfile p{
+	margin-top: 13px;
+	color: white;
+	font-size: 18px;
 }
 .avatar{
 	margin: 8px 30px;

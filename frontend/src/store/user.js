@@ -4,6 +4,7 @@ import {
     AUTH_LOGOUT,
     USER_UPDATE,
     USER_CONFIRM_UPDATE_PASSWORD,
+    USER_NOTIF_REQUEST,
     USER_CHANGE_PASSWORD,
     USER_ALL_EMAILS,
     USER_UPDATE_STAFF,
@@ -35,7 +36,7 @@ const actions = {
             })
             .then(response => {
                 commit(USER_SUCCESS, response.data[0])
-                dispatch(DOCS_REQUEST, response.data[0].docs)
+                dispatch(DOCS_REQUEST, response.data[0].id)
             })
             .catch(err => {
                 reject(err.response.request.response)
@@ -43,43 +44,18 @@ const actions = {
             })
         })
     },
-    // [USER_NOTIF_REQUEST]: ({commit, dispatch}) => {
-    //     return new Promise((resolve, reject) => {
-    //         axios
-    //         .post('http://127.0.0.1:8000/api/users/notif')
-    //         .then(response => {
-    //             console.log(response)
-    //             commit(USER_NOTIF_SUCCESS, response)
-    //         })
-    //         .catch(err => {
-    //             reject(err.response.request.response)
-    //         })
-    //         // let response = [
-    //         //     {
-    //         //         user: 'Городничев Михаил Геннадьевич', 
-    //         //         message: 'Кандидат технических наук, заведующий кафедрой',
-    //         //         doc: 'dfdf',
-    //         //         read: false,
-    //         //         date: '12/12/1997',
-    //         //     },
-    //         //     {
-    //         //         user: 'Городничев Михаил Геннадьевич', 
-    //         //         message: 'Кандидат технических наук, заведующий кафедрой',
-    //         //         doc: 'dfdf',
-    //         //         read: false,
-    //         //         date: '12/12/1997',
-    //         //     },
-    //         //     {
-    //         //         user: 'Городничев Михаил Геннадьевич', 
-    //         //         message: 'Кандидат технических наук, заведующий кафедрой',
-    //         //         doc: 'dfdf',
-    //         //         read: false,
-    //         //         date: '12/12/1997',
-    //         //     },
-    //         // ];
-    //         // commit(USER_NOTIF_SUCCESS, response)
-    //     })
-    // },
+    [USER_NOTIF_REQUEST]: ({commit, dispatch}, id) => {
+        return new Promise((resolve, reject) => {
+            axios
+            .get('http://127.0.0.1:8000/api/users/'+id+'/notif/')
+            .then(response => {
+                resolve(response.data)
+            })
+            .catch(err => {
+                reject(err.response.request.response)
+            })
+        })
+    },
     [USER_UPDATE]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios

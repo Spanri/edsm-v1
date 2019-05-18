@@ -4,10 +4,12 @@
 		<div class="mainProfile">
 			<div>
 				<div class="menuProfile">
+					<div style="margin-top:10px"></div>
 					<p :class="{active: page==1 ? true : false}" @click="page=1;notif()">УВЕДОМЛЕНИЯ</p>
 					<p :class="{active: page==2 ? true : false}" @click="page=2;edit()">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</p>
 					<p v-if="getProfile.is_staff" :class="{active: page==3 ? true : false}" @click="page=3;adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
-					<hr style="height:0px; border:solid 1.6px #e0e0e0; ">
+					<div style="height:15px;"></div>
+					<!-- <hr style="height:0px; border:solid 1.6px #e0e0e0; "> -->
 					<p @click="logout()">ВЫЙТИ</p>
 				</div>
 			</div>
@@ -70,11 +72,15 @@ export default {
 }
 /**/
 .menuProfile{
+	font-family: 'El Messiri', sans-serif;
+	font-weight: 300;
 	border: #e0e0e0 3px solid;
 	border-radius: 5px;
 }
 .menuProfile p{
-	padding: 3px 30px;
+	padding: 10px 30px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 .menuProfile p:hover{
 	cursor: pointer;
@@ -82,6 +88,6 @@ export default {
 }
 /**/
 .menuProfile .active{
-	text-decoration-line: underline;
+	background: rgb(223, 243, 253);
 }
 </style>

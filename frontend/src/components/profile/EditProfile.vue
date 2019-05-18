@@ -11,14 +11,6 @@
                 <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange">
                 <p>{{upload}}</p>
                 <form @submit.prevent="editProfile">
-                    <p>Email</p>
-                    <MaxInput
-                        v-model="email"
-                        type="email" 
-                        :max="50"
-                        placeholder="Введите email"
-                        class="search-box">
-                    </MaxInput>
                     <p>Пароль</p>
                     <MaxInput
                         v-model="password1"
@@ -34,7 +26,7 @@
                             v-model="password2"
                             type="password" 
                             :max="50"
-                            placeholder="Введите имя"
+                            placeholder="Введите пароль"
                             class="search-box">
                         </MaxInput>
                     </div>
@@ -68,7 +60,7 @@
                         v-model="position"
                         type="text" 
                         :max="200"
-                        placeholder="Введите отчество"
+                        placeholder="Введите должность"
                         class="search-box">
                     </MaxInput>
                     <div style="height:35px;"></div>
@@ -90,7 +82,6 @@ export default {
     components: { MaxInput },
     data () {
 		return {
-            email: '',
             password1: '',
             password2: '',
             first_name: '',
@@ -157,14 +148,13 @@ export default {
                 let data = {
                     profile: {}
                 }
-                if(this.email) data.email = this.email;
                 if(this.password1) data.password = this.password1;
                 if(this.first_name) data.profile.first_name = this.first_name;
                 if(this.second_name) data.profile.second_name = this.second_name;
                 if(this.patronymic) data.profile.patronymic = this.patronymic;
                 if(this.position) data.profile.position = this.position;
                 console.log(data)
-                if('first_name' in data.profile || 'email' in data.profile || 'password' in data || 'second_name' in data.profile 
+                if('first_name' in data.profile || 'password' in data || 'second_name' in data.profile 
                         || 'patronymic' in data.profile || 'position' in data.profile){
                     console.log('data')
                     this.$store.dispatch(USER_UPDATE, {
@@ -173,7 +163,6 @@ export default {
                     })
                     .then(resp => {
                         this.error = 'Данные профиля изменены.';
-                        this.email = '';
                         this.password1 = '';
                         this.password2 = '';
                         this.first_name = '';

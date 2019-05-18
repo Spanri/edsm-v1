@@ -31,7 +31,7 @@ export default {
 	text-align: center;
 }
 p{
-	margin: 10px;
+	margin: 8px;
 	color: white;
 }
 a:hover{

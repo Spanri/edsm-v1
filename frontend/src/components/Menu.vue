@@ -1,6 +1,5 @@
 <template>
     <div class="menu">
-        <div class="catalog">
             <div class="link" :class="{active: page==1 ? true : false}" @click="page=1">
                 <router-link :to="{ path: '/', }">ВСЕ ДОКУМЕНТЫ</router-link>
             </div>
@@ -10,7 +9,6 @@
             <div class="link" :class="{active: page==3 ? true : false}" @click="page=3">
                 <router-link :to="{ path: '/d/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
             </div>
-        </div>
     </div>
 </template>
 
@@ -35,32 +33,15 @@ export default {
 /* Основное */
 .menu{
     background-color: #ADE0FC;
-    min-width: 280px;
-}
-/* Поиск */
-.menu .search{
-    margin: 30px 50px;
-    margin-bottom: 0;
-    height: 35px;
-    width: calc(100% - 130px);
-    background-color: white;
-    border: 0;
-    padding: 0px 15px;
+    min-width: 250px;
+    font-family: 'El Messiri', sans-serif;
+    font-weight: 600;
+    padding-top: 40px;
 }
 /**/
-.menu .catalog{
-    margin-top: 50px;
-}
-.menu .catalog > *{
-    margin: 10px;
-    margin: auto;
-}
 .menu .link{
-    padding: 20px 20px;
+    padding: 18px 20px;
     padding-left: 50px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #373737;
 }
@@ -69,7 +50,6 @@ export default {
     color: #373737;
 }
 .menu .link:hover{
-    color:#347090;
     cursor: pointer;
 }
 /**/

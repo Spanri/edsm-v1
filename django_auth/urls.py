@@ -13,6 +13,9 @@ from users.views import (
     Index,
     ConfirmUpdatePasswordView,
     GetAllEmails,
+    DocViewSet2,
+    DocViewSet3,
+    NotifViewSet2,
 )
 from docs.views import (
     DocViewSet,
@@ -25,8 +28,12 @@ router = routers.DefaultRouter(trailing_slash = False)
 router.register(r'^users/i', UserViewSet)
 router.register(r'^users/notif', NotifViewSet)
 router.register(r'^docs', DocViewSet)
+# router.register(r'^docs2', DocViewSet2)
 
 urlpatterns = [
+    url(r'^api/users/(?P<pk>.+)/docs/$', DocViewSet2.as_view()),
+    url(r'^api/users/(?P<pk>.+)/docs2/$', DocViewSet3.as_view()),
+    url(r'^api/users/(?P<pk>.+)/notif/$', NotifViewSet2.as_view()),
     url(r'^api/', include(router.urls)),
     url(r'^api/users/all_emails/$', GetAllEmails.as_view()),
     url(r'^api/users/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),
