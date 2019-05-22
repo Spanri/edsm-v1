@@ -3,7 +3,6 @@ from .models import Doc
 
 @admin.register(Doc)
 class DocAdmin(admin.ModelAdmin):
-    # fields = ('title', 'owner', 'date', 'common')
-    pass
-    
-# admin.site.register(Doc, DocAdmin)
+    list_display = ('title', 'date', 'common')
+    search_fields = ('id',)
+    ordering = ('id',)

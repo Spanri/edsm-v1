@@ -70,11 +70,11 @@ class DocViewSet3(generics.ListAPIView):
     serializer_class = NotifSerializer
     queryset = Notif.objects.all()
     permission_classes = ()
-    # СДЕЛАТЬ ТАК, ЧТОБЫ ВОЗВРАЩАЛИСЬ ТОЛЬКО ОБЩИЕ ДОКУМЕНТЫ, ПРОБЛЕМА ВО ВЛОЖЕННОСТИ
     def get_queryset(self):
-        return Notif.objects.filter(user_id=self.kwargs['pk'], doc['common']=True)
+        # user_id = self.kwargs['pk'],
+        return Notif.objects.filter(doc__common=True)
 
-class GetAllEmails(generics.ListAPIView):
+class GetEmail(generics.ListAPIView):
     '''
     Получение списка всех email и имен.
     '''
@@ -82,22 +82,10 @@ class GetAllEmails(generics.ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
-    def list(self, request):
-        q = list()
-        queryset = User.objects.all()
-        for u in queryset:
-            i = {}
-            i["email"] = u.email
-            i["is_staff"] = u.is_staff
-            i["id"] = u.id
-            uP = list(UserProfile.objects.filter(user_id=u.id).values('first_name','second_name','patronymic'))
-            if (uP[0]['first_name'] != "" and uP[0]['patronymic'] != ""):
-                print()
-                i["name"] = uP[0]['second_name'] + " " + uP[0]['first_name'][0] + "." + uP[0]['patronymic'][0] + "."
-            else:
-                i["name"] = uP[0]['second_name']
-            q.append(i)
-        return Response(q)
+    def get(self, *args, **kwargs):
+        u = User.objects.get(id=self.kwargs['pk'])
+        uu = UserProfile.objects.get(user_id=u.id)
+        return Response({"full_name": uu.get_full_name()})
 
 class ObtainAuthToken(views.APIView):
     '''

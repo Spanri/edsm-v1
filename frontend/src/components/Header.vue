@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT, DOCS_REQUEST} from '../store/mutation-types'
+import {AUTH_LOGOUT, DOCS_REQUEST, USER_NOTIF_REQUEST} from '../store/mutation-types'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -60,23 +60,33 @@ export default {
     data () {
         return {
             search: '',
-            title: '',
-            notif: '',
+            n: '',
+            // title: '',
+            // notif: '',
             notifHover: false,
         }
     },
     created() {
-        this.notif = 5;
-        this.title = 'Открыть профиль\n' + this.getProfile.email;
-        // this.$store.dispatch(DOCS_REQUEST, "notif")
-        //     .then(()=>{
-        //         this.notif = this.$store.getters.getDoc.length;
-        //     });
+        // this.title = 'Открыть профиль\n' + this.getProfile.email;
+        // this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
+        // .then(resp=>{
+        //     this.notif = resp.length;
+        // });
     },
     computed: {
         ...mapGetters({
 			getProfile: 'getProfile'
-		}),
+        }),
+        title(){
+            return 'Открыть профиль\n' + this.getProfile.email;
+        },
+        notif(){
+            this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
+            .then(resp=>{
+                this.n = resp.length;
+            });
+            return this.n
+        },
         notifColor(){
             if(this.notifHover){
                 return "#aaa9f8"

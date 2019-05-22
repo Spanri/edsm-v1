@@ -9,7 +9,15 @@ from django.core import exceptions
 from rest_framework import status
 from rest_framework.response import Response
 
-class UserProfileSerializer(serializers.HyperlinkedModelSerializer):    
+class UserProfileSerializer(serializers.HyperlinkedModelSerializer): 
+    full_name = serializers.SerializerMethodField()
+
+    def get_full_name(self, obj):
+        if (obj.first_name != "" and obj.patronymic != ""):
+            return obj.second_name + " " + obj.first_name[0] + "." + obj.patronymic[0] + "."
+        else:
+            return obj.second_name
+
     class Meta:
         model = UserProfile
         fields = (
@@ -17,6 +25,7 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
             'first_name',
             'second_name',
             'patronymic',
+            'full_name',
             'position',
             'photo',
         )

@@ -152,6 +152,7 @@ export default {
 					} else {
 						this.error = err;
 					}
+					console.log(err)
 				}
 			})
 			this.$router.push('/')

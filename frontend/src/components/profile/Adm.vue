@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import {AUTH_SIGNUP, USER_ALL_EMAILS, USER_UPDATE_STAFF} from '../../store/mutation-types'
+import {AUTH_SIGNUP, USERS_REQUEST, USER_UPDATE_STAFF} from '../../store/mutation-types'
 
 export default {
     name: 'adm',
@@ -62,7 +62,7 @@ export default {
             columns: [
                 {
                     name: 'Пользователь',
-                    code: 'name'
+                    code: 'full_name'
                 },
                 {
                     name: 'Email',
@@ -76,7 +76,7 @@ export default {
         }
     },
     created(){
-        this.$store.dispatch(USER_ALL_EMAILS)
+        this.$store.dispatch(USERS_REQUEST)
         .then(resp=>{
             console.log(resp)
             this.users = resp

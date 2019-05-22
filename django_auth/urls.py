@@ -12,7 +12,7 @@ from users.views import (
     UserFromTokenViewSet,
     Index,
     ConfirmUpdatePasswordView,
-    GetAllEmails,
+    GetEmail,
     DocViewSet2,
     DocViewSet3,
     NotifViewSet2,
@@ -32,10 +32,10 @@ router.register(r'^docs', DocViewSet)
 
 urlpatterns = [
     url(r'^api/users/(?P<pk>.+)/docs/$', DocViewSet2.as_view()),
-    url(r'^api/users/(?P<pk>.+)/docs2/$', DocViewSet3.as_view()),
+    url(r'^api/users/all_docs/$', DocViewSet3.as_view()),
     url(r'^api/users/(?P<pk>.+)/notif/$', NotifViewSet2.as_view()),
     url(r'^api/', include(router.urls)),
-    url(r'^api/users/all_emails/$', GetAllEmails.as_view()),
+    # url(r'^api/users/email/(?P<pk>.+)/$', GetEmail.as_view()),
     url(r'^api/users/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),
 ]
 

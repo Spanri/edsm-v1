@@ -12,7 +12,6 @@ import {
     DOC_REQUEST,
     DOC_REQUEST_SUCCESS,
     DOCS_SUCCESS,
-    USER_ALL_EMAILS,
     path,
 } from './mutation-types'
 import Vue from 'vue'
@@ -49,10 +48,10 @@ const actions = {
     [DOCS_REQUEST]: ({commit, dispatch, store}, id) => {
         return new Promise((resolve, reject) => {
             axios
-            .get('http://127.0.0.1:8000/api/docs')
+            .get('http://127.0.0.1:8000/api/users/all_docs/')
             .then(respCommon => {
                 axios
-                .get('http://127.0.0.1:8000/api/users/'+id+'/docs/')
+                .get('http://127.0.0.1:8000/api/users/'+ id +'/docs/')
                 .then(respUser => {
                     let docs = respCommon.data;
                     docs = docs.concat(respUser.data);
@@ -62,35 +61,15 @@ const actions = {
                         acc.docs2.push(c);
                         return acc;
                     }, { map: {}, docs2: [] }).docs2;
-                    dispatch(USER_ALL_EMAILS)
-                    .then(resp => {
-                        console.log(docs2)
-                        try {
-                            docs2.forEach(d => {
-                                try {
-                                    let r = resp.find(x => x.id === d.owner_id);
-                                    d.owner_email = r.email
-                                    d.owner_name = r.name
-                                } catch (e) { }
-                                console.log('after 1',docs2)
-                                try {
-                                    let r = resp.find(x => x.id === d.user.id);
-                                    d.owner_email = r.email
-                                    d.owner_name = r.name
-                                } catch (e) { }
-                            });
-                            commit(DOCS_SUCCESS, docs2)
-                        } catch (err) {
-                            console.log(err)
-                        }
-                    })
-                    .catch(err => {
-                        try {
-                            reject(err.response.request.response)
-                        } catch (error) {
-                            reject(err)
-                        }
-                    })
+                    try {
+                        docs2.forEach(d => {
+                            d.owner_name = d.user.profile.full_name
+                            d.title = d.doc.title;
+                        });
+                        commit(DOCS_SUCCESS, docs2)
+                    } catch (err) {
+                        console.log(err)
+                    }
                 })
                 .catch(err => {
                     try {
@@ -132,19 +111,8 @@ const actions = {
                 "common": true,
                 "signature": null
             };
-            dispatch(USER_ALL_EMAILS)
-            .then(resp=>{
-                try {
-                    let r = resp.find(x => x.id === response.owner_id);
-                    response.owner_email = r.email
-                    response.owner_name = r.name
-                } catch (err) {
-                    console.log(err)
-                }
-            })
-            .catch(err => {
-                reject(err.response.request.response)
-            })
+            response.owner_name = response.user.profile.full_name
+            response.title = response.doc.title;
             resolve(response)
         })
     },

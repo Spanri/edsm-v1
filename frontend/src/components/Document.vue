@@ -13,10 +13,10 @@
 				<button @click="edith">РЕДАКТИРОВАТЬ</button> <br>
             </div>
 			<div style="margin-left:25px">
-				<p>Владелец: {{doc.owner_name}} ({{doc.owner_email}})</p>
+				<p>Владелец: {{doc.user.full_name}} ({{doc.user.email}})</p>
 				<p>Описание:</p>
-				{{doc.description}}
-				<p>Общий доступ: {{doc.common ? 'да' : 'нет'}} </p>
+				<p> {{ doc.doc.description }}</p>
+				<p>Общий доступ: {{doc.doc.common ? 'да' : 'нет'}} </p>
 			</div>
 		</div>
 	</div>
@@ -24,13 +24,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import { DOC_REQUEST } from '../store/mutation-types';
+import { DOC_REQUEST, DOCS_REQUEST } from '../store/mutation-types';
 
 export default {
 	name: 'account',
 	props: {
 		id: String,
-        data: Object,
 	},
 	data () {
         return {
@@ -41,6 +40,7 @@ export default {
 	},
 	created(){
 		try {
+			this.$store.dispatch(DOCS_REQUEST, this.id)
 			this.doc = this.$store.getters.getDoc(this.id)
 		} catch (e) {
 			console.log(e)

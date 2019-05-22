@@ -1,12 +1,12 @@
 import { 
     USER_REQUEST,
+    USERS_REQUEST,
     USER_SUCCESS,
     AUTH_LOGOUT,
     USER_UPDATE,
     USER_CONFIRM_UPDATE_PASSWORD,
     USER_NOTIF_REQUEST,
     USER_CHANGE_PASSWORD,
-    USER_ALL_EMAILS,
     USER_UPDATE_STAFF,
     USER_UPDATE_IMAGE,
     path,
@@ -18,12 +18,10 @@ import { isDate } from 'util';
 
 const state = {
     profile: {},
-    // notif: []
 }
 
 const getters = {
     getProfile: state => state.profile,
-    // getNotif: state => state.notif,
     isProfileLoaded: state => !!state.profile.name,
 }
 
@@ -39,9 +37,33 @@ const actions = {
                 dispatch(DOCS_REQUEST, response.data[0].id)
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
                 dispatch(AUTH_LOGOUT)
             })
+        })
+    },
+    // ДОБАВИТЬ ЧТОБЫ ТОЛЬКО АДМИН МОГ ТАКОЕ СЛАТЬ
+    [USERS_REQUEST]: ({ commit, dispatch }) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get('http://127.0.0.1:8000/api/users/i')
+                .then(response => {
+                    response.data.forEach(r => {
+                        r.full_name = r.profile.full_name
+                    });
+                    resolve(response.data)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
         })
     },
     [USER_NOTIF_REQUEST]: ({commit, dispatch}, id) => {
@@ -49,10 +71,18 @@ const actions = {
             axios
             .get('http://127.0.0.1:8000/api/users/'+id+'/notif/')
             .then(response => {
+                response.data.forEach(r => {
+                    r.title = r.doc.title
+                    r.full_name = r.user.profile.full_name
+                });
                 resolve(response.data)
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
@@ -73,12 +103,19 @@ const actions = {
                     resolve(resp)
                 })
                 .catch(err => {
-                    reject(err)
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
                 })
             })
             .catch(err => {
-                reject(err.response.request.response)
-                // console.log(err)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
@@ -97,7 +134,11 @@ const actions = {
                 commit(USER_SUCCESS, resp.data)
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
@@ -110,19 +151,11 @@ const actions = {
                 headers: { Authorization: "Token " + data.token }
             })
             .catch(err => {
-                reject(err.response.request.response)
-            })
-        })
-    },
-    [USER_ALL_EMAILS]: ({commit, dispatch, state}) => {
-        return new Promise((resolve, reject) => {
-            axios
-            .get(path + '/api/users/all_emails/')
-            .then(response => {
-                resolve(response.data)
-            })
-            .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
@@ -136,7 +169,11 @@ const actions = {
                 resolve(resp)
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
@@ -154,7 +191,11 @@ const actions = {
                 resolve(resp)
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },

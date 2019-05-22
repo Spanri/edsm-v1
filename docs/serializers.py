@@ -16,6 +16,6 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'date',
             'common',
             'signature',
-            # 'notif',
+            'description',
         )
         

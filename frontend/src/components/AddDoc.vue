@@ -26,12 +26,12 @@
                     />
                     <p>Запросить подпись:</p>
                     <div>
-                        <div v-for="(user) in selectedUsers" :key="user.name" style="margin-bottom: 15px">
-                            {{user.name}}
+                        <div v-for="(user) in selectedUsers" :key="user.full_name" style="margin-bottom: 15px">
+                            {{user.full_name}}
                             <a class="deleteSelectedUser" @click="deleteSelectedUser(user)">x</a>
                             </div>
                         <select v-model="selectedUser">
-                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.name}}</option>
+                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}}</option>
                         </select>
 
                         <button type="button" @click="addUser">ДОБАВИТЬ</button> <br>
@@ -56,7 +56,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import { DOC_UPLOAD, DOC_REQUEST, USER_ALL_EMAILS } from '../store/mutation-types';
+import { DOC_UPLOAD, DOC_REQUEST, USERS_REQUEST } from '../store/mutation-types';
 
 export default {
     name: 'account',
@@ -76,7 +76,7 @@ export default {
 		}
     },
     created(){
-        this.$store.dispatch(USER_ALL_EMAILS)
+        this.$store.dispatch(USERS_REQUEST)
         .then(resp=>{
             console.log(resp)
             this.users = resp

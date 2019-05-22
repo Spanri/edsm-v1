@@ -95,10 +95,10 @@ export default {
 			    return this.getDocs;
             } else if(this.$route.params.id == 'common') {
                 return this.getDocs
-                .filter(d => d.common == true);
+                .filter(d => d.doc.common == true);
             } else if(this.$route.params.id == 'myDocs') {
                 return this.getDocs
-                .filter(d => d.owner_id == this.getProfile.id);
+                .filter(d => d.user.id == this.getProfile.id);
             } else if(this.id == 'notif') {
                 this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
                 .then(resp=>{

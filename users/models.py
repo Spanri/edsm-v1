@@ -44,13 +44,18 @@ class UserProfile(models.Model):
     patronymic = models.CharField(max_length=50, blank=True)
     position = models.CharField(max_length=200, blank=True)
     photo = models.ImageField(upload_to='media', blank=True)
+
+    # def get_full_name(self):
+    #     if (self.first_name != "" and self.patronymic != ""):
+    #         return self.second_name + " " + self.first_name[0] + "." + self.patronymic[0] + "."
+    #     else:
+    #         return self.second_name
     
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
             UserProfile.objects.create(user=instance)
 
-    def get_full_name(self):
-        return self.first_name + " " + second_name + " " + patronymic
+    
 
     def save(self, *args, **kwargs):
         change_image(post_object=self)
