@@ -16,7 +16,7 @@ import Auth from './components/Auth';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import axios from 'axios'
-import {USER_REQUEST} from './store/mutation-types'
+// import {USER_REQUEST} from './store/mutation-types'
       
 export default {
 	name: 'App',

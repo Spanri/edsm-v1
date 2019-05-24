@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT, DOCS_REQUEST, USER_NOTIF_REQUEST} from '../store/mutation-types'
+import {AUTH_LOGOUT, USER_NOTIF_REQUEST} from '../store/mutation-types'
 import { mapGetters } from 'vuex'
 
 export default {

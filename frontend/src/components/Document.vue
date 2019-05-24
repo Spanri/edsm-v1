@@ -4,12 +4,13 @@
 		<div class="document2Colon">
 			<div>
                 <div @click="bigImage = 1" class="imageScale">
-                    <img :src="image || 'https://img.icons8.com/wired/512/000000/document.png'">
+                    <img :src="doc.doc.preview || 'https://img.icons8.com/wired/512/000000/document.png'">
                 </div>
                 <div v-if="bigImage == 1" @click="bigImage = 0">
-                    <img class="bigImage" :src="image">
+                    <img class="bigImage" :src="doc.doc.preview || 'https://img.icons8.com/wired/512/000000/document.png'">
                     <div class="bigImageBackground"></div>
                 </div>
+				<a class="button" :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a>
 				<button @click="edith">РЕДАКТИРОВАТЬ</button> <br>
             </div>
 			<div style="margin-left:25px">
@@ -39,8 +40,8 @@ export default {
         }
 	},
 	created(){
+		this.$store.dispatch(DOCS_REQUEST)
 		try {
-			this.$store.dispatch(DOCS_REQUEST, this.id)
 			this.doc = this.$store.getters.getDoc(this.id)
 		} catch (e) {
 			console.log(e)
@@ -53,6 +54,15 @@ export default {
 		}
 	},
 	methods: {
+		download(){
+			const path = this.doc.doc.file
+			const link = document.createElement('a')
+			link.href = path
+			link.download = path.substr(path.lastIndexOf('/') + 1);
+			document.body.appendChild(link)
+			link.click()
+			document.body.removeChild(link);
+		},
 		edith(){
 			console.log('dfgg')
 		},
@@ -79,7 +89,7 @@ export default {
     grid-template-columns: max-content auto;
 }
 /**/
-.document button{
+.document button, .document .button{
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
@@ -89,6 +99,7 @@ export default {
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
 	background-color: #347090;
+	text-decoration: none;
 }
 .document button:hover{
 	cursor: pointer;

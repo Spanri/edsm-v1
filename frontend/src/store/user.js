@@ -14,7 +14,6 @@ import {
 } from './mutation-types'
 import Vue from 'vue'
 import axios from 'axios'
-import { isDate } from 'util';
 
 const state = {
     profile: {},
@@ -26,15 +25,16 @@ const getters = {
 }
 
 const actions = {
-    [USER_REQUEST]: ({commit, dispatch, state}, token) => {
+    [USER_REQUEST]: ({commit, dispatch, rootState}, token) => {
         return new Promise((resolve, reject) => {
+            console.log(rootState.auth)
             axios
             .get(path + '/api/users/get_user_from_token/', {
-                headers: { Authorization: "Token " + token }
+                headers: { Authorization: "Token " + rootState.auth.token }
             })
             .then(response => {
                 commit(USER_SUCCESS, response.data[0])
-                dispatch(DOCS_REQUEST, response.data[0].id)
+                dispatch(DOCS_REQUEST)
             })
             .catch(err => {
                 try {
@@ -121,7 +121,6 @@ const actions = {
     },
     [USER_UPDATE_IMAGE]: ({commit, dispatch, state}, data) => {
         return new Promise((resolve, reject) => {
-            console.log(state.token)
             axios
             .patch(path + '/api/users/i/' + state.profile.id, 
                 data.data, { headers: {

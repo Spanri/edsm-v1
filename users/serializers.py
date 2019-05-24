@@ -82,6 +82,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class NotifSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer(required=False)
     doc = DocSerializer(required=False)
+    user_id = serializers.IntegerField(write_only=True)
+    doc_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Notif
@@ -89,6 +91,8 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
             'id',
             'owner',
             'message',
+            'user_id',
+            'doc_id',
             'date',
             'user',
             'doc'

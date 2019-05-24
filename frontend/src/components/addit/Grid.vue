@@ -17,7 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(entry,j) in filteredHeroes" :key="j" @click="toDoc(entry.id)">
+                <tr v-for="(entry,j) in filteredHeroes" :key="j" @click="toDoc(entry.doc.id)">
                     <td v-for="(key,i) in columns" :key="i">
                     {{entry[key.key]}}
                     </td>
@@ -55,14 +55,14 @@ export default {
         }
     },
     created(){
-        this.$store.dispatch(USER_REQUEST, this.token)
-        this.$store.dispatch(DOCS_REQUEST, this.getProfile.id)
+        this.$store.dispatch(USER_REQUEST)
+        this.$store.dispatch(DOCS_REQUEST)
     },
     computed: {
         ...mapGetters({
             getProfile: 'getProfile',
             getDocs: 'getDocs',
-            token: 'token',
+            // token: 'token',
             getNotif: 'getNotif',
         }),
         filteredHeroes() {

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {USER_REQUEST} from '../../store/mutation-types'
+// import {USER_REQUEST} from '../../store/mutation-types'
 
 export default {
 	name: 'headerProfile',

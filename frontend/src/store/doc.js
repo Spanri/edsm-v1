@@ -16,7 +16,6 @@ import {
 } from './mutation-types'
 import Vue from 'vue'
 import axios from 'axios'
-import { conditionalExpression } from 'babel-types';
 
 const state = {
     docs: [],
@@ -25,33 +24,21 @@ const state = {
 const getters = {
     getDocs: state => state.docs,
     getDoc: (state) => i => {
-        return state.docs.filter(d => d.id == i)[0]
+        return state.docs.filter(
+            d => d.doc.id == i && d.owner == true
+        )[0]
     },
     getFolder: state => state.folder,
 }
 
-function unique(arr) {
-    var obj = {};
-    for (var i = 0; i < arr.length; i++) {
-        var str = arr[i];
-        obj[str] = true;
-    }
-    console.log(Object.keys(obj))
-    return Object.keys(obj);
-}
-
-function uniqueArray (a) {
-    return [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s))
-}
-
 const actions = {
-    [DOCS_REQUEST]: ({commit, dispatch, store}, id) => {
+    [DOCS_REQUEST]: ({commit, dispatch, store, rootState}) => {
         return new Promise((resolve, reject) => {
             axios
             .get('http://127.0.0.1:8000/api/users/all_docs/')
             .then(respCommon => {
                 axios
-                .get('http://127.0.0.1:8000/api/users/'+ id +'/docs/')
+                    .get('http://127.0.0.1:8000/api/users/' + rootState.user.profile.id +'/docs/')
                 .then(respUser => {
                     let docs = respCommon.data;
                     docs = docs.concat(respUser.data);
@@ -66,6 +53,7 @@ const actions = {
                             d.owner_name = d.user.profile.full_name
                             d.title = d.doc.title;
                         });
+                        resolve(docs2)
                         commit(DOCS_SUCCESS, docs2)
                     } catch (err) {
                         console.log(err)
@@ -116,23 +104,43 @@ const actions = {
             resolve(response)
         })
     },
-    [DOC_UPLOAD]: ({commit, dispatch}, data) => {
-        // axios
-        // .post(`http://127.0.0.1:8000/doc/upload`, {
-        //     "file": data.file,
-        //     "image": data.image,
-        //     "description": data.description,
-        //     "common": data.common
-        // })
-        // .then(response => {
-        //     commit(DOC_SUCCESS, data)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        commit(DOC_SUCCESS)
-        let response = '1234';
-        return response;
+    // РЕШИТЬ, ДОБАВЛЯТЬ ЛИ ПРАВА
+    [DOC_UPLOAD]: ({commit, dispatch, rootState}, data) => {
+        return new Promise((resolve, reject) => {
+            console.log(data)
+            axios
+                .post(path + '/api/docs',
+                    data, { headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then(resp => {
+                    axios
+                        .post(path + '/api/users/notif', {
+                            doc_id: resp.data.id,
+                            user_id: rootState.user.profile.id,
+                            owner: true,
+                            date: new Date().toISOString().slice(0, 10)
+                        })
+                        .then(res => {
+                            resolve(resp.data)
+                        })
+                        .catch(err => {
+                            try {
+                                reject(err.response.request.response)
+                            } catch (error) {
+                                reject(err)
+                            }
+                        })
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
     },
 }
 

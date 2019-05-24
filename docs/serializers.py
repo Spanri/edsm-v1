@@ -15,7 +15,8 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'file',
             'date',
             'common',
-            'signature',
+            'preview',
             'description',
+            'signature',
         )
         
