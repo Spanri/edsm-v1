@@ -59,7 +59,7 @@ const router = new Router({
 						columns: [
 							{key: 'title', title: 'Название'},
 							{key: 'full_name', title: 'Владелец'},
-							{key: 'date', title: 'Дата добавления'},
+							{key: 'date_doc', title: 'Дата добавления'},
 						],
 					} 
 				},

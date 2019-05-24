@@ -89,11 +89,12 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
         model = Notif
         fields = (
             'id',
-            'owner',
-            'message',
             'user_id',
             'doc_id',
             'date',
+            'is_owner',
+            'message',
+            'is_signature_request',
             'is_signature',
             'user',
             'doc'

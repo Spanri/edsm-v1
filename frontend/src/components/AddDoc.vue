@@ -33,8 +33,20 @@
                         <select v-model="selectedUser">
                             <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}}</option>
                         </select>
+                        <button type="button" @click="addUser(1)">ДОБАВИТЬ</button> <br>
+                    </div>
+                    <p>Пользователи, у которых были запрошены подписи, могут просматривать документ. 
+                        Добавить дополнительных пользователей, которые не должны подписывать документ, но могут его просматривать:</p>
+                    <div>
+                        <div v-for="(user) in selectedUsers2" :key="user.full_name" style="margin-bottom: 15px">
+                            {{user.full_name}}
+                            <a class="deleteSelectedUser" @click="deleteSelectedUser(user)">x</a>
+                            </div>
+                        <select v-model="selectedUser2">
+                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}}</option>
+                        </select>
 
-                        <button type="button" @click="addUser">ДОБАВИТЬ</button> <br>
+                        <button type="button" @click="addUser(2)">ДОБАВИТЬ</button> <br>
                     </div>
                     <div style="height:15px;"></div>
                     <p>Описание</p>
@@ -67,6 +79,8 @@ export default {
             description: '',
             selectedUser: '',
             selectedUsers: [],
+            selectedUser2: '',
+            selectedUsers2: [],
             users: [],
             common: 0,
             error: null,
@@ -80,7 +94,6 @@ export default {
     created(){
         this.$store.dispatch(USERS_REQUEST)
         .then(resp=>{
-            // console.log(resp)
             this.users = resp
         })
     },
@@ -146,12 +159,21 @@ export default {
             }
             return new Blob([ab], {type: 'image/png'});
         },
-        addUser(){
-            const {selectedUser} = this;
-            this.selectedUsers.push(selectedUser);
-            this.users = this.users.filter(function(el){
-                return el != selectedUser;
-            });
+        addUser(num){
+            if (num == 1){
+                const {selectedUser} = this;
+                this.selectedUsers.push(selectedUser);
+                this.users = this.users.filter(function(el){
+                    return el != selectedUser;
+                });
+            } else if(num == 2) {
+                const {selectedUser2} = this;
+                this.selectedUsers2.push(selectedUser2);
+                this.users = this.users.filter(function(el){
+                    return el != selectedUser2;
+                });
+            }
+            
         },
         deleteSelectedUser(item){
             this.selectedUsers = this.selectedUsers.filter(function(el){

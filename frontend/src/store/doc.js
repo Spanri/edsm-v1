@@ -25,7 +25,7 @@ const getters = {
     getDocs: state => state.docs,
     getDoc: (state) => i => {
         return state.docs.filter(
-            d => d.doc.id == i && d.owner == true
+            d => d.doc.id == i && d.is_owner == true
         )[0]
     },
     getFolder: state => state.folder,
@@ -45,7 +45,7 @@ const actions = {
                     axios
                         .get(path + '/api/users/' + rootState.user.profile.id + '/notif/')
                         .then(respNotif => {
-                            console.log(respNotif.data)
+                            // console.log(respNotif.data)
                             docs = docs.concat(respNotif.data);
                             let docs2 = docs.reduce((acc, c) => {
                                 if (acc.map[c.id]) return acc;
@@ -57,6 +57,7 @@ const actions = {
                                 docs2.forEach(d => {
                                     d.full_name = d.user.profile.full_name
                                     d.title = d.doc.title;
+                                    d.date_doc = d.doc.date;
                                 });
                                 resolve(docs2)
                                 commit(DOCS_SUCCESS, docs2)
@@ -125,8 +126,9 @@ const actions = {
                         .post(path + '/api/users/notif', {
                             doc_id: resp.data.id,
                             user_id: rootState.user.profile.id,
-                            owner: true,
-                            date: new Date().toISOString().slice(0, 10)
+                            is_owner: true,
+                            date: new Date().toISOString().slice(0, 10),
+                            is_signature_request: true
                         })
                         .then(res => {
                             resolve(resp.data)

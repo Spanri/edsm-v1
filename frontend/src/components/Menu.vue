@@ -3,7 +3,7 @@
             <div class="link" :class="{active: page==1 ? true : false}" @click="page=1">
                 <router-link :to="{ path: '/', }">ВСЕ ДОКУМЕНТЫ</router-link>
             </div>
-            <div class="link" :class="{active: page==2 ? true : false}" @click="page=2">
+            <div class="link" :class="{active: page==2 ? true : false}"  @click="page=2">
                 <router-link :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
             </div>
             <div class="link" :class="{active: page==3 ? true : false}" @click="page=3">
@@ -55,7 +55,7 @@ export default {
     text-decoration: none;
     color: #373737;
 }
-.menu .link:hover{
+.menu .link > router-link:hover{
     cursor: pointer;
 }
 /**/

@@ -49,12 +49,11 @@ class NotifViewSet2(generics.ListAPIView):
     permission_classes = ()
 
     def get_queryset(self):
-        notif = Notif.objects.filter(user_id=self.kwargs['pk'], owner=False)
-        for n in notif:
-            old_message = n.message
-            n = Notif.objects.get(doc_id=n.doc_id, owner=True)
-            n.message = old_message
-            print(n)
+        notif = Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=False)
+        for i, n in enumerate(notif):
+            n2 = Notif.objects.get(is_owner=True, doc_id=n.doc_id)
+            notif[i].user = n2.user
+            notif[i].id = n2.id
         return notif
 
 class DocsOwnerViewSet(generics.ListAPIView):
@@ -66,7 +65,7 @@ class DocsOwnerViewSet(generics.ListAPIView):
     permission_classes = ()
 
     def get_queryset(self):
-        return Notif.objects.filter(user_id=self.kwargs['pk'],owner=True)
+        return Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
 
 
 class DocsOwnerOneViewSet(generics.ListAPIView):
@@ -78,7 +77,7 @@ class DocsOwnerOneViewSet(generics.ListAPIView):
     permission_classes = ()
 
     def get(self, request, pk, format=None):
-        n = Notif.objects.get(doc_id=self.kwargs['pk'], owner=True)
+        n = Notif.objects.get(doc_id=self.kwargs['pk'], is_owner=True)
         serializer = NotifSerializer(n)
         return Response(serializer.data)
 
@@ -144,7 +143,7 @@ class NotifViewSet(viewsets.ModelViewSet):
     permission_classes = ()
 
     def get_queryset(self):
-        return Notif.objects.filter(owner=False)
+        return Notif.objects.filter(is_owner=False)
 
 class UserFromTokenViewSet(viewsets.ModelViewSet):
     '''

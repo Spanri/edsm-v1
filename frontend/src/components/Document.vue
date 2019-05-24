@@ -18,6 +18,7 @@
 				<p>Описание:</p>
 				<p> {{ doc.doc.description }}</p>
 				<p>Общий доступ: {{doc.doc.common ? 'да' : 'нет'}} </p>
+				<p>Дата добавления: {{doc.doc.date}} </p>
 			</div>
 		</div>
 	</div>
@@ -41,17 +42,7 @@ export default {
 	},
 	created(){
 		this.$store.dispatch(DOCS_REQUEST)
-		try {
-			this.doc = this.$store.getters.getDoc(this.id)
-		} catch (e) {
-			console.log(e)
-			try {
-				this.$store.dispatch(DOC_REQUEST, this.id)
-				.then(resp => this.doc = resp)
-			} catch (e) {
-				console.log(e)
-			}
-		}
+		this.doc = this.$store.getters.getDoc(this.id);
 	},
 	methods: {
 		download(){

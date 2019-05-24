@@ -83,7 +83,7 @@ export default {
                     return (a === b ? 0 : a > b ? 1 : -1) * order
                 })
             }
-            // console.log('heroes', heroes)
+            console.log('heroes', heroes)
             return heroes
         },
 		heroes() {
@@ -94,13 +94,13 @@ export default {
                 .filter(d => d.doc.common == true);
             } else if(this.$route.params.id == 'myDocs') {
                 return this.getDocs
-                .filter(d => d.user.id == this.getProfile.id && d.owner == true);
+                .filter(d => d.user.id == this.getProfile.id && d.is_owner == true);
             } else if(this.$route.params.id == 'signature-request') {
                 return this.getDocs
-                .filter(d => d.owner == false && d.is_signature == false);
+                .filter(d => d.is_owner == false && d.is_signature_request == true && d.is_signature == false);
             } else if(this.$route.params.id == 'signature-success') {
                 return this.getDocs
-                .filter(d => d.owner == false && d.is_signature == true);
+                .filter(d => d.is_owner == false && d.is_signature_request == true && d.is_signature == true);
             } else if(this.id == 'notif') {
                 this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
                 .then(resp=>{

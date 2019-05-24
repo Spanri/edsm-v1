@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.db.models.signals import post_save, post_delete
 from docs.models import Doc
+import datetime
 
 def change_image(post_object):
     ''' 
@@ -57,15 +58,18 @@ class UserProfile(models.Model):
     post_delete.connect(receiver=delete_image)
 
 class Notif(models.Model):
+    now = datetime.datetime.now()
+
     user = models.ForeignKey(User, related_name="notif", on_delete=models.CASCADE)
     doc = models.ForeignKey(Doc, related_name="notif", on_delete=models.CASCADE)
-    owner = models.BooleanField(default=False)
+    is_owner = models.BooleanField(default=False)
+    is_signature_request = models.BooleanField(default=False)
     message = models.CharField(max_length=500, blank=True)
-    date = models.DateField(blank=True, null=True)
+    date = models.DateField(default=now.strftime("%Y-%m-%d"))
     is_signature = models.BooleanField(default=False)
 
-    REQUIRED_FIELDS = ['user', 'doc', 'owner']
+    REQUIRED_FIELDS = ['user_id', 'doc_id']
 
     class Meta:
-        unique_together = (("user", "doc", "owner"),)
+        unique_together = (("user", "doc"),)
         
