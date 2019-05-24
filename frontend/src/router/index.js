@@ -9,6 +9,7 @@ import Adm from '@/components/profile/Adm'
 import Document from '@/components/Document'
 import AddDoc from '@/components/AddDoc'
 import NotFound from '@/components/NotFound'
+import Help from '@/components/Help'
 import store from '../store'
 import VeeValidate from 'vee-validate';
 
@@ -49,15 +50,15 @@ const router = new Router({
 			children: [
 				{
 					path: '',
-					redirect: '/d/all',
+					redirect: '/documents/all',
 				},
 				{
-					path: 'd/:id',
+					path: 'documents/:id',
 					component: Grid,
 					props: {
 						columns: [
 							{key: 'title', title: 'Название'},
-							{key: 'owner_name', title: 'Владелец'},
+							{key: 'full_name', title: 'Владелец'},
 							{key: 'date', title: 'Дата добавления'},
 						],
 					} 
@@ -72,14 +73,19 @@ const router = new Router({
 			beforeEnter: ifNotAuthenticated,
 		},
 		{
+			path: '/help',
+			name: 'help',
+			component: Help,
+		},
+		{
 			path: '/addDoc',
 			name: 'addDoc',
 			component: AddDoc,
 			beforeEnter: ifAuthenticated,
 		},
 		{
-			path: '/doc/:id',
-			name: 'doc',
+			path: '/document/:id',
+			name: 'document',
 			component: Document,
 			props: true,
 			beforeEnter: ifAuthenticated,
@@ -102,7 +108,7 @@ const router = new Router({
 						id: "notif",
 						columns: [
 							{key: 'full_name', title: 'Инициатор'},
-							{ key: 'title', title: 'Документ' },
+							{key: 'title', title: 'Документ' },
 							{key: 'message', title: 'Сообщение'},
 							{key: 'date', title: 'Дата добавления'},
 						],

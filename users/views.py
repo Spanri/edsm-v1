@@ -49,9 +49,15 @@ class NotifViewSet2(generics.ListAPIView):
     permission_classes = ()
 
     def get_queryset(self):
-        return Notif.objects.filter(user_id=self.kwargs['pk'], owner=False)
+        notif = Notif.objects.filter(user_id=self.kwargs['pk'], owner=False)
+        for n in notif:
+            old_message = n.message
+            n = Notif.objects.get(doc_id=n.doc_id, owner=True)
+            n.message = old_message
+            print(n)
+        return notif
 
-class DocViewSet2(generics.ListAPIView):
+class DocsOwnerViewSet(generics.ListAPIView):
     '''
     Возвр
     '''
@@ -63,7 +69,20 @@ class DocViewSet2(generics.ListAPIView):
         return Notif.objects.filter(user_id=self.kwargs['pk'],owner=True)
 
 
-class DocViewSet3(generics.ListAPIView):
+class DocsOwnerOneViewSet(generics.ListAPIView):
+    '''
+    Возвр
+    '''
+    serializer_class = NotifSerializer
+    queryset = Notif.objects.all()
+    permission_classes = ()
+
+    def get(self, request, pk, format=None):
+        n = Notif.objects.get(doc_id=self.kwargs['pk'], owner=True)
+        serializer = NotifSerializer(n)
+        return Response(serializer.data)
+
+class AllDocsViewSet(generics.ListAPIView):
     '''
     Возвр
     '''
@@ -74,18 +93,18 @@ class DocViewSet3(generics.ListAPIView):
         # user_id = self.kwargs['pk'],
         return Notif.objects.filter(doc__common=True)
 
-class GetEmail(generics.ListAPIView):
-    '''
-    Получение списка всех email и имен.
-    '''
-    permission_classes = ()
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+# class GetEmail(generics.ListAPIView):
+#     '''
+#     Получение списка всех email и имен.
+#     '''
+#     permission_classes = ()
+#     serializer_class = UserSerializer
+#     queryset = User.objects.all()
 
-    def get(self, *args, **kwargs):
-        u = User.objects.get(id=self.kwargs['pk'])
-        uu = UserProfile.objects.get(user_id=u.id)
-        return Response({"full_name": uu.get_full_name()})
+#     def get(self, *args, **kwargs):
+#         u = User.objects.get(id=self.kwargs['pk'])
+#         uu = UserProfile.objects.get(user_id=u.id)
+#         return Response({"full_name": uu.get_full_name()})
 
 class ObtainAuthToken(views.APIView):
     '''

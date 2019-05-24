@@ -94,6 +94,7 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
             'user_id',
             'doc_id',
             'date',
+            'is_signature',
             'user',
             'doc'
         )

@@ -12,10 +12,11 @@ from users.views import (
     UserFromTokenViewSet,
     Index,
     ConfirmUpdatePasswordView,
-    GetEmail,
-    DocViewSet2,
-    DocViewSet3,
+    # GetEmail,
+    DocsOwnerViewSet,
+    AllDocsViewSet,
     NotifViewSet2,
+    DocsOwnerOneViewSet,
 )
 from docs.views import (
     DocViewSet,
@@ -31,8 +32,9 @@ router.register(r'^docs', DocViewSet)
 # router.register(r'^docs2', DocViewSet2)
 
 urlpatterns = [
-    url(r'^api/users/(?P<pk>.+)/docs/$', DocViewSet2.as_view()),
-    url(r'^api/users/all_docs/$', DocViewSet3.as_view()),
+    url(r'^api/users/(?P<pk>.+)/docs/$', DocsOwnerViewSet.as_view()),
+    url(r'^api/users/docs/(?P<pk>.+)/$', DocsOwnerOneViewSet.as_view()),
+    url(r'^api/users/all_docs/$', AllDocsViewSet.as_view()),
     url(r'^api/users/(?P<pk>.+)/notif/$', NotifViewSet2.as_view()),
     url(r'^api/', include(router.urls)),
     # url(r'^api/users/email/(?P<pk>.+)/$', GetEmail.as_view()),

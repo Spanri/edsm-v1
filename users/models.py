@@ -44,18 +44,10 @@ class UserProfile(models.Model):
     patronymic = models.CharField(max_length=50, blank=True)
     position = models.CharField(max_length=200, blank=True)
     photo = models.ImageField(upload_to='media', blank=True)
-
-    # def get_full_name(self):
-    #     if (self.first_name != "" and self.patronymic != ""):
-    #         return self.second_name + " " + self.first_name[0] + "." + self.patronymic[0] + "."
-    #     else:
-    #         return self.second_name
     
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
             UserProfile.objects.create(user=instance)
-
-    
 
     def save(self, *args, **kwargs):
         change_image(post_object=self)
@@ -70,3 +62,10 @@ class Notif(models.Model):
     owner = models.BooleanField(default=False)
     message = models.CharField(max_length=500, blank=True)
     date = models.DateField(blank=True, null=True)
+    is_signature = models.BooleanField(default=False)
+
+    REQUIRED_FIELDS = ['user', 'doc', 'owner']
+
+    class Meta:
+        unique_together = (("user", "doc", "owner"),)
+        

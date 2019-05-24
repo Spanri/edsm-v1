@@ -185,7 +185,7 @@ export default {
                 this.$store.dispatch(DOCS_REQUEST)
                 .then(res => {
                     this.$router.push({
-                        name: 'doc',
+                        name: 'document',
                         params: { id: resp.id }
                     })
                 })

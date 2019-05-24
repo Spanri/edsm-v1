@@ -38,26 +38,32 @@ const actions = {
             .get('http://127.0.0.1:8000/api/users/all_docs/')
             .then(respCommon => {
                 axios
-                    .get('http://127.0.0.1:8000/api/users/' + rootState.user.profile.id +'/docs/')
+                .get('http://127.0.0.1:8000/api/users/' + rootState.user.profile.id +'/docs/')
                 .then(respUser => {
                     let docs = respCommon.data;
                     docs = docs.concat(respUser.data);
-                    let docs2 = docs.reduce((acc, c) => {
-                        if (acc.map[c.id]) return acc;
-                        acc.map[c.id] = true;
-                        acc.docs2.push(c);
-                        return acc;
-                    }, { map: {}, docs2: [] }).docs2;
-                    try {
-                        docs2.forEach(d => {
-                            d.owner_name = d.user.profile.full_name
-                            d.title = d.doc.title;
+                    axios
+                        .get(path + '/api/users/' + rootState.user.profile.id + '/notif/')
+                        .then(respNotif => {
+                            console.log(respNotif.data)
+                            docs = docs.concat(respNotif.data);
+                            let docs2 = docs.reduce((acc, c) => {
+                                if (acc.map[c.id]) return acc;
+                                acc.map[c.id] = true;
+                                acc.docs2.push(c);
+                                return acc;
+                            }, { map: {}, docs2: [] }).docs2;
+                            try {
+                                docs2.forEach(d => {
+                                    d.full_name = d.user.profile.full_name
+                                    d.title = d.doc.title;
+                                });
+                                resolve(docs2)
+                                commit(DOCS_SUCCESS, docs2)
+                            } catch (err) {
+                                console.log(err)
+                            }
                         });
-                        resolve(docs2)
-                        commit(DOCS_SUCCESS, docs2)
-                    } catch (err) {
-                        console.log(err)
-                    }
                 })
                 .catch(err => {
                     try {

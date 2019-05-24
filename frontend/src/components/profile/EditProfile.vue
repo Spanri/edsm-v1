@@ -8,7 +8,7 @@
             <div style="margin-left:25px">
                 <p v-if="error" style="color: red">{{error}}</p>
                 <p>Выбрать новый аватар</p>
-                <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange">
+                <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange" accept="image/*">
                 <p>{{upload}}</p>
                 <form @submit.prevent="editProfile">
                     <p>Пароль</p>

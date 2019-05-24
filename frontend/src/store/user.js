@@ -9,6 +9,7 @@ import {
     USER_CHANGE_PASSWORD,
     USER_UPDATE_STAFF,
     USER_UPDATE_IMAGE,
+    USER_NOTIF_R,
     path,
     DOCS_REQUEST,
 } from './mutation-types'
@@ -27,7 +28,7 @@ const getters = {
 const actions = {
     [USER_REQUEST]: ({commit, dispatch, rootState}, token) => {
         return new Promise((resolve, reject) => {
-            console.log(rootState.auth)
+            // console.log(rootState.auth)
             axios
             .get(path + '/api/users/get_user_from_token/', {
                 headers: { Authorization: "Token " + rootState.auth.token }
@@ -50,7 +51,7 @@ const actions = {
     [USERS_REQUEST]: ({ commit, dispatch }) => {
         return new Promise((resolve, reject) => {
             axios
-                .get('http://127.0.0.1:8000/api/users/i')
+                .get(path + '/api/users/i')
                 .then(response => {
                     response.data.forEach(r => {
                         r.full_name = r.profile.full_name
@@ -66,24 +67,16 @@ const actions = {
                 })
         })
     },
-    [USER_NOTIF_REQUEST]: ({commit, dispatch}, id) => {
-        return new Promise((resolve, reject) => {
-            axios
-            .get('http://127.0.0.1:8000/api/users/'+id+'/notif/')
-            .then(response => {
-                response.data.forEach(r => {
-                    r.title = r.doc.title
-                    r.full_name = r.user.profile.full_name
-                });
-                resolve(response.data)
+    [USER_NOTIF_REQUEST]: ({commit, dispatch, rootState}) => {
+        return new Promise(async (resolve, reject) => {
+            let response = await axios.get(path + '/api/users/' + rootState.user.profile.id + '/notif/');
+            await response.data.forEach(async (r, i) => {
+                r.title = r.doc.title
+                r.full_name = r.user.profile.full_name;
+                r.date = 'r.message';
             })
-            .catch(err => {
-                try {
-                    reject(err.response.request.response)
-                } catch (error) {
-                    reject(err)
-                }
-            })
+            await console.log(response.data)
+            await resolve(response.data)
         })
     },
     [USER_UPDATE]: ({commit, dispatch}, data) => {
@@ -204,8 +197,8 @@ const mutations = {
     [USER_SUCCESS]: (state, resp) => {
         Vue.set(state, 'profile', resp)
     },
-    // [USER_NOTIF_SUCCESS]: (state, resp) => {
-    //     Vue.set(state, 'notif', resp)
+    // [USER_NOTIF_R]: (state, resp) => {
+    //     Vue.set(state, 'r', resp)
     // }
 }
 

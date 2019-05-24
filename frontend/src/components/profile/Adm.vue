@@ -78,7 +78,7 @@ export default {
     created(){
         this.$store.dispatch(USERS_REQUEST)
         .then(resp=>{
-            console.log(resp)
+            // console.log(resp)
             this.users = resp
         })
     },
@@ -99,7 +99,7 @@ export default {
                 this.error = 'Пользователь создается...'
                 this.$store.dispatch(AUTH_SIGNUP, { email: this.email, is_staff: this.is_staff })
                 .then((resp) => {
-                    this.error = 'Пользователь создан. Пароль пользователя: ' + resp
+                    this.error = 'Пользователь создан.'
                 })
                 .catch(err=>{
                     this.error = 'Пользователь не создан. Такой пользователь уже существует.'

@@ -43,12 +43,7 @@ export default {
             sortOrders[key] = 1
         });
         return {
-            title: {
-                '': 'ВСЕ ДОКУМЕНТЫ',
-                'common': 'ОБЩИЙ ДОСТУП',
-                'myDocs': 'МОИ ДОКУМЕНТЫ'
-            },
-            h: [],
+            h: null,
             sortKey: '',
             filterKey: '',
             sortOrders: sortOrders
@@ -63,7 +58,7 @@ export default {
             getProfile: 'getProfile',
             getDocs: 'getDocs',
             // token: 'token',
-            getNotif: 'getNotif',
+            // getNotif: 'getNotif',
         }),
         filteredHeroes() {
             var sortKey = ''
@@ -73,21 +68,22 @@ export default {
             });
             var filterKey = this.filterKey && this.filterKey.toLowerCase()
             var order = this.sortOrders[sortKey] || 1
-            var heroes = this.heroes || this.h
+            var heroes = this.heroes || this.h;
             if (filterKey) {
                 heroes = heroes.filter(function (row) {
-                return Object.keys(row).some(function (key) {
-                    return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-                })
+                    return Object.keys(row).some(function (key) {
+                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+                    })
                 })
             }
             if (sortKey) {
                 heroes = heroes.slice().sort(function (a, b) {
-                a = a[sortKey]
-                b = b[sortKey]
-                return (a === b ? 0 : a > b ? 1 : -1) * order
+                    a = a[sortKey]
+                    b = b[sortKey]
+                    return (a === b ? 0 : a > b ? 1 : -1) * order
                 })
             }
+            // console.log('heroes', heroes)
             return heroes
         },
 		heroes() {
@@ -98,11 +94,18 @@ export default {
                 .filter(d => d.doc.common == true);
             } else if(this.$route.params.id == 'myDocs') {
                 return this.getDocs
-                .filter(d => d.user.id == this.getProfile.id);
+                .filter(d => d.user.id == this.getProfile.id && d.owner == true);
+            } else if(this.$route.params.id == 'signature-request') {
+                return this.getDocs
+                .filter(d => d.owner == false && d.is_signature == false);
+            } else if(this.$route.params.id == 'signature-success') {
+                return this.getDocs
+                .filter(d => d.owner == false && d.is_signature == true);
             } else if(this.id == 'notif') {
                 this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
                 .then(resp=>{
                     this.h = resp;
+                    // console.log('notif', this.h)
                 })
                 return null;
             }
@@ -119,7 +122,7 @@ export default {
             this.sortOrders[key] = this.sortOrders[key] * -1
         },
         toDoc(id){
-            this.$router.push('/doc/'+id);
+            this.$router.push('/document/'+id);
         },
     }
 }

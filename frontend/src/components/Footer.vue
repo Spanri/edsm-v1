@@ -1,7 +1,7 @@
 <template>
 	<div class="background">
 		<div class="footer">
-			<p>МТУСИ, 2019</p>
+			<p>МТУСИ, 2019 | <label @click="toHelp()">Помощь</label></p>	
 		</div>
 	</div>
 </template>
@@ -11,8 +11,13 @@ export default {
 	name: 'Header',
 	data () {
 		return {
-		msg: 'Welcome to Your Vue.js App'
+			// msg: 'Welcome to Your Vue.js App'
 		}
+	},
+	methods: {
+		toHelp(){
+			this.$router.push('/help');
+		},
 	}
 }
 </script>
@@ -34,7 +39,12 @@ p{
 	margin: 8px;
 	color: white;
 }
-a:hover{
-	color: #b1d887;
+.background label{
+	color: white;
+	text-decoration: none;
+}
+.background label:hover{
+	cursor: pointer;
+	color: #aaa9f8;
 }
 </style>

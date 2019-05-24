@@ -4,10 +4,16 @@
                 <router-link :to="{ path: '/', }">ВСЕ ДОКУМЕНТЫ</router-link>
             </div>
             <div class="link" :class="{active: page==2 ? true : false}" @click="page=2">
-                <router-link :to="{ path: '/d/common', }">ОБЩИЙ ДОСТУП</router-link>
+                <router-link :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
             </div>
             <div class="link" :class="{active: page==3 ? true : false}" @click="page=3">
-                <router-link :to="{ path: '/d/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
+                <router-link :to="{ path: '/documents/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
+            </div>
+            <div class="link" :class="{active: page==4 ? true : false}" @click="page=4">
+                <router-link :to="{ path: '/documents/signature-request', }">НА ПОДПИСЬ</router-link>
+            </div>
+            <div class="link" :class="{active: page==5 ? true : false}" @click="page=5">
+                <router-link :to="{ path: '/documents/signature-success', }">ПОДПИСАННОЕ</router-link>
             </div>
     </div>
 </template>
