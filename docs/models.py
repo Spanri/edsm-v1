@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 import datetime
 
-
 class Doc(models.Model):
     now = datetime.datetime.now()
 

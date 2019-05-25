@@ -10,15 +10,16 @@
                     <img class="bigImage" :src="doc.doc.preview || 'https://img.icons8.com/wired/512/000000/document.png'">
                     <div class="bigImageBackground"></div>
                 </div>
-				<a class="button" :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a>
-				<button @click="edith">РЕДАКТИРОВАТЬ</button> <br>
+				<button><a :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a></button>
+				<button @click="editDoc">РЕДАКТИРОВАТЬ</button> <br>
+				<button v-if="doc.is_signature_request && !doc.is_signature" @click="addSignature">ПОДПИСАТЬ</button> <br>
             </div>
 			<div style="margin-left:25px">
-				<p>Владелец: {{doc.user.full_name}} ({{doc.user.email}})</p>
-				<p>Описание:</p>
-				<p> {{ doc.doc.description }}</p>
+				<p>Владелец: {{doc.user.profile.full_name}} ({{doc.user.email}})</p>
 				<p>Общий доступ: {{doc.doc.common ? 'да' : 'нет'}} </p>
 				<p>Дата добавления: {{doc.doc.date}} </p>
+				<p>Описание:</p>
+				<p> {{ doc.doc.description }}</p>
 			</div>
 		</div>
 	</div>
@@ -40,9 +41,10 @@ export default {
 			image: '',
         }
 	},
-	created(){
+	created() {
 		this.$store.dispatch(DOCS_REQUEST)
 		this.doc = this.$store.getters.getDoc(this.id);
+		console.log('docs', this.doc)
 	},
 	methods: {
 		download(){
@@ -54,9 +56,12 @@ export default {
 			link.click()
 			document.body.removeChild(link);
 		},
-		edith(){
-			console.log('dfgg')
+		editDoc(){
+			console.log('editDoc')
 		},
+		addSignature(){
+			console.log('addSignature')
+		}
 	},
 }
 </script>
@@ -81,15 +86,20 @@ export default {
 }
 /**/
 .document button, .document .button{
+	width: 100%;
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 	color: white;
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
 	background-color: #347090;
+	text-align: center;
+}
+.document a{
+	color: white;
 	text-decoration: none;
 }
 .document button:hover{

@@ -94,7 +94,7 @@ export default {
     created(){
         this.$store.dispatch(USERS_REQUEST)
         .then(resp=>{
-            this.users = resp
+            this.users = resp.filter(r => r.id != this.$store.getters.getProfile.id)
         })
     },
     methods: {
@@ -198,11 +198,15 @@ export default {
                 'preview.png',
                 {type: 'image/png'}
             );
+            d.append('user_id', this.$store.getters.getProfile.id);
             if (this.title) d.append('title', this.title);
             if (this.pr) d.append('preview', newPr);
             if (this.description) d.append('description', this.description);
             d.common = this.common ? d.append('common', true) : d.append('common', false);
-            this.$store.dispatch(DOC_UPLOAD, d)
+            let dd = { d }
+            if (this.selectedUsers) dd.signature_request = this.selectedUsers;
+            if (this.selectedUsers2) dd.show_request = this.selectedUsers2;
+            this.$store.dispatch(DOC_UPLOAD, dd)
 			.then((resp) => {
                 this.$store.dispatch(DOCS_REQUEST)
                 .then(res => {

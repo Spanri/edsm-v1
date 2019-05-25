@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import {AUTH_SIGNUP, USERS_REQUEST, USER_UPDATE_STAFF} from '../../store/mutation-types'
+import {AUTH_SIGNUP, USERS_REQUEST, USER_UPDATE_STAFF, DOC_FOLDER_PAGE_PROFILE} from '../../store/mutation-types'
 
 export default {
     name: 'adm',
@@ -76,6 +76,7 @@ export default {
         }
     },
     created(){
+        this.$store.commit(DOC_FOLDER_PAGE_PROFILE, 3)
         this.$store.dispatch(USERS_REQUEST)
         .then(resp=>{
             // console.log(resp)

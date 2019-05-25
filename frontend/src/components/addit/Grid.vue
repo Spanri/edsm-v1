@@ -29,7 +29,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import {DOCS_REQUEST, DOC_REQUEST, USER_REQUEST, USER_NOTIF_REQUEST} from '../../store/mutation-types'
+import {DOCS_REQUEST, DOC_REQUEST, USER_REQUEST, USER_NOTIF_REQUEST, DOC_FOLDER_PAGE, DOC_FOLDER_PAGE_PROFILE} from '../../store/mutation-types'
 
 export default {
     name: 'grid',
@@ -88,25 +88,32 @@ export default {
         },
 		heroes() {
             if(this.$route.params.id == 'all'){
+                this.$store.commit(DOC_FOLDER_PAGE, 1)
 			    return this.getDocs;
             } else if(this.$route.params.id == 'common') {
+                this.$store.commit(DOC_FOLDER_PAGE, 2)
                 return this.getDocs
                 .filter(d => d.doc.common == true);
             } else if(this.$route.params.id == 'myDocs') {
+                this.$store.commit(DOC_FOLDER_PAGE, 3)
                 return this.getDocs
                 .filter(d => d.user.id == this.getProfile.id && d.is_owner == true);
             } else if(this.$route.params.id == 'signature-request') {
+                this.$store.commit(DOC_FOLDER_PAGE, 4)
                 return this.getDocs
                 .filter(d => d.is_owner == false && d.is_signature_request == true && d.is_signature == false);
             } else if(this.$route.params.id == 'signature-success') {
+                this.$store.commit(DOC_FOLDER_PAGE, 5)
                 return this.getDocs
                 .filter(d => d.is_owner == false && d.is_signature_request == true && d.is_signature == true);
+            } else if(this.$route.params.id == 'available-to-me') {
+                this.$store.commit(DOC_FOLDER_PAGE, 6)
+                return this.getDocs
+                .filter(d => d.is_owner == false && d.is_signature_request == false);
             } else if(this.id == 'notif') {
-                this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
-                .then(resp=>{
-                    this.h = resp;
-                    // console.log('notif', this.h)
-                })
+                this.$store.commit(DOC_FOLDER_PAGE_PROFILE, 1)
+                return this.getDocs
+                .filter(d => d.is_owner == false && d.is_signature_request == true && d.is_signature == false);
                 return null;
             }
 		}

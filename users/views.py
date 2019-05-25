@@ -77,9 +77,12 @@ class DocsOwnerOneViewSet(generics.ListAPIView):
     permission_classes = ()
 
     def get(self, request, pk, format=None):
-        n = Notif.objects.get(doc_id=self.kwargs['pk'], is_owner=True)
-        serializer = NotifSerializer(n)
-        return Response(serializer.data)
+        try:
+            n = Notif.objects.get(doc_id=self.kwargs['pk'], is_owner=True)
+            serializer = NotifSerializer(n)
+            return Response(serializer.data)
+        except:
+            return Response({})
 
 class AllDocsViewSet(generics.ListAPIView):
     '''
@@ -89,8 +92,7 @@ class AllDocsViewSet(generics.ListAPIView):
     queryset = Notif.objects.all()
     permission_classes = ()
     def get_queryset(self):
-        # user_id = self.kwargs['pk'],
-        return Notif.objects.filter(doc__common=True)
+        return Notif.objects.filter(doc__common=True, is_owner=True)
 
 # class GetEmail(generics.ListAPIView):
 #     '''

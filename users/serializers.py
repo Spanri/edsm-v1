@@ -32,8 +32,6 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=False)
-    # docs = DocSerializer(many=True)
-    # notif = NotifSerializer(required=False)
 
     class Meta:
         model = User
@@ -44,11 +42,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'date_joined',
             'is_staff',
             'profile',
-            # 'docs',
-            # 'notif'
         )
 
-    # я не уверена, что будут загружаться картинки при создании
     def create(self, validated_data):
         profile_data = dict(validated_data.get('profile'))
         user_data = dict(validated_data)
@@ -99,6 +94,7 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
             'user',
             'doc'
         )
+        unique_together = (("user_id", "doc_id"),)
 
 class AuthTokenSerializer(serializers.Serializer):
     '''

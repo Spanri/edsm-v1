@@ -5,9 +5,22 @@
 			<div>
 				<div class="menuProfile">
 					<div style="margin-top:10px"></div>
-					<p :class="{active: page==1 ? true : false}" @click="page=1;notif()">УВЕДОМЛЕНИЯ</p>
-					<p :class="{active: page==2 ? true : false}" @click="page=2;edit()">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</p>
-					<p v-if="getProfile.is_staff" :class="{active: page==3 ? true : false}" @click="page=3;adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
+					<p 
+						:class="{active: page==1 ? true : false}" 
+						@click="page=1;notif()">
+						УВЕДОМЛЕНИЯ
+					</p>
+					<p 
+						:class="{active: page==2 ? true : false}" 
+						@click="page=2;edit()">
+						РЕДАКТИРОВАНИЕ ПРОФИЛЯ
+					</p>
+					<p 
+						v-if="getProfile.is_staff" 
+						:class="{active: page==3 ? true : false}" 
+						@click="page=3;adm()">
+						АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ
+					</p>
 					<div style="height:15px;"></div>
 					<!-- <hr style="height:0px; border:solid 1.6px #e0e0e0; "> -->
 					<p @click="logout()">ВЫЙТИ</p>
@@ -28,8 +41,11 @@ export default {
 	components: { HeaderProfile },
 	data () {
 		return {
-            page: 1,
+            page: '',
 		}
+	},
+	created(){
+		this.page = this.$store.getters.getPageProfile;
 	},
 	computed: {
 		...mapGetters({

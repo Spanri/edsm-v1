@@ -81,11 +81,11 @@ export default {
             return 'Открыть профиль\n' + this.getProfile.email;
         },
         notif(){
-            this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
-            .then(resp=>{
-                this.n = resp.length;
-            });
-            return this.n
+            // this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
+            // .then(resp=>{
+            //     this.n = resp.length;
+            // });
+            // return this.n
         },
         notifColor(){
             if(this.notifHover){

@@ -68,8 +68,5 @@ class Notif(models.Model):
     date = models.DateField(default=now.strftime("%Y-%m-%d"))
     is_signature = models.BooleanField(default=False)
 
-    REQUIRED_FIELDS = ['user_id', 'doc_id']
-
-    class Meta:
-        unique_together = (("user", "doc"),)
+    
         

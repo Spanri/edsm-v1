@@ -2,7 +2,8 @@ import {
     DOCS_REQUEST,
     DOC_SUCCESS,
     DOC_FOLDER_SUCCESS,
-    DOC_FOLDER_REQUEST,
+    DOC_FOLDER_PAGE,
+    DOC_FOLDER_PAGE_PROFILE,
     DOC_FOLDERS_REQUEST,
     DOC_FOLDERS_UPDATE,
     DOC_FOLDERS_UPDATE_SUCCESS,
@@ -19,16 +20,17 @@ import axios from 'axios'
 
 const state = {
     docs: [],
+    page: '',
+    pageProfile: '',
 }
 
 const getters = {
     getDocs: state => state.docs,
     getDoc: (state) => i => {
-        return state.docs.filter(
-            d => d.doc.id == i && d.is_owner == true
-        )[0]
+        return state.docs.filter(d => d.doc.id == i)[0]
     },
-    getFolder: state => state.folder,
+    getPage: state => state.page,
+    getPageProfile: state => state.pageProfile,
 }
 
 const actions = {
@@ -117,29 +119,49 @@ const actions = {
             console.log(data)
             axios
                 .post(path + '/api/docs',
-                    data, { headers: {
+                    data.d, { headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 })
                 .then(resp => {
-                    axios
-                        .post(path + '/api/users/notif', {
-                            doc_id: resp.data.id,
-                            user_id: rootState.user.profile.id,
-                            is_owner: true,
-                            date: new Date().toISOString().slice(0, 10),
-                            is_signature_request: true
+                    if(data.signature_request) {
+                        data.signature_request.forEach(s => {
+                            console.log(s)
+                            axios
+                                .post(path + '/api/users/notif', {
+                                    doc_id: resp.data.id,
+                                    user_id: s.id,
+                                    message: 'Вас просят подписать документ.',
+                                    is_owner: false,
+                                    is_signature_request: true
+                                })
+                                .catch(err => {
+                                    try {
+                                        reject(err.response.request.response)
+                                    } catch (error) {
+                                        reject(err)
+                                    }
+                                })
                         })
-                        .then(res => {
-                            resolve(resp.data)
+                        data.show_request.forEach(s => {
+                            console.log(s)
+                            axios
+                                .post(path + '/api/users/notif', {
+                                    doc_id: resp.data.id,
+                                    user_id: s.id,
+                                    is_owner: false,
+                                    is_signature_request: false
+                                })
+                                .catch(err => {
+                                    try {
+                                        reject(err.response.request.response)
+                                    } catch (error) {
+                                        reject(err)
+                                    }
+                                })
                         })
-                        .catch(err => {
-                            try {
-                                reject(err.response.request.response)
-                            } catch (error) {
-                                reject(err)
-                            }
-                        })
+                        resolve(resp.data)
+                    }
                 })
                 .catch(err => {
                     try {
@@ -158,6 +180,12 @@ const mutations = {
     },
     [DOC_REQUEST_SUCCESS]: (state, resp) => { 
         state.doc.push(resp)
+    },
+    [DOC_FOLDER_PAGE]: (state, resp) => {
+        Vue.set(state, 'page', resp)
+    },
+    [DOC_FOLDER_PAGE_PROFILE]: (state, resp) => {
+        Vue.set(state, 'pageProfile', resp)
     },
 }
 

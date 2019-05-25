@@ -15,21 +15,24 @@
             <div class="link" :class="{active: page==5 ? true : false}" @click="page=5">
                 <router-link :to="{ path: '/documents/signature-success', }">ПОДПИСАННОЕ</router-link>
             </div>
+            <div class="link" :class="{active: page==6 ? true : false}" @click="page=6">
+                <router-link :to="{ path: '/documents/available-to-me', }">ДОСТУПНЫ МНЕ</router-link>
+            </div>
     </div>
 </template>
 
 <script>
-import {} from '../store/mutation-types'
+import { } from '../store/mutation-types'
 
 export default {
     name: 'Menu',
     data () {
         return {
-            page: 1,
+            page: '',
         }
     },
-    methods: {
-        
+    created() {
+        this.page = this.$store.getters.getPage;
     }
 }
 </script>
@@ -46,7 +49,7 @@ export default {
 }
 /**/
 .menu .link{
-    padding: 18px 20px;
+    padding: 13px 20px;
     padding-left: 50px;
     font-size: 16px;
     color: #373737;

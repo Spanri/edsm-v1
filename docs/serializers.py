@@ -1,16 +1,14 @@
 from .models import Doc
 # from users.serializers import NotifSerializer
+from users.models import Notif
 from rest_framework import serializers
 
-class DocSerializer(serializers.HyperlinkedModelSerializer):    
-    # notif = serializers.HyperlinkedIdentityField(view_name='notif-list')
-    # notif = NotifSerializer(required=False)
+class DocSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Doc
         fields = (
             'id',
-            # 'owner_id',
             'title',
             'file',
             'date',
@@ -19,4 +17,3 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'description',
             'signature',
         )
-        
