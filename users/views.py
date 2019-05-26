@@ -3,10 +3,14 @@ from users.serializers import (
     UserSerializer, 
     AuthTokenSerializer, 
     UserProfileSerializer,
-    NotifSerializer
+    NotifSerializer,
+)
+from docs.serializers import (
+    DocSerializer,
 )
 from .permissions import CustomIsAuthenticated
 from .models import User, UserProfile, Notif
+from docs.models import Doc
 from rest_framework import (
     generics,
     mixins,
@@ -26,6 +30,7 @@ from django.core import exceptions
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework import parsers, renderers
+from itertools import chain
 
 ## Работает
 class Index(TemplateView):
@@ -39,10 +44,13 @@ class Index(TemplateView):
         context = super(Index, self).get_context_data()
         return context
 
-
-class NotifViewSet2(generics.ListAPIView):
+class Notif2(generics.ListAPIView):
     '''
-    Унив
+    Нотифы конкретного пользователя, где он не владелец, 
+    при этом документ может быть одним из:
+    * доступен для просмотра, не надо подписывать (is_signature_request=0)
+    * уже подписан (is_signature_request=1, is_signature=1)
+    * надо подписать и очередь у него (is_signature_request=1, is_signature=0, is_queue=1)
     '''
     serializer_class = NotifSerializer
     queryset = Notif.objects.all()
@@ -50,62 +58,93 @@ class NotifViewSet2(generics.ListAPIView):
 
     def get_queryset(self):
         notif = Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=False)
-        for i, n in enumerate(notif):
+        notif1 = notif.filter(is_signature_request=0)
+        notif2 = notif.filter(is_signature_request=1, is_signature=1)
+        notif3 = notif.filter(
+            is_signature_request=1,
+            is_signature=0, 
+            is_queue=1
+        )
+        for i, n in enumerate(notif1):
             n2 = Notif.objects.get(is_owner=True, doc_id=n.doc_id)
-            notif[i].user = n2.user
-            notif[i].id = n2.id
-        return notif
+            notif1[i].user = n2.user
+            notif1[i].id = n2.id
+        # Находим документы пользовтеля, которые подписали.
+        # Сначала находим документы пользователя, которыми он владеет
+        notif4 = Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
+        # Для каждого документа проверяем, есть ли нотиф, где этот документ и 
+        # is_owner=false, is_signature_request=true, is_signature=true
+        for i, d in enumerate(notif4):
+            try:
+                d2 = Notif.objects.filter(
+                    is_owner=False, 
+                    doc_id=d.doc_id,
+                    is_signature_request=True, 
+                    is_signature=True
+                )
+                if d2:
+                    notif1 = notif1.union(d2)
+            except:
+                pass
+        # Добавляем нотифы, где пользователь - владелец
+        notif5 = Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
+        # Добавляем нотифы, где документы в общем доступе
+        notif6 = Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
+        # Объединяем (нотиф 4 присоединили отдельно выше)
+        notif1 = notif1.union(notif2).union(notif3).union(notif5).union(notif6)
+        return notif1
 
-class DocsOwnerViewSet(generics.ListAPIView):
+class AddSignature(viewsets.ModelViewSet):
     '''
-    Возвр
+    Добавить подпись к документу. Принимает id документа.
     '''
-    serializer_class = NotifSerializer
-    queryset = Notif.objects.all()
+    serializer_class = DocSerializer
+    queryset = Doc.objects.all()
     permission_classes = ()
 
-    def get_queryset(self):
-        return Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
+    def add_signature(self, request):
+        # Найти нужный документ
+        doc = Doc.objects.get(id=request.data['id'])
 
+        # Тут должна быть функция генерации подписи
+        signature = "123456"
 
-class DocsOwnerOneViewSet(generics.ListAPIView):
-    '''
-    Возвр
-    '''
-    serializer_class = NotifSerializer
-    queryset = Notif.objects.all()
-    permission_classes = ()
+        # Добавить подпись
+        doc.signature = signature
+        doc.save()
+        
+        # Найти нотиф, который с этим документом и 
+        # где очередь подписывать и изменить на "подписано"
+        notif = Notif.objects.get(
+            doc_id=doc.id, 
+            is_owner=False,
+            is_signature_request=1, 
+            is_queue=True
+        )
+        notif.is_queue = False
+        notif.is_signature = True
+        notif.message = "Ваш документ подписали."
+        notif.is_show_notif = True
+        notif.save()
 
-    def get(self, request, pk, format=None):
+        # Найти следующий нотиф, который с этим документом и
+        # где очередь = очередь+1
         try:
-            n = Notif.objects.get(doc_id=self.kwargs['pk'], is_owner=True)
-            serializer = NotifSerializer(n)
-            return Response(serializer.data)
+            notifNext = Notif.objects.get(
+                doc_id=doc.id,
+                is_owner=False,
+                is_signature_request=1,
+                queue=notif.queue+1
+            )
+            print(notifNext)
+            notifNext.is_queue = True
+            notif.message = "Вас просят подписать документ."
+            notifNext.save()
         except:
-            return Response({})
+            pass
 
-class AllDocsViewSet(generics.ListAPIView):
-    '''
-    Возвр
-    '''
-    serializer_class = NotifSerializer
-    queryset = Notif.objects.all()
-    permission_classes = ()
-    def get_queryset(self):
-        return Notif.objects.filter(doc__common=True, is_owner=True)
-
-# class GetEmail(generics.ListAPIView):
-#     '''
-#     Получение списка всех email и имен.
-#     '''
-#     permission_classes = ()
-#     serializer_class = UserSerializer
-#     queryset = User.objects.all()
-
-#     def get(self, *args, **kwargs):
-#         u = User.objects.get(id=self.kwargs['pk'])
-#         uu = UserProfile.objects.get(user_id=u.id)
-#         return Response({"full_name": uu.get_full_name()})
+        serializer = DocSerializer(doc)
+        return Response(serializer.data)
 
 class ObtainAuthToken(views.APIView):
     '''
@@ -143,9 +182,6 @@ class NotifViewSet(viewsets.ModelViewSet):
     serializer_class = NotifSerializer
     queryset = Notif.objects.all()
     permission_classes = ()
-
-    def get_queryset(self):
-        return Notif.objects.filter(is_owner=False)
 
 class UserFromTokenViewSet(viewsets.ModelViewSet):
     '''
@@ -253,7 +289,71 @@ class ConfirmUpdatePasswordView(viewsets.ModelViewSet):
         
         return Response({"code": code})
 
-# ## Эксперимент
+# ## Не нужно, но жалко выкидывать
+
+# class Notif1(generics.ListAPIView):
+#     '''
+#     Нотифы конкретного пользователя, где он не владелец
+#     '''
+#     serializer_class = NotifSerializer
+#     queryset = Notif.objects.all()
+#     permission_classes = ()
+
+#     def get_queryset(self):
+#         return Notif.objects.filter(is_owner=False)
+
+# class DocsOwner(generics.ListAPIView):
+#     '''
+#     Нотифы конкретного пользователя, где пользователь
+#      - владелец документов.
+#     '''
+#     serializer_class = NotifSerializer
+#     queryset = Notif.objects.all()
+#     permission_classes = ()
+
+#     def get_queryset(self):
+#         return Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
+
+# class DocsOwnerOne(generics.ListAPIView):
+#     '''
+#     Нотиф конкретного докумена, где юзер -
+#     владелец документа.
+#     '''
+#     serializer_class = NotifSerializer
+#     queryset = Notif.objects.all()
+#     permission_classes = ()
+
+#     def get(self, request, pk, format=None):
+#         try:
+#             n = Notif.objects.get(doc_id=self.kwargs['pk'], is_owner=True)
+#             serializer = NotifSerializer(n)
+#             return Response(serializer.data)
+#         except:
+#             return Response({})
+
+# class AllDocs(generics.ListAPIView):
+#     '''
+#     Все нотифы, которые в общем доступе и
+#     обозначают владельца.
+#     '''
+#     serializer_class = NotifSerializer
+#     queryset = Notif.objects.all()
+#     permission_classes = ()
+#     def get_queryset(self):
+#         return Notif.objects.filter(doc__common=True, is_owner=True)
+
+# class GetEmail(generics.ListAPIView):
+#     '''
+#     Получение списка всех email и имен.
+#     '''
+#     permission_classes = ()
+#     serializer_class = UserSerializer
+#     queryset = User.objects.all()
+
+#     def get(self, *args, **kwargs):
+#         u = User.objects.get(id=self.kwargs['pk'])
+#         uu = UserProfile.objects.get(user_id=u.id)
+#         return Response({"full_name": uu.get_full_name()})
 
 # class Login(viewsets.ModelViewSet):
 #     serializer_class = UserSerializer
@@ -266,6 +366,7 @@ class ConfirmUpdatePasswordView(viewsets.ModelViewSet):
 #         u = obtain_jwt_token()
 #         print(u)
 #         return user
+
     # def retrieve(self, request, *args, **kwargs):
     #     user = self.get_object()
     #     token, created = Token.objects.get_or_create(user=user)

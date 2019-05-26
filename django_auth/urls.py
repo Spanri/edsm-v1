@@ -13,10 +13,12 @@ from users.views import (
     Index,
     ConfirmUpdatePasswordView,
     # GetEmail,
-    DocsOwnerViewSet,
-    AllDocsViewSet,
-    NotifViewSet2,
-    DocsOwnerOneViewSet,
+    # DocsOwner,
+    # AllDocs,
+    # Notif1,
+    Notif2,
+    DocsOwnerOne,
+    AddSignature,
 )
 from docs.views import (
     DocViewSet,
@@ -32,10 +34,13 @@ router.register(r'^docs', DocViewSet)
 # router.register(r'^docs2', DocViewSet2)
 
 urlpatterns = [
-    url(r'^api/users/(?P<pk>.+)/docs/$', DocsOwnerViewSet.as_view()),
-    url(r'^api/users/docs/(?P<pk>.+)/$', DocsOwnerOneViewSet.as_view()),
-    url(r'^api/users/all_docs/$', AllDocsViewSet.as_view()),
-    url(r'^api/users/(?P<pk>.+)/notif/$', NotifViewSet2.as_view()),
+    # url(r'^api/users/(?P<pk>.+)/docs/$', DocsOwner.as_view()),
+    url(r'^api/users/docs/(?P<pk>.+)/$', DocsOwnerOne.as_view()),
+    # url(r'^api/users/all_docs/$', AllDocs.as_view()),
+    # url(r'^api/users/notif/common/$', Notif1.as_view()),
+    url(r'^api/users/(?P<pk>.+)/notif/$', Notif2.as_view()),
+    url(r'^api/users/notif/add_signature/$',
+        AddSignature.as_view({'post': 'add_signature'})),
     url(r'^api/', include(router.urls)),
     # url(r'^api/users/email/(?P<pk>.+)/$', GetEmail.as_view()),
     url(r'^api/users/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),

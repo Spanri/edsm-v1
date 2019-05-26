@@ -83,39 +83,52 @@ export default {
                     return (a === b ? 0 : a > b ? 1 : -1) * order
                 })
             }
-            console.log('heroes', heroes)
+            // console.log('heroes', heroes)
             return heroes
         },
 		heroes() {
             if(this.$route.params.id == 'all'){
-                this.$store.commit(DOC_FOLDER_PAGE, 1)
 			    return this.getDocs;
             } else if(this.$route.params.id == 'common') {
-                this.$store.commit(DOC_FOLDER_PAGE, 2)
                 return this.getDocs
-                .filter(d => d.doc.common == true);
+                .filter(d => d.doc.common);
             } else if(this.$route.params.id == 'myDocs') {
-                this.$store.commit(DOC_FOLDER_PAGE, 3)
                 return this.getDocs
-                .filter(d => d.user.id == this.getProfile.id && d.is_owner == true);
+                .filter(d => 
+                    d.user.id == this.getProfile.id && d.is_owner
+                );
             } else if(this.$route.params.id == 'signature-request') {
-                this.$store.commit(DOC_FOLDER_PAGE, 4)
                 return this.getDocs
-                .filter(d => d.is_owner == false && d.is_signature_request == true && d.is_signature == false);
+                .filter(d => 
+                    !d.is_owner && d.is_signature_request && !d.is_signature
+                );
             } else if(this.$route.params.id == 'signature-success') {
-                this.$store.commit(DOC_FOLDER_PAGE, 5)
                 return this.getDocs
-                .filter(d => d.is_owner == false && d.is_signature_request == true && d.is_signature == true);
+                .filter(d => 
+                    !d.is_owner && d.is_signature_request && d.is_signature
+                );
             } else if(this.$route.params.id == 'available-to-me') {
-                this.$store.commit(DOC_FOLDER_PAGE, 6)
                 return this.getDocs
-                .filter(d => d.is_owner == false && d.is_signature_request == false);
+                .filter(d => 
+                    !d.is_owner && !d.is_signature_request
+                );
             } else if(this.id == 'notif') {
-                this.$store.commit(DOC_FOLDER_PAGE_PROFILE, 1)
                 return this.getDocs
-                .filter(d => d.is_owner == false && d.is_signature_request == true && d.is_signature == false);
-                return null;
+                .filter(d =>
+                    (
+                        !d.is_owner && 
+                        d.is_signature_request && 
+                        d.is_signature && 
+                        d.user.id != this.getProfile.id &&
+                        d.is_show_notif
+                    ) || (
+                        !d.is_owner && 
+                        d.is_signature_request && 
+                        !d.is_signature
+                    )
+                );
             }
+            return null;
 		}
     },
     filters: {

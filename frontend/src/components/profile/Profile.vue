@@ -5,25 +5,11 @@
 			<div>
 				<div class="menuProfile">
 					<div style="margin-top:10px"></div>
-					<p 
-						:class="{active: page==1 ? true : false}" 
-						@click="page=1;notif()">
-						УВЕДОМЛЕНИЯ
-					</p>
-					<p 
-						:class="{active: page==2 ? true : false}" 
-						@click="page=2;edit()">
-						РЕДАКТИРОВАНИЕ ПРОФИЛЯ
-					</p>
-					<p 
-						v-if="getProfile.is_staff" 
-						:class="{active: page==3 ? true : false}" 
-						@click="page=3;adm()">
-						АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ
-					</p>
+					<router-link class="router-link" :to="{ path: '/profile/notif', }">УВЕДОМЛЕНИЯ</router-link>
+					<router-link class="router-link" :to="{ path: '/profile/edit', }">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</router-link>
+					<router-link v-if="getProfile.is_staff" class="router-link" :to="{ path: '/profile/adm', }">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</router-link>
 					<div style="height:15px;"></div>
-					<!-- <hr style="height:0px; border:solid 1.6px #e0e0e0; "> -->
-					<p @click="logout()">ВЫЙТИ</p>
+					<p class="router-link" @click="logout()">ВЫЙТИ</p>
 				</div>
 			</div>
 			<router-view></router-view>
@@ -93,17 +79,23 @@ export default {
 	border: #e0e0e0 3px solid;
 	border-radius: 5px;
 }
-.menuProfile p{
-	padding: 10px 30px;
+.menuProfile .router-link{
+	padding: 10px 20px;
 	margin-top: 5px;
 	margin-bottom: 5px;
+	text-decoration: none;
+	color: black;
+	width: calc(100% - 40px);
+	margin-left: 0;
+	margin-right: 0;
+	display: block;
 }
 .menuProfile p:hover{
 	cursor: pointer;
 	color: #7cb0c1;
 }
 /**/
-.menuProfile .active{
+.menuProfile .router-link-exact-active{
 	background: rgb(223, 243, 253);
 }
 </style>

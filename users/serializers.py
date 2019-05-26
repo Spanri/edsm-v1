@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core import exceptions
 from rest_framework import status
 from rest_framework.response import Response
+import datetime
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer): 
     full_name = serializers.SerializerMethodField()
@@ -91,10 +92,46 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
             'message',
             'is_signature_request',
             'is_signature',
+            'is_show_notif',
+            'queue',
+            'is_queue',
             'user',
             'doc'
         )
         unique_together = (("user_id", "doc_id"),)
+
+    def create(self, validated_data):
+        now = datetime.datetime.now()
+        notif = Notif.objects.create(**validated_data)
+        notif.date = now.strftime("%Y-%m-%d")
+        notif.save()
+        return notif
+    
+    # def get_object(self, pk):
+    #     return TestModel.objects.get(pk=pk)
+
+    # def patch(self, request, pk):
+    #     notif = self.get_object(pk)
+    #     serializer = NotifModelSerializer(
+    #         notif, data=request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return JsonReponse(code=201, data=serializer.data)
+    #     return JsonResponse(code=400, data="wrong parameters")
+    
+    def update(self, instance, validated_data):
+        try:
+            if('doc' in validated_data):
+                nested_serializer = self.fields['doc']
+                nested_instance = instance.doc
+                nested_data = validated_data.pop('doc')
+                nested_serializer.update(nested_instance, nested_data)
+                return nested_serializer.update(instance, validated_data)
+            else:
+                return super(UserSerializer, self).update(instance, validated_data)
+        except:
+            content = {'error': 'Something else went wrong'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
 
 class AuthTokenSerializer(serializers.Serializer):
     '''

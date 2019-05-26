@@ -1,23 +1,11 @@
 <template>
     <div class="menu">
-            <div class="link" :class="{active: page==1 ? true : false}" @click="page=1">
-                <router-link :to="{ path: '/', }">ВСЕ ДОКУМЕНТЫ</router-link>
-            </div>
-            <div class="link" :class="{active: page==2 ? true : false}"  @click="page=2">
-                <router-link :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
-            </div>
-            <div class="link" :class="{active: page==3 ? true : false}" @click="page=3">
-                <router-link :to="{ path: '/documents/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
-            </div>
-            <div class="link" :class="{active: page==4 ? true : false}" @click="page=4">
-                <router-link :to="{ path: '/documents/signature-request', }">НА ПОДПИСЬ</router-link>
-            </div>
-            <div class="link" :class="{active: page==5 ? true : false}" @click="page=5">
-                <router-link :to="{ path: '/documents/signature-success', }">ПОДПИСАННОЕ</router-link>
-            </div>
-            <div class="link" :class="{active: page==6 ? true : false}" @click="page=6">
-                <router-link :to="{ path: '/documents/available-to-me', }">ДОСТУПНЫ МНЕ</router-link>
-            </div>
+        <router-link class="router-link" :to="{ path: '/documents/all', }">ВСЕ ДОКУМЕНТЫ</router-link>
+        <router-link class="router-link" :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
+        <router-link class="router-link" :to="{ path: '/documents/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
+        <router-link class="router-link" :to="{ path: '/documents/signature-request', }">НА ПОДПИСЬ</router-link>
+        <router-link class="router-link" :to="{ path: '/documents/signature-success', }">ПОДПИСАННОЕ</router-link>
+        <router-link class="router-link" :to="{ path: '/documents/available-to-me', }">ДОСТУПНЫ МНЕ</router-link>      
     </div>
 </template>
 
@@ -28,16 +16,11 @@ export default {
     name: 'Menu',
     data () {
         return {
-            page: '',
         }
     },
-    created() {
-        this.page = this.$store.getters.getPage;
-    }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 /* Основное */
 .menu{
@@ -48,24 +31,30 @@ export default {
     padding-top: 40px;
 }
 /**/
-.menu .link{
-    padding: 13px 20px;
-    padding-left: 50px;
-    font-size: 16px;
-    color: #373737;
-}
 .menu a{
     text-decoration: none;
     color: #373737;
 }
+.menu .router-link-exact-active{
+    background: #64b2db;
+}
+.menu .router-link{
+    font-size: 16px;
+    color: #373737;
+    padding: 11px 20px;
+    padding-left: 50px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	text-decoration: none;
+	color: black;
+	width: calc(100% - 70px);
+	margin-left: 0;
+	margin-right: 0;
+	display: block;
+}
 .menu .link > router-link:hover{
     cursor: pointer;
 }
-/**/
-.menu .active{
-    background: #64b2db;
-}
-/**/
 @media (max-width: 500px) {
     .menu{
         min-width: 0;

@@ -9,6 +9,7 @@ import {
     DOC_FOLDERS_UPDATE_SUCCESS,
     DOC_ERROR,
     DOC_UPLOAD,
+    DOC_SIGNATURE,
     DOC_UPLOAD_SUCCESS,
     DOC_REQUEST,
     DOC_REQUEST_SUCCESS,
@@ -20,8 +21,6 @@ import axios from 'axios'
 
 const state = {
     docs: [],
-    page: '',
-    pageProfile: '',
 }
 
 const getters = {
@@ -29,32 +28,30 @@ const getters = {
     getDoc: (state) => i => {
         return state.docs.filter(d => d.doc.id == i)[0]
     },
-    getPage: state => state.page,
-    getPageProfile: state => state.pageProfile,
 }
 
 const actions = {
     [DOCS_REQUEST]: ({commit, dispatch, store, rootState}) => {
         return new Promise((resolve, reject) => {
             axios
-            .get('http://127.0.0.1:8000/api/users/all_docs/')
-            .then(respCommon => {
+            .get(path + '/api/users/' + rootState.user.profile.id + '/notif/')
+            .then(respNotif => {
                 axios
-                .get('http://127.0.0.1:8000/api/users/' + rootState.user.profile.id +'/docs/')
+                    .get(path + '/api/users/' + rootState.user.profile.id +'/docs/')
                 .then(respUser => {
-                    let docs = respCommon.data;
+                    let docs = respNotif.data;
                     docs = docs.concat(respUser.data);
                     axios
-                        .get(path + '/api/users/' + rootState.user.profile.id + '/notif/')
-                        .then(respNotif => {
-                            // console.log(respNotif.data)
-                            docs = docs.concat(respNotif.data);
+                        .get(path + '/api/users/all_docs/')
+                        .then(respCommon => {
+                            docs = docs.concat(respCommon.data);
                             let docs2 = docs.reduce((acc, c) => {
                                 if (acc.map[c.id]) return acc;
                                 acc.map[c.id] = true;
                                 acc.docs2.push(c);
                                 return acc;
                             }, { map: {}, docs2: [] }).docs2;
+                            console.log('docs2', docs2)
                             try {
                                 docs2.forEach(d => {
                                     d.full_name = d.user.profile.full_name
@@ -85,34 +82,6 @@ const actions = {
             })
         })
     },
-    [DOC_REQUEST]: ({commit, dispatch}, id) => {
-        return new Promise((resolve, reject) => {
-            // axios
-            // .post(`http://127.0.0.1:8000/api/docs`, {
-            //     "id" : id
-            // })
-            // .then(response => {
-            //     commit(DOCS_SUCCESS, response)
-            // })
-            // .catch(resp => {
-            //     commit(DOC_ERROR)
-            // })
-            let response =
-            {
-                "id": 1,
-                "owner_id": 1,
-                "title": "Файл1",
-                "file": "http://localhost:8000/uVyuTHdBDN8.jpg",
-                "description": "gngfnfghjhg fdg terte t",
-                "date": "2019-05-12",
-                "common": true,
-                "signature": null
-            };
-            response.owner_name = response.user.profile.full_name
-            response.title = response.doc.title;
-            resolve(response)
-        })
-    },
     // РЕШИТЬ, ДОБАВЛЯТЬ ЛИ ПРАВА
     [DOC_UPLOAD]: ({commit, dispatch, rootState}, data) => {
         return new Promise((resolve, reject) => {
@@ -125,7 +94,7 @@ const actions = {
                 })
                 .then(resp => {
                     if(data.signature_request) {
-                        data.signature_request.forEach(s => {
+                        data.signature_request.forEach((s, i) => {
                             console.log(s)
                             axios
                                 .post(path + '/api/users/notif', {
@@ -133,7 +102,9 @@ const actions = {
                                     user_id: s.id,
                                     message: 'Вас просят подписать документ.',
                                     is_owner: false,
-                                    is_signature_request: true
+                                    is_signature_request: true,
+                                    queue: i,
+                                    is_queue: i==0 ? true : false
                                 })
                                 .catch(err => {
                                     try {
@@ -172,6 +143,53 @@ const actions = {
                 })
         })
     },
+    [DOC_SIGNATURE]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            console.log('id', id)
+            axios
+                .post(path + '/api/users/notif/add_signature/', {
+                    id: id
+                })
+                .then(resp => {
+                    resolve(resp.data)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    // [DOC_REQUEST]: ({commit, dispatch}, id) => {
+    //     return new Promise((resolve, reject) => {
+    //         // axios
+    //         // .post(`http://127.0.0.1:8000/api/docs`, {
+    //         //     "id" : id
+    //         // })
+    //         // .then(response => {
+    //         //     commit(DOCS_SUCCESS, response)
+    //         // })
+    //         // .catch(resp => {
+    //         //     commit(DOC_ERROR)
+    //         // })
+    //         let response =
+    //         {
+    //             "id": 1,
+    //             "owner_id": 1,
+    //             "title": "Файл1",
+    //             "file": "http://localhost:8000/uVyuTHdBDN8.jpg",
+    //             "description": "gngfnfghjhg fdg terte t",
+    //             "date": "2019-05-12",
+    //             "common": true,
+    //             "signature": null
+    //         };
+    //         response.owner_name = response.user.profile.full_name
+    //         response.title = response.doc.title;
+    //         resolve(response)
+    //     })
+    // },
 }
 
 const mutations = {

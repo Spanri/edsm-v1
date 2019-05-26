@@ -10,11 +10,13 @@
                     <img class="bigImage" :src="doc.doc.preview || 'https://img.icons8.com/wired/512/000000/document.png'">
                     <div class="bigImageBackground"></div>
                 </div>
-				<button><a :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a></button>
-				<button @click="editDoc">РЕДАКТИРОВАТЬ</button> <br>
-				<button v-if="doc.is_signature_request && !doc.is_signature" @click="addSignature">ПОДПИСАТЬ</button> <br>
+				<a class="button" :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a>
+				<button @click="editDoc()">РЕДАКТИРОВАТЬ</button> <br>
+				<button v-if="!doc.is_owner && doc.is_signature_request && !doc.is_signature && doc.is_queue" @click="addSignature()">ПОДПИСАТЬ</button> <br>
+				<button v-if="doc.is_owner" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ ПОДПИСЕЙ СНОВА</button> <br>
             </div>
 			<div style="margin-left:25px">
+				<p v-if="error" style="color: red">{{error}}</p>
 				<p>Владелец: {{doc.user.profile.full_name}} ({{doc.user.email}})</p>
 				<p>Общий доступ: {{doc.doc.common ? 'да' : 'нет'}} </p>
 				<p>Дата добавления: {{doc.doc.date}} </p>
@@ -27,7 +29,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { DOC_REQUEST, DOCS_REQUEST } from '../store/mutation-types';
+import { DOC_REQUEST, DOCS_REQUEST, DOC_SIGNATURE } from '../store/mutation-types';
 
 export default {
 	name: 'account',
@@ -39,6 +41,7 @@ export default {
 			doc: {},
 			bigImage: '',
 			image: '',
+			error: '',
         }
 	},
 	created() {
@@ -58,10 +61,23 @@ export default {
 		},
 		editDoc(){
 			console.log('editDoc')
+
 		},
 		addSignature(){
 			console.log('addSignature')
-		}
+			this.$store.dispatch(DOC_SIGNATURE, this.id)
+			.then(resp => {
+				this.doc.is_signature = true;
+				this.error = 'Подпись успешно поставлена!'
+			})
+			.catch(err=>{
+				console.log(err)
+				this.error = 'Ошибка. Что-то пошло не так.'
+			})
+		},
+		repeatSignatures(){
+			console.log('repeatSignatures')
+		},
 	},
 }
 </script>
@@ -98,11 +114,15 @@ export default {
 	background-color: #347090;
 	text-align: center;
 }
+.document .button{
+	width: calc(100% - 16px);
+	display: block;
+}
 .document a{
 	color: white;
 	text-decoration: none;
 }
-.document button:hover{
+.document button:hover, .document .button:hover{
 	cursor: pointer;
 }
 /**/
