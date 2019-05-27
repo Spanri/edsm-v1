@@ -18,6 +18,7 @@
 							type="text"
 							placeholder="Введите логин"
 							class="search-box"
+							style="width:200px"
 						/>
 						<div style="height:15px;"></div>
 						<p>ПАРОЛЬ</p>
@@ -27,6 +28,7 @@
 							:type="passwordFieldType"
 							placeholder="Введите пароль"
 							class="search-box"
+							style="width:166px"
 						/>
 						<button type="password" style="padding:6px; margin:0" @click="switchVisibility()">
 							<svg 
@@ -44,7 +46,7 @@
 									stroke-miterlimit="10" 
 									stroke-width="2"/>
 								<circle cx="16" cy="16" fill="none" id="XMLID_14_" r="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
-								<line v-if="passwordFieldType == 'password'" fill="none" id="XMLID_15_" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" x1="3" x2="29" y1="3" y2="29"/>
+								<line v-if="passwordFieldType == 'text'" fill="none" id="XMLID_15_" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" x1="3" x2="29" y1="3" y2="29"/>
 							</svg>
 						</button>
 						<div style="height:35px;"></div>

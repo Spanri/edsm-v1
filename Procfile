@@ -1,4 +1,5 @@
+heroku ps:scale web=1
+release: python manage.py makemigrations users
+release: python manage.py makemigrations docs
+release: python manage.py migrate
 web: gunicorn django_auth.wsgi
-heroku ps:scale web=1 -a edms-mtuci
-heroku run python manage.py migrate -a edms-mtuci
-heroku run python manage.py createsuperuser -a edms-mtuci
