@@ -56,6 +56,7 @@
                         class="search-box"
                     ></textarea>
                     <p></p> Общий доступ <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="common">
+                    <p></p> Подписать <input class="checkbox" type="checkbox" name="selfSignature" true-value="1"  false-value="0" v-model="selfSignature">
                     <div style="height:35px;"></div>
                     <button type="submit" :class="{disabled: !this.image}">СОЗДАТЬ</button> <br>
                 </form>
@@ -83,6 +84,7 @@ export default {
             selectedUsers2: [],
             users: [],
             common: 0,
+            selfSignature: 0,
             error: null,
             image: false,
             pr: '',
@@ -173,7 +175,6 @@ export default {
                     return el != selectedUser2;
                 });
             }
-            
         },
         deleteSelectedUser(item){
             this.selectedUsers = this.selectedUsers.filter(function(el){
@@ -206,6 +207,8 @@ export default {
             let dd = { d }
             if (this.selectedUsers) dd.signature_request = this.selectedUsers;
             if (this.selectedUsers2) dd.show_request = this.selectedUsers2;
+            dd.selfSignature = this.selfSignature;
+            // ДОДЕЛАТЬ С ПОДПИСЬЮ САМОГО ПОЛЬЗОВАТЕЛЯ selfSignature
             this.$store.dispatch(DOC_UPLOAD, dd)
 			.then((resp) => {
                 this.$store.dispatch(DOCS_REQUEST)
