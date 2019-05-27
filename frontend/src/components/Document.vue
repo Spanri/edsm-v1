@@ -1,21 +1,27 @@
 <template>
 	<div class="document">
-		<h3 class="header">{{this.title}}</h3>
+		<h3 class="header">{{doc.title}}</h3>
 		<div class="document2Colon">
 			<div>
                 <div @click="bigImage = 1" class="imageScale">
-                    <img :src="image || 'https://img.icons8.com/wired/512/000000/document.png'">
+                    <img :src="doc.doc.preview || 'https://img.icons8.com/wired/512/000000/document.png'">
                 </div>
                 <div v-if="bigImage == 1" @click="bigImage = 0">
-                    <img class="bigImage" :src="image">
+                    <img class="bigImage" :src="doc.doc.preview || 'https://img.icons8.com/wired/512/000000/document.png'">
                     <div class="bigImageBackground"></div>
                 </div>
-				<button @click="edith">РЕДАКТИРОВАТЬ</button> <br>
+				<a class="button" :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a>
+				<button @click="editDoc()">РЕДАКТИРОВАТЬ</button> <br v-if="!doc.is_owner && doc.is_signature_request && !doc.is_signature && doc.is_queue">
+				<button v-if="doc.status == 2" @click="addSignature()">ПОДПИСАТЬ</button> <br>
+				<button v-if="doc.status == 0" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ<br>ПОДПИСЕЙ СНОВА</button> <br>
             </div>
 			<div style="margin-left:25px">
+				<p v-if="error" style="color: red">{{error}}</p>
+				<p>Владелец: {{doc.user.profile.full_name}} ({{doc.user.email}})</p>
+				<p>Общий доступ: {{doc.doc.common ? 'да' : 'нет'}} </p>
+				<p>Дата добавления: {{doc.doc.date}} </p>
 				<p>Описание:</p>
-				{{description}}
-				<p>Общий доступ: {{common ? 'да' : 'нет'}} </p>
+				<p> {{ doc.doc.description }}</p>
 			</div>
 		</div>
 	</div>
@@ -23,36 +29,57 @@
 
 <script>
 import { mapState } from 'vuex'
-import { DOC_REQUEST } from '../store/mutation-types';
+import { DOC_REQUEST, DOCS_REQUEST, DOC_SIGNATURE } from '../store/mutation-types';
 
 export default {
 	name: 'account',
 	props: {
 		id: String,
-        data: Object,
 	},
 	data () {
         return {
-			title: '',
+			doc: {},
 			bigImage: '',
 			image: '',
-			description: '',
-			common: ''
+			error: '',
         }
 	},
-	created(){
-		console.log(this.id);
-		this.$store.dispatch(DOC_REQUEST, this.id)
-		.then((resp) => {
-			this.title = resp.title,
-			this.image = resp.image;
-			this.description = resp.description;
-			this.common = resp.common;
-		})
+	created() {
+		this.$store.dispatch(DOCS_REQUEST)
+		this.doc = this.$store.getters.getDoc(this.id);
+		console.log('docs', this.doc)
 	},
 	methods: {
-		edith(){
-			console.log('dfgg')
+		download(){
+			const path = this.doc.doc.file
+			const link = document.createElement('a')
+			link.href = path
+			link.download = path.substr(path.lastIndexOf('/') + 1);
+			document.body.appendChild(link)
+			link.click()
+			document.body.removeChild(link);
+		},
+		editDoc(){
+			console.log('editDoc')
+
+		},
+		async addSignature(){
+			console.log('addSignature')
+			let res = await confirm('Подтвердите подпись.', { title: 'Подтверждение' })
+			if (res) {
+				this.$store.dispatch(DOC_SIGNATURE, this.id)
+				.then(resp => {
+					this.doc.status = 3;
+					this.error = 'Подпись успешно поставлена!'
+				})
+				.catch(err=>{
+					console.log(err)
+					this.error = 'Ошибка. Что-то пошло не так.'
+				})
+			}
+		},
+		repeatSignatures(){
+			console.log('repeatSignatures')
 		},
 	},
 }
@@ -77,18 +104,28 @@ export default {
     grid-template-columns: max-content auto;
 }
 /**/
-.document button{
+.document button, .document .button{
+	width: 100%;
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 	color: white;
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
 	background-color: #347090;
+	text-align: center;
 }
-.document button:hover{
+.document .button{
+	width: calc(100% - 16px);
+	display: block;
+}
+.document a{
+	color: white;
+	text-decoration: none;
+}
+.document button:hover, .document .button:hover{
 	cursor: pointer;
 }
 /**/

@@ -9,6 +9,7 @@ import Adm from '@/components/profile/Adm'
 import Document from '@/components/Document'
 import AddDoc from '@/components/AddDoc'
 import NotFound from '@/components/NotFound'
+import Help from '@/components/Help'
 import store from '../store'
 import VeeValidate from 'vee-validate';
 
@@ -44,29 +45,22 @@ const router = new Router({
 	routes: [
 		{
 			path: '/',
-			name: 'main',
+			// name: 'main',
 			component: Main,
 			children: [
-				{ 
-					path: '', 
-					component: Grid, 
-					props: {
-						id: "all", 
-						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования'],
-					} 
+				{
+					path: '',
+					redirect: '/documents/all',
 				},
 				{
-					path: 'd/notif',
+					path: 'documents/:id',
 					component: Grid,
 					props: {
-						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования', 'Прочитано'],
-					} 
-				},
-				{
-					path: 'd/:id',
-					component: Grid,
-					props: {
-						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования'],
+						columns: [
+							{key: 'title', title: 'Название'},
+							{key: 'full_name', title: 'Владелец'},
+							{key: 'date_doc', title: 'Дата добавления'},
+						],
 					} 
 				},
 			],
@@ -79,14 +73,19 @@ const router = new Router({
 			beforeEnter: ifNotAuthenticated,
 		},
 		{
+			path: '/help',
+			name: 'help',
+			component: Help,
+		},
+		{
 			path: '/addDoc',
 			name: 'addDoc',
 			component: AddDoc,
 			beforeEnter: ifAuthenticated,
 		},
 		{
-			path: '/doc/:id',
-			name: 'doc',
+			path: '/document/:id',
+			name: 'document',
 			component: Document,
 			props: true,
 			beforeEnter: ifAuthenticated,
@@ -98,15 +97,21 @@ const router = new Router({
 			beforeEnter: ifAuthenticated },
 		{
 			path: '/profile',
-			name: 'profile',
+			redirect: '/profile/notif',
 			component: Profile,
 			children: [
 				{
-					path: 'notif', 
+					path: 'notif',
+					name: 'notif',
 					component: Grid,
 					props: {
 						id: "notif",
-						columns: ['Номер', 'Название', 'Инициатор', 'Столбец', 'Дата инициирования'],
+						columns: [
+							{key: 'full_name', title: 'Инициатор'},
+							{key: 'title', title: 'Документ' },
+							{key: 'message', title: 'Сообщение'},
+							{key: 'date', title: 'Дата добавления'},
+						],
 					} 
 				},
 				{ path: 'edit', component: EditProfile },

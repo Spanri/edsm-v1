@@ -152,6 +152,7 @@ export default {
 					} else {
 						this.error = err;
 					}
+					console.log(err)
 				}
 			})
 			this.$router.push('/')
@@ -199,7 +200,7 @@ export default {
 			.then((resp) => {
 				this.error = null;
 				this.processConfirm = false;
-				this.newPassword = 2;
+				this.newPassword = 0;
 			})
 			.catch(err => {
 				console.log(err)

@@ -2,11 +2,14 @@ import {
     DOCS_REQUEST,
     DOC_SUCCESS,
     DOC_FOLDER_SUCCESS,
-    DOC_FOLDER_REQUEST,
-    DOC_FOLDER_UPDATE,
-    DOC_FOLDER_UPDATE_SUCCESS,
+    DOC_FOLDER_PAGE,
+    DOC_FOLDER_PAGE_PROFILE,
+    DOC_FOLDERS_REQUEST,
+    DOC_FOLDERS_UPDATE,
+    DOC_FOLDERS_UPDATE_SUCCESS,
     DOC_ERROR,
     DOC_UPLOAD,
+    DOC_SIGNATURE,
     DOC_UPLOAD_SUCCESS,
     DOC_REQUEST,
     DOC_REQUEST_SUCCESS,
@@ -18,159 +21,164 @@ import axios from 'axios'
 
 const state = {
     docs: [],
-    doc: {},
-    folder: [],
 }
 
 const getters = {
     getDocs: state => state.docs,
-    getDoc: state => state.doc,
-    getFolder: state => state.folder,
+    getDoc: (state) => i => {
+        return state.docs.filter(d => d.doc.id == i)[0]
+    },
 }
 
 const actions = {
-    [DOCS_REQUEST]: ({commit, dispatch}, id) => {
-        // axios
-        // .post(`http://127.0.0.1:8000/doc/docsRequest`, {
-        //     "id" : id
-        // })
-        // .then(response => {
-        //     commit(DOCS_SUCCESS, response)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        let response = [
-            { 
-                id: 1,
-                'Номер': 'Chuck Norris1', 
-                'Название': Infinity,
-                'Инициатор': 'dfg11',
-                'Столбец': 'dfg'
-            },
-            { 
-                id: 2,
-                'Номер': 'Bruce Lee', 
-                'Название': 9000,
-                'Инициатор': 'dfkkkg',
-                'Столбец': 'dfg'
-            },
-            { 
-                id: 3,
-                'Номер': 'Jackie Chan', 
-                'Название': 7000,
-                'Инициатор': 'dbbbfg',
-                'Столбец': 'dfg'
-            },
-            { 
-                id: 4,
-                'Номер': 'Jet Li', 
-                'Название': 8000,
-                'Инициатор': 'dvvvfg',
-                'Столбец': 'dfg'
-            }
-        ];
-        commit(DOC_SUCCESS, response)
+    [DOCS_REQUEST]: ({commit, dispatch, store, rootState}) => {
+        return new Promise((resolve, reject) => {
+            axios
+            .get(path + '/api/users/' + rootState.user.profile.id + '/notif/')
+            .then(resp => {
+                try {
+                    resp.data.forEach(d => {
+                        d.full_name = d.user.profile.full_name
+                        d.title = d.doc.title;
+                        d.date_doc = d.doc.date;
+                    });
+                    resolve(resp.data)
+                    commit(DOCS_SUCCESS, resp.data)
+                } catch (err) {
+                    console.log(err)
+                }
+            })
+            .catch(err => {
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
+            })
+        })
     },
-    [DOC_FOLDER_REQUEST]: ({commit, dispatch}) => {
-        // axios
-        // .get(`http://127.0.0.1:8000/doc/folderRequest`)
-        // .then(response => {
-        //     commit(DOC_FOLDER_SUCCESS, response)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        let response = [
-            {title: "ДОКУМЕНТЫ СТУДЕНТОВ", ref: "3"},
-            {title: "ДРУГИЕ ДОКУМЕНТЫ", ref: "4"}
-        ]
-        commit(DOC_FOLDER_SUCCESS, response)
+    // РЕШИТЬ, ДОБАВЛЯТЬ ЛИ ПРАВА
+    [DOC_UPLOAD]: ({commit, dispatch, rootState}, data) => {
+        return new Promise((resolve, reject) => {
+            console.log(data)
+            axios
+                .post(path + '/api/docs',
+                    data.d, { headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then(resp => {
+                    if(data.signature_request) {
+                        data.signature_request.forEach((s, i) => {
+                            console.log(s)
+                            axios
+                                .post(path + '/api/users/notif', {
+                                    doc_id: resp.data.id,
+                                    user_id: s.id,
+                                    status: i == 0 ? 2 : 1,
+                                    // is_owner: false,
+                                    // is_signature_request: true,
+                                    queue: i,
+                                    // is_queue: i==0 ? true : false
+                                })
+                                .catch(err => {
+                                    try {
+                                        reject(err.response.request.response)
+                                    } catch (error) {
+                                        reject(err)
+                                    }
+                                })
+                        })
+                        data.show_request.forEach(s => {
+                            console.log(s)
+                            axios
+                                .post(path + '/api/users/notif', {
+                                    doc_id: resp.data.id,
+                                    user_id: s.id,
+                                    status: 5,
+                                    // is_owner: false,
+                                    // is_signature_request: false
+                                })
+                                .catch(err => {
+                                    try {
+                                        reject(err.response.request.response)
+                                    } catch (error) {
+                                        reject(err)
+                                    }
+                                })
+                        })
+                        resolve(resp.data)
+                    }
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
     },
-    [DOC_FOLDER_UPDATE]: ({commit, dispatch}, newFolder) => {
-        state.folder.push(newFolder);
-        // axios
-        // .post(`http://127.0.0.1:8000/doc/folderUpdate`, {
-        //     "newFolder": newFolder
-        // })
-        // .then(response => {
-        //     commit(DOC_SUCCESS, response)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        commit(DOC_FOLDER_UPDATE_SUCCESS, newFolder)
-        console.log("Сделан UPDATE.")
+    [DOC_SIGNATURE]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(path + '/api/users/notif/add_signature/', {
+                    id: id
+                })
+                .then(resp => {
+                    resolve(resp.data)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
     },
-    [DOC_UPLOAD]: ({commit, dispatch}, data) => {
-        // axios
-        // .post(`http://127.0.0.1:8000/doc/upload`, {
-        //     "file": data.file,
-        //     "image": data.image,
-        //     "description": data.description,
-        //     "common": data.common
-        // })
-        // .then(response => {
-        //     commit(DOC_SUCCESS, data)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        commit(DOC_SUCCESS)
-        let response = '1234';
-        return response;
-    },
-    [DOC_REQUEST]: ({commit, dispatch}, id) => {
-        // axios
-        // .post(`http://127.0.0.1:8000/doc/request`, {
-        //     "id" : id
-        // })
-        // .then(response => {
-        //     commit(DOC_SUCCESS, response)
-        // })
-        // .catch(resp => {
-        //     commit(DOC_ERROR)
-        // })
-        let response = {
-            id: 1,
-            image: '',
-            title: 'Chuck Norris1', 
-            description: 'Infinity',
-            common: true,
-        };
-        commit(DOC_SUCCESS)
-        return response;
-    },
+    // [DOC_REQUEST]: ({commit, dispatch}, id) => {
+    //     return new Promise((resolve, reject) => {
+    //         // axios
+    //         // .post(`http://127.0.0.1:8000/api/docs`, {
+    //         //     "id" : id
+    //         // })
+    //         // .then(response => {
+    //         //     commit(DOCS_SUCCESS, response)
+    //         // })
+    //         // .catch(resp => {
+    //         //     commit(DOC_ERROR)
+    //         // })
+    //         let response =
+    //         {
+    //             "id": 1,
+    //             "owner_id": 1,
+    //             "title": "Файл1",
+    //             "file": "http://localhost:8000/uVyuTHdBDN8.jpg",
+    //             "description": "gngfnfghjhg fdg terte t",
+    //             "date": "2019-05-12",
+    //             "common": true,
+    //             "signature": null
+    //         };
+    //         response.owner_name = response.user.profile.full_name
+    //         response.title = response.doc.title;
+    //         resolve(response)
+    //     })
+    // },
 }
 
 const mutations = {
-    [DOCS_REQUEST]: (state) => {
-        state.status = 'loading'
-    },
     [DOCS_SUCCESS]: (state, resp) => {
-        state.status = 'success'
-        Vue.set(state, 'doc', resp)
+        Vue.set(state, 'docs', resp)
     },
-    [DOC_SUCCESS]: (state) => {
-        state.status = 'success'
-    },
-    [DOC_FOLDER_SUCCESS]: (state, resp) => {
-        state.status = 'success'
-        Vue.set(state, 'folder', resp)
-    },
-    [DOC_UPLOAD_SUCCESS]: (state) => {
-        state.status = 'success'
-    },
-    [DOC_REQUEST_SUCCESS]: (state, resp) => {
-        state.status = 'success'
+    [DOC_REQUEST_SUCCESS]: (state, resp) => { 
         state.doc.push(resp)
     },
-    [DOC_FOLDER_UPDATE_SUCCESS]: (state, resp) => {
-        state.status = 'success'
-        state.folder.push(resp)
+    [DOC_FOLDER_PAGE]: (state, resp) => {
+        Vue.set(state, 'page', resp)
     },
-    [DOC_ERROR]: (state) => {
-        state.status = 'error'
+    [DOC_FOLDER_PAGE_PROFILE]: (state, resp) => {
+        Vue.set(state, 'pageProfile', resp)
     },
 }
 

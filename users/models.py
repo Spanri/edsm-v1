@@ -2,12 +2,35 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
+from docs.models import Doc
+
+def change_image(post_object):
+    ''' 
+    функция удаления изображений при их замене на новые
+    '''
+    try:
+        pre_object = post_object.__class__.objects.get(id=post_object.id)
+        if pre_object.photo != post_object.photo:
+            pre_object.photo.delete(save=False)
+    except:
+        pass
+
+
+def delete_image(sender, **kwargs):
+    '''
+    функция удаления изображений при удалении объектов
+    '''
+    try:
+        object_ = kwargs.get('instance')
+        storage, path = object_.photo.storage, object_.photo.path
+        storage.delete(path)
+    except:
+        pass
 
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=255, blank=True, null=True)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -26,7 +49,16 @@ class UserProfile(models.Model):
         if created:
             UserProfile.objects.create(user=instance)
 
-    def get_full_name(self):
-        return self.first_name + " " + second_name + " " + patronymic
+    def save(self, *args, **kwargs):
+        change_image(post_object=self)
+        super(UserProfile, self).save(*args, **kwargs)
 
     post_save.connect(create_user_profile, sender=User)
+    post_delete.connect(receiver=delete_image)
+
+class Notif(models.Model):
+    user = models.ForeignKey(User, related_name="notif", on_delete=models.CASCADE)
+    doc = models.ForeignKey(Doc, related_name="notif", on_delete=models.CASCADE)
+    status = models.IntegerField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    queue = models.IntegerField(blank=True, null=True)

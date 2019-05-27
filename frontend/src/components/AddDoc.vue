@@ -14,27 +14,39 @@
             <div style="margin-left:25px">
                 <form @submit.prevent="addDoc">
                     <input type="file" id="file" class="inputfile" name="file" @change="onFileChange">
-                    <p>{{upload}}</p>
+                    <p style="color: red">{{upload}}</p>
                     <p>Имя файла</p>
                     <input 
                         required
                         v-model="title"
-                        type="text" 
+                        type="text"
                         placeholder="Введите имя"
                         class="search-box"
                         autocomplete = usernameNew
                     />
                     <p>Запросить подпись:</p>
                     <div>
-                        <div v-for="(user) in selectedUsers" :key="user.name" style="margin-bottom: 15px">
-                            {{user.name}}
+                        <div v-for="(user) in selectedUsers" :key="user.full_name" style="margin-bottom: 15px">
+                            {{user.full_name}}
                             <a class="deleteSelectedUser" @click="deleteSelectedUser(user)">x</a>
                             </div>
                         <select v-model="selectedUser">
-                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.name}}</option>
+                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}}</option>
+                        </select>
+                        <button type="button" @click="addUser(1)">ДОБАВИТЬ</button> <br>
+                    </div>
+                    <p>Пользователи, у которых были запрошены подписи, могут просматривать документ. 
+                        Добавить дополнительных пользователей, которые не должны подписывать документ, но могут его просматривать:</p>
+                    <div>
+                        <div v-for="(user) in selectedUsers2" :key="user.full_name" style="margin-bottom: 15px">
+                            {{user.full_name}}
+                            <a class="deleteSelectedUser" @click="deleteSelectedUser(user)">x</a>
+                            </div>
+                        <select v-model="selectedUser2">
+                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}}</option>
                         </select>
 
-                        <button type="button" @click="addUser">ДОБАВИТЬ</button> <br>
+                        <button type="button" @click="addUser(2)">ДОБАВИТЬ</button> <br>
                     </div>
                     <div style="height:15px;"></div>
                     <p>Описание</p>
@@ -54,32 +66,35 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
-import { DOC_UPLOAD, DOC_REQUEST, USER_ALL_EMAILS } from '../store/mutation-types';
+import { DOC_UPLOAD, DOC_REQUEST, DOCS_REQUEST, USERS_REQUEST } from '../store/mutation-types';
 
 export default {
     name: 'account',
     data () {
 		return {
             title: '',
+            titleWithoutExt: '', // нигде не используется
             description: '',
             selectedUser: '',
             selectedUsers: [],
+            selectedUser2: '',
+            selectedUsers2: [],
             users: [],
             common: 0,
             error: null,
             image: false,
+            pr: '',
             file:'',
             upload: '',
             bigImage: '',
 		}
     },
     created(){
-        this.$store.dispatch(USER_ALL_EMAILS)
+        this.$store.dispatch(USERS_REQUEST)
         .then(resp=>{
-            console.log(resp)
-            this.users = resp
+            this.users = resp.filter(r => r.id != this.$store.getters.getProfile.id)
         })
     },
     methods: {
@@ -88,7 +103,7 @@ export default {
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
             this.file = files[0];
-            console.log(this.file);
+            // console.log(this.file);
             /* Расширение файла */
             let typeFile = files[0].name.split('.')
             typeFile = typeFile[typeFile.length-1];
@@ -98,13 +113,15 @@ export default {
                         'jpg', 'jpeg', 'tif', 'tiff', 'png', 'bmp', 'mdi', 'gif', 'fax', 'ico',
                         'odc', 'odf', 'ppt', 'pptx', 'pdf',
                         'doc', 'docx', 'dot', 'dotx', 'wps', 'wpd', 'txt'];
-            if (!types.includes(typeFile)) {
+            if (!types.includes(typeFile.toLowerCase())) {
                 this.upload = "Файл с таким расширением загрузить нельзя."
             } else {
+                this.image = '';
                 /* Имя файла без расширения */
                 let titleFile = files[0].name.replace("." + typeFile, "");
-                this.title = titleFile;
-                console.log(this.file);
+                this.titleWithoutExt = titleFile;
+                this.title = titleFile + '.' + typeFile;
+                // console.log(this.file);
                 /* Конвертирование файла в картинку для превью */
                 var formData = new FormData();
                 formData.append('File', files[0], files[0].name);
@@ -115,13 +132,22 @@ export default {
                     formData,
                 )
                 .then(data => {
-                    this.file = data.data.Files[0].FileData;
+                    this.file = files[0];
                     let b64Data = data.data.Files[0].FileData;
+                    this.pr = this.dataURItoBlob(b64Data);
+                    console.log('f', files[0])
+                    console.log('p', this.blobToFile(this.dataURItoBlob(b64Data), files[0].name))
                     this.image = URL.createObjectURL(this.dataURItoBlob(b64Data));
                     this.upload = ""
                 });
             }
             
+        },
+        blobToFile(theBlob, fileName) {
+            //A Blob() is almost a File() - it's just missing the two properties below which we will add
+            theBlob.lastModifiedDate = new Date();
+            theBlob.name = fileName;
+            return theBlob;
         },
         /* Конвертирование файла в картинку для превью */
         dataURItoBlob(dataURI) {
@@ -133,12 +159,21 @@ export default {
             }
             return new Blob([ab], {type: 'image/png'});
         },
-        addUser(){
-            const {selectedUser} = this;
-            this.selectedUsers.push(selectedUser);
-            this.users = this.users.filter(function(el){
-                return el != selectedUser;
-            });
+        addUser(num){
+            if (num == 1){
+                const {selectedUser} = this;
+                this.selectedUsers.push(selectedUser);
+                this.users = this.users.filter(function(el){
+                    return el != selectedUser;
+                });
+            } else if(num == 2) {
+                const {selectedUser2} = this;
+                this.selectedUsers2.push(selectedUser2);
+                this.users = this.users.filter(function(el){
+                    return el != selectedUser2;
+                });
+            }
+            
         },
         deleteSelectedUser(item){
             this.selectedUsers = this.selectedUsers.filter(function(el){
@@ -147,20 +182,43 @@ export default {
             this.users.push(item);
         },
         addDoc(){
-            console.log(this.selectedUsers)
-            // this.$store.dispatch(DOC_UPLOAD, {
-            //     file: this.file,
-            //     image: this.image, 
-            //     description: this.description,
-            //     common: this.common
-            // })
-			// .then((resp) => {
-            //     console.log(resp)
-            //     this.$router.push({ 
-            //         name: 'doc',
-            //         params: { id: resp }
-            //     })
-            // })
+            var d = new FormData();
+            // для файла
+            if (this.file) {   
+                const newFile = new File(
+                    [this.file], 
+                    this.title,
+                    {type: this.file.type}
+                );             
+                d.file = d.append('file', newFile);
+            }
+            // для превью
+            const newPr = new File(
+                [this.pr],
+                'preview.png',
+                {type: 'image/png'}
+            );
+            d.append('user_id', this.$store.getters.getProfile.id);
+            if (this.title) d.append('title', this.title);
+            if (this.pr) d.append('preview', newPr);
+            if (this.description) d.append('description', this.description);
+            d.common = this.common ? d.append('common', true) : d.append('common', false);
+            let dd = { d }
+            if (this.selectedUsers) dd.signature_request = this.selectedUsers;
+            if (this.selectedUsers2) dd.show_request = this.selectedUsers2;
+            this.$store.dispatch(DOC_UPLOAD, dd)
+			.then((resp) => {
+                this.$store.dispatch(DOCS_REQUEST)
+                .then(res => {
+                    this.$router.push({
+                        name: 'document',
+                        params: { id: resp.id }
+                    })
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            })
         },
     }
 }

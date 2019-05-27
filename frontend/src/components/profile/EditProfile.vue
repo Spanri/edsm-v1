@@ -8,7 +8,7 @@
             <div style="margin-left:25px">
                 <p v-if="error" style="color: red">{{error}}</p>
                 <p>Выбрать новый аватар</p>
-                <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange">
+                <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange" accept="image/*">
                 <p>{{upload}}</p>
                 <form @submit.prevent="editProfile">
                     <p>Пароль</p>
@@ -26,7 +26,7 @@
                             v-model="password2"
                             type="password" 
                             :max="50"
-                            placeholder="Введите имя"
+                            placeholder="Введите пароль"
                             class="search-box">
                         </MaxInput>
                     </div>
@@ -60,7 +60,7 @@
                         v-model="position"
                         type="text" 
                         :max="200"
-                        placeholder="Введите отчество"
+                        placeholder="Введите должность"
                         class="search-box">
                     </MaxInput>
                     <div style="height:35px;"></div>
@@ -74,11 +74,11 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import { USER_UPDATE, USER_UPDATE_IMAGE } from '../../store/mutation-types';
+import { USER_UPDATE, USER_UPDATE_IMAGE, DOC_FOLDER_PAGE_PROFILE } from '../../store/mutation-types';
 import MaxInput from '@/components/addit/MaxInput'
 
 export default {
-    name: 'account',
+    name: 'edirProfile',
     components: { MaxInput },
     data () {
 		return {
@@ -92,6 +92,9 @@ export default {
             error: '',
             upload: '',
 		}
+    },
+    created(){
+        this.$store.commit(DOC_FOLDER_PAGE_PROFILE, 2)
     },
     methods: {
         onFileChange(e) {

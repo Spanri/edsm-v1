@@ -4,10 +4,12 @@
 		<div class="mainProfile">
 			<div>
 				<div class="menuProfile">
-					<p @click="notif()">УВЕДОМЛЕНИЯ</p>
-					<p @click="edit()">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</p>
-					<p v-if="getProfile.is_staff" @click="adm()">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</p>
-					<p @click="logout()">ВЫЙТИ</p>
+					<div style="margin-top:10px"></div>
+					<router-link class="router-link" :to="{ path: '/profile/notif', }">УВЕДОМЛЕНИЯ</router-link>
+					<router-link class="router-link" :to="{ path: '/profile/edit', }">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</router-link>
+					<router-link v-if="getProfile.is_staff" class="router-link" :to="{ path: '/profile/adm', }">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</router-link>
+					<div style="height:15px;"></div>
+					<p class="router-link" @click="logout()">ВЫЙТИ</p>
 				</div>
 			</div>
 			<router-view></router-view>
@@ -21,12 +23,15 @@ import HeaderProfile from './HeaderProfile';
 import { mapGetters } from 'vuex'
 
 export default {
-	name: 'account',
+	name: 'profile',
 	components: { HeaderProfile },
 	data () {
 		return {
-            // is_staff: false,
+            page: '',
 		}
+	},
+	created(){
+		this.page = this.$store.getters.getPageProfile;
 	},
 	computed: {
 		...mapGetters({
@@ -69,14 +74,28 @@ export default {
 }
 /**/
 .menuProfile{
+	font-family: 'El Messiri', sans-serif;
+	font-weight: 300;
 	border: #e0e0e0 3px solid;
 	border-radius: 5px;
 }
-.menuProfile *{
-	padding: 3px 30px;
+.menuProfile .router-link{
+	padding: 10px 20px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	text-decoration: none;
+	color: black;
+	width: calc(100% - 40px);
+	margin-left: 0;
+	margin-right: 0;
+	display: block;
 }
-.menuProfile *:hover{
+.menuProfile p:hover{
 	cursor: pointer;
 	color: #7cb0c1;
+}
+/**/
+.menuProfile .router-link-exact-active{
+	background: rgb(223, 243, 253);
 }
 </style>

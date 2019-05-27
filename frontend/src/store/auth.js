@@ -49,7 +49,7 @@ const actions = {
                 commit(AUTH_TOKEN, response.data)
                 localStorage.setItem('user-token', token)
                 axios.defaults.headers.common['Authorization'] = token
-                dispatch(USER_REQUEST, token)
+                dispatch(USER_REQUEST)
                 resolve(response)
             })
             .catch(err => {

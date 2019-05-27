@@ -1,4 +1,5 @@
-from .models import User, UserProfile
+from .models import User, UserProfile, Notif
+from docs.serializers import DocSerializer
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.core import exceptions
@@ -6,21 +7,33 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.conf import settings
 from django.core import exceptions
 from rest_framework import status
+from rest_framework.response import Response
+import datetime
 
-class UserProfileSerializer(serializers.HyperlinkedModelSerializer):    
+class UserProfileSerializer(serializers.HyperlinkedModelSerializer): 
+    full_name = serializers.SerializerMethodField()
+
+    def get_full_name(self, obj):
+        if (obj.first_name != "" and obj.patronymic != ""):
+            return obj.second_name + " " + obj.first_name[0] + "." + obj.patronymic[0] + "."
+        else:
+            return obj.second_name
+
     class Meta:
         model = UserProfile
         fields = (
             'id',
             'first_name',
-            'second_name', 
+            'second_name',
             'patronymic',
+            'full_name',
             'position',
             'photo',
         )
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=False)
+
     class Meta:
         model = User
         fields = (
@@ -32,7 +45,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'profile',
         )
 
-    # я не уверена, что будут загружаться картинки при создании
     def create(self, validated_data):
         profile_data = dict(validated_data.get('profile'))
         user_data = dict(validated_data)
@@ -44,7 +56,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     def update(self, instance, validated_data):
         try:
-            print(validated_data)
+            # print(validated_data)
             if('password' in validated_data):
                 instance.set_password(validated_data['password'])
                 instance.save()
@@ -53,7 +65,49 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                 nested_serializer = self.fields['profile']
                 nested_instance = instance.profile
                 nested_data = validated_data.pop('profile')
-                print(nested_instance)
+                # print(nested_instance)
+                nested_serializer.update(nested_instance, nested_data)
+                return nested_serializer.update(instance, validated_data)
+            else:
+                return super(UserSerializer, self).update(instance, validated_data)
+        except:
+            content = {'error': 'Something else went wrong'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+
+class NotifSerializer(serializers.HyperlinkedModelSerializer):
+    user = UserSerializer(required=False)
+    doc = DocSerializer(required=False)
+    user_id = serializers.IntegerField(write_only=True)
+    doc_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = Notif
+        fields = (
+            'id',
+            'user_id',
+            'doc_id',
+            'date',
+            'status',
+            'queue',
+            'user',
+            'doc'
+        )
+        unique_together = (("user_id", "doc_id"),)
+
+    def create(self, validated_data):
+        now = datetime.datetime.now()
+        notif = Notif.objects.create(**validated_data)
+        notif.date = now.strftime("%Y-%m-%d")
+        notif.save()
+        return notif
+    
+    def update(self, instance, validated_data):
+        try:
+            if('doc' in validated_data):
+                nested_serializer = self.fields['doc']
+                nested_instance = instance.doc
+                nested_data = validated_data.pop('doc')
                 nested_serializer.update(nested_instance, nested_data)
                 return nested_serializer.update(instance, validated_data)
             else:

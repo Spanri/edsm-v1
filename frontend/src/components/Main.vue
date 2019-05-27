@@ -7,13 +7,14 @@
 
 <script>
 import Menu from '../components/Menu';
+import {DOCS_REQUEST, USER_REQUEST} from '../store/mutation-types'
 
 export default {
 	name: 'auth',
 	components: { Menu },
-	methods: {
-		
-	}
+	created(){
+
+	},
 }
 </script>
 

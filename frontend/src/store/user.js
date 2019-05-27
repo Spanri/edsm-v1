@@ -1,68 +1,84 @@
 import { 
     USER_REQUEST,
+    USERS_REQUEST,
     USER_SUCCESS,
-    USER_NOTIF_REQUEST,
     AUTH_LOGOUT,
     USER_UPDATE,
     USER_CONFIRM_UPDATE_PASSWORD,
+    // USER_NOTIF_REQUEST,
     USER_CHANGE_PASSWORD,
-    USER_ALL_EMAILS,
     USER_UPDATE_STAFF,
     USER_UPDATE_IMAGE,
+    USER_NOTIF_R,
     path,
+    DOCS_REQUEST,
 } from './mutation-types'
 import Vue from 'vue'
 import axios from 'axios'
 
 const state = {
     profile: {},
-    notif: []
 }
 
 const getters = {
     getProfile: state => state.profile,
-    getNotif: state => state.notif,
     isProfileLoaded: state => !!state.profile.name,
 }
 
 const actions = {
-    [USER_REQUEST]: ({commit, dispatch, state}, token) => {
+    [USER_REQUEST]: ({commit, dispatch, rootState}, token) => {
         return new Promise((resolve, reject) => {
+            // console.log(rootState.auth)
             axios
             .get(path + '/api/users/get_user_from_token/', {
-                headers: { Authorization: "Token " + token }
+                headers: { Authorization: "Token " + rootState.auth.token }
             })
             .then(response => {
                 commit(USER_SUCCESS, response.data[0])
+                dispatch(DOCS_REQUEST)
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
                 dispatch(AUTH_LOGOUT)
             })
         })
     },
-    [USER_NOTIF_REQUEST]: ({commit, dispatch}) => {
+    // ДОБАВИТЬ ЧТОБЫ ТОЛЬКО АДМИН МОГ ТАКОЕ СЛАТЬ
+    [USERS_REQUEST]: ({ commit, dispatch }) => {
         return new Promise((resolve, reject) => {
-            // axios
-            // .post('http://127.0.0.1:8000/api-token-verify/', {
-            //     "token" : state.token
-            // })
-            // .then(response => {
-            //     commit(USER_SUCCESS, response)
-            // })
-            // .catch(resp => {
-            //     commit(USER_ERROR)
-            //     // if resp is unauthorized, logout, to
-            //     dispatch(AUTH_LOGOUT)
-            // })
-            let response = {
-                name:'Городничев Михаил Геннадьевич', 
-                position:'Кандидат технических наук, заведующий кафедрой',
-                adm: true,
-            };
-            commit(USER_SUCCESS, response)
+            axios
+                .get(path + '/api/users/i')
+                .then(response => {
+                    response.data.forEach(r => {
+                        r.full_name = r.profile.full_name
+                    });
+                    resolve(response.data)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
         })
     },
+    // [USER_NOTIF_REQUEST]: ({commit, dispatch, rootState}) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         let response = await axios.get(path + '/api/users/' + rootState.user.profile.id + '/notif/');
+    //         await response.data.forEach(async (r, i) => {
+    //             r.title = r.doc.title
+    //             r.full_name = r.user.profile.full_name;
+    //             r.date = 'r.message';
+    //         })
+    //         await console.log(response.data)
+    //         await resolve(response.data)
+    //     })
+    // },
     [USER_UPDATE]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
@@ -71,7 +87,7 @@ const actions = {
             })
             .then(response => {
                 axios
-                .patch(path + '/api/users/'+response.data[0].id, data.data, {
+                .patch(path + '/api/users/i/'+response.data[0].id, data.data, {
                     headers: { Authorization: "Token " + data.token }
                 })
                 .then(resp => {
@@ -80,20 +96,26 @@ const actions = {
                     resolve(resp)
                 })
                 .catch(err => {
-                    reject(err)
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
                 })
             })
             .catch(err => {
-                reject(err.response.request.response)
-                // console.log(err)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
     [USER_UPDATE_IMAGE]: ({commit, dispatch, state}, data) => {
         return new Promise((resolve, reject) => {
-            console.log(state.token)
             axios
-            .patch(path + '/api/users/' + state.profile.id, 
+            .patch(path + '/api/users/i/' + state.profile.id, 
                 data.data, { headers: {
                     Authorization: "Token " + data.token,
                     'Content-Type': 'multipart/form-data' 
@@ -104,32 +126,28 @@ const actions = {
                 commit(USER_SUCCESS, resp.data)
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
     [USER_UPDATE_STAFF]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
-            .patch(path + '/api/users/'+data.id, {
+            .patch(path + '/api/users/i/'+data.id, {
                 "is_staff": data.is_staff
             },{
                 headers: { Authorization: "Token " + data.token }
             })
             .catch(err => {
-                reject(err.response.request.response)
-            })
-        })
-    },
-    [USER_ALL_EMAILS]: ({commit, dispatch, state}, data) => {
-        return new Promise((resolve, reject) => {
-            axios
-            .get(path + '/api/users/all_emails/')
-            .then(response => {
-                resolve(response.data)
-            })
-            .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
@@ -143,7 +161,11 @@ const actions = {
                 resolve(resp)
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
@@ -161,7 +183,11 @@ const actions = {
                 resolve(resp)
             })
             .catch(err => {
-                reject(err.response.request.response)
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
@@ -170,7 +196,10 @@ const actions = {
 const mutations = {
     [USER_SUCCESS]: (state, resp) => {
         Vue.set(state, 'profile', resp)
-    }
+    },
+    // [USER_NOTIF_R]: (state, resp) => {
+    //     Vue.set(state, 'r', resp)
+    // }
 }
 
 export default {

@@ -16,7 +16,7 @@ import Auth from './components/Auth';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import axios from 'axios'
-import {USER_REQUEST} from './store/mutation-types'
+// import {USER_REQUEST} from './store/mutation-types'
       
 export default {
 	name: 'App',
@@ -72,10 +72,15 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=El+Messiri:600|Roboto:300|Spectral&display=swap');
+#app{
+	font-family: 'Roboto', serif;
+	font-weight: 500;
+	
+}
 .a {
 	height: 100vh;
-	overflow-y: auto;
-	width: 100vw;
+	width: calc(100vw-15px);
 	display: grid;
 	grid-template-rows: max-content auto max-content;
 }

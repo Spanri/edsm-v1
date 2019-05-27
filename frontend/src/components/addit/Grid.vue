@@ -1,6 +1,5 @@
 <template>
 	<div class="grid">
-        <p>ID {{$route.params.id}}</p>
 		<form id="search">
 			Поиск по всем столбцам <input name="query" v-model="filterKey">
 		</form>
@@ -9,18 +8,18 @@
                 <tr>
                     <th v-for="(key,i) in columns"
                         :key="i"
-                        @click="sortBy(key)"
+                        @click="sortBy(key.title)"
                         :class="{ active: sortKey == key }">
-                        {{ key | capitalize }}
+                        {{ key.title | capitalize }}
                     <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
                     </span>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(entry,j) in filteredHeroes" :key="j">
+                <tr v-for="(entry,j) in filteredHeroes" :key="j" @click="toDoc(entry.doc.id)">
                     <td v-for="(key,i) in columns" :key="i">
-                    {{entry[key]}}
+                    {{entry[key.key]}}
                     </td>
                 </tr>
             </tbody>
@@ -29,8 +28,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import {DOCS_REQUEST} from '../../store/mutation-types'
+import { mapGetters, mapState } from 'vuex'
+import {DOCS_REQUEST, DOC_REQUEST, USER_REQUEST, USER_NOTIF_REQUEST, DOC_FOLDER_PAGE, DOC_FOLDER_PAGE_PROFILE} from '../../store/mutation-types'
 
 export default {
     name: 'grid',
@@ -44,14 +43,24 @@ export default {
             sortOrders[key] = 1
         });
         return {
+            h: null,
             sortKey: '',
             filterKey: '',
             sortOrders: sortOrders
         }
     },
+    created(){
+        this.$store.dispatch(USER_REQUEST)
+        this.$store.dispatch(DOCS_REQUEST)
+    },
     computed: {
+        ...mapGetters({
+            getProfile: 'getProfile',
+            getDocs: 'getDocs',
+            // token: 'token',
+            // getNotif: 'getNotif',
+        }),
         filteredHeroes() {
-            // var sortKey = this.sortKey
             var sortKey = ''
             var sortOrders = {}
             this.columns.forEach(function (key) {
@@ -59,38 +68,72 @@ export default {
             });
             var filterKey = this.filterKey && this.filterKey.toLowerCase()
             var order = this.sortOrders[sortKey] || 1
-            var heroes = this.heroes
+            var heroes = this.heroes || this.h;
             if (filterKey) {
                 heroes = heroes.filter(function (row) {
-                return Object.keys(row).some(function (key) {
-                    return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-                })
+                    return Object.keys(row).some(function (key) {
+                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+                    })
                 })
             }
             if (sortKey) {
                 heroes = heroes.slice().sort(function (a, b) {
-                a = a[sortKey]
-                b = b[sortKey]
-                return (a === b ? 0 : a > b ? 1 : -1) * order
+                    a = a[sortKey]
+                    b = b[sortKey]
+                    return (a === b ? 0 : a > b ? 1 : -1) * order
                 })
             }
+            // console.log('heroes', heroes)
             return heroes
         },
 		heroes() {
-			this.$store.dispatch(DOCS_REQUEST, this.id);
-			return this.$store.getters.getDoc;
+            if(this.$route.params.id == 'all'){
+			    return this.getDocs;
+            } else if(this.$route.params.id == 'common') {
+                return this.getDocs
+                .filter(d => d.doc.common);
+            } else if(this.$route.params.id == 'myDocs') {
+                return this.getDocs.filter(d =>
+                    d.user.id == this.getProfile.id && 
+                    d.status == 0
+                );
+            } else if(this.$route.params.id == 'signature-request') {
+                return this.getDocs.filter(d => d.status == 2);
+            } else if(this.$route.params.id == 'signature-success') {
+                return this.getDocs.filter(d => d.status == 6);
+            } else if(this.$route.params.id == 'available-to-me') {
+                return this.getDocs
+                .filter(d => d.status == 5);
+            } else if(this.id == 'notif') {
+                let docs = this.getDocs.filter(d => 
+                    d.status == 3 || d.status == 2
+                );
+                docs.forEach(d => {
+                    if(d.status == 3){
+                        d.message = "Ваш документ подписали."
+                    }
+                    if(d.status == 2){
+                        d.message = "Вас просят подписать документ."
+                    }
+                })
+                return docs;
+            }
+            return null;
 		}
     },
     filters: {
         capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1)
+            return str.charAt(0).toUpperCase() + str.slice(1)
         }
     },
     methods: {
         sortBy(key) {
             this.sortKey = key
             this.sortOrders[key] = this.sortOrders[key] * -1
-        }
+        },
+        toDoc(id){
+            this.$router.push('/document/'+id);
+        },
     }
 }
 </script>
@@ -114,6 +157,10 @@ export default {
     padding: 7px 15px;
 }
 .grid th{
+    background: rgb(223, 243, 253);
+}
+.grid tr:hover{
+    cursor: pointer;
     background: rgb(223, 243, 253);
 }
 .grid .arrow{
