@@ -10,9 +10,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 from corsheaders.defaults import default_methods
-CORS_ORIGIN_WHITELIST = (
-    'http//:localhost:8080',
-)
+# CORS_ORIGIN_WHITELIST = (
+#     'http//:localhost:8080',
+# )
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
