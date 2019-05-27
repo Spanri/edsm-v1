@@ -77,79 +77,62 @@ class Notif2(generics.ListAPIView):
             for idx, val in enumerate(n):
                 d.setdefault(val, n[val])
             notif.data[i] = d
-            # доступен для просмотра, не надо подписывать
+            # надо подписать и очередь или
+            # подписан и есть уведомления или
+            # просто смотрю, не надо подписывать
             if(
                 n['user']['id'] == user_id and
-                not n['is_owner'] and
-                not n['is_signature_request']
+                (
+                    n['status'] == 2 or
+                    n['status'] == 3 or
+                    n['status'] == 5
+                )
             ):
                 notif2.append(notif.data[i])
-            # уже подписан
+            # владелец (отдельно, ибо нужно дальше)
             if(
                 n['user']['id'] == user_id and
-                not n['is_owner'] and
-                n['is_signature_request'] and 
-                n['is_signature']
-            ):
-                notif2.append(notif.data[i])
-            # надо подписать и очередь у него
-            if(
-                n['user']['id'] == user_id and
-                not n['is_owner'] and
-                n['is_signature_request'] and
-                not n['is_signature'] and 
-                n['is_queue']
-            ):
-                notif2.append(notif.data[i])
-            # владелец
-            if(
-                n['user']['id'] == user_id and
-                n['is_owner']
+                n['status'] == 0
             ):
                 notif_owner.append(notif.data[i])
             # документ в общем доступе
             if(
-                n['doc']['common'] and 
-                n['user']['id'] != user_id
+                n['doc']['common'] and
+                n['status'] == 0
             ):
-                notif_common.append(notif.data[i])
-        notif2 = notif2 + notif_owner + notif_common
+                notif2.append(notif.data[i])
+        notif2 = notif2 + notif_owner
         # Находим документы пользователя, которые подписали, чтобы
         # вывести это в уведомления с сообщением "Ваш документ подписали."
-        # Для каждого документа, где пользователь - владелец, проверяем, 
+        # Для каждого документа, где пользователь - владелец, проверяем,
         # есть ли нотиф, где этот документ и
         # is_owner=false, is_signature_request=true, is_signature=true
         notif_signature = []
         for i, n in enumerate(notif_owner):
             for j, n2 in enumerate(notif.data):
                 if(
-                    not n2['is_owner'] and
-                    n2['is_signature_request'] and
-                    n2['is_signature'] and
-                    n2['doc']['id'] == n['doc']['id']
+                    n2['doc']['id'] == n['doc']['id'] and
+                    n2['status'] == 3
                 ):
                     notif_signature.append(n2)
                     break
         notif2 = notif2 + notif_signature
-        # Если подписал сам владелец, то пусть будет 
-        # 1/1/1 (is_owner/is_signature_request/is_signature)
-        # True ставим отдельно от замены user-ов
+        # Если подписал сам владелец, то пусть будет
+        # статус = 6 (в таблице оригинальной он нигде не занят)
         for i, n in enumerate(notif2):
             for j, n2 in enumerate(notif2):
                 if(
                     n2['user']['id'] == user_id and
-                    not n2['is_owner'] and
-                    n2['is_signature_request'] and
-                    n2['is_signature']
+                    (n2['status'] == 3 or n2['status'] == 4)
                 ):
-                    notif2[j]['is_owner'] = True
+                    notif2[j]['status'] = 6
                     break
         notif3 = copy.deepcopy(notif.data)
         for i, n in enumerate(notif3):
             for j, n2 in enumerate(notif3):
                 if (
                     n2['doc']['id'] == n['doc']['id'] and
-                    n2['is_owner']
+                    n2['status'] == 0
                 ):
                     for k, n3 in enumerate(notif2):
                         if (
@@ -183,16 +166,10 @@ class AddSignature(viewsets.ModelViewSet):
         # Найти нотиф, который с этим документом и 
         # где очередь подписывать и изменить на "подписано"
         notif = Notif.objects.get(
-            doc_id=doc.id, 
-            is_owner=False,
-            is_signature_request=1, 
-            is_queue=True,
-
+            doc_id=doc.id,
+            status=2
         )
-        notif.is_queue = False
-        notif.is_signature = True
-        # notif.message = "Ваш документ подписали."
-        notif.is_show_notif = True
+        notif.status = 3
         notif.save()
 
         # Найти следующий нотиф, который с этим документом и
@@ -200,12 +177,10 @@ class AddSignature(viewsets.ModelViewSet):
         try:
             notifNext = Notif.objects.get(
                 doc_id=doc.id,
-                is_owner=False,
-                is_signature_request=1,
+                status=1,
                 queue=notif.queue+1
             )
-            notifNext.is_queue = True
-            # notif.message = "Вас просят подписать документ."
+            notifNext.status = 2
             notifNext.save()
         except:
             pass
@@ -355,105 +330,3 @@ class ConfirmUpdatePasswordView(viewsets.ModelViewSet):
         )
         
         return Response({"code": code})
-
-# ## Не нужно, но жалко выкидывать
-
-# class Notif1(generics.ListAPIView):
-#     '''
-#     Нотифы конкретного пользователя, где он не владелец
-#     '''
-#     serializer_class = NotifSerializer
-#     queryset = Notif.objects.all()
-#     permission_classes = ()
-
-#     def get_queryset(self):
-#         return Notif.objects.filter(is_owner=False)
-
-# class DocsOwner(generics.ListAPIView):
-#     '''
-#     Нотифы конкретного пользователя, где пользователь
-#      - владелец документов.
-#     '''
-#     serializer_class = NotifSerializer
-#     queryset = Notif.objects.all()
-#     permission_classes = ()
-
-#     def get_queryset(self):
-#         return Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
-
-# class DocsOwnerOne(generics.ListAPIView):
-#     '''
-#     Нотиф конкретного докумена, где юзер -
-#     владелец документа.
-#     '''
-#     serializer_class = NotifSerializer
-#     queryset = Notif.objects.all()
-#     permission_classes = ()
-
-#     def get(self, request, pk, format=None):
-#         try:
-#             n = Notif.objects.get(doc_id=self.kwargs['pk'], is_owner=True)
-#             serializer = NotifSerializer(n)
-#             return Response(serializer.data)
-#         except:
-#             return Response({})
-
-# class AllDocs(generics.ListAPIView):
-#     '''
-#     Все нотифы, которые в общем доступе и
-#     обозначают владельца.
-#     '''
-#     serializer_class = NotifSerializer
-#     queryset = Notif.objects.all()
-#     permission_classes = ()
-#     def get_queryset(self):
-#         return Notif.objects.filter(doc__common=True, is_owner=True)
-
-# class GetEmail(generics.ListAPIView):
-#     '''
-#     Получение списка всех email и имен.
-#     '''
-#     permission_classes = ()
-#     serializer_class = UserSerializer
-#     queryset = User.objects.all()
-
-#     def get(self, *args, **kwargs):
-#         u = User.objects.get(id=self.kwargs['pk'])
-#         uu = UserProfile.objects.get(user_id=u.id)
-#         return Response({"full_name": uu.get_full_name()})
-
-# class Login(viewsets.ModelViewSet):
-#     serializer_class = UserSerializer
-#     queryset = User.objects.all()
-
-#     def login(self, request):
-#         queryset = self.get_queryset()
-#         print('queryset')
-#         print(queryset)
-#         u = obtain_jwt_token()
-#         print(u)
-#         return user
-
-    # def retrieve(self, request, *args, **kwargs):
-    #     user = self.get_object()
-    #     token, created = Token.objects.get_or_create(user=user)
-    #     serializer = self.get_serializer(user)
-    #     return Response({
-    #         'token': token.key,
-    #         **serializer.data
-    #     })
-
-# class UserUpdateView(generics.GenericAPIView, mixins.UpdateModelMixin):
-#     '''
-#     Изменить поля в модели User методом PUT (чтобы изменить поля профиля, 
-#     надо писать в запросе "profile": {"first_name": "новое"}).\n
-#     Поле profile добавлять обязательно (даже если пустое - {})! без 
-#     него не работает. Кроме того, пользователь должен существовать. 
-#     '''
-#     authentication_classes = (TokenAuthentication,)
-#     permission_classes = (IsAuthenticated,)
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
-#     def put(self, request, *args, **kwargs):
-#         return self.update(request, *args, **kwargs)

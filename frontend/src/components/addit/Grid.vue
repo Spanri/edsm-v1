@@ -93,68 +93,29 @@ export default {
                 return this.getDocs
                 .filter(d => d.doc.common);
             } else if(this.$route.params.id == 'myDocs') {
-                let docs = this.getDocs
-                .filter(d =>
-                    d.user.id == this.getProfile.id && d.is_owner && 
-                    !d.is_signature_request && !d.is_signature
+                return this.getDocs.filter(d =>
+                    d.user.id == this.getProfile.id && 
+                    d.status == 0
                 );
-                // console.log(docs);
-                return docs;
             } else if(this.$route.params.id == 'signature-request') {
-                let docs = this.getDocs
-                .filter(d =>
-                    !d.is_owner && d.is_signature_request && !d.is_signature
-                );
-                // console.log(docs);
-                return docs;
+                return this.getDocs.filter(d => d.status == 2);
             } else if(this.$route.params.id == 'signature-success') {
-                let docs = this.getDocs
-                .filter(d =>
-                    d.is_owner &&
-                    d.is_signature_request && 
-                    d.is_signature
-                );
-                // console.log(docs);
-                return docs;
+                return this.getDocs.filter(d => d.status == 6);
             } else if(this.$route.params.id == 'available-to-me') {
-                let docs = this.getDocs
-                .filter(d => 
-                    !d.is_owner && !d.is_signature_request
-                );
-                // console.log(docs);
-                return docs;
+                return this.getDocs
+                .filter(d => d.status == 5);
             } else if(this.id == 'notif') {
-                let docs = this.getDocs
-                .filter(d =>
-                    (
-                        !d.is_owner &&
-                        d.is_signature_request && 
-                        d.is_signature &&
-                        d.is_show_notif
-                    ) || (
-                        !d.is_owner && 
-                        d.is_signature_request && 
-                        !d.is_signature
-                    )
+                let docs = this.getDocs.filter(d => 
+                    d.status == 3 || d.status == 2
                 );
                 docs.forEach(d => {
-                    if(
-                        !d.is_owner &&
-                        d.is_signature_request && 
-                        d.is_signature &&
-                        d.is_show_notif
-                    ){
+                    if(d.status == 3){
                         d.message = "Ваш документ подписали."
                     }
-                    if(
-                        !d.is_owner &&
-                        d.is_signature_request && 
-                        !d.is_signature
-                    ){
+                    if(d.status == 2){
                         d.message = "Вас просят подписать документ."
                     }
                 })
-                // console.log(docs);
                 return docs;
             }
             return null;

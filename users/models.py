@@ -59,10 +59,6 @@ class UserProfile(models.Model):
 class Notif(models.Model):
     user = models.ForeignKey(User, related_name="notif", on_delete=models.CASCADE)
     doc = models.ForeignKey(Doc, related_name="notif", on_delete=models.CASCADE)
-    is_owner = models.BooleanField(default=False)
-    is_signature_request = models.BooleanField(default=False)
-    is_signature = models.BooleanField(default=False)
-    is_show_notif = models.BooleanField(default=True)
+    status = models.IntegerField(blank=True, null=True)
     date = models.DateField(blank=True, null=True)
     queue = models.IntegerField(blank=True, null=True)
-    is_queue = models.BooleanField(blank=True, null=True, default=False)

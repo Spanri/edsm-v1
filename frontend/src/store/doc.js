@@ -75,11 +75,11 @@ const actions = {
                                 .post(path + '/api/users/notif', {
                                     doc_id: resp.data.id,
                                     user_id: s.id,
-                                    // message: 'Вас просят подписать документ.',
-                                    is_owner: false,
-                                    is_signature_request: true,
+                                    status: i == 0 ? 2 : 1,
+                                    // is_owner: false,
+                                    // is_signature_request: true,
                                     queue: i,
-                                    is_queue: i==0 ? true : false
+                                    // is_queue: i==0 ? true : false
                                 })
                                 .catch(err => {
                                     try {
@@ -95,8 +95,9 @@ const actions = {
                                 .post(path + '/api/users/notif', {
                                     doc_id: resp.data.id,
                                     user_id: s.id,
-                                    is_owner: false,
-                                    is_signature_request: false
+                                    status: 5,
+                                    // is_owner: false,
+                                    // is_signature_request: false
                                 })
                                 .catch(err => {
                                     try {
@@ -120,7 +121,6 @@ const actions = {
     },
     [DOC_SIGNATURE]: ({ commit, dispatch, rootState }, id) => {
         return new Promise((resolve, reject) => {
-            console.log('id', id)
             axios
                 .post(path + '/api/users/notif/add_signature/', {
                     id: id

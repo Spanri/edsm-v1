@@ -12,8 +12,8 @@
                 </div>
 				<a class="button" :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a>
 				<button @click="editDoc()">РЕДАКТИРОВАТЬ</button> <br v-if="!doc.is_owner && doc.is_signature_request && !doc.is_signature && doc.is_queue">
-				<button v-if="!doc.is_owner && doc.is_signature_request && !doc.is_signature && doc.is_queue" @click="addSignature()">ПОДПИСАТЬ</button> <br>
-				<button v-if="doc.is_owner && !doc.is_signature_request && !doc.is_signature" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ<br>ПОДПИСЕЙ СНОВА</button> <br>
+				<button v-if="doc.status == 2" @click="addSignature()">ПОДПИСАТЬ</button> <br>
+				<button v-if="doc.status == 0" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ<br>ПОДПИСЕЙ СНОВА</button> <br>
             </div>
 			<div style="margin-left:25px">
 				<p v-if="error" style="color: red">{{error}}</p>
@@ -63,17 +63,20 @@ export default {
 			console.log('editDoc')
 
 		},
-		addSignature(){
+		async addSignature(){
 			console.log('addSignature')
-			this.$store.dispatch(DOC_SIGNATURE, this.id)
-			.then(resp => {
-				this.doc.is_signature = true;
-				this.error = 'Подпись успешно поставлена!'
-			})
-			.catch(err=>{
-				console.log(err)
-				this.error = 'Ошибка. Что-то пошло не так.'
-			})
+			let res = await confirm('Подтвердите подпись.', { title: 'Подтверждение' })
+			if (res) {
+				this.$store.dispatch(DOC_SIGNATURE, this.id)
+				.then(resp => {
+					this.doc.status = 3;
+					this.error = 'Подпись успешно поставлена!'
+				})
+				.catch(err=>{
+					console.log(err)
+					this.error = 'Ошибка. Что-то пошло не так.'
+				})
+			}
 		},
 		repeatSignatures(){
 			console.log('repeatSignatures')
