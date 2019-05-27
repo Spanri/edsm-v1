@@ -13,7 +13,7 @@
 				<a class="button" :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a>
 				<button @click="editDoc()">РЕДАКТИРОВАТЬ</button> <br v-if="!doc.is_owner && doc.is_signature_request && !doc.is_signature && doc.is_queue">
 				<button v-if="!doc.is_owner && doc.is_signature_request && !doc.is_signature && doc.is_queue" @click="addSignature()">ПОДПИСАТЬ</button> <br>
-				<button v-if="doc.is_owner" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ<br>ПОДПИСЕЙ СНОВА</button> <br>
+				<button v-if="doc.is_owner && !doc.is_signature_request && !doc.is_signature" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ<br>ПОДПИСЕЙ СНОВА</button> <br>
             </div>
 			<div style="margin-left:25px">
 				<p v-if="error" style="color: red">{{error}}</p>

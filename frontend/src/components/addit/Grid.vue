@@ -93,33 +93,41 @@ export default {
                 return this.getDocs
                 .filter(d => d.doc.common);
             } else if(this.$route.params.id == 'myDocs') {
-                return this.getDocs
-                .filter(d => 
+                let docs = this.getDocs
+                .filter(d =>
                     d.user.id == this.getProfile.id && d.is_owner && 
                     !d.is_signature_request && !d.is_signature
                 );
+                // console.log(docs);
+                return docs;
             } else if(this.$route.params.id == 'signature-request') {
-                return this.getDocs
+                let docs = this.getDocs
                 .filter(d =>
                     !d.is_owner && d.is_signature_request && !d.is_signature
                 );
+                // console.log(docs);
+                return docs;
             } else if(this.$route.params.id == 'signature-success') {
-                return this.getDocs
+                let docs = this.getDocs
                 .filter(d =>
-                    !d.is_owner &&
+                    d.is_owner &&
                     d.is_signature_request && 
                     d.is_signature
                 );
+                // console.log(docs);
+                return docs;
             } else if(this.$route.params.id == 'available-to-me') {
-                return this.getDocs
+                let docs = this.getDocs
                 .filter(d => 
                     !d.is_owner && !d.is_signature_request
                 );
+                // console.log(docs);
+                return docs;
             } else if(this.id == 'notif') {
                 let docs = this.getDocs
                 .filter(d =>
                     (
-                        d.is_owner &&
+                        !d.is_owner &&
                         d.is_signature_request && 
                         d.is_signature &&
                         d.is_show_notif
@@ -131,7 +139,7 @@ export default {
                 );
                 docs.forEach(d => {
                     if(
-                        d.is_owner &&
+                        !d.is_owner &&
                         d.is_signature_request && 
                         d.is_signature &&
                         d.is_show_notif
@@ -139,14 +147,14 @@ export default {
                         d.message = "Ваш документ подписали."
                     }
                     if(
-                        !d.is_owner && 
+                        !d.is_owner &&
                         d.is_signature_request && 
                         !d.is_signature
                     ){
                         d.message = "Вас просят подписать документ."
                     }
                 })
-                console.log(docs);
+                // console.log(docs);
                 return docs;
             }
             return null;

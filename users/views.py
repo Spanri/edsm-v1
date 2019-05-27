@@ -31,6 +31,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework import parsers, renderers
 from itertools import chain
+import copy
 
 ## Работает
 class Index(TemplateView):
@@ -43,6 +44,13 @@ class Index(TemplateView):
     def get_context_data(self):
         context = super(Index, self).get_context_data()
         return context
+
+def unique(list1):  
+    unique_list = [] 
+    for x in list1:
+        if x not in unique_list: 
+            unique_list.append(x)
+    return unique_list
 
 class Notif2(generics.ListAPIView):
     '''
@@ -75,7 +83,7 @@ class Notif2(generics.ListAPIView):
                 not n['is_owner'] and
                 not n['is_signature_request']
             ):
-                notif2.append(n)
+                notif2.append(notif.data[i])
             # уже подписан
             if(
                 n['user']['id'] == user_id and
@@ -83,7 +91,7 @@ class Notif2(generics.ListAPIView):
                 n['is_signature_request'] and 
                 n['is_signature']
             ):
-                notif2.append(n)
+                notif2.append(notif.data[i])
             # надо подписать и очередь у него
             if(
                 n['user']['id'] == user_id and
@@ -92,16 +100,19 @@ class Notif2(generics.ListAPIView):
                 not n['is_signature'] and 
                 n['is_queue']
             ):
-                notif2.append(n)
+                notif2.append(notif.data[i])
             # владелец
             if(
                 n['user']['id'] == user_id and
                 n['is_owner']
             ):
-                notif_owner.append(n)
+                notif_owner.append(notif.data[i])
             # документ в общем доступе
-            if(n['doc']['common']):
-                notif_common.append(n)
+            if(
+                n['doc']['common'] and 
+                n['user']['id'] != user_id
+            ):
+                notif_common.append(notif.data[i])
         notif2 = notif2 + notif_owner + notif_common
         # Находим документы пользователя, которые подписали, чтобы
         # вывести это в уведомления с сообщением "Ваш документ подписали."
@@ -117,9 +128,37 @@ class Notif2(generics.ListAPIView):
                     n2['is_signature'] and
                     n2['doc']['id'] == n['doc']['id']
                 ):
-                    n2['is_owner'] = True
                     notif_signature.append(n2)
+                    break
         notif2 = notif2 + notif_signature
+        # Если подписал сам владелец, то пусть будет 
+        # 1/1/1 (is_owner/is_signature_request/is_signature)
+        # True ставим отдельно от замены user-ов
+        for i, n in enumerate(notif2):
+            for j, n2 in enumerate(notif2):
+                if(
+                    n2['user']['id'] == user_id and
+                    not n2['is_owner'] and
+                    n2['is_signature_request'] and
+                    n2['is_signature']
+                ):
+                    notif2[j]['is_owner'] = True
+                    break
+        notif3 = copy.deepcopy(notif.data)
+        for i, n in enumerate(notif3):
+            for j, n2 in enumerate(notif3):
+                if (
+                    n2['doc']['id'] == n['doc']['id'] and
+                    n2['is_owner']
+                ):
+                    for k, n3 in enumerate(notif2):
+                        if (
+                            n3['doc']['id'] == n['doc']['id']
+                        ):
+                            notif2[k]['user'] = notif3[j]['user']
+                            break
+                    break
+        notif2 = unique(notif2)
         return Response(notif2)
 
 class AddSignature(viewsets.ModelViewSet):
