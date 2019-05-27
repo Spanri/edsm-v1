@@ -42,5 +42,6 @@ class DocViewSet(viewsets.ModelViewSet):
         notif = Notif.objects.create(
             user_id=request.data["user_id"], 
             doc_id=serializer.data["id"],
-            is_owner=True)
+            is_owner=True,
+            is_signature_request=False)
         return Response(serializer.data)

@@ -5,7 +5,7 @@ import {
     AUTH_LOGOUT,
     USER_UPDATE,
     USER_CONFIRM_UPDATE_PASSWORD,
-    USER_NOTIF_REQUEST,
+    // USER_NOTIF_REQUEST,
     USER_CHANGE_PASSWORD,
     USER_UPDATE_STAFF,
     USER_UPDATE_IMAGE,
@@ -67,18 +67,18 @@ const actions = {
                 })
         })
     },
-    [USER_NOTIF_REQUEST]: ({commit, dispatch, rootState}) => {
-        return new Promise(async (resolve, reject) => {
-            let response = await axios.get(path + '/api/users/' + rootState.user.profile.id + '/notif/');
-            await response.data.forEach(async (r, i) => {
-                r.title = r.doc.title
-                r.full_name = r.user.profile.full_name;
-                r.date = 'r.message';
-            })
-            await console.log(response.data)
-            await resolve(response.data)
-        })
-    },
+    // [USER_NOTIF_REQUEST]: ({commit, dispatch, rootState}) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         let response = await axios.get(path + '/api/users/' + rootState.user.profile.id + '/notif/');
+    //         await response.data.forEach(async (r, i) => {
+    //             r.title = r.doc.title
+    //             r.full_name = r.user.profile.full_name;
+    //             r.date = 'r.message';
+    //         })
+    //         await console.log(response.data)
+    //         await resolve(response.data)
+    //     })
+    // },
     [USER_UPDATE]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios

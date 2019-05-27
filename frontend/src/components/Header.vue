@@ -75,17 +75,27 @@ export default {
     },
     computed: {
         ...mapGetters({
-			getProfile: 'getProfile'
+            getProfile: 'getProfile',
+            getDocs: 'getDocs'
         }),
         title(){
             return 'Открыть профиль\n' + this.getProfile.email;
         },
         notif(){
-            // this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
-            // .then(resp=>{
-            //     this.n = resp.length;
-            // });
-            // return this.n
+            // return this.getDocs
+            //     .filter(d =>
+            //         (
+            //             !d.is_owner && 
+            //             d.is_signature_request && 
+            //             d.is_signature && 
+            //             d.user.id != this.getProfile.id &&
+            //             d.is_show_notif
+            //         ) || (
+            //             !d.is_owner && 
+            //             d.is_signature_request && 
+            //             !d.is_signature
+            //         )
+            //     ).length;
         },
         notifColor(){
             if(this.notifHover){

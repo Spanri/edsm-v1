@@ -54,7 +54,7 @@ class NotifTestCase(TestCase):
             "is_owner": False,
             "is_signature_request": True,
             "is_queue": True,
-            "message": 'Вас просят подписать документ.',
+            # "message": 'Вас просят подписать документ.',
             "user_id": u.id,
             "doc_id": 1
         })

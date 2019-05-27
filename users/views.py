@@ -46,53 +46,81 @@ class Index(TemplateView):
 
 class Notif2(generics.ListAPIView):
     '''
-    Нотифы конкретного пользователя, где он не владелец, 
-    при этом документ может быть одним из:
-    * доступен для просмотра, не надо подписывать (is_signature_request=0)
-    * уже подписан (is_signature_request=1, is_signature=1)
-    * надо подписать и очередь у него (is_signature_request=1, is_signature=0, is_queue=1)
+    Нотифы конкретного пользователя
+    1. где он не владелец, при этом документ может быть одним из:
+        + доступен для просмотра, не надо подписывать (is_signature_request=0)
+        + уже подписан (is_signature_request=1, is_signature=1)
+        + надо подписать и очередь у него (is_signature_request=1, is_signature=0, is_queue=1)
+    2. где он владелец
+    3. где документы в общем доступе
     '''
     serializer_class = NotifSerializer
     queryset = Notif.objects.all()
     permission_classes = ()
 
-    def get_queryset(self):
-        notif = Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=False)
-        notif1 = notif.filter(is_signature_request=0)
-        notif2 = notif.filter(is_signature_request=1, is_signature=1)
-        notif3 = notif.filter(
-            is_signature_request=1,
-            is_signature=0, 
-            is_queue=1
-        )
-        for i, n in enumerate(notif1):
-            n2 = Notif.objects.get(is_owner=True, doc_id=n.doc_id)
-            notif1[i].user = n2.user
-            notif1[i].id = n2.id
-        # Находим документы пользовтеля, которые подписали.
-        # Сначала находим документы пользователя, которыми он владеет
-        notif4 = Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
-        # Для каждого документа проверяем, есть ли нотиф, где этот документ и 
+    def list(self, request, *args, **kwargs):
+        notif = super(Notif2, self).list(request, args, kwargs)
+        notif2 = []
+        notif_owner = []
+        notif_common = []
+        user_id = int(self.kwargs['pk'])
+        for i, n in enumerate(notif.data):
+            d = {}
+            for idx, val in enumerate(n):
+                d.setdefault(val, n[val])
+            notif.data[i] = d
+            # доступен для просмотра, не надо подписывать
+            if(
+                n['user']['id'] == user_id and
+                not n['is_owner'] and
+                not n['is_signature_request']
+            ):
+                notif2.append(n)
+            # уже подписан
+            if(
+                n['user']['id'] == user_id and
+                not n['is_owner'] and
+                n['is_signature_request'] and 
+                n['is_signature']
+            ):
+                notif2.append(n)
+            # надо подписать и очередь у него
+            if(
+                n['user']['id'] == user_id and
+                not n['is_owner'] and
+                n['is_signature_request'] and
+                not n['is_signature'] and 
+                n['is_queue']
+            ):
+                notif2.append(n)
+            # владелец
+            if(
+                n['user']['id'] == user_id and
+                n['is_owner']
+            ):
+                notif_owner.append(n)
+            # документ в общем доступе
+            if(n['doc']['common']):
+                notif_common.append(n)
+        notif2 = notif2 + notif_owner + notif_common
+        # Находим документы пользователя, которые подписали, чтобы
+        # вывести это в уведомления с сообщением "Ваш документ подписали."
+        # Для каждого документа, где пользователь - владелец, проверяем, 
+        # есть ли нотиф, где этот документ и
         # is_owner=false, is_signature_request=true, is_signature=true
-        for i, d in enumerate(notif4):
-            try:
-                d2 = Notif.objects.filter(
-                    is_owner=False, 
-                    doc_id=d.doc_id,
-                    is_signature_request=True, 
-                    is_signature=True
-                )
-                if d2:
-                    notif1 = notif1.union(d2)
-            except:
-                pass
-        # Добавляем нотифы, где пользователь - владелец
-        notif5 = Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
-        # Добавляем нотифы, где документы в общем доступе
-        notif6 = Notif.objects.filter(user_id=self.kwargs['pk'], is_owner=True)
-        # Объединяем (нотиф 4 присоединили отдельно выше)
-        notif1 = notif1.union(notif2).union(notif3).union(notif5).union(notif6)
-        return notif1
+        notif_signature = []
+        for i, n in enumerate(notif_owner):
+            for j, n2 in enumerate(notif.data):
+                if(
+                    not n2['is_owner'] and
+                    n2['is_signature_request'] and
+                    n2['is_signature'] and
+                    n2['doc']['id'] == n['doc']['id']
+                ):
+                    n2['is_owner'] = True
+                    notif_signature.append(n2)
+        notif2 = notif2 + notif_signature
+        return Response(notif2)
 
 class AddSignature(viewsets.ModelViewSet):
     '''
@@ -119,11 +147,12 @@ class AddSignature(viewsets.ModelViewSet):
             doc_id=doc.id, 
             is_owner=False,
             is_signature_request=1, 
-            is_queue=True
+            is_queue=True,
+
         )
         notif.is_queue = False
         notif.is_signature = True
-        notif.message = "Ваш документ подписали."
+        # notif.message = "Ваш документ подписали."
         notif.is_show_notif = True
         notif.save()
 
@@ -136,9 +165,8 @@ class AddSignature(viewsets.ModelViewSet):
                 is_signature_request=1,
                 queue=notif.queue+1
             )
-            print(notifNext)
             notifNext.is_queue = True
-            notif.message = "Вас просят подписать документ."
+            # notif.message = "Вас просят подписать документ."
             notifNext.save()
         except:
             pass

@@ -35,43 +35,18 @@ const actions = {
         return new Promise((resolve, reject) => {
             axios
             .get(path + '/api/users/' + rootState.user.profile.id + '/notif/')
-            .then(respNotif => {
-                axios
-                    .get(path + '/api/users/' + rootState.user.profile.id +'/docs/')
-                .then(respUser => {
-                    let docs = respNotif.data;
-                    docs = docs.concat(respUser.data);
-                    axios
-                        .get(path + '/api/users/all_docs/')
-                        .then(respCommon => {
-                            docs = docs.concat(respCommon.data);
-                            let docs2 = docs.reduce((acc, c) => {
-                                if (acc.map[c.id]) return acc;
-                                acc.map[c.id] = true;
-                                acc.docs2.push(c);
-                                return acc;
-                            }, { map: {}, docs2: [] }).docs2;
-                            console.log('docs2', docs2)
-                            try {
-                                docs2.forEach(d => {
-                                    d.full_name = d.user.profile.full_name
-                                    d.title = d.doc.title;
-                                    d.date_doc = d.doc.date;
-                                });
-                                resolve(docs2)
-                                commit(DOCS_SUCCESS, docs2)
-                            } catch (err) {
-                                console.log(err)
-                            }
-                        });
-                })
-                .catch(err => {
-                    try {
-                        reject(err.response.request.response)
-                    } catch (error) {
-                        reject(err)
-                    }
-                })
+            .then(resp => {
+                try {
+                    resp.data.forEach(d => {
+                        d.full_name = d.user.profile.full_name
+                        d.title = d.doc.title;
+                        d.date_doc = d.doc.date;
+                    });
+                    resolve(resp.data)
+                    commit(DOCS_SUCCESS, resp.data)
+                } catch (err) {
+                    console.log(err)
+                }
             })
             .catch(err => {
                 try {
@@ -100,7 +75,7 @@ const actions = {
                                 .post(path + '/api/users/notif', {
                                     doc_id: resp.data.id,
                                     user_id: s.id,
-                                    message: 'Вас просят подписать документ.',
+                                    // message: 'Вас просят подписать документ.',
                                     is_owner: false,
                                     is_signature_request: true,
                                     queue: i,

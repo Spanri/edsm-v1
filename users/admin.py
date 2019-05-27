@@ -10,7 +10,7 @@ class UserProfileInline(admin.StackedInline):
 
 @admin.register(Notif)
 class NotifAdmin(admin.ModelAdmin):
-    list_display = ('user', 'doc', 'message', 'is_owner', 'id')
+    list_display = ('user', 'doc', 'is_owner', 'is_signature_request', 'is_signature', 'is_queue', 'id')
     search_fields = ('id',)
     ordering = ('id',)
     # inlines = (UserProfileInline,)

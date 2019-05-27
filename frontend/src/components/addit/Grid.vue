@@ -95,17 +95,20 @@ export default {
             } else if(this.$route.params.id == 'myDocs') {
                 return this.getDocs
                 .filter(d => 
-                    d.user.id == this.getProfile.id && d.is_owner
+                    d.user.id == this.getProfile.id && d.is_owner && 
+                    !d.is_signature_request && !d.is_signature
                 );
             } else if(this.$route.params.id == 'signature-request') {
                 return this.getDocs
-                .filter(d => 
+                .filter(d =>
                     !d.is_owner && d.is_signature_request && !d.is_signature
                 );
             } else if(this.$route.params.id == 'signature-success') {
                 return this.getDocs
-                .filter(d => 
-                    !d.is_owner && d.is_signature_request && d.is_signature
+                .filter(d =>
+                    !d.is_owner &&
+                    d.is_signature_request && 
+                    d.is_signature
                 );
             } else if(this.$route.params.id == 'available-to-me') {
                 return this.getDocs
@@ -113,13 +116,12 @@ export default {
                     !d.is_owner && !d.is_signature_request
                 );
             } else if(this.id == 'notif') {
-                return this.getDocs
+                let docs = this.getDocs
                 .filter(d =>
                     (
-                        !d.is_owner && 
+                        d.is_owner &&
                         d.is_signature_request && 
-                        d.is_signature && 
-                        d.user.id != this.getProfile.id &&
+                        d.is_signature &&
                         d.is_show_notif
                     ) || (
                         !d.is_owner && 
@@ -127,6 +129,25 @@ export default {
                         !d.is_signature
                     )
                 );
+                docs.forEach(d => {
+                    if(
+                        d.is_owner &&
+                        d.is_signature_request && 
+                        d.is_signature &&
+                        d.is_show_notif
+                    ){
+                        d.message = "Ваш документ подписали."
+                    }
+                    if(
+                        !d.is_owner && 
+                        d.is_signature_request && 
+                        !d.is_signature
+                    ){
+                        d.message = "Вас просят подписать документ."
+                    }
+                })
+                console.log(docs);
+                return docs;
             }
             return null;
 		}

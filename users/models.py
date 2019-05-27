@@ -63,7 +63,6 @@ class Notif(models.Model):
     is_signature_request = models.BooleanField(default=False)
     is_signature = models.BooleanField(default=False)
     is_show_notif = models.BooleanField(default=True)
-    message = models.CharField(max_length=500, blank=True)
     date = models.DateField(blank=True, null=True)
     queue = models.IntegerField(blank=True, null=True)
     is_queue = models.BooleanField(blank=True, null=True, default=False)

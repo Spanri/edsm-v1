@@ -89,7 +89,6 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
             'doc_id',
             'date',
             'is_owner',
-            'message',
             'is_signature_request',
             'is_signature',
             'is_show_notif',

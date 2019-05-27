@@ -12,13 +12,13 @@ from users.views import (
     UserFromTokenViewSet,
     Index,
     ConfirmUpdatePasswordView,
+    AddSignature,
+    Notif2,
     # GetEmail,
     # DocsOwner,
     # AllDocs,
     # Notif1,
-    Notif2,
-    DocsOwnerOne,
-    AddSignature,
+    # DocsOwnerOne,
 )
 from docs.views import (
     DocViewSet,
@@ -35,7 +35,7 @@ router.register(r'^docs', DocViewSet)
 
 urlpatterns = [
     # url(r'^api/users/(?P<pk>.+)/docs/$', DocsOwner.as_view()),
-    url(r'^api/users/docs/(?P<pk>.+)/$', DocsOwnerOne.as_view()),
+    # url(r'^api/users/docs/(?P<pk>.+)/$', DocsOwnerOne.as_view()),
     # url(r'^api/users/all_docs/$', AllDocs.as_view()),
     # url(r'^api/users/notif/common/$', Notif1.as_view()),
     url(r'^api/users/(?P<pk>.+)/notif/$', Notif2.as_view()),
