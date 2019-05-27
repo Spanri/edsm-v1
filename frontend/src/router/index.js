@@ -42,6 +42,7 @@ const ifAdm = (to, from, next) => {
 
 const router = new Router({
 	mode: 'history',
+	base: '/app',
 	routes: [
 		{
 			path: '/',
