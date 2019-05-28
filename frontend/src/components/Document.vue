@@ -1,21 +1,17 @@
 <template>
 	<div class="document">
-		<h3 class="header">{{doc.title}}</h3>
+		<h3 class="header">{{doc.title.split('.')[0]}}</h3>
 		<div class="document2Colon">
-			<div>
-                <div @click="bigImage = 1" class="imageScale">
-                    <img :src="doc.doc.preview || 'https://img.icons8.com/wired/512/000000/document.png'">
-                </div>
-                <div v-if="bigImage == 1" @click="bigImage = 0">
-                    <img class="bigImage" :src="doc.doc.preview || 'https://img.icons8.com/wired/512/000000/document.png'">
-                    <div class="bigImageBackground"></div>
-                </div>
-				<a class="button" :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a>
-				<button @click="editDoc()">РЕДАКТИРОВАТЬ</button> <br v-if="!doc.is_owner && doc.is_signature_request && !doc.is_signature && doc.is_queue">
-				<button v-if="doc.status == 2" @click="addSignature()">ПОДПИСАТЬ</button> <br>
-				<button v-if="doc.status == 0" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ<br>ПОДПИСЕЙ СНОВА</button> <br>
-            </div>
-			<div style="margin-left:25px">
+			<preview :typeFile="type"></preview>
+			<div style="margin-left:25px;margin-top:-15px;">
+				<div class="buttons">
+					<button @click="viewDoc()">СМОТРЕТЬ(ПЕЧАТЬ)</button>
+					<a class="button" :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a>
+					<a class="button" :href="fileWithSignature" download="FileName">СКАЧАТЬ С ПОДПИСЬЮ</a>
+					<button @click="editDoc()">РЕДАКТИРОВАТЬ</button>
+					<button v-if="doc.status == 2" @click="addSignature()">ПОДПИСАТЬ (не работает)</button>
+					<button v-if="doc.status == 0" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ ПОДПИСЕЙ СНОВА (не работает)</button>
+				</div>
 				<p v-if="error" style="color: red">{{error}}</p>
 				<p>Владелец: {{doc.user.profile.full_name}} ({{doc.user.email}})</p>
 				<p>Общий доступ: {{doc.doc.common ? 'да' : 'нет'}} </p>
@@ -28,28 +24,44 @@
 </template>
 
 <script>
+// import FileReader from 'vue-filereader'
 import { mapState } from 'vuex'
 import { DOC_REQUEST, DOCS_REQUEST, DOC_SIGNATURE } from '../store/mutation-types';
+import Preview from '../components/addit/Preview';
 
 export default {
 	name: 'account',
+	components: { Preview },
 	props: {
 		id: String,
 	},
 	data () {
         return {
+			file: '',
 			doc: {},
-			bigImage: '',
-			image: '',
+			type: '',
+			fileWithSignature: 'ddd',
 			error: '',
         }
 	},
 	created() {
 		this.$store.dispatch(DOCS_REQUEST)
 		this.doc = this.$store.getters.getDoc(this.id);
-		console.log('docs', this.doc)
+		let typeFile = this.doc.doc.title.split('.');
+		this.type = typeFile[typeFile.length-1];
 	},
 	methods: {
+		viewDoc() {
+			let type = this.type.toLowerCase();
+			console.log(type);
+			let url = '';
+			if(type != "jpg" && type != "jpeg" && type != "png"){
+				url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
+			} else {
+				url = this.doc.doc.file;
+			}
+			window.open(url, "_blank");
+      	},
 		download(){
 			const path = this.doc.doc.file
 			const link = document.createElement('a')
@@ -105,7 +117,7 @@ export default {
 }
 /**/
 .document button, .document .button{
-	width: 100%;
+	width: auto;
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
@@ -117,9 +129,8 @@ export default {
 	background-color: #347090;
 	text-align: center;
 }
-.document .button{
-	width: calc(100% - 16px);
-	display: block;
+.document .buttons{
+	max-width: 500px;
 }
 .document a{
 	color: white;
@@ -127,37 +138,5 @@ export default {
 }
 .document button:hover, .document .button:hover{
 	cursor: pointer;
-}
-/**/
-.document img{
-    width: 200px;
-	border: 0.5px solid #347090;
-}
-/* Картинка при увеличении*/
-.document .bigImage{
-    position: fixed;
-    min-width:400px;
-	max-height: 700px;
-    height:auto;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 5;
-}
-.document .imageScale:hover{
-    cursor: pointer;
-}
-.document .bigImageBackground{
-    position: fixed;
-    width:100%;
-    height:100%;
-    padding: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: 0;
-    background-color: #2746578c;
-    z-index: 2;
 }
 </style>

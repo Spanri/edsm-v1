@@ -55,6 +55,7 @@ const router = new Router({
 				},
 				{
 					path: 'documents/:id',
+					meta: { title: 'Главная, СЭД МТУСИ' }, 
 					component: Grid,
 					props: {
 						columns: [
@@ -70,32 +71,31 @@ const router = new Router({
 		{
 			path: '/auth',
 			name: 'auth',
+			meta: { title: 'Вход, СЭД МТУСИ' }, 
 			component: Auth,
 			beforeEnter: ifNotAuthenticated,
 		},
 		{
 			path: '/help',
 			name: 'help',
+			meta: { title: 'Помощь, СЭД МТУСИ' },
 			component: Help,
 		},
 		{
 			path: '/addDoc',
 			name: 'addDoc',
+			meta: { title: 'Добавить документ, СЭД МТУСИ' },
 			component: AddDoc,
 			beforeEnter: ifAuthenticated,
 		},
 		{
 			path: '/document/:id',
 			name: 'document',
+			meta: { title: 'Документ, СЭД МТУСИ' },
 			component: Document,
 			props: true,
 			beforeEnter: ifAuthenticated,
 		},
-		{ 
-			path: '/editProfile', 
-			name: 'editProfile',
-			component: EditProfile, 
-			beforeEnter: ifAuthenticated },
 		{
 			path: '/profile',
 			redirect: '/profile/notif',
@@ -104,6 +104,7 @@ const router = new Router({
 				{
 					path: 'notif',
 					name: 'notif',
+					meta: { title: 'Уведомления, СЭД МТУСИ' }, 
 					component: Grid,
 					props: {
 						id: "notif",
@@ -115,13 +116,31 @@ const router = new Router({
 						],
 					} 
 				},
-				{ path: 'edit', component: EditProfile },
-				{ path: 'adm', component: Adm, beforeEnter: ifAdm, },
+				{ 
+					path: 'edit', 
+					meta: { title: 'Редактировать профиль, СЭД МТУСИ' }, 
+					component: EditProfile 
+				},
+				{ 
+					path: 'adm', 
+					meta: { title: 'Администрирование профилей, СЭД МТУСИ' }, 
+					component: Adm, 
+					beforeEnter: ifAdm, 
+				},
 			],
 			beforeEnter: ifAuthenticated,
 		},
-		{ path: '*', component: NotFound }
+		{ 
+			path: '*', 
+			meta: { title: 'Страница не найдена, СЭД МТУСИ' }, 
+			component: NotFound 
+		}
 	]
+})
+
+router.beforeEach((to, from, next) => {
+	document.title = to.meta.title
+	next()
 })
 
 // router.beforeEach((to, from, next) => {
