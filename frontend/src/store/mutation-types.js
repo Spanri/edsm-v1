@@ -27,5 +27,5 @@ export const DOC_FOLDER_PAGE_PROFILE = 'DOC_FOLDER_PAGE_PROFILE'
 export const DOCS_SUCCESS = 'DOCS_SUCCESS'
 export const DOC_REQUEST_SUCCESS = 'DOC_REQUEST_SUCCESS'
 
-export const path = 'http://localhost:8000'
-// export const path = 'https://edms-mtuci.herokuapp.com'
+// export const path = 'http://localhost:8000'
+export const path = 'https://edms-mtuci.herokuapp.com'
