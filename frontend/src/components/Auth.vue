@@ -18,16 +18,37 @@
 							type="text"
 							placeholder="Введите логин"
 							class="search-box"
+							style="width:200px"
 						/>
 						<div style="height:15px;"></div>
 						<p>ПАРОЛЬ</p>
 						<input 
 							v-validate.immediate="'required_if:!newPassword'"
 							v-model="password" 
-							type="password" 
+							:type="passwordFieldType"
 							placeholder="Введите пароль"
 							class="search-box"
+							style="width:166px"
 						/>
+						<button type="password" style="padding:6px; margin:0" @click="switchVisibility()">
+							<svg 
+								width="16px"
+								stroke="white"
+								enable-background="new 0 0 10 12" 
+								id="Editable-line"
+								viewBox="0 0 30 30">
+								<path 
+									d="  M16,7C9.934,7,4.798,10.776,3,16c1.798,5.224,6.934,9,13,9s11.202-3.776,13-9C27.202,10.776,22.066,7,16,7z" 
+									fill="none"
+									id="XMLID_13_"
+									stroke-linecap="round"
+									stroke-linejoin="round" 
+									stroke-miterlimit="10" 
+									stroke-width="2"/>
+								<circle cx="16" cy="16" fill="none" id="XMLID_14_" r="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+								<line v-if="passwordFieldType == 'text'" fill="none" id="XMLID_15_" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" x1="3" x2="29" y1="3" y2="29"/>
+							</svg>
+						</button>
 						<div style="height:35px;"></div>
 						<button type="submit" @click="doLogin()">ВОЙТИ</button> <br>
 						<div @click="newPassword=1" class="rememberPassword">
@@ -115,6 +136,7 @@ export default {
 		return {
 			email: null,
 			password: null,
+			passwordFieldType: 'password',
 			emailForConfirm: null,
 			processConfirm: false,
 			code: null,
@@ -131,6 +153,9 @@ export default {
 
 	},
 	methods: {
+		switchVisibility() {
+			this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
+		},
 		doLogin(e) {
 			const { email, password } = this;
 			this.$store.dispatch(

@@ -14,10 +14,6 @@ from corsheaders.defaults import default_methods
 #     'http//:localhost:8080',
 # )
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_METHODS = default_methods + (
-    'PUT', 'PATCH'
-)
 
 # Application definition
 INSTALLED_APPS = [
@@ -53,7 +49,7 @@ ROOT_URLCONF = 'django_auth.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'public')],
+        'DIRS': [os.path.join(BASE_DIR, 'staticfiles')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -111,10 +107,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # Для деплоймента
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
-STATIC_DIR = os.path.join(BASE_DIR, 'public/static/')
-STATIC_URL = 'public/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static')
+# STATIC_DIR = os.path.join(BASE_DIR, 'staticfiles/')
+# STATIC_URL = 'staticfiles/'
 STATICFILES_DIRS = (
+    # os.path.join(BASE_DIR, 'staticfiles/static/'),
     os.path.join(BASE_DIR, 'frontend/dist/'),
 )
 MEDIA_ROOT = os.path.join(BASE_DIR, '')

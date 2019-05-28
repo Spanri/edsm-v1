@@ -20,7 +20,6 @@ const getters = {
 const actions = {
     [AUTH_SIGNUP]: ({commit, dispatch, state}, user) => {
         return new Promise((resolve, reject) => {
-            console.log(user);
             axios
             .post(path + '/api/users/send_invite/', {
                 "email": user.email,
@@ -29,11 +28,15 @@ const actions = {
                 headers: { Authorization: "Token " + state.token }
             })
             .then(resp => {
+                console.log(resp.data);
                 resolve(resp.data.password)
             })
             .catch(err => {
-                reject(err.response.request.response)
-                // console.log(err);
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },
@@ -54,8 +57,11 @@ const actions = {
             })
             .catch(err => {
                 localStorage.removeItem('user-token')
-                reject(err.response.request.response)
-                // console.log(err);
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
             })
         })
     },

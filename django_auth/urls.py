@@ -78,7 +78,7 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    url(r'^$', Index.as_view(), name='index'),
+    url(r'^app/*', Index.as_view(), name='index'),
 ]
 
 # Для файлов

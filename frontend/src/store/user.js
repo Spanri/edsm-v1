@@ -28,7 +28,6 @@ const getters = {
 const actions = {
     [USER_REQUEST]: ({commit, dispatch, rootState}, token) => {
         return new Promise((resolve, reject) => {
-            // console.log(rootState.auth)
             axios
             .get(path + '/api/users/get_user_from_token/', {
                 headers: { Authorization: "Token " + rootState.auth.token }
