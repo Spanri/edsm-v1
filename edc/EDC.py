@@ -1,8 +1,9 @@
 import requests
 
 class EDC:
-    connString = "http://localhost:8080"
-    username = "MTUCI-EDC"
+    connString = "https://hsmserver.herokuapp.com"
+    #connString = "http://localhost:8080"
+    schemaname = "MTUCI-EDC"
     password = "PASWWORD"
 
     def signFile(self, file, username):
@@ -12,9 +13,11 @@ class EDC:
         return requests.post(
             url, 
             files=files, 
-            data={'username': self.username, 'password': self.password}
+            data={  'schemaname': self.schemaname, 
+                    'password': self.password, 
+                    'username': username}
         ).text
 
 edc = EDC()
 file = open("test.txt", "r")
-print(edc.signFile(file, 'Misha'))
+print(edc.signFile(file, 'Emil'))
