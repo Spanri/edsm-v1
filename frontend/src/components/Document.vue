@@ -1,12 +1,12 @@
 <template>
 	<div class="document">
-		<h3 class="header">{{doc.title.split('.')[0]}}</h3>
+		<h3 class="header">{{title}}</h3>
 		<div class="document2Colon">
 			<preview :typeFile="type"></preview>
 			<div style="margin-left:25px;margin-top:-15px;">
 				<div class="buttons">
-					<button @click="viewDoc()">СМОТРЕТЬ(ПЕЧАТЬ)</button>
-					<a class="button" :href="this.doc.doc.file" download="FileName">СКАЧАТЬ</a>
+					<button v-if="doc.doc.size/1024/1024 < 25" @click="viewDoc()">СМОТРЕТЬ</button>
+					<button @click="download()">СКАЧАТЬ</button>
 					<a class="button" :href="fileWithSignature" download="FileName">СКАЧАТЬ С ПОДПИСЬЮ</a>
 					<button @click="editDoc()">РЕДАКТИРОВАТЬ</button>
 					<button v-if="doc.status == 2" @click="addSignature()">ПОДПИСАТЬ (не работает)</button>
@@ -29,6 +29,8 @@ import { mapState } from 'vuex'
 import { DOC_REQUEST, DOCS_REQUEST, DOC_SIGNATURE } from '../store/mutation-types';
 import Preview from '../components/addit/Preview';
 
+import axios from 'axios'
+
 export default {
 	name: 'account',
 	components: { Preview },
@@ -39,6 +41,7 @@ export default {
         return {
 			file: '',
 			doc: {},
+			title: '',
 			type: '',
 			fileWithSignature: 'ddd',
 			error: '',
@@ -49,6 +52,8 @@ export default {
 		this.doc = this.$store.getters.getDoc(this.id);
 		let typeFile = this.doc.doc.title.split('.');
 		this.type = typeFile[typeFile.length-1];
+		this.title = this.doc.doc.title.replace("." + this.type, "");
+		console.log(this.doc)
 	},
 	methods: {
 		viewDoc() {
@@ -56,20 +61,32 @@ export default {
 			console.log(type);
 			let url = '';
 			if(type != "jpg" && type != "jpeg" && type != "png"){
-				url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
+				if(type == "txt") {
+					url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file + ".txt";
+				} else {
+					url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
+				}
 			} else {
 				url = this.doc.doc.file;
 			}
 			window.open(url, "_blank");
       	},
 		download(){
-			const path = this.doc.doc.file
-			const link = document.createElement('a')
-			link.href = path
-			link.download = path.substr(path.lastIndexOf('/') + 1);
-			document.body.appendChild(link)
-			link.click()
-			document.body.removeChild(link);
+			this.error = "Скачивается..."
+			let title = this.doc.doc.title
+			axios({
+				url: this.doc.doc.file,
+				method: 'GET',
+				responseType: 'blob', // important
+			}).then((response) => {
+				const url = window.URL.createObjectURL(new Blob([response.data]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', title); //or any other extension
+				document.body.appendChild(link);
+				link.click();
+				this.error = ""
+			});
 		},
 		editDoc(){
 			console.log('editDoc')
@@ -130,7 +147,7 @@ export default {
 	text-align: center;
 }
 .document .buttons{
-	max-width: 500px;
+	max-width: 600px;
 }
 .document a{
 	color: white;

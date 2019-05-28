@@ -11,9 +11,8 @@
                     <input 
                         type="file"
                         id="file"
-                        name="file" 
+                        name="file"
                         @change="onFileChange">
-                    <p style="color: red">{{upload}}</p>
                     <p>Имя файла</p>
                     <input
                         required
@@ -57,9 +56,9 @@
                     <p></p> Общий доступ <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="common">
                     <p></p> Подписать <input class="checkbox" type="checkbox" name="selfSignature" true-value="1"  false-value="0" v-model="selfSignature">
                     <div style="height:35px;"></div>
-                    <button type="submit" :class="{disabled: !this.typeFile}">СОЗДАТЬ</button> <br>
+                    <button type="submit" :class="{disabled: this.disable}">СОЗДАТЬ</button> <br>
                 </form>
-                <p v-if="error"> {{ error }} </p>
+                <p v-if="error" style="color: red"> {{ error }} </p>
             </div>
         </div>
 	</div>
@@ -88,7 +87,7 @@ export default {
             selfSignature: 0,
             error: null,
             file:'',
-            upload: '',
+            disable: false
 		}
     },
     created(){
@@ -99,17 +98,15 @@ export default {
     },
     methods: {
         onFileChange(e) {
-            this.upload = "Загружается..."
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
             this.file = files[0];
-            // console.log(this.file);
             /* Расширение файла */
             let typeFile = files[0].name.split('.')
             this.typeFile = typeFile[typeFile.length-1];
             this.title = files[0].name.replace("." + this.typeFile, "");
             this.file = files[0];
-            this.upload = ""
+            // console.log(files[0].size/1024/1024 + " мб")
         },
         blobToFile(theBlob, fileName) {
             //A Blob() is almost a File() - it's just missing the two properties below which we will add
@@ -155,15 +152,19 @@ export default {
             this.users.push(item);
         },
         addDoc(){
+            this.disable = true;
+            this.error = "Загружается..."
             var d = new FormData();
             // для файла
             if (this.file) {   
                 const newFile = new File(
-                    [this.file], 
-                    this.title,
+                    [this.file],
+                    this.title+'.'+this.typeFile,
                     {type: this.file.type}
                 );             
-                d.file = d.append('file', newFile);
+                d.append('file', newFile);
+                console.log(this.file.size)
+                d.append('size', this.file.size);
             }
             d.append('user_id', this.$store.getters.getProfile.id);
             if (this.title) d.append('title', this.title+'.'+this.typeFile);
@@ -178,6 +179,7 @@ export default {
 			.then((resp) => {
                 this.$store.dispatch(DOCS_REQUEST)
                 .then(res => {
+                    this.error = "Загружено!"
                     this.$router.push({
                         name: 'document',
                         params: { id: resp.id }

@@ -12,6 +12,7 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'id',
             'title',
             'file',
+            'size',
             'date',
             'common',
             'preview',
