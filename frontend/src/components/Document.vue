@@ -7,8 +7,8 @@
 				<div class="buttons">
 					<button v-if="doc.doc.size/1024/1024 < 25" @click="viewDoc()">СМОТРЕТЬ</button>
 					<button @click="download()">СКАЧАТЬ</button>
-					<a class="button" :href="fileWithSignature" download="FileName">СКАЧАТЬ С ПОДПИСЬЮ</a>
-					<button @click="editDoc()">РЕДАКТИРОВАТЬ</button>
+					<a class="button" :href="fileWithSignature" download="FileName">СКАЧАТЬ С ПОДПИСЬЮ (не работает)</a>
+					<button @click="editDoc()">РЕДАКТИРОВАТЬ (не работает)</button>
 					<button v-if="doc.status == 2" @click="addSignature()">ПОДПИСАТЬ (не работает)</button>
 					<button v-if="doc.status == 0" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ ПОДПИСЕЙ СНОВА (не работает)</button>
 				</div>
@@ -53,15 +53,14 @@ export default {
 		let typeFile = this.doc.doc.title.split('.');
 		this.type = typeFile[typeFile.length-1];
 		this.title = this.doc.doc.title.replace("." + this.type, "");
-		console.log(this.doc)
+		this.type = this.type.toLowerCase();
+		console.log(this.type)
 	},
 	methods: {
 		viewDoc() {
-			let type = this.type.toLowerCase();
-			console.log(type);
 			let url = '';
-			if(type != "jpg" && type != "jpeg" && type != "png"){
-				if(type == "txt") {
+			if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
+				if(this.type == "txt") {
 					url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file + ".txt";
 				} else {
 					url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
@@ -70,7 +69,7 @@ export default {
 				url = this.doc.doc.file;
 			}
 			window.open(url, "_blank");
-      	},
+		},
 		download(){
 			this.error = "Скачивается..."
 			let title = this.doc.doc.title

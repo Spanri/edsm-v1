@@ -25,11 +25,11 @@
                     <p style="padding-bottom:10px">Запросить подпись: (не забудьте после выбора в выпадающем меню нажать кнопку "Добавить")</p>
                     <div>
                         <div v-for="(user) in selectedUsers" :key="user.full_name" style="margin-bottom: 15px">
-                            {{user.full_name}}
+                            {{user.full_name}} - {{user.profile.position}}
                             <a class="deleteSelectedUser" @click="deleteSelectedUser(1, user)">x</a>
                             </div>
                         <select v-model="selectedUser">
-                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}}</option>
+                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}} - {{user.profile.position}}</option>
                         </select>
                         <button type="button" @click="addUser(1)">ДОБАВИТЬ</button> <br>
                     </div>
@@ -37,11 +37,11 @@
                         Добавить дополнительных пользователей, которые не должны подписывать документ, но могут его просматривать:</p>
                     <div>
                         <div v-for="(user) in selectedUsers2" :key="user.full_name" style="margin-bottom: 15px">
-                            {{user.full_name}}
+                            {{user.full_name}} - {{user.profile.position}}
                             <a class="deleteSelectedUser" @click="deleteSelectedUser(2, user)">x</a>
                             </div>
                         <select v-model="selectedUser2">
-                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}}</option>
+                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}} - {{user.profile.position}}</option>
                         </select>
 
                         <button type="button" @click="addUser(2)">ДОБАВИТЬ</button> <br>
