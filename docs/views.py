@@ -1,3 +1,5 @@
+from rest_framework import status
+from django.core import exceptions
 from rest_framework.response import Response
 from .serializers import (
     DocSerializer,
@@ -16,6 +18,7 @@ from rest_framework import (
     permissions,
     views
 )
+from edc.EDC import EDC
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 
@@ -38,12 +41,63 @@ class DocViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        print(request.data)
-        notif = Notif.objects.create(
-            user_id=request.data["user_id"], 
-            doc_id=serializer.data["id"],
-            status=0,
-            # is_owner=True,
-            # is_signature_request=False
-        )
+        try:
+            notif = Notif.objects.create(
+                user_id=request.data["user_id"], 
+                doc_id=serializer.data["id"],
+                status=0,
+            )
+        except Exception as e:
+            raise exceptions.ValidationError(str(e))
         return Response(serializer.data)
+
+class AddSignature(generics.ListAPIView):
+    '''
+    Добавить подпись к документу. Принимает id документа.
+    Права - нет (они проверяются на сервере генерации подписи).
+    '''
+    serializer_class = DocSerializer
+    queryset = Doc.objects.all()
+    permission_classes = ()
+
+    def get_queryset(self):
+        # Найти нужный документ
+        doc = Doc.objects.get(id=self.kwargs['pk'])
+
+        # Тут должна быть функция генерации подписи
+        edc = EDC()
+        file = open("edc/test.txt", "r")
+        signature = edc.signFile(file, 'Emil')
+
+        # Добавить подпись
+        doc.signature = signature
+        doc.save()
+
+        # Найти нотиф, который с этим документом и
+        # где очередь подписывать и изменить на "подписано"
+        try:
+            notif = Notif.objects.get(
+                doc_id=doc.id,
+                status=2
+            )
+            notif.status = 3
+            notif.save()
+        except Exception as e:
+            raise exceptions.ValidationError(str(e))
+
+        # Найти следующий нотиф, который с этим документом и
+        # где очередь = очередь+1
+        try:
+            notifNext = Notif.objects.get(
+                doc_id=doc.id,
+                status=1,
+                queue=notif.queue+1
+            )
+            notifNext.status = 2
+            notifNext.save()
+        except:
+            pass
+        
+        doc = Doc.objects.filter(id=self.kwargs['pk'])
+        serializer = DocSerializer(doc)
+        return doc

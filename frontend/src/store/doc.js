@@ -9,6 +9,7 @@ import {
     DOC_FOLDERS_UPDATE_SUCCESS,
     DOC_ERROR,
     DOC_UPLOAD,
+    DOC_DELETE,
     DOC_SIGNATURE,
     DOC_UPLOAD_SUCCESS,
     DOC_REQUEST,
@@ -21,6 +22,8 @@ import axios from 'axios'
 
 const state = {
     docs: [],
+    fileCabinets: [],
+    fileCabinet: ''
 }
 
 const getters = {
@@ -28,13 +31,17 @@ const getters = {
     getDoc: (state) => i => {
         return state.docs.filter(d => d.doc.id == i)[0]
     },
+    getFileCabinets: state => state.fileCabinets,
+    getFileCabinet: state => state.fileCabinet,
 }
 
 const actions = {
     [DOCS_REQUEST]: ({commit, dispatch, store, rootState}) => {
         return new Promise((resolve, reject) => {
             axios
-            .get(path + '/api/users/' + rootState.user.profile.id + '/notif/')
+            .get(path + '/api/users/' + rootState.user.profile.id + '/notif/', {
+                headers: { Authorization: "Token " + rootState.auth.token }
+            })
             .then(resp => {
                 try {
                     resp.data.forEach(d => {
@@ -122,9 +129,23 @@ const actions = {
     [DOC_SIGNATURE]: ({ commit, dispatch, rootState }, id) => {
         return new Promise((resolve, reject) => {
             axios
-                .post(path + '/api/users/notif/add_signature/', {
-                    id: id
+                .get(path + '/api/docs/add_signature/' + id + '/')
+                .then(resp => {
+                    resolve(resp.data)
                 })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOC_DELETE]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .delete(path + '/api/docs/' + id)
                 .then(resp => {
                     resolve(resp.data)
                 })

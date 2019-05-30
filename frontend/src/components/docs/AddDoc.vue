@@ -67,8 +67,8 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
-import { DOC_UPLOAD, DOC_REQUEST, DOCS_REQUEST, USERS_REQUEST } from '../store/mutation-types';
-import Preview from '../components/addit/Preview';
+import { DOC_UPLOAD, DOC_REQUEST, DOCS_REQUEST, USERS_REQUEST } from '../../store/mutation-types';
+import Preview from '../addit/Preview';
 
 export default {
     name: 'account',

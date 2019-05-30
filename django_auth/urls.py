@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from rest_framework.documentation import include_docs_urls
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.generic.base import RedirectView
 from users.views import (
     UserViewSet, 
     NotifViewSet, 
@@ -12,16 +13,11 @@ from users.views import (
     UserFromTokenViewSet,
     Index,
     ConfirmUpdatePasswordView,
-    AddSignature,
     Notif2,
-    # GetEmail,
-    # DocsOwner,
-    # AllDocs,
-    # Notif1,
-    # DocsOwnerOne,
 )
 from docs.views import (
     DocViewSet,
+    AddSignature,
 )
 
 # Создание пользователей, получение всего списка, получение 
@@ -34,13 +30,8 @@ router.register(r'^docs', DocViewSet)
 # router.register(r'^docs2', DocViewSet2)
 
 urlpatterns = [
-    # url(r'^api/users/(?P<pk>.+)/docs/$', DocsOwner.as_view()),
-    # url(r'^api/users/docs/(?P<pk>.+)/$', DocsOwnerOne.as_view()),
-    # url(r'^api/users/all_docs/$', AllDocs.as_view()),
-    # url(r'^api/users/notif/common/$', Notif1.as_view()),
     url(r'^api/users/(?P<pk>.+)/notif/$', Notif2.as_view()),
-    url(r'^api/users/notif/add_signature/$',
-        AddSignature.as_view({'post': 'add_signature'})),
+    url(r'^api/docs/add_signature/(?P<pk>.+)/$', AddSignature.as_view()),
     url(r'^api/', include(router.urls)),
     # url(r'^api/users/email/(?P<pk>.+)/$', GetEmail.as_view()),
     url(r'^api/users/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),
@@ -78,6 +69,7 @@ urlpatterns += [
 ]
 
 urlpatterns += [
+    url(r'^$', RedirectView.as_view(url='/app')),
     url(r'^app/*', Index.as_view(), name='index'),
 ]
 

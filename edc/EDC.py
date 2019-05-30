@@ -18,6 +18,6 @@ class EDC:
                     'username': username}
         ).text
 
-edc = EDC()
-file = open("test.txt", "r")
-print(edc.signFile(file, 'Emil'))
+# edc = EDC()
+# file = open("edc/test.txt", "r")
+# print(edc.signFile(file, 'Emil'))

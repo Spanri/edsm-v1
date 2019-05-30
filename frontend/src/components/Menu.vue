@@ -1,5 +1,8 @@
 <template>
     <div class="menu">
+        <select v-model="selectedUser">
+            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}} - {{user.profile.position}}</option>
+        </select>
         <router-link class="router-link" :to="{ path: '/documents/all', }">ВСЕ ДОКУМЕНТЫ</router-link>
         <router-link class="router-link" :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
         <router-link class="router-link" :to="{ path: '/documents/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
@@ -16,8 +19,14 @@ export default {
     name: 'Menu',
     data () {
         return {
+            fileCabinets: [],
+            fileCabinet: '',
         }
     },
+    created(){
+        this.fileCabinets = $store.getters.fileCabinets;
+        this.fileCabinet = $store.getters.fileCabinet;
+    }
 }
 </script>
 
@@ -55,7 +64,7 @@ export default {
 .menu .link > router-link:hover{
     cursor: pointer;
 }
-@media (max-width: 500px) {
+/* @media (max-width: 500px) {
     .menu{
         min-width: 0;
         background-color: blue;
@@ -63,5 +72,5 @@ export default {
     .menu *{
         min-width: 0;
     }
-}
+} */
 </style>

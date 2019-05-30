@@ -8,7 +8,10 @@ from users.serializers import (
 from docs.serializers import (
     DocSerializer,
 )
-from .permissions import CustomIsAuthenticated
+from .permissions import (
+    CustomIsAuthenticated,
+    CustomIsAuthenticated2
+)
 from .models import User, UserProfile, Notif
 from docs.models import Doc
 from rest_framework import (
@@ -37,6 +40,7 @@ import copy
 class Index(TemplateView):
     '''
     Шаблон, показывает vue приложение на сервере.
+    Права - нет.
     '''
     template_name = "index.html"
     permission_classes = ()
@@ -61,10 +65,12 @@ class Notif2(generics.ListAPIView):
         + надо подписать и очередь у него (is_signature_request=1, is_signature=0, is_queue=1)
     2. где он владелец
     3. где документы в общем доступе
+    Права - владелец или админ.
     '''
     serializer_class = NotifSerializer
     queryset = Notif.objects.all()
-    permission_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated2,)
 
     def list(self, request, *args, **kwargs):
         notif = super(Notif2, self).list(request, args, kwargs)
@@ -144,58 +150,12 @@ class Notif2(generics.ListAPIView):
         notif2 = unique(notif2)
         return Response(notif2)
 
-class AddSignature(viewsets.ModelViewSet):
-    '''
-    Добавить подпись к документу. Принимает id документа.
-    '''
-    serializer_class = DocSerializer
-    queryset = Doc.objects.all()
-    permission_classes = ()
-
-    def add_signature(self, request):
-        # Найти нужный документ
-        doc = Doc.objects.get(id=request.data['id'])
-
-        # Тут должна быть функция генерации подписи
-        signature = "123456"
-
-        # Добавить подпись
-        doc.signature = signature
-        doc.save()
-        
-        # Найти нотиф, который с этим документом и 
-        # где очередь подписывать и изменить на "подписано"
-        notif = Notif.objects.get(
-            doc_id=doc.id,
-            status=2
-        )
-        notif.status = 3
-        notif.save()
-
-        # Найти следующий нотиф, который с этим документом и
-        # где очередь = очередь+1
-        try:
-            notifNext = Notif.objects.get(
-                doc_id=doc.id,
-                status=1,
-                queue=notif.queue+1
-            )
-            notifNext.status = 2
-            notifNext.save()
-        except:
-            pass
-
-        serializer = DocSerializer(doc)
-        return Response(serializer.data)
-
 class ObtainAuthToken(views.APIView):
     '''
     Переопределение получения токена, потому что по дефолту он 
     получается через username и пароль, а надо через email и пароль.
+    Права - нет.
     '''
-    title="123456"
-    description = "dfdgf"
-    throttle_classes = ()
     permission_classes = ()
 
     def post(self, request):
@@ -210,6 +170,7 @@ class UserViewSet(viewsets.ModelViewSet):
     '''
     Универсальное представление для работы с пользователями.
     (адрес без слеша в конце, где список получать)
+    Права - владелец аккаунта или админ.
     '''
     serializer_class = UserSerializer
     queryset = User.objects.all()
@@ -220,14 +181,17 @@ class NotifViewSet(viewsets.ModelViewSet):
     '''
     Универсальное представление для работы с пользователями.
     (адрес без слеша в конце, где список получать)
+    Права - владелец нотифа или админ.
     '''
     serializer_class = NotifSerializer
     queryset = Notif.objects.all()
-    permission_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated,)
 
 class UserFromTokenViewSet(viewsets.ModelViewSet):
     '''
     Получить id по токену.
+    Права - нет.
     '''
     serializer_class = UserSerializer
     permission_classes = ()
@@ -243,6 +207,7 @@ class SendInviteView(viewsets.ModelViewSet):
     происходит отдельно (дополнительным запросом).
     Доступ к функции имеют только аккаунты с is_staff = true
     (аккаунт берется из посланного токена)
+    Права - админ.
     '''
     serializer_class = UserSerializer
     authentication_classes = (TokenAuthentication,)

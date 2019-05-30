@@ -5,7 +5,7 @@ class CustomIsAuthenticated(permissions.BasePermission):
     '''
     + POST - аутентификация и админ
     + GET все юзеры - пусто
-    + GET один пользователь - аутентификация и владелец
+    + GET один пользователь - аутентификация и (владелец или админ)
     '''
     def has_permission(self, request, view):
         if request.method == 'GET' or request.method == 'PUT':
@@ -14,3 +14,11 @@ class CustomIsAuthenticated(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return request.user.is_authenticated and (obj.id == request.user.id or request.user.is_staff)
+
+
+class CustomIsAuthenticated2(permissions.BasePermission):
+    '''
+    Для всех нотифов пользователя, аутентификация и (владелец или админ).
+    '''
+    def has_permission(self, request, view):
+        return request.user and (request.user.is_authenticated and (int(view.kwargs['pk']) == request.user.id or request.user.is_staff))
