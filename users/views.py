@@ -190,8 +190,9 @@ class GetEmails(generics.ListAPIView):
         users = super(GetEmails, self).list(request, args, kwargs)
         for i, n in enumerate(users.data):
             users.data[i] = {
-                id: users.data[i]['id'],
-                email: users.data[i]['email']
+                "id": users.data[i]['id'],
+                "full_name": users.data[i]['profile']['full_name'],
+                "position": users.data[i]['profile']['position'],
             }
         return Response(users.data)
 

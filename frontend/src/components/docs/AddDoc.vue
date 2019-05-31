@@ -24,30 +24,44 @@
                     />
                     <p>Картотека</p>
                     <select v-model="fileCabinet">
-                        <option v-for="(fileC) in fileCabinets" :key="fileC.id" :value="fileC">{{fileC.name}}</option>
+                        <option v-for="(fileC,i) in fileCabinets" :key="i" :value="fileC">{{fileC.name}}</option>
                     </select>
+                    
                     <p style="padding-bottom:10px">Запросить подпись: (не забудьте после выбора в выпадающем меню нажать кнопку "Добавить")</p>
                     <div>
-                        <div v-for="(user) in selectedUsers" :key="user.full_name" style="margin-bottom: 15px">
-                            {{user.full_name}} - {{user.profile.position}}
-                            <a class="deleteSelectedUser" @click="deleteSelectedUser(1, user)">x</a>
+                        <div v-for="(user) in selectedUsers" :key="user.id" style="margin-bottom: 15px">
+                            <p class="selectedUser">{{user.full_name}} - {{user.position}}</p>
+                            <svg class="deleteSelectedUser" @click="deleteSelectedUser(1, user)" height="21px" viewBox="0 0 31 32" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <g id="Cancel" stroke="#347090" stroke-width="1">
+                                    <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                    <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                </g>
+                            </svg>
                             </div>
                         <select v-model="selectedUser">
-                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}} - {{user.profile.position}}</option>
+                            <option v-for="(user) in users" :key="user.id" :value="user">{{user.full_name}} - {{user.position}}</option>
                         </select>
                         <button type="button" @click="addUser(1)">ДОБАВИТЬ</button> <br>
                     </div>
                     <p style="padding-bottom:10px">Пользователи, у которых были запрошены подписи, могут просматривать документ. 
                         Добавить дополнительных пользователей, которые не должны подписывать документ, но могут его просматривать:</p>
                     <div>
-                        <div v-for="(user) in selectedUsers2" :key="user.full_name" style="margin-bottom: 15px">
-                            {{user.full_name}} - {{user.profile.position}}
-                            <a class="deleteSelectedUser" @click="deleteSelectedUser(2, user)">x</a>
+                        <div v-for="(user) in selectedUsers2" :key="user.id" style="margin-bottom: 15px">
+                            <p class="selectedUser">{{user.full_name}} - {{user.position}}</p>
+                            <svg class="deleteSelectedUser" @click="deleteSelectedUser(2, user)" height="21px" viewBox="0 0 31 32" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <g id="Cancel" stroke="#347090" stroke-width="1">
+                                    <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                    <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                </g>
+                            </svg>
                             </div>
                         <select v-model="selectedUser2">
-                            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}} - {{user.profile.position}}</option>
+                            <option v-for="(user) in users" :key="user.id" :value="user">{{user.full_name}} - {{user.position}}</option>
                         </select>
-
                         <button type="button" @click="addUser(2)">ДОБАВИТЬ</button> <br>
                     </div>
                     <div style="height:15px;"></div>
@@ -71,7 +85,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
-import { DOC_UPLOAD, DOC_REQUEST, DOCS_REQUEST, USERS_REQUEST } from '../../store/mutation-types';
+import { DOC_UPLOAD, DOC_REQUEST, DOCS_REQUEST, USERS_EMAILS } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 
 export default {
@@ -97,11 +111,13 @@ export default {
 		}
     },
     created(){
-        this.$store.dispatch(USERS_REQUEST)
+        this.$store.dispatch(USERS_EMAILS)
         .then(resp=>{
             this.users = resp.filter(r => r.id != this.$store.getters.getProfile.id)
+            console.log(this.users)
         })
         this.fileCabinets = this.$store.getters.getFileCabinets;
+        this.fileCabinet = this.$store.getters.getFileCabinet;
     },
     methods: {
         onFileChange(e) {
@@ -133,26 +149,31 @@ export default {
         // },
         addUser(num){
             if (num == 1){
-                const {selectedUser} = this;
-                this.selectedUsers.push(selectedUser);
-                this.users = this.users.filter(function(el){
-                    return el != selectedUser;
-                });
+                if(this.selectedUser != '') {
+                    this.selectedUsers.push(this.selectedUser);
+                    this.users = this.users.filter(el => {
+                        return el != this.selectedUser;
+                    });
+                    this.selectedUser = '';
+                }
             } else if(num == 2) {
-                const {selectedUser2} = this;
-                this.selectedUsers2.push(selectedUser2);
-                this.users = this.users.filter(function(el){
-                    return el != selectedUser2;
-                });
+                if(this.selectedUser2 != '') {
+                    this.selectedUsers2.push(this.selectedUser2);
+                    this.users = this.users.filter(el => {
+                        return el != this.selectedUser2;
+                    });
+                    this.selectedUser2 = '';
+                }
             }
         },
         deleteSelectedUser(i, item){
+            console.log(item)
             if(i==1){
-                this.selectedUsers = this.selectedUsers.filter(function(el){
+                this.selectedUsers = this.selectedUsers.filter(el => {
                     return el != item;
                 });
             } else if(i==2){
-                this.selectedUsers2 = this.selectedUsers2.filter(function(el){
+                this.selectedUsers2 = this.selectedUsers2.filter(el => {
                     return el != item;
                 });
             }
@@ -230,6 +251,12 @@ export default {
     font-size: 13.5px;
     min-width: 250px;
 }
+.addDoc .selectedUser{
+    display:inline-block;
+    margin:0;
+    vertical-align:top;
+    font-weight: 400;
+}
 /* Кнопки ЗАГРУЗИТЬ и СОЗДАТЬ */
 .addDoc button, .addDoc input[type="submit"] [type]:not([type="checkbox"]), .fileContainer{
 	border: 0;
@@ -260,13 +287,8 @@ export default {
 }
 /**/
 .addDoc .deleteSelectedUser{
-    border: 0;
-	border-radius: 5px;
-	padding: 3px;
-    padding: 5px;
-    padding-top: 2px;
-	color: white;
-	background-color: #347090;
+    padding: 0px;
+    padding-left: 5px;
 }
 /**/
 .addDoc input[type="checkbox"]{

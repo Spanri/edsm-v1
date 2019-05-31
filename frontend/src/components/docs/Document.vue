@@ -4,7 +4,7 @@
 		<div class="document2Colon">
 			<div>
 				<preview :typeFile="type"></preview>
-				<button style="margin-top:20px;margin-left:3px;background: rgb(243, 92, 92);" v-if="doc.status == 0" @click="deleteDoc()">УДАЛИТЬ<br>ДОКУМЕНТ</button>
+				<button style="margin-top:20px;margin-left:6px;background: rgb(243, 92, 92);" v-if="doc.status == 0" @click="deleteDoc()">УДАЛИТЬ</button>
 			</div>
 			<div style="margin-left:25px;margin-top:-15px;">
 				<div class="buttons">

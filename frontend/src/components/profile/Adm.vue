@@ -8,6 +8,7 @@
             <a href="#usersManage">Настройка прав пользователей</a>
         </div>
         <p v-if="error" style="color:red">{{error}}</p>
+        <hr>
         <a name="addFileCabinet"></a>
         <form @submit.prevent="addFileCabinet" style="margin-bottom:40px">
             <h3>Создать картотеку</h3>
@@ -19,6 +20,7 @@
             />
             <button type="submit">СОЗДАТЬ</button> <br>
         </form>
+        <hr>
         <a name="addDoc"></a>
         <form @submit.prevent="addDoc" style="margin-bottom:40px">
             <h3>Создать пользователя</h3>
@@ -34,9 +36,10 @@
             <br>
             <button type="submit">СОЗДАТЬ</button> <br>
         </form>
+        <hr>
         <a name="fileCabManage"></a>
         <h3>Управление картотеками</h3>
-        <table>
+        <table style="margin-bottom:40px">
             <thead><tr><th>Название</th><th>Действия</th></tr>
             </thead>
             <tbody>
@@ -52,7 +55,7 @@
                                 placeholder="Картотека"
                                 style="min-width:150px;margin-left:-8px"
                             />
-                            <svg @click="editFileCabinetName.splice(j, 1, false);fileCabinetsNew.splice(j, 1, '');" style="margin-left: 10px;cursor: pointer;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <svg @click="editFileCabinetName.splice(j, 1, false);fileCabinetsNew.splice(j, 1, fileCabinets[j].name);" style="margin-left: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <g id="Cancel" stroke="black" stroke-width="1">
                                     <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
                                         fill="#121313" fill-rule="evenodd"/>
@@ -60,18 +63,19 @@
                                         fill="#121313" fill-rule="evenodd"/>
                                 </g>
                             </svg>
-                            <svg @click="editNameFileCabinet(j)" style="margin-left: 10px;cursor: pointer;" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <svg @click="editNameFileCabinet(j)" style="margin-left: 10px;cursor: pointer;margin-top: 7px;" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                 <path class="heroicon-ui" d="M6.3 12.3l10-10a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1 0 1.4l-10 10a1 1 0 0 1-.7.3H7a1 1 0 0 1-1-1v-4a1 1 0 0 1 .3-.7zM8 16h2.59l9-9L17 4.41l-9 9V16zm10-2a1 1 0 0 1 2 0v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h6a1 1 0 0 1 0 2H4v14h14v-6z"/>
                             </svg>
                         </div>
                     </td>
                     <td>
                         <button v-if="!editFileCabinetName[j]" @click="editFileCabinetName.splice(j, 1, true)" type="button" style="margin-top:0;">ПЕРЕИМЕНОВАТЬ</button>
-                        <button type="button" style="margin-top:0;">УДАЛИТЬ</button> <br>
+                        <button type="button" style="margin-top:0;" @click="deleteFileCabinet(j)">УДАЛИТЬ КАРТОТЕКУ</button> <br>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <hr>
         <a name="usersManage"></a>
         <h3>Настройка прав пользователей</h3>
         <table>
@@ -114,7 +118,8 @@ import {
     DOCS_FILE_CABINET, 
     DOCS_FILE_CABINET_CREATE, 
     DOCS_FILTER,
-    DOCS_FILE_CABINET_EDIT
+    DOCS_FILE_CABINET_EDIT,
+    DOCS_FILE_CABINET_DELETE
 } from '../../store/mutation-types'
 
 export default {
@@ -126,7 +131,7 @@ export default {
             fileCabinetsNew: [],
             // fileCabinets: [],
             editFileCabinetName: [],
-            // users: [],
+            users: [],
             email: '',
             is_staff: false,
             error: '',
@@ -153,7 +158,7 @@ export default {
             this.editFileCabinetName.push(false);
         }
         for(let i=0;i<this.fileCabinets.length;i++){
-            this.fileCabinetsNew.push('')
+            this.fileCabinetsNew.push(this.fileCabinets[i].name)
         }
         this.$store.commit(DOC_FOLDER_PAGE_PROFILE, 3)
         this.$store.dispatch(USERS_REQUEST)
@@ -170,9 +175,9 @@ export default {
         fileCabinets() {
             return this.$store.getters.getFileCabinets;
         },
-        users(){
-            return this.$store.getters.getUsers;
-        }
+        // users(){
+        //     return this.$store.getters.getUsers;
+        // }
     },
     methods: {
         addUser(){
@@ -221,6 +226,21 @@ export default {
             //     id: this.fileCabinets[j],
             //     name: this.fileCabinetsNew[j]
             // });
+        },
+        async deleteFileCabinet(j){
+            let res = await confirm('Вы уверены, что хотите удалить картотеку \"' + this.fileCabinets[j].name + '\"? Это действие также удалит все документы, которые есть в картотеке!', { title: 'Подтверждение' });
+			if (res) {
+                this.$store.dispatch(DOCS_FILE_CABINET_DELETE, {
+                id: this.fileCabinets[j].id,
+            })
+            .then(r => {
+                this.$store.commit(DOCS_FILE_CABINET, '');
+                this.error = 'Картотека удалена.'
+            })
+            .catch(err=>{
+                this.error = 'Ошибка. Что-то пошло не так.'
+            })
+            }
         },
         editStaff(user){
             this.$store.dispatch(USER_UPDATE_STAFF, {
@@ -321,4 +341,11 @@ export default {
 .adm .fastLink a{
     text-decoration: none;
 }
+/**/
+hr { 
+    overflow: visible;
+    border: 0;
+    margin-left: -2px;
+    border-top: dotted #347090 4px;
+} 
 </style>

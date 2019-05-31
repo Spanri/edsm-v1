@@ -4,6 +4,7 @@ import {
     DOCS_FILTER_SUCCESS,
     DOCS_FILE_CABINET_CREATE,
     DOCS_FILE_CABINET_EDIT,
+    DOCS_FILE_CABINET_DELETE,
     DOC_FOLDER_PAGE,
     DOC_FOLDER_PAGE_PROFILE,
     DOC_UPLOAD,
@@ -26,6 +27,7 @@ const state = {
 }
 
 const getters = {
+    getDocsOld: state => state.docs,
     getDocs: state => state.docsFiltering,
     getDoc: (state) => i => {
         return state.docs.filter(d => d.doc.id == i)[0]
@@ -69,12 +71,8 @@ const actions = {
             axios
             .get(path + '/api/docs/fileCabinets')
             .then(res => {
-                let dfc = [];
-                res.data = res.data.filter(r => {
-                    dfc = rootState.doc.docs.filter(r => r.doc.fileCabinet.id == res.data.id)
-                    if (dfc != []) return true;
-                })
                 commit(DOCS_FILE_CABINETS, res.data)
+                if (rootState.doc.fileCabinet == '') commit(DOCS_FILE_CABINET, res.data[0]);
                 let d = rootState.doc.docs.filter(r => r.doc.fileCabinet.id == rootState.doc.fileCabinet.id)
                 commit(DOCS_FILTER_SUCCESS, d)
             })
@@ -114,6 +112,25 @@ const actions = {
                 .patch(path + '/api/docs/fileCabinets/' + data.id, {
                     name: data.name
                 }, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(res => {
+                    dispatch(DOCS_FILTER)
+                    resolve(res)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOCS_FILE_CABINET_DELETE]: ({ commit, dispatch, rootState }, data) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .delete(path + '/api/docs/fileCabinets/' + data.id, {
                     headers: { Authorization: "Token " + rootState.auth.token }
                 })
                 .then(res => {
@@ -179,6 +196,7 @@ const actions = {
                                     }
                                 })
                         })
+                        dispatch(DOCS_REQUEST)
                         resolve(resp.data)
                     }
                 })

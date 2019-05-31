@@ -5,6 +5,7 @@ import {
     AUTH_LOGOUT,
     USER_UPDATE,
     USER_CONFIRM_UPDATE_PASSWORD,
+    USERS_EMAILS,
     // USER_NOTIF_REQUEST,
     USER_CHANGE_PASSWORD,
     USER_UPDATE_STAFF,
@@ -48,7 +49,7 @@ const actions = {
             })
         })
     },
-    [USERS_REQUEST]: ({ commit, dispatch }) => {
+    [USERS_REQUEST]: ({ commit, dispatch, rootState }) => {
         return new Promise((resolve, reject) => {
             axios
                 .get(path + '/api/users/i', {
@@ -69,16 +70,11 @@ const actions = {
                 })
         })
     },
-    [USERS_REQUEST]: ({ commit, dispatch }) => {
+    [USERS_EMAILS]: ({ commit, dispatch, rootState }) => {
         return new Promise((resolve, reject) => {
             axios
-                .get(path + '/api/users/i', {
-                    headers: { Authorization: "Token " + rootState.auth.token }
-                })
+                .get(path + '/api/users/emails/')
                 .then(response => {
-                    response.data.forEach(r => {
-                        r.full_name = r.profile.full_name
-                    });
                     resolve(response.data)
                 })
                 .catch(err => {

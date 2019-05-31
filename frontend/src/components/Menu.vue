@@ -26,15 +26,27 @@ export default {
         }
     },
     created(){
+        this.$store.dispatch(DOCS_FILTER)
+        let docs = this.$store.getters.getDocsOld;
         this.fileCabinets = this.$store.getters.getFileCabinets;
+        let dfc = [];
+        this.fileCabinets = this.fileCabinets.filter(re => {
+            dfc = docs.filter(r => r.doc.fileCabinet.id == re.id);
+            if (dfc.length != 0) {
+                return true;
+            } else {
+                return false;
+            }
+        })
         this.fileCabinet = this.$store.getters.getFileCabinet;
+        if (this.fileCabinet in this.fileCabinets === false) {
+            this.fileCabinet = this.fileCabinets[0];
+        }
     },
     methods: {
         onChange() {
             this.$store.commit(DOCS_FILE_CABINET, this.fileCabinet)
             this.$store.dispatch(DOCS_FILTER)
-            console.log('store getFileCabinet', this.$store.getters.getFileCabinet)
-            console.log('store getDocs', this.$store.getters.getDocs)
         },
     },
 }

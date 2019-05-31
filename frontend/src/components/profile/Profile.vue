@@ -3,6 +3,7 @@
 		<headerProfile></headerProfile>
 		<div class="mainProfile">
 			<div>
+				<p>Моя почта: {{getProfile.email}}</p>
 				<div class="menuProfile">
 					<div style="margin-top:10px"></div>
 					<router-link class="router-link" :to="{ path: '/profile/notif', }">УВЕДОМЛЕНИЯ</router-link>
@@ -29,9 +30,6 @@ export default {
 		return {
             page: '',
 		}
-	},
-	created(){
-		this.page = this.$store.getters.getPageProfile;
 	},
 	computed: {
 		...mapGetters({
