@@ -18,10 +18,12 @@ import axios from 'axios'
 
 const state = {
     profile: {},
+    users: [],
 }
 
 const getters = {
     getProfile: state => state.profile,
+    getUsers: tate => state.users,
     isProfileLoaded: state => !!state.profile.name,
 }
 
@@ -46,11 +48,33 @@ const actions = {
             })
         })
     },
-    // ДОБАВИТЬ ЧТОБЫ ТОЛЬКО АДМИН МОГ ТАКОЕ СЛАТЬ
     [USERS_REQUEST]: ({ commit, dispatch }) => {
         return new Promise((resolve, reject) => {
             axios
-                .get(path + '/api/users/i')
+                .get(path + '/api/users/i', {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(response => {
+                    response.data.forEach(r => {
+                        r.full_name = r.profile.full_name
+                    });
+                    resolve(response.data)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [USERS_REQUEST]: ({ commit, dispatch }) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(path + '/api/users/i', {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
                 .then(response => {
                     response.data.forEach(r => {
                         r.full_name = r.profile.full_name
@@ -133,13 +157,13 @@ const actions = {
             })
         })
     },
-    [USER_UPDATE_STAFF]: ({commit, dispatch}, data) => {
+    [USER_UPDATE_STAFF]: ({commit, dispatch, rootState}, data) => {
         return new Promise((resolve, reject) => {
             axios
             .patch(path + '/api/users/i/'+data.id, {
                 "is_staff": data.is_staff
             },{
-                headers: { Authorization: "Token " + data.token }
+                headers: { Authorization: "Token " + rootState.auth.token }
             })
             .catch(err => {
                 try {

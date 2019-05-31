@@ -1,10 +1,20 @@
-from .models import Doc
+from .models import Doc, FileCabinet
 # from users.serializers import NotifSerializer
 from users.models import Notif
 from rest_framework import serializers
 import datetime
 
+class FileCabinetSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = FileCabinet
+        fields = (
+            'id',
+            'name',
+        )
+
 class DocSerializer(serializers.HyperlinkedModelSerializer):
+    fileCabinet = FileCabinetSerializer(required=False)
+    fileCabinet_id = serializers.IntegerField(write_only=True, required=False)
 
     class Meta:
         model = Doc
@@ -15,9 +25,10 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'size',
             'date',
             'common',
-            'preview',
             'description',
             'signature',
+            'fileCabinet',
+            'fileCabinet_id',
         )
     
     def create(self, validated_data):

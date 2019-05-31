@@ -1,7 +1,8 @@
 <template>
     <div class="menu">
-        <select v-model="selectedUser">
-            <option v-for="(user) in users" :key="user.email" :value="user">{{user.full_name}} - {{user.profile.position}}</option>
+        <p>Картотека</p>
+        <select v-model="fileCabinet" @change="onChange()">
+            <option v-for="(fileC) in fileCabinets" :key="fileC.id" :value="fileC">{{fileC.name}}</option>
         </select>
         <router-link class="router-link" :to="{ path: '/documents/all', }">ВСЕ ДОКУМЕНТЫ</router-link>
         <router-link class="router-link" :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
@@ -14,6 +15,7 @@
 
 <script>
 import { } from '../store/mutation-types'
+import {DOCS_FILE_CABINET, DOCS_REQUEST, DOCS_FILTER} from '../store/mutation-types'
 
 export default {
     name: 'Menu',
@@ -24,9 +26,17 @@ export default {
         }
     },
     created(){
-        this.fileCabinets = $store.getters.fileCabinets;
-        this.fileCabinet = $store.getters.fileCabinet;
-    }
+        this.fileCabinets = this.$store.getters.getFileCabinets;
+        this.fileCabinet = this.$store.getters.getFileCabinet;
+    },
+    methods: {
+        onChange() {
+            this.$store.commit(DOCS_FILE_CABINET, this.fileCabinet)
+            this.$store.dispatch(DOCS_FILTER)
+            console.log('store getFileCabinet', this.$store.getters.getFileCabinet)
+            console.log('store getDocs', this.$store.getters.getDocs)
+        },
+    },
 }
 </script>
 
@@ -37,7 +47,7 @@ export default {
     min-width: 250px;
     font-family: 'El Messiri', sans-serif;
     font-weight: 600;
-    padding-top: 40px;
+    /* padding-top: 40px; */
 }
 /**/
 .menu a{
@@ -63,6 +73,22 @@ export default {
 }
 .menu .link > router-link:hover{
     cursor: pointer;
+}
+.menu select{
+    margin: 25px;
+    margin-top: 5px;
+    padding: 6px;
+    font-size: 13.5px;
+    min-width: 250px;
+    border: 1;
+}
+.menu select button{
+    border: 10px solid black;
+}
+.menu p{
+    margin: 25px;
+    margin-bottom: 0;
+    font-weight: 500;
 }
 /* @media (max-width: 500px) {
     .menu{

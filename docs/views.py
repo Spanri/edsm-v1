@@ -3,6 +3,7 @@ from django.core import exceptions
 from rest_framework.response import Response
 from .serializers import (
     DocSerializer,
+    FileCabinetSerializer
 )
 from users.serializers import (
     UserSerializer,
@@ -10,7 +11,10 @@ from users.serializers import (
 )
 from users.models import Notif
 from .permissions import CustomIsAuthenticated
-from .models import Doc
+from .models import (
+    Doc,
+    FileCabinet
+)
 from rest_framework import (
     generics,
     mixins,
@@ -50,6 +54,15 @@ class DocViewSet(viewsets.ModelViewSet):
         except Exception as e:
             raise exceptions.ValidationError(str(e))
         return Response(serializer.data)
+
+
+class FileCabinetViewSet(viewsets.ModelViewSet):
+    '''
+    Универсальное представление для работы с картотеками.
+    '''
+    serializer_class = FileCabinetSerializer
+    queryset = FileCabinet.objects.all()
+    permission_classes = ()
 
 class AddSignature(generics.ListAPIView):
     '''

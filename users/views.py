@@ -170,12 +170,30 @@ class UserViewSet(viewsets.ModelViewSet):
     '''
     Универсальное представление для работы с пользователями.
     (адрес без слеша в конце, где список получать)
-    Права - владелец аккаунта или админ.
+    Права - админ или владелец аккаунта.
     '''
     serializer_class = UserSerializer
     queryset = User.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated,)
+
+class GetEmails(generics.ListAPIView):
+    '''
+    Все емайлы
+    Права - нет.
+    '''
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    permission_classes = ()
+
+    def list(self, request, *args, **kwargs):
+        users = super(GetEmails, self).list(request, args, kwargs)
+        for i, n in enumerate(users.data):
+            users.data[i] = {
+                id: users.data[i]['id'],
+                email: users.data[i]['email']
+            }
+        return Response(users.data)
 
 class NotifViewSet(viewsets.ModelViewSet):
     '''

@@ -29,7 +29,15 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import {DOCS_REQUEST, DOC_REQUEST, USER_REQUEST, USER_NOTIF_REQUEST, DOC_FOLDER_PAGE, DOC_FOLDER_PAGE_PROFILE} from '../../store/mutation-types'
+import {
+    DOCS_REQUEST, 
+    DOC_REQUEST, 
+    USER_REQUEST, 
+    USER_NOTIF_REQUEST, 
+    DOC_FOLDER_PAGE, 
+    DOC_FOLDER_PAGE_PROFILE,
+    DOCS_FILTER,
+} from '../../store/mutation-types'
 
 export default {
     name: 'grid',
@@ -57,8 +65,6 @@ export default {
         ...mapGetters({
             getProfile: 'getProfile',
             getDocs: 'getDocs',
-            // token: 'token',
-            // getNotif: 'getNotif',
         }),
         filteredHeroes() {
             var sortKey = ''

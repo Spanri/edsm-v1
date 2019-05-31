@@ -1,6 +1,27 @@
 <template>
     <div class="adm">
-        <form @submit.prevent="addDoc" style="margin-bottom:60px">
+        <div class="fastLink">
+            <p>Быстрый переход:</p>
+            <a href="#addFileCabinet">Создать картотеку&#8195;</a>
+            <a href="#addDoc">Создать пользователя&#8195;</a>
+            <a href="#fileCabManage">Управление картотеками&#8195;</a>
+            <a href="#usersManage">Настройка прав пользователей</a>
+        </div>
+        <p v-if="error" style="color:red">{{error}}</p>
+        <a name="addFileCabinet"></a>
+        <form @submit.prevent="addFileCabinet" style="margin-bottom:40px">
+            <h3>Создать картотеку</h3>
+            <input
+                required
+                v-model="fileCabinet"
+                type="text" 
+                placeholder="Введите название картотеки"
+            />
+            <button type="submit">СОЗДАТЬ</button> <br>
+        </form>
+        <a name="addDoc"></a>
+        <form @submit.prevent="addDoc" style="margin-bottom:40px">
+            <h3>Создать пользователя</h3>
             <p>Email того, кому нужно создать аккаунт</p>
             <input
                 required
@@ -11,10 +32,48 @@
             <p style="display: inline-block;padding-left:15px;padding-right:7px"> Администратор</p>
             <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="is_staff">
             <br>
-            <button type="button" @click="addUser">СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ</button> <br>
-            <p v-if="error" style="color:red">{{error}}</p>
+            <button type="submit">СОЗДАТЬ</button> <br>
         </form>
-        <p>Настройка прав пользователей</p>
+        <a name="fileCabManage"></a>
+        <h3>Управление картотеками</h3>
+        <table>
+            <thead><tr><th>Название</th><th>Действия</th></tr>
+            </thead>
+            <tbody>
+                <tr v-for="(entry,j) in fileCabinets" :key="j">
+                    <td>
+                        <div v-if="!editFileCabinetName[j]" class="editNameFileCabinet">
+                            {{entry.name}}
+                        </div>
+                        <div v-if="editFileCabinetName[j]" class="editNameFileCabinet2">
+                            <input
+                                v-model="fileCabinetsNew[j]"
+                                type="text"
+                                placeholder="Картотека"
+                                style="min-width:150px;margin-left:-8px"
+                            />
+                            <svg @click="editFileCabinetName.splice(j, 1, false);fileCabinetsNew.splice(j, 1, '');" style="margin-left: 10px;cursor: pointer;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <g id="Cancel" stroke="black" stroke-width="1">
+                                    <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                    <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                </g>
+                            </svg>
+                            <svg @click="editNameFileCabinet(j)" style="margin-left: 10px;cursor: pointer;" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                <path class="heroicon-ui" d="M6.3 12.3l10-10a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1 0 1.4l-10 10a1 1 0 0 1-.7.3H7a1 1 0 0 1-1-1v-4a1 1 0 0 1 .3-.7zM8 16h2.59l9-9L17 4.41l-9 9V16zm10-2a1 1 0 0 1 2 0v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h6a1 1 0 0 1 0 2H4v14h14v-6z"/>
+                            </svg>
+                        </div>
+                    </td>
+                    <td>
+                        <button v-if="!editFileCabinetName[j]" @click="editFileCabinetName.splice(j, 1, true)" type="button" style="margin-top:0;">ПЕРЕИМЕНОВАТЬ</button>
+                        <button type="button" style="margin-top:0;">УДАЛИТЬ</button> <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a name="usersManage"></a>
+        <h3>Настройка прав пользователей</h3>
         <table>
             <thead>
                 <tr>
@@ -39,7 +98,6 @@
                         <div v-else>
                             {{entry[key.code]}}
                         </div>
-                        
                     </td>
                 </tr>
             </tbody>
@@ -48,14 +106,27 @@
 </template>
 
 <script>
-import {AUTH_SIGNUP, USERS_REQUEST, USER_UPDATE_STAFF, DOC_FOLDER_PAGE_PROFILE} from '../../store/mutation-types'
+import {
+    AUTH_SIGNUP, 
+    USERS_REQUEST, 
+    USER_UPDATE_STAFF, 
+    DOC_FOLDER_PAGE_PROFILE,
+    DOCS_FILE_CABINET, 
+    DOCS_FILE_CABINET_CREATE, 
+    DOCS_FILTER,
+    DOCS_FILE_CABINET_EDIT
+} from '../../store/mutation-types'
 
 export default {
     name: 'adm',
     data () {
         return {
             self_id: this.$store.getters.getProfile.id,
-            users: [],
+            fileCabinet: '',
+            fileCabinetsNew: [],
+            // fileCabinets: [],
+            editFileCabinetName: [],
+            // users: [],
             email: '',
             is_staff: false,
             error: '',
@@ -76,10 +147,17 @@ export default {
         }
     },
     created(){
+        this.$store.dispatch(DOCS_FILTER)
+        // this.fileCabinets = this.$store.getters.getFileCabinets;
+        for(let i=0;i<this.fileCabinets.length;i++){
+            this.editFileCabinetName.push(false);
+        }
+        for(let i=0;i<this.fileCabinets.length;i++){
+            this.fileCabinetsNew.push('')
+        }
         this.$store.commit(DOC_FOLDER_PAGE_PROFILE, 3)
         this.$store.dispatch(USERS_REQUEST)
         .then(resp=>{
-            // console.log(resp)
             this.users = resp
         })
     },
@@ -88,6 +166,12 @@ export default {
             return this.users.filter(
                 user => this.self_id != user.id
             )
+        },
+        fileCabinets() {
+            return this.$store.getters.getFileCabinets;
+        },
+        users(){
+            return this.$store.getters.getUsers;
         }
     },
     methods: {
@@ -100,6 +184,7 @@ export default {
                 this.error = 'Пользователь создается...'
                 this.$store.dispatch(AUTH_SIGNUP, { email: this.email, is_staff: this.is_staff })
                 .then((resp) => {
+                    this.email = ''
                     this.error = 'Пользователь создан.'
                 })
                 .catch(err=>{
@@ -107,9 +192,38 @@ export default {
                 });
             }
         },
+        addFileCabinet(){
+            this.$store.dispatch(DOCS_FILE_CABINET_CREATE, this.fileCabinet)
+            .then((resp) => {
+                this.fileCabinet = ''
+                this.error = 'Картотека создана.'
+            })
+            .catch(err=>{
+                console.log(err)
+                this.error = 'Картотека не создана. Что-то пошло не так.'
+            });
+        },
+        editNameFileCabinet(j){
+            // console.log(this.fileCabinetsNew[j])
+            this.$store.dispatch(DOCS_FILE_CABINET_EDIT, {
+                id: this.fileCabinets[j].id,
+                name: this.fileCabinetsNew[j]
+            })
+            .then((resp) => {
+                this.editFileCabinetName[j] = false;
+                this.fileCabinetsNew.splice(j, 1, '');
+            })
+            .catch(err=> {
+                console.log(err)
+                this.error = 'Имя не изменено. Что-то пошло не так.'
+            });
+            // this.fileCabinets.splice(j, 1, {
+            //     id: this.fileCabinets[j],
+            //     name: this.fileCabinetsNew[j]
+            // });
+        },
         editStaff(user){
             this.$store.dispatch(USER_UPDATE_STAFF, {
-                token: this.$store.getters.token,
                 id: user.id,
                 is_staff: user.is_staff
             })
@@ -131,7 +245,7 @@ export default {
     padding-left: 60px;
 }
 /* Поле ввода */
-.adm input[type="email"]{
+.adm input[type="email"], .adm input[type="text"]{
 	border: 0;
 	margin: 0;
     height: 35px;
@@ -158,6 +272,20 @@ export default {
     width: 15px;
     margin: 0;
     vertical-align: middle;
+}
+/* Картотеки */
+.adm .fileCabinet{
+    border: #347090 1px solid;
+    border-bottom: 0;
+    padding: 5px;
+}
+.adm .editNameFileCabinet{
+    display: grid;
+	grid-template-columns: 1fr auto;
+}
+.adm .editNameFileCabinet2{
+    display: grid;
+	grid-template-columns: 1fr auto auto;
 }
 /**/
 .adm table {
@@ -189,5 +317,8 @@ export default {
 .adm .editStaff:hover{
     cursor: pointer;
     fill: #347090;
+}
+.adm .fastLink a{
+    text-decoration: none;
 }
 </style>

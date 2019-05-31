@@ -22,6 +22,10 @@
                         autocomplete = usernameNew
                         class="filename"
                     />
+                    <p>Картотека</p>
+                    <select v-model="fileCabinet">
+                        <option v-for="(fileC) in fileCabinets" :key="fileC.id" :value="fileC">{{fileC.name}}</option>
+                    </select>
                     <p style="padding-bottom:10px">Запросить подпись: (не забудьте после выбора в выпадающем меню нажать кнопку "Добавить")</p>
                     <div>
                         <div v-for="(user) in selectedUsers" :key="user.full_name" style="margin-bottom: 15px">
@@ -87,7 +91,9 @@ export default {
             selfSignature: 0,
             error: null,
             file:'',
-            disable: false
+            disable: false,
+            fileCabinets: [],
+            fileCabinet: '',
 		}
     },
     created(){
@@ -95,6 +101,7 @@ export default {
         .then(resp=>{
             this.users = resp.filter(r => r.id != this.$store.getters.getProfile.id)
         })
+        this.fileCabinets = this.$store.getters.getFileCabinets;
     },
     methods: {
         onFileChange(e) {
@@ -169,6 +176,7 @@ export default {
             d.append('user_id', this.$store.getters.getProfile.id);
             if (this.title) d.append('title', this.title+'.'+this.typeFile);
             if (this.description) d.append('description', this.description);
+            if (this.fileCabinet) d.append('fileCabinet_id', this.fileCabinet.id);
             d.common = this.common ? d.append('common', true) : d.append('common', false);
             let dd = { d }
             if (this.selectedUsers) dd.signature_request = this.selectedUsers;

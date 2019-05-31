@@ -1,19 +1,17 @@
 import { 
     DOCS_REQUEST,
-    DOC_SUCCESS,
-    DOC_FOLDER_SUCCESS,
+    DOCS_FILTER,
+    DOCS_FILTER_SUCCESS,
+    DOCS_FILE_CABINET_CREATE,
+    DOCS_FILE_CABINET_EDIT,
     DOC_FOLDER_PAGE,
     DOC_FOLDER_PAGE_PROFILE,
-    DOC_FOLDERS_REQUEST,
-    DOC_FOLDERS_UPDATE,
-    DOC_FOLDERS_UPDATE_SUCCESS,
-    DOC_ERROR,
     DOC_UPLOAD,
     DOC_DELETE,
     DOC_SIGNATURE,
-    DOC_UPLOAD_SUCCESS,
-    DOC_REQUEST,
     DOC_REQUEST_SUCCESS,
+    DOCS_FILE_CABINETS,
+    DOCS_FILE_CABINET,
     DOCS_SUCCESS,
     path,
 } from './mutation-types'
@@ -22,12 +20,13 @@ import axios from 'axios'
 
 const state = {
     docs: [],
+    docsFiltering: [],
     fileCabinets: [],
     fileCabinet: ''
 }
 
 const getters = {
-    getDocs: state => state.docs,
+    getDocs: state => state.docsFiltering,
     getDoc: (state) => i => {
         return state.docs.filter(d => d.doc.id == i)[0]
     },
@@ -36,7 +35,7 @@ const getters = {
 }
 
 const actions = {
-    [DOCS_REQUEST]: ({commit, dispatch, store, rootState}) => {
+    [DOCS_REQUEST]: ({commit, dispatch, rootState}) => {
         return new Promise((resolve, reject) => {
             axios
             .get(path + '/api/users/' + rootState.user.profile.id + '/notif/', {
@@ -49,8 +48,9 @@ const actions = {
                         d.title = d.doc.title;
                         d.date_doc = d.doc.date;
                     });
-                    resolve(resp.data)
-                    commit(DOCS_SUCCESS, resp.data)
+                    commit(DOCS_SUCCESS, resp.data);
+                    dispatch(DOCS_FILTER)
+                    resolve(resp.data);
                 } catch (err) {
                     console.log(err)
                 }
@@ -64,12 +64,77 @@ const actions = {
             })
         })
     },
+    [DOCS_FILTER]: ({ commit, dispatch, rootState }) => {
+        return new Promise((resolve, reject) => {
+            axios
+            .get(path + '/api/docs/fileCabinets')
+            .then(res => {
+                let dfc = [];
+                res.data = res.data.filter(r => {
+                    dfc = rootState.doc.docs.filter(r => r.doc.fileCabinet.id == res.data.id)
+                    if (dfc != []) return true;
+                })
+                commit(DOCS_FILE_CABINETS, res.data)
+                let d = rootState.doc.docs.filter(r => r.doc.fileCabinet.id == rootState.doc.fileCabinet.id)
+                commit(DOCS_FILTER_SUCCESS, d)
+            })
+            .catch(err => {
+                try {
+                    reject(err.response.request.response)
+                } catch (error) {
+                    reject(err)
+                }
+            })  
+        })   
+    },
+    [DOCS_FILE_CABINET_CREATE]: ({ commit, dispatch, rootState }, name) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(path + '/api/docs/fileCabinets', {
+                    name: name
+                }, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(res => {
+                    dispatch(DOCS_FILTER)
+                    resolve(res)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOCS_FILE_CABINET_EDIT]: ({ commit, dispatch, rootState }, data) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .patch(path + '/api/docs/fileCabinets/' + data.id, {
+                    name: data.name
+                }, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(res => {
+                    dispatch(DOCS_FILTER)
+                    resolve(res)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
     // РЕШИТЬ, ДОБАВЛЯТЬ ЛИ ПРАВА
     [DOC_UPLOAD]: ({commit, dispatch, rootState}, data) => {
         return new Promise((resolve, reject) => {
             console.log(data)
             axios
-                .post(path + '/api/docs',
+                .post(path + '/api/docs/i',
                     data.d, { headers: {
                         'Content-Type': 'multipart/form-data'
                     }
@@ -145,7 +210,7 @@ const actions = {
     [DOC_DELETE]: ({ commit, dispatch, rootState }, id) => {
         return new Promise((resolve, reject) => {
             axios
-                .delete(path + '/api/docs/' + id)
+                .delete(path + '/api/docs/i/' + id)
                 .then(resp => {
                     resolve(resp.data)
                 })
@@ -191,6 +256,15 @@ const actions = {
 const mutations = {
     [DOCS_SUCCESS]: (state, resp) => {
         Vue.set(state, 'docs', resp)
+    },
+    [DOCS_FILTER_SUCCESS]: (state, resp) => {
+        Vue.set(state, 'docsFiltering', resp)
+    },
+    [DOCS_FILE_CABINETS]: (state, resp) => {
+        Vue.set(state, 'fileCabinets', resp)
+    },
+    [DOCS_FILE_CABINET]: (state, resp) => {
+        Vue.set(state, 'fileCabinet', resp)
     },
     [DOC_REQUEST_SUCCESS]: (state, resp) => { 
         state.doc.push(resp)

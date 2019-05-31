@@ -41,27 +41,27 @@ class NotifTestCase(TestCase):
         response = c.get('/api/users/1/notif/')
         self.assertEqual(response.status_code, 200)
     
-    def test_add_signature(self):
-        u = User.objects.create(
-            email="lol@mail.ru",
-            password="gag123456"
-        )
-        response = c.post('/api/docs', {
-            "title": "test.doc",
-            "user_id": u.id
-        })
-        c.post('/api/users/notif', {
-            "is_owner": False,
-            "is_signature_request": True,
-            "is_queue": True,
-            # "message": 'Вас просят подписать документ.',
-            "user_id": u.id,
-            "doc_id": 1
-        })
-        response = c.post('/api/users/notif/add_signature/', {
-            "id": 1
-        })
-        self.assertEqual(response.status_code, 200)
+    # def test_add_signature(self):
+    #     u = User.objects.create(
+    #         email="lol@mail.ru",
+    #         password="gag123456"
+    #     )
+    #     response = c.post('/api/docs', {
+    #         "title": "test.doc",
+    #         "user_id": u.id
+    #     })
+    #     c.post('/api/users/notif', {
+    #         "is_owner": False,
+    #         "is_signature_request": True,
+    #         "is_queue": True,
+    #         # "message": 'Вас просят подписать документ.',
+    #         "user_id": u.id,
+    #         "doc_id": 1
+    #     })
+    #     response = c.post('/api/users/notif/add_signature/', {
+    #         "id": 1
+    #     })
+    #     self.assertEqual(response.status_code, 200)
 
 class DocTestCase(TestCase):
     def setUp(self):
