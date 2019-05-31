@@ -87,17 +87,21 @@ export default {
 	},
 	methods: {
 		viewDoc() {
-			let url = '';
-			if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
-				if(this.type == "txt") {
-					url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file + ".txt";
+			try{
+				let url = '';
+				if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
+					if(this.type == "txt") {
+						url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file + ".txt";
+					} else {
+						url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
+					}
 				} else {
-					url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
+					url = this.doc.doc.file;
 				}
-			} else {
-				url = this.doc.doc.file;
+				window.open(url, "_blank");
+			} catch (e){
+				this.error = 'Ошибка. Что-то пошло не так.';
 			}
-			window.open(url, "_blank");
 		},
 		viewSign(){
 			if (this.error == "") {
@@ -120,7 +124,10 @@ export default {
 				link.setAttribute('download', title); //or any other extension
 				document.body.appendChild(link);
 				link.click();
-				this.error = ""
+				this.error = '';
+			})
+			.catch(err => {
+				this.error = 'Ошибка. Что-то пошло не так.';
 			});
 		},
 		downloadSign(){
