@@ -157,6 +157,7 @@ const actions = {
                     }
                 })
                 .then(resp => {
+                    dispatch(DOC_SIGNATURE, resp.data.id)
                     if(data.signature_request) {
                         data.signature_request.forEach((s, i) => {
                             console.log(s)
@@ -209,6 +210,7 @@ const actions = {
                 })
         })
     },
+    // ПОДПИСЫВАТЬ НАДО ПОДПИСЬ, ЕСЛИ ОНА УЖЕ ЕСТЬ
     [DOC_SIGNATURE]: ({ commit, dispatch, rootState }, id) => {
         return new Promise((resolve, reject) => {
             axios

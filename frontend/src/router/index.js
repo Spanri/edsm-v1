@@ -12,9 +12,7 @@ import NotFound from '@/components/NotFound'
 import Help from '@/components/Help'
 import store from '../store'
 import VeeValidate from 'vee-validate';
-import Vuetify from 'vuetify'
 
-Vue.use(Vuetify)
 Vue.use(Router)
 Vue.use(VeeValidate);
 

@@ -1,3 +1,4 @@
+from PIL import Image
 from rest_framework import status
 from django.core import exceptions
 from rest_framework.response import Response
@@ -77,10 +78,19 @@ class AddSignature(generics.ListAPIView):
         # Найти нужный документ
         doc = Doc.objects.get(id=self.kwargs['pk'])
 
+        # Найти нотиф, который с этим документом и
+        # пользователь - владелец документа
+        notifOwner = Notif.objects.get(
+            doc_id=doc.id,
+            status=0
+        )
+
         # Тут должна быть функция генерации подписи
         edc = EDC()
-        file = open("edc/test.txt", "r")
-        signature = edc.signFile(file, 'Emil')
+        path = doc.file
+        path = "edc/test.txt"
+        file = open(str(path), "r")
+        signature = edc.signFile(file, notifOwner.user.username)
 
         # Добавить подпись
         doc.signature = signature
