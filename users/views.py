@@ -42,7 +42,8 @@ class Index(TemplateView):
     Шаблон, показывает vue приложение на сервере.
     Права - нет.
     '''
-    template_name = "index.html"
+    # template_name = "index.html"
+    template_name = 'https://edms-mtuci.s3.amazonaws.com/static/index.html'
     permission_classes = ()
 
     def get_context_data(self):

@@ -8,6 +8,7 @@ import {
     DOC_FOLDER_PAGE,
     DOC_FOLDER_PAGE_PROFILE,
     DOC_UPLOAD,
+    DOC_DOWNLOAD,
     DOC_DELETE,
     DOC_SIGNATURE,
     DOC_REQUEST_SUCCESS,
@@ -203,11 +204,27 @@ const actions = {
                 })
                 .catch(err => {
                     try {
-                        reject(err.response.request.response)
+                        reject(err.response.request.response);
                     } catch (error) {
-                        reject(err)
+                        reject(err);
                     }
                 })
+        })
+    },
+    [DOC_DOWNLOAD]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            axios
+            .get(path + '/api/docs/download/' + id + '/')
+            .then((response) => {
+                resolve(response.data);
+            })
+            .catch(err => {
+                try {
+                    reject(err.response.request.response);
+                } catch (error) {
+                    reject(err);
+                }
+            });
         })
     },
     // ПОДПИСЫВАТЬ НАДО ПОДПИСЬ, ЕСЛИ ОНА УЖЕ ЕСТЬ

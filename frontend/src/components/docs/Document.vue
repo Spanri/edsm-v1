@@ -51,7 +51,7 @@
 <script>
 // import FileReader from 'vue-filereader'
 import { mapState } from 'vuex'
-import { DOC_REQUEST, DOCS_REQUEST, DOC_SIGNATURE, DOC_DELETE } from '../../store/mutation-types';
+import { DOC_REQUEST, DOCS_REQUEST, DOC_SIGNATURE, DOC_DELETE, DOC_DOWNLOAD } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 
 import axios from 'axios'
@@ -88,18 +88,20 @@ export default {
 	methods: {
 		viewDoc() {
 			try{
-				let url = '';
-				if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
-					// if(this.type == "txt") {
-					// 	url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file + ".txt";
-					// } else {
-					// 	url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
-					// }
-					url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
-				} else {
-					url = this.doc.doc.file;
-				}
-				window.open(url, "_blank");
+				this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
+				.then((response) => {
+					let url = '';
+					let path = 'https://edms-mtuci.herokuapp.com/' + response.file;
+					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
+						url = "https://docs.google.com/viewerng/viewer?url=" + path;  
+					} else {
+						url = path;
+					}
+					window.open(url, "_blank");
+				})
+				.catch(err => {
+					this.error = 'Ошибка. Что-то пошло не так.';
+				});
 			} catch (e){
 				this.error = 'Ошибка. Что-то пошло не так.';
 			}
@@ -114,20 +116,20 @@ export default {
 		download(){
 			this.error = "Скачивается..."
 			let title = this.doc.doc.title
-			axios({
-				url: this.doc.doc.file,
-				method: 'GET',
-				responseType: 'blob', // important
-			}).then((response) => {
-				const url = window.URL.createObjectURL(new Blob([response.data]));
+			this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
+			.then((response) => {
 				const link = document.createElement('a');
-				link.href = url;
+				link.href = response;
 				link.setAttribute('download', title); //or any other extension
 				document.body.appendChild(link);
 				link.click();
-				this.error = '';
+				this.error = 'Скачано!';
+				setTimeout(() => {
+					this.error = '';
+				}, 3000);
 			})
 			.catch(err => {
+				console.log(err)
 				this.error = 'Ошибка. Что-то пошло не так.';
 			});
 		},

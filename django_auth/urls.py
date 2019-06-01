@@ -20,6 +20,7 @@ from docs.views import (
     DocViewSet,
     FileCabinetViewSet,
     AddSignature,
+    DownloadFile,
 )
 
 # Создание пользователей, получение всего списка, получение 
@@ -35,6 +36,7 @@ router.register(r'^docs/fileCabinets', FileCabinetViewSet)
 urlpatterns = [
     url(r'^api/users/(?P<pk>.+)/notif/$', Notif2.as_view()),
     url(r'^api/docs/add_signature/(?P<pk>.+)/$', AddSignature.as_view()),
+    url(r'^api/docs/download/(?P<pk>.+)/$', DownloadFile.as_view()),
     url(r'^api/', include(router.urls)),
     url(r'^api/users/emails/$', GetEmails.as_view()),
     url(r'^api/users/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),
@@ -77,11 +79,5 @@ urlpatterns += [
 ]
 
 # Для файлов
-urlpatterns += static(
-    settings.STATIC_URL,
-    document_root=settings.STATIC_ROOT
-)
-urlpatterns += static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
+urlpatterns += static(settings.STATIC_URL)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
