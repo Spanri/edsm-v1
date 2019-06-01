@@ -1,6 +1,4 @@
-from __future__ import unicode_literals
 import os
-from .base import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -18,8 +16,8 @@ from corsheaders.defaults import default_methods
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Для статических файлов, Amazon S3
-AWS_ACCESS_KEY_ID = '***REMOVED***'
-AWS_SECRET_ACCESS_KEY = '***REMOVED***'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'edms-mtuci'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
@@ -116,15 +114,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # Для деплоймента
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static/')
-# STATIC_DIR = os.path.join(BASE_DIR, 'staticfiles/')
-# STATIC_URL = 'staticfiles/'
-STATICFILES_DIRS = (
-    # os.path.join(BASE_DIR, 'staticfiles/static/'),
-    os.path.join(BASE_DIR, 'frontend/dist/'),
-)
-MEDIA_ROOT = os.path.join(BASE_DIR, '')
-MEDIA_URL = '/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static/')
+# # STATIC_DIR = os.path.join(BASE_DIR, 'staticfiles/')
+# # STATIC_URL = 'staticfiles/'
+# STATICFILES_DIRS = (
+#     # os.path.join(BASE_DIR, 'staticfiles/static/'),
+#     os.path.join(BASE_DIR, 'frontend/dist/'),
+# )
+# MEDIA_ROOT = os.path.join(BASE_DIR, '')
+# MEDIA_URL = '/'
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
