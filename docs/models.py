@@ -1,14 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-from django_auth.storage_backends import MediaStorage
+from django_auth.storage_backends import MediaFilesStorage
 
 class FileCabinet(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
 
 class Doc(models.Model):
     title = models.CharField(max_length=100, blank=True, null=True)
-    file = models.FileField(storage=MediaStorage(), blank=True, null=True)
+    file = models.FileField(storage=MediaFilesStorage(), blank=True, null=True)
     # file = models.FileField(upload_to='', blank=True, null=True)
     size = models.IntegerField(blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
