@@ -125,7 +125,7 @@ export default {
             }
         },
         editProfile(){
-            this.eror = 'Профиль обновляется...'
+            this.error = 'Профиль обновляется...'
             try {
                 if(this.password1 && this.password1 != this.password2) {
                     this.error = 'Пароли не совпадают.'

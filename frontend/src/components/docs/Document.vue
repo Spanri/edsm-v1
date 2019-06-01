@@ -93,11 +93,11 @@ export default {
 				.then((response) => {
 					let url = '';
 					let path = 'https://edms-mtuci.herokuapp.com/' + response.file;
-					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
+					// if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
 						url = "https://docs.google.com/viewerng/viewer?url=" + path;  
-					} else {
-						url = path;
-					}
+					// } else {
+					// 	url = path;
+					// }
 					window.open(url, "_blank");
 					this.error = "Открылось!";
 					setTimeout(() => {
@@ -123,15 +123,29 @@ export default {
 			let title = this.doc.doc.title
 			this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
 			.then((response) => {
-				const link = document.createElement('a');
-				link.href = response;
-				link.setAttribute('download', title); //or any other extension
-				document.body.appendChild(link);
-				link.click();
-				this.error = 'Скачано!';
-				setTimeout(() => {
-					this.error = '';
-				}, 3000);
+				console.log('http://localhost:8000/' + response.file)
+				axios({
+					url: 'http://localhost:8000/' + response.file,
+					method: 'GET',
+					responseType: 'blob',
+				}).then((resp) => {
+					console.log(resp)
+					const url = window.URL.createObjectURL(new Blob([resp.data]));
+					const link = document.createElement('a');
+					link.href = url;
+					link.setAttribute('download', title);
+					document.body.appendChild(link);
+					link.click();
+					this.error = 'Скачано!';
+					this.error = url;
+					setTimeout(() => {
+						this.error = '';
+					}, 3000);
+				})
+				.catch(err => {
+					console.log(err)
+					this.error = 'Ошибка. Что-то пошло не так.';
+				});
 			})
 			.catch(err => {
 				console.log(err)
