@@ -162,6 +162,11 @@ class DownloadFile(generics.RetrieveAPIView):
         )
         print(str(doc.file))
         s3.meta.client.download_file(
-            'edms-mtuci', 'media/'+str(doc.file), 'staticfiles/media/'+str(doc.file))
+            'edms-mtuci', 
+            'media/'+str(doc.file), 
+            # 'staticfiles/media/'+str(doc.file)
+            str(doc.file)
+        )
         print(str(doc.file))
-        return Response({'file': 'media/'+str(doc.file)})
+        # return Response({'file': 'media/'+str(doc.file)})
+        return Response({'file': str(doc.file)})
