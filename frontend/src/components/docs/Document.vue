@@ -93,11 +93,11 @@ export default {
 				.then((response) => {
 					let url = '';
 					let path = 'https://edms-mtuci.herokuapp.com/' + response.file;
-					// if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
+					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
 						url = "https://docs.google.com/viewerng/viewer?url=" + path;  
-					// } else {
-					// 	url = path;
-					// }
+					} else {
+						url = path;
+					}
 					window.open(url, "_blank");
 					this.error = "Открылось!";
 					setTimeout(() => {
@@ -142,7 +142,6 @@ export default {
 					document.body.appendChild(link);
 					link.click();
 					this.error = 'Скачано!';
-					this.error = url;
 					setTimeout(() => {
 						this.error = '';
 					}, 3000);
