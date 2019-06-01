@@ -72,7 +72,6 @@
                         class="search-box"
                     ></textarea>
                     <p></p> Общий доступ <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="common">
-                    <p></p> Подписать <input class="checkbox" type="checkbox" name="selfSignature" true-value="1"  false-value="0" v-model="selfSignature">
                     <div style="height:35px;"></div>
                     <button type="submit" :class="{disabled: this.disable}">СОЗДАТЬ</button> <br>
                 </form>
