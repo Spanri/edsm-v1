@@ -160,6 +160,7 @@ class DownloadFile(generics.RetrieveAPIView):
             aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
             aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
         )
+        print(str(doc.file))
         s3.meta.client.download_file(
             'edms-mtuci', 'media/'+str(doc.file), 'staticfiles/media/'+str(doc.file))
         return Response({'file': 'media/'+str(doc.file)})

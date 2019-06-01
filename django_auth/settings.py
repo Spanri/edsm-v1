@@ -171,10 +171,9 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 #AWS S3 Static
 STATIC_URL = 'https://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
 # для автоматического collectstatic
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # для статики
 STATICFILES_LOCATION = 'static'
-STATICFILES_STORAGE = 'storage_backends.StaticStorage'
+# STATICFILES_STORAGE = 'storage_backends.StaticStorage'
 # для медиа
 MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
@@ -182,7 +181,7 @@ DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
 AWS_S3_FILE_OVERWRITE = False
 # from django_auth import storage_backends
 
-STATICFILES_DIRS = []
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/dist/'),]
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',

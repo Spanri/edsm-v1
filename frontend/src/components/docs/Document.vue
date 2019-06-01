@@ -105,10 +105,14 @@ export default {
 					}, 3000);
 				})
 				.catch(err => {
+					console.log(err)
 					this.error = 'Ошибка. Что-то пошло не так.';
+					this.error = err;
 				});
 			} catch (e){
+				console.log(e)
 				this.error = 'Ошибка. Что-то пошло не так.';
+				this.error = e;
 			}
 		},
 		viewSign(){
@@ -123,6 +127,7 @@ export default {
 			let title = this.doc.doc.title
 			this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
 			.then((response) => {
+				console.log(response)
 				console.log('https://edms-mtuci.herokuapp.com/' + response.file)
 				axios({
 					url: 'https://edms-mtuci.herokuapp.com/' + response.file,
