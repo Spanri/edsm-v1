@@ -1,4 +1,6 @@
+from __future__ import unicode_literals
 import os
+from .base import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -15,6 +17,14 @@ from corsheaders.defaults import default_methods
 # )
 CORS_ORIGIN_ALLOW_ALL = True
 
+# Для статических файлов, Amazon S3
+AWS_ACCESS_KEY_ID = '***REMOVED***'
+AWS_SECRET_ACCESS_KEY = '***REMOVED***'
+AWS_STORAGE_BUCKET_NAME = 'edms-mtuci'
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATIC_URL = 'http://s3.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME + '/'
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,6 +37,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_rest_passwordreset',
+    'storages',
     'users',
     'docs',
     
@@ -64,15 +75,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_auth.wsgi.application'
 
-
-# Database
+Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
