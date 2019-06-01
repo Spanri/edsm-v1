@@ -7,7 +7,8 @@ SECRET_KEY = 'klc=#bj7qm#iiz%1ru-6y3%guc5_e(hq+3hm3&65dg6%c%@(*y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+                 'edms-mtuci.s3.amazonaws.com']
 
 from corsheaders.defaults import default_methods
 # CORS_ORIGIN_WHITELIST = (
