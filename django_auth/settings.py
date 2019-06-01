@@ -182,7 +182,7 @@ DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
 AWS_S3_FILE_OVERWRITE = False
 # from django_auth import storage_backends
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/dist/'), ]
+STATICFILES_DIRS = []
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
