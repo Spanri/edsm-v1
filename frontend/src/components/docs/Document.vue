@@ -88,6 +88,7 @@ export default {
 	methods: {
 		viewDoc() {
 			try{
+				this.error = "Открывается..."
 				this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
 				.then((response) => {
 					let url = '';
@@ -98,6 +99,10 @@ export default {
 						url = path;
 					}
 					window.open(url, "_blank");
+					this.error = "Открылось!";
+					setTimeout(() => {
+						this.error = '';
+					}, 3000);
 				})
 				.catch(err => {
 					this.error = 'Ошибка. Что-то пошло не так.';
@@ -156,6 +161,9 @@ export default {
 					this.confirmFromApp = '';
 					this.confirm = '';
 					this.$store.dispatch(DOCS_REQUEST);
+					setTimeout(() => {
+						this.error = '';
+					}, 3000);
 				})
 				.catch(err=>{
 					console.log(err)
