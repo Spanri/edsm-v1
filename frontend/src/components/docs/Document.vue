@@ -90,11 +90,12 @@ export default {
 			try{
 				let url = '';
 				if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
-					if(this.type == "txt") {
-						url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file + ".txt";
-					} else {
-						url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
-					}
+					// if(this.type == "txt") {
+					// 	url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file + ".txt";
+					// } else {
+					// 	url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
+					// }
+					url = "https://docs.google.com/viewerng/viewer?url=" + this.doc.doc.file;  
 				} else {
 					url = this.doc.doc.file;
 				}

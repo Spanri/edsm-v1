@@ -24,9 +24,9 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 #AWS S3 Static
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_LOCATION = 'static'
-STATICFILES_STORAGE = 'custom_files_storage.StaticFilesStorage'
+STATICFILES_STORAGE = 'storage_backends.StaticFilesStorage'
 MEDIAFILES_LOCATION = 'media'
-MEDIAFILES_STORAGE = 'custom_files_storage.MediaFilesStorage'
+MEDIAFILES_STORAGE = 'storage_backends.MediaFilesStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATIC_URL = 'http://s3.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME + '/'
