@@ -10,7 +10,9 @@ from docs.serializers import (
 )
 from .permissions import (
     CustomIsAuthenticated,
-    CustomIsAuthenticated2
+    CustomIsAuthenticated2,
+    CustomIsAuthenticated3,
+    CustomIsAuthenticated4,
 )
 from .models import User, UserProfile, Notif
 from docs.models import Doc
@@ -206,7 +208,23 @@ class NotifViewSet(viewsets.ModelViewSet):
     serializer_class = NotifSerializer
     queryset = Notif.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (CustomIsAuthenticated,)
+    permission_classes = (CustomIsAuthenticated3,)
+
+class NotifIsRead(generics.ListAPIView):
+    '''
+    Представление для изменения свойства is_read.
+    Права - нет.
+    '''
+    serializer_class = NotifSerializer
+    queryset = Notif.objects.all()
+    permission_classes = (CustomIsAuthenticated4,)
+
+    def get_queryset(self):
+        u = User.objects.get(id=self.kwargs['pk1'])
+        n = Notif.objects.get(id=self.kwargs['pk2'])
+        n.is_read.add(u)
+        n.save()
+        return Notif.objects.filter(id=self.kwargs['pk2'])
 
 class UserFromTokenViewSet(viewsets.ModelViewSet):
     '''

@@ -81,6 +81,8 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
     doc = DocSerializer(required=False)
     user_id = serializers.IntegerField(write_only=True)
     doc_id = serializers.IntegerField(write_only=True)
+    is_read = UserSerializer(required=False, many=True)
+    is_read_id = UserSerializer(required=False, many=True)
 
     class Meta:
         model = Notif
@@ -88,9 +90,11 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
             'id',
             'user_id',
             'doc_id',
+            'is_read_id',
             'date',
             'status',
             'queue',
+            'is_read',
             'user',
             'doc'
         )
@@ -112,7 +116,7 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
                 nested_serializer.update(nested_instance, nested_data)
                 return nested_serializer.update(instance, validated_data)
             else:
-                return super(UserSerializer, self).update(instance, validated_data)
+                return super(NotifSerializer, self).update(instance, validated_data)
         except:
             content = {'error': 'Something else went wrong'}
             return Response(content, status=status.HTTP_404_NOT_FOUND)

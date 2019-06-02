@@ -1,5 +1,7 @@
 import { 
     DOCS_REQUEST,
+    DOC_EDIT_NOTIF,
+    DOC_EDIT_NOTIF_IS_READ,
     DOCS_FILTER,
     DOCS_FILTER_SUCCESS,
     DOCS_FILE_CABINET_CREATE,
@@ -11,6 +13,7 @@ import {
     DOC_DOWNLOAD,
     DOC_DELETE,
     DOC_SIGNATURE,
+    DOC_EDIT,
     DOC_REQUEST_SUCCESS,
     DOCS_FILE_CABINETS,
     DOCS_FILE_CABINET,
@@ -50,6 +53,8 @@ const actions = {
                         d.full_name = d.user.profile.full_name
                         d.title = d.doc.title;
                         d.date_doc = d.doc.date;
+                        d.date_notif = d.date;
+                        d.fileCabinet = d.doc.fileCabinet.name;
                     });
                     commit(DOCS_SUCCESS, resp.data);
                     dispatch(DOCS_FILTER)
@@ -65,6 +70,53 @@ const actions = {
                     reject(err)
                 }
             })
+        })
+    },
+    [DOC_EDIT_NOTIF]: ({ commit, dispatch, rootState }, data) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .patch(path + '/api/users/notif/' + data.id, data.data, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(resp => {
+                    try {
+                        dispatch(DOCS_REQUEST)
+                        resolve(resp.data);
+                    } catch (err) {
+                        console.log(err)
+                    }
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOC_EDIT_NOTIF_IS_READ]: ({ commit, dispatch, rootState }, data) => {
+        return new Promise((resolve, reject) => {
+            console.log('data hide', data)
+            axios
+                .get(path + '/api/users/' + data.user + '/notif/' + data.notif + '/is_read/', {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(resp => {
+                    try {
+                        dispatch(DOCS_REQUEST)
+                        resolve(resp.data);
+                    } catch (err) {
+                        console.log(err)
+                    }
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
         })
     },
     [DOCS_FILTER]: ({ commit, dispatch, rootState }) => {
@@ -147,10 +199,8 @@ const actions = {
                 })
         })
     },
-    // РЕШИТЬ, ДОБАВЛЯТЬ ЛИ ПРАВА
     [DOC_UPLOAD]: ({commit, dispatch, rootState}, data) => {
         return new Promise((resolve, reject) => {
-            console.log(data)
             axios
                 .post(path + '/api/docs/i',
                     data.d, { headers: {
@@ -167,10 +217,7 @@ const actions = {
                                     doc_id: resp.data.id,
                                     user_id: s.id,
                                     status: i == 0 ? 2 : 1,
-                                    // is_owner: false,
-                                    // is_signature_request: true,
                                     queue: i,
-                                    // is_queue: i==0 ? true : false
                                 })
                                 .catch(err => {
                                     try {
@@ -187,8 +234,6 @@ const actions = {
                                     doc_id: resp.data.id,
                                     user_id: s.id,
                                     status: 5,
-                                    // is_owner: false,
-                                    // is_signature_request: false
                                 })
                                 .catch(err => {
                                     try {
@@ -261,34 +306,27 @@ const actions = {
                 })
         })
     },
-    // [DOC_REQUEST]: ({commit, dispatch}, id) => {
-    //     return new Promise((resolve, reject) => {
-    //         // axios
-    //         // .post(`http://127.0.0.1:8000/api/docs`, {
-    //         //     "id" : id
-    //         // })
-    //         // .then(response => {
-    //         //     commit(DOCS_SUCCESS, response)
-    //         // })
-    //         // .catch(resp => {
-    //         //     commit(DOC_ERROR)
-    //         // })
-    //         let response =
-    //         {
-    //             "id": 1,
-    //             "owner_id": 1,
-    //             "title": "Файл1",
-    //             "file": "http://localhost:8000/uVyuTHdBDN8.jpg",
-    //             "description": "gngfnfghjhg fdg terte t",
-    //             "date": "2019-05-12",
-    //             "common": true,
-    //             "signature": null
-    //         };
-    //         response.owner_name = response.user.profile.full_name
-    //         response.title = response.doc.title;
-    //         resolve(response)
-    //     })
-    // },
+    [DOC_EDIT]: ({ commit, dispatch, rootState }, data) => {
+        return new Promise((resolve, reject) => {
+            let id = data.id;
+            delete data.id;
+            axios
+                .patch(path + '/api/docs/i/' + id, data, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(res => {
+                    dispatch(DOCS_REQUEST)
+                    resolve(res)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
 }
 
 const mutations = {

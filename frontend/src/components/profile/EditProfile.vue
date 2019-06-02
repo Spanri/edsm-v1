@@ -10,14 +10,15 @@
                 <p>Выбрать новый аватар</p>
                 <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange" accept="image/*">
                 <p>{{upload}}</p>
-                <form @submit.prevent="editProfile">
+                <form @submit.prevent="">
                     <p>Пароль</p>
                     <MaxInput
                         v-model="password1"
                         type="password" 
-                        placeholder="Введите имя"
+                        placeholder="Введите новый пароль"
                         class="search-box"
                         autocomplete="false"
+                        @keyup.native="passwordValidation"
                         :max="50">
                     </MaxInput>
                     <div v-if="password1">
@@ -26,16 +27,18 @@
                             v-model="password2"
                             type="password" 
                             :max="50"
-                            placeholder="Введите пароль"
+                            placeholder="Повторите пароль"
+                            @keyup.native="passwordValidation"
                             class="search-box">
                         </MaxInput>
+                        <p v-if="passError" style="color: red;display:inline-block;margin:0;margin-left:5px;">{{passError}}</p>
                     </div>
                     <p>Имя</p>
                     <MaxInput
                         v-model="first_name"
                         type="text" 
                         :max="50"
-                        placeholder="Введите имя"
+                        placeholder="Введите новое имя"
                         class="search-box">
                     </MaxInput>
                     <p>Фамилия</p>
@@ -43,7 +46,7 @@
                         v-model="second_name"
                         type="text" 
                         :max="50"
-                        placeholder="Введите фамилию"
+                        placeholder="Введите новую фамилию"
                         class="search-box"
                         @keydown="onKeyDown">
                     </MaxInput>
@@ -52,7 +55,7 @@
                         v-model="patronymic"
                         type="text" 
                         :max="50"
-                        placeholder="Введите отчество"
+                        placeholder="Введите новое отчество"
                         class="search-box">
                     </MaxInput>
                     <p>Должность</p>
@@ -60,11 +63,11 @@
                         v-model="position"
                         type="text" 
                         :max="200"
-                        placeholder="Введите должность"
+                        placeholder="Введите новую должность"
                         class="search-box">
                     </MaxInput>
                     <div style="height:35px;"></div>
-                    <button type="submit">РЕДАКТИРОВАТЬ</button> <br>
+                    <button type="button" @click="editProfile()">РЕДАКТИРОВАТЬ</button> <br>
                 </form>
             </div>
         </div>
@@ -90,6 +93,7 @@ export default {
             position: '',
             image: '',
             error: '',
+            passError: '',
             upload: '',
 		}
     },
@@ -120,26 +124,32 @@ export default {
         onKeyDown(evt){
             if (this.second_name.length >= 50) {
                 evt.preventDefault();
-                console.log('keydown');
                 return
             }
         },
+        passwordValidation(evt){
+            if(this.password1 && this.password1 != this.password2) {
+                this.passError = 'Пароли не совпадают.'
+                return;
+            } else {
+                this.passError = '';
+            }
+        },
         editProfile(){
-            this.error = 'Профиль обновляется...'
             try {
                 if(this.password1 && this.password1 != this.password2) {
-                    this.error = 'Пароли не совпадают.'
+                    this.error = 'Форма заполнена неверно.'
                     return;
                 } else {
-                    this.error = '';
+                    this.passError = '';
                 }
+                this.error = 'Профиль обновляется...'
                 if(this.file){
                     this.$store.dispatch(USER_UPDATE_IMAGE, {
                         token: this.$store.getters.token, 
                         data: this.file
                     })
                     .then(resp => {
-                        // console.log(resp)
                         this.error = 'Данные профиля изменены.';
                         this.file = '';
                     })
@@ -156,10 +166,8 @@ export default {
                 if(this.second_name) data.profile.second_name = this.second_name;
                 if(this.patronymic) data.profile.patronymic = this.patronymic;
                 if(this.position) data.profile.position = this.position;
-                console.log(data)
                 if('first_name' in data.profile || 'password' in data || 'second_name' in data.profile 
                         || 'patronymic' in data.profile || 'position' in data.profile){
-                    console.log('data')
                     this.$store.dispatch(USER_UPDATE, {
                         token: this.$store.getters.token,
                         data
@@ -199,7 +207,7 @@ export default {
 	margin-bottom: 30px;
 }
 /* Поля ввода */
-.editProfile textarea, .editProfile [type]:not([type="submit"]):not([type="file"]){
+.editProfile textarea, .editProfile [type]:not([type="button"]):not([type="file"]){
 	border: 0;
 	margin: 0 auto;
     height: 30px;
@@ -209,7 +217,7 @@ export default {
     background: rgb(223, 243, 253);
 }
 /* Кнопки ЗАГРУЗИТЬ и СОЗДАТЬ */
-.editProfile button, .editProfile input[type="submit"], .fileContainer{
+.editProfile button, .editProfile input[type="button"], .fileContainer{
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;

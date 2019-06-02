@@ -16,7 +16,6 @@ def change_image(post_object):
     except:
         pass
 
-
 def delete_image(sender, **kwargs):
     '''
     функция удаления изображений при удалении объектов
@@ -31,6 +30,10 @@ def delete_image(sender, **kwargs):
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=255, blank=True, null=True)
+    # notif_is_read = serializers.HyperlinkedRelatedField(
+    #     many=True, read_only=True,
+    #     view_name='notif_is_read'
+    # )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -63,3 +66,4 @@ class Notif(models.Model):
     status = models.IntegerField(blank=True, null=True)
     date = models.DateField(blank=True, null=True)
     queue = models.IntegerField(blank=True, null=True)
+    is_read = models.ManyToManyField(User, related_name="notif_is_read")

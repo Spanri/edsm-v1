@@ -69,9 +69,8 @@
                     <textarea
                         v-model="description" 
                         placeholder="Опишите документ"
-                        class="search-box"
                     ></textarea>
-                    <p></p> Общий доступ <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="common">
+                    <p></p> Общий доступ <input type="checkbox" name="common" true-value="1"  false-value="0" v-model="common">
                     <div style="height:35px;"></div>
                     <button type="submit" :class="{disabled: this.disable}">СОЗДАТЬ</button> <br>
                 </form>
@@ -104,7 +103,7 @@ export default {
             selfSignature: 0,
             error: null,
             file:'',
-            disable: false,
+            disable: true,
             fileCabinets: [],
             fileCabinet: '',
 		}
@@ -113,7 +112,7 @@ export default {
         this.$store.dispatch(USERS_EMAILS)
         .then(resp=>{
             this.users = resp.filter(r => r.id != this.$store.getters.getProfile.id)
-            console.log(this.users)
+            // console.log(this.users)
         })
         this.fileCabinets = this.$store.getters.getFileCabinets;
         this.fileCabinet = this.$store.getters.getFileCabinet;
@@ -128,6 +127,7 @@ export default {
             this.typeFile = typeFile[typeFile.length-1];
             this.title = files[0].name.replace("." + this.typeFile, "");
             this.file = files[0];
+            this.disable = false;
             // console.log(files[0].size/1024/1024 + " мб")
         },
         blobToFile(theBlob, fileName) {
@@ -166,7 +166,7 @@ export default {
             }
         },
         deleteSelectedUser(i, item){
-            console.log(item)
+            // console.log(item)
             if(i==1){
                 this.selectedUsers = this.selectedUsers.filter(el => {
                     return el != item;
@@ -190,7 +190,7 @@ export default {
                     {type: this.file.type}
                 );             
                 d.append('file', newFile);
-                console.log(this.file.size)
+                // console.log(this.file.size)
                 d.append('size', this.file.size);
             }
             d.append('user_id', this.$store.getters.getProfile.id);
@@ -210,7 +210,7 @@ export default {
                     this.error = "Загружено!"
                     this.$router.push({
                         name: 'document',
-                        params: { id: resp.id }
+                        params: { id: resp.id.toString() }
                     })
                 })
                 .catch(e => {

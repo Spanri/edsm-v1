@@ -76,26 +76,14 @@ export default {
     computed: {
         ...mapGetters({
             getProfile: 'getProfile',
-            getDocs: 'getDocs'
+            getDocsOld: 'getDocsOld'
         }),
         title(){
             return 'Открыть профиль\n' + this.getProfile.email;
         },
         notif(){
-            // return this.getDocs
-            //     .filter(d =>
-            //         (
-            //             !d.is_owner && 
-            //             d.is_signature_request && 
-            //             d.is_signature && 
-            //             d.user.id != this.getProfile.id &&
-            //             d.is_show_notif
-            //         ) || (
-            //             !d.is_owner && 
-            //             d.is_signature_request && 
-            //             !d.is_signature
-            //         )
-            //     ).length;
+            return this.getDocsOld
+                .filter(d => d.status == 3 || d.status == 2).length;
         },
         notifColor(){
             if(this.notifHover){

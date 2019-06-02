@@ -2,6 +2,19 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 import uuid
+from django.db.models.signals import post_save, post_delete
+
+def delete_doc(sender, **kwargs):
+    '''
+    функция удаления документов при удалении объектов
+    '''
+    try:
+        object_ = kwargs.get('instance')
+        storage, path = object_.file.storage, object_.file.path
+        print(path)
+        storage.delete(path)
+    except:
+        pass
 
 class FileCabinet(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
@@ -16,3 +29,5 @@ class Doc(models.Model):
     signature = models.CharField(max_length=255, blank=True, null=True)
     fileCabinet = models.ForeignKey(FileCabinet, related_name="doc",
                                     on_delete=models.CASCADE, default=1)
+
+    post_delete.connect(receiver=delete_doc)

@@ -12,8 +12,16 @@ from users.serializers import (
     UserSerializer,
     NotifSerializer
 )
-from users.models import Notif
-from .permissions import CustomIsAuthenticated
+from users.models import (
+    Notif,
+    User
+)
+from .permissions import (
+    CustomIsAuthenticated,
+    CustomIsAuthenticated2,
+    CustomIsAuthenticated3,
+    CustomIsAuthenticated4,
+)
 from .models import (
     Doc,
     FileCabinet
@@ -28,16 +36,20 @@ from rest_framework import (
 from edc.EDC import EDC
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
+import datetime
 
 class DocViewSet(viewsets.ModelViewSet):
     '''
+    Универсальное представление для работы с документами.
     При создании документа обязательно указывать user_id, потому 
     что создается еще запись Notif, где есть созданный документ и 
     указанный пользователь в user_id.
+    Права - админ или владелец.
     '''
     serializer_class = DocSerializer
     queryset = Doc.objects.all()
-    permission_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated,)
 
     def list(self, request):
         queryset = Doc.objects.filter(common=True)
@@ -45,6 +57,7 @@ class DocViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
+        now = datetime.datetime.now()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -53,6 +66,7 @@ class DocViewSet(viewsets.ModelViewSet):
                 user_id=request.data["user_id"], 
                 doc_id=serializer.data["id"],
                 status=0,
+                date=now.strftime("%Y-%m-%d")
             )
         except Exception as e:
             raise exceptions.ValidationError(str(e))
@@ -65,7 +79,8 @@ class FileCabinetViewSet(viewsets.ModelViewSet):
     '''
     serializer_class = FileCabinetSerializer
     queryset = FileCabinet.objects.all()
-    permission_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated4,)
 
 class AddSignature(generics.ListAPIView):
     '''
@@ -74,7 +89,8 @@ class AddSignature(generics.ListAPIView):
     '''
     serializer_class = DocSerializer
     queryset = Doc.objects.all()
-    permission_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated2,)
 
     def get_queryset(self):
         # Найти нужный документ
@@ -122,7 +138,7 @@ class AddSignature(generics.ListAPIView):
                 doc_id=doc.id,
                 status=2
             )
-            # notif.status = 3
+            notif.status = 3
             notif.save()
         except Exception as e:
             raise exceptions.ValidationError(str(e))
@@ -151,7 +167,8 @@ class DownloadFile(generics.RetrieveAPIView):
     '''
     serializer_class = DocSerializer
     queryset = Doc.objects.all()
-    permission_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated3,)
 
     def get(self, request, pk):
         doc = Doc.objects.get(id=self.kwargs['pk'])

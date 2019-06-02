@@ -7,6 +7,7 @@ import EditProfile from '@/components/profile/EditProfile'
 import Grid from '@/components/addit/Grid'
 import Adm from '@/components/profile/Adm'
 import Document from '@/components/docs/Document'
+import EditDocument from '@/components/docs/EditDocument'
 import AddDoc from '@/components/docs/AddDoc'
 import NotFound from '@/components/NotFound'
 import Help from '@/components/Help'
@@ -97,6 +98,14 @@ const router = new Router({
 			beforeEnter: ifAuthenticated,
 		},
 		{
+			path: '/document/:id/edit',
+			name: 'editDocument',
+			meta: { title: 'Редактировать документ, СЭД МТУСИ' },
+			component: EditDocument,
+			props: true,
+			beforeEnter: ifAuthenticated,
+		},
+		{
 			path: '/profile',
 			redirect: '/profile/notif',
 			component: Profile,
@@ -112,7 +121,8 @@ const router = new Router({
 							{key: 'full_name', title: 'Инициатор'},
 							{key: 'title', title: 'Документ' },
 							{key: 'message', title: 'Сообщение'},
-							{key: 'date', title: 'Дата добавления'},
+							{key: 'date_notif', title: 'Дата добавления'},
+							{key: 'fileCabinet', title: 'Картотека' },
 						],
 					} 
 				},
@@ -130,11 +140,15 @@ const router = new Router({
 			],
 			beforeEnter: ifAuthenticated,
 		},
-		{ 
-			path: '*', 
-			meta: { title: 'Страница не найдена, СЭД МТУСИ' }, 
+		{
+			path: '/404',
+			meta: { title: 'Страница не найдена, СЭД МТУСИ' },
 			component: NotFound 
-		}
+		},
+		{ 
+			path: '*',
+			redirect: '/404',
+		},
 	]
 })
 

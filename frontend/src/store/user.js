@@ -110,7 +110,6 @@ const actions = {
                     headers: { Authorization: "Token " + data.token }
                 })
                 .then(resp => {
-                    // console.log(resp)
                     commit(USER_SUCCESS, resp.data)
                     resolve(resp)
                 })
