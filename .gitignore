@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # media/
+passwords.txt
 
 # Editor directories and files
 .idea
