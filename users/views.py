@@ -210,9 +210,13 @@ class NotifViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated3,)
 
-class NotifIsRead(generics.ListAPIView):
+class NotifIsReadOrStatus4(generics.ListAPIView):
     '''
-    Представление для изменения свойства is_read.
+    Представление для изменения свойства is_read или 
+    выставления status в 4.
+    pk1 - user id
+    pk2 - notif id
+    pk3 - 0/1 (is_read/status)
     Права - нет.
     '''
     serializer_class = NotifSerializer
@@ -220,9 +224,12 @@ class NotifIsRead(generics.ListAPIView):
     permission_classes = (CustomIsAuthenticated4,)
 
     def get_queryset(self):
-        u = User.objects.get(id=self.kwargs['pk1'])
         n = Notif.objects.get(id=self.kwargs['pk2'])
-        n.is_read.add(u)
+        if self.kwargs['pk3'] == "0":
+            u = User.objects.get(id=self.kwargs['pk1'])
+            n.is_read.add(u)
+        if self.kwargs['pk3'] == "1":
+            n.status = 4
         n.save()
         return Notif.objects.filter(id=self.kwargs['pk2'])
 

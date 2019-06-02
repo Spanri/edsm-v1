@@ -63,7 +63,6 @@ import {
     DOC_FOLDER_PAGE_PROFILE,
     DOCS_FILTER,
     DOC_EDIT_NOTIF,
-    DOC_EDIT_NOTIF_IS_READ,
 } from '../../store/mutation-types'
 
 export default {
@@ -176,9 +175,10 @@ export default {
         },
         toDoc(entry){
             let id = this.getProfile.id;
-            this.$store.dispatch(DOC_EDIT_NOTIF_IS_READ, {
+            this.$store.dispatch(DOC_EDIT_NOTIF, {
                 user: id,
                 notif: entry.id,
+                pk3: 0,
             })
             .then(r => {
                 this.$store.dispatch(DOCS_REQUEST)
@@ -190,11 +190,11 @@ export default {
             })
         },
         hideNotif(j){
+            let id = this.getProfile.id;
             this.$store.dispatch(DOC_EDIT_NOTIF, {
-                id: this.filteredHeroes[j].id,
-                data: {
-                    status: 4
-                }
+                user: id,
+                notif: this.filteredHeroes[j].id,
+                pk3: 1,
             })
             .catch(err=>{
                 console.log(err)

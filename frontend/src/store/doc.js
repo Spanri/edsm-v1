@@ -74,32 +74,9 @@ const actions = {
     },
     [DOC_EDIT_NOTIF]: ({ commit, dispatch, rootState }, data) => {
         return new Promise((resolve, reject) => {
-            axios
-                .patch(path + '/api/users/notif/' + data.id, data.data, {
-                    headers: { Authorization: "Token " + rootState.auth.token }
-                })
-                .then(resp => {
-                    try {
-                        dispatch(DOCS_REQUEST)
-                        resolve(resp.data);
-                    } catch (err) {
-                        console.log(err)
-                    }
-                })
-                .catch(err => {
-                    try {
-                        reject(err.response.request.response)
-                    } catch (error) {
-                        reject(err)
-                    }
-                })
-        })
-    },
-    [DOC_EDIT_NOTIF_IS_READ]: ({ commit, dispatch, rootState }, data) => {
-        return new Promise((resolve, reject) => {
             console.log('data hide', data)
             axios
-                .get(path + '/api/users/' + data.user + '/notif/' + data.notif + '/is_read/', {
+                .get(path + '/api/users/' + data.user + '/notif/' + data.notif + '/' + data.pk3 +'/', {
                     headers: { Authorization: "Token " + rootState.auth.token }
                 })
                 .then(resp => {

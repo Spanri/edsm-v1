@@ -14,7 +14,7 @@ from users.views import (
     Index,
     ConfirmUpdatePasswordView,
     Notif2,
-    NotifIsRead,
+    NotifIsReadOrStatus4,
     GetEmails,
 )
 from docs.views import (
@@ -36,7 +36,8 @@ router.register(r'^docs/fileCabinets', FileCabinetViewSet)
 
 urlpatterns = [
     url(r'^api/users/(?P<pk>.+)/notif/$', Notif2.as_view()),
-    url(r'^api/users/(?P<pk1>.+)/notif/(?P<pk2>.+)/is_read/$', NotifIsRead.as_view()),
+    url(r'^api/users/(?P<pk1>.+)/notif/(?P<pk2>.+)/(?P<pk3>.+)/$',
+        NotifIsReadOrStatus4.as_view()),
     url(r'^api/docs/add_signature/(?P<pk>.+)/$', AddSignature.as_view()),
     url(r'^api/docs/download/(?P<pk>.+)/$', DownloadFile.as_view()),
     url(r'^api/', include(router.urls)),
