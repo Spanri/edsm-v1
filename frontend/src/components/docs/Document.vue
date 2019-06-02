@@ -194,8 +194,8 @@ export default {
 			let title = this.doc.doc.title
 			this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
 			.then((response) => {
-				console.log(response)
-				console.log('https://edms-mtuci.herokuapp.com/' + response.file)
+				// console.log(response)
+				// console.log('https://edms-mtuci.herokuapp.com/' + response.file)
 				axios({
 					url: 'https://edms-mtuci.herokuapp.com/' + response.file,
 					method: 'GET',

@@ -26,39 +26,45 @@
                     <select v-model="fileCabinet">
                         <option v-for="(fileC,i) in fileCabinets" :key="i" :value="fileC">{{fileC.name}}</option>
                     </select>
-                    
-                    <p style="padding-bottom:10px">Запросить подпись: (не забудьте после выбора в выпадающем меню нажать кнопку "Добавить")</p>
-                    <div>
-                        <div v-for="(user) in selectedUsers" :key="user.id" style="margin-bottom: 15px">
-                            <p class="selectedUser">{{user.full_name}} - {{user.position}}</p>
-                            <svg class="deleteSelectedUser" @click="deleteSelectedUser(1, user)" height="21px" viewBox="0 0 31 32" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                <g id="Cancel" stroke="#347090" stroke-width="1">
-                                    <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
-                                        fill="#121313" fill-rule="evenodd"/>
-                                    <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
-                                        fill="#121313" fill-rule="evenodd"/>
-                                </g>
-                            </svg>
+                    <div style="border: 1px solid #347090;border-radius:3px;padding:15px;margin-top:10px">
+                        <p style="margin-top:0px">Запросить подпись. Порядок выбранных пользователей можно менять перетаскиванием.</p>
+                        <draggable v-model="selectedUsers">
+                            <div v-for="user in selectedUsers" :key="user.id" class="selectedUserWithCancel">
+                                <p class="selectedUser">{{user.full_name}} - {{user.position}}</p>
+                                <svg class="deleteSelectedUser" @click="deleteSelectedUser(1, user)" height="21px" viewBox="0 0 31 32" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <g id="Cancel" stroke="#347090" stroke-width="1">
+                                        <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+                                            fill="#121313" fill-rule="evenodd"/>
+                                        <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+                                            fill="#121313" fill-rule="evenodd"/>
+                                    </g>
+                                </svg>
                             </div>
+                        </draggable>
                         <select v-model="selectedUser">
                             <option v-for="(user) in users" :key="user.id" :value="user">{{user.full_name}} - {{user.position}}</option>
                         </select>
                         <button type="button" @click="addUser(1)">ДОБАВИТЬ</button> <br>
                     </div>
-                    <p style="padding-bottom:10px">Пользователи, у которых были запрошены подписи, могут просматривать документ. 
-                        Добавить дополнительных пользователей, которые не должны подписывать документ, но могут его просматривать:</p>
-                    <div>
-                        <div v-for="(user) in selectedUsers2" :key="user.id" style="margin-bottom: 15px">
-                            <p class="selectedUser">{{user.full_name}} - {{user.position}}</p>
-                            <svg class="deleteSelectedUser" @click="deleteSelectedUser(2, user)" height="21px" viewBox="0 0 31 32" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                <g id="Cancel" stroke="#347090" stroke-width="1">
-                                    <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
-                                        fill="#121313" fill-rule="evenodd"/>
-                                    <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
-                                        fill="#121313" fill-rule="evenodd"/>
-                                </g>
-                            </svg>
+                    <div style="border: 1px solid #347090;border-radius:3px;padding:15px;margin-top:10px">
+                        <p style="margin-top:0">
+                            Пользователи, у которых были запрошены подписи, могут просматривать документ. 
+                            Ниже можно указать дополнительных пользователей, которые не должны подписывать документ, 
+                            но могут его просматривать. Порядок выбранных пользователей можно менять перетаскиванием.
+                        </p>
+                        <draggable v-model="selectedUsers2">
+                            <div v-for="user in selectedUsers2" :key="user.id" class="selectedUserWithCancel">
+                                <p class="selectedUser">{{user.full_name}} - {{user.position}}</p>
+                                <svg class="deleteSelectedUser" @click="deleteSelectedUser(2, user)" height="21px" viewBox="0 0 31 32" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <g id="Cancel" stroke="#347090" stroke-width="1">
+                                        <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+                                            fill="#121313" fill-rule="evenodd"/>
+                                        <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+                                            fill="#121313" fill-rule="evenodd"/>
+                                    </g>
+                                </svg>
                             </div>
+                        </draggable>
                         <select v-model="selectedUser2">
                             <option v-for="(user) in users" :key="user.id" :value="user">{{user.full_name}} - {{user.position}}</option>
                         </select>
@@ -85,10 +91,11 @@ import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
 import { DOC_UPLOAD, DOC_REQUEST, DOCS_REQUEST, USERS_EMAILS } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
+import draggable from 'vuedraggable'
 
 export default {
     name: 'account',
-    components: { Preview },
+    components: { Preview, draggable, },
     data () {
 		return {
             title: '',
@@ -98,6 +105,7 @@ export default {
             selectedUsers: [],
             selectedUser2: '',
             selectedUsers2: [],
+            selectedUsers20: [],
             users: [],
             common: 0,
             selfSignature: 0,
@@ -241,7 +249,8 @@ export default {
 	margin: 0 auto;
     padding: 10px;
     font-size: 13.5px;
-    min-width: 350px;
+    min-width: 900px;
+    max-width: 900px;
     background: rgb(223, 243, 253);
 }
 .addDoc select{
@@ -252,9 +261,27 @@ export default {
 }
 .addDoc .selectedUser{
     display:inline-block;
-    margin:0;
+    margin: 0;
+    padding:0;
     vertical-align:top;
     font-weight: 400;
+}
+.addDoc .selectedUserWithCancel{
+    background: rgb(223, 243, 253);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto;
+}
+.addDoc .selectedUserWithCancel:hover{
+    background: rgb(223, 243, 253);
+    cursor: pointer;
+}
+.addDoc .deleteSelectedUser{
+    padding: 0px;
+    padding-left: 5px;
 }
 /* Кнопки ЗАГРУЗИТЬ и СОЗДАТЬ */
 .addDoc button, .addDoc input[type="submit"] [type]:not([type="checkbox"]), .fileContainer{
@@ -283,11 +310,6 @@ export default {
 /**/
 .addDoc img{
     width: 110px;
-}
-/**/
-.addDoc .deleteSelectedUser{
-    padding: 0px;
-    padding-left: 5px;
 }
 /**/
 .addDoc input[type="checkbox"]{

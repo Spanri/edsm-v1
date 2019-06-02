@@ -110,7 +110,7 @@ export default {
                 let myDoc = h.status == 0 && h.user.id == this.getProfile.id
                 heroes[i].rowBackg = (hh.length != 0 || myDoc) ? "white" : "#dcdbfc"
             })
-            console.log(heroes)
+            // console.log(heroes)
             if (filterKey) {
                 heroes = heroes.filter(function (row) {
                     return Object.keys(row).some(function (key) {
