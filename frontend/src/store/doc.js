@@ -55,6 +55,11 @@ const actions = {
                         d.date_doc = d.doc.date;
                         d.date_notif = d.date;
                         d.fileCabinet = d.doc.fileCabinet.name;
+                        let dd = d.is_read.filter(d0 => {
+                            return d0.id == rootState.user.profile.id
+                        })
+                        let myDoc = d.status == 0 && d.user.id == rootState.user.profile.id
+                        d.rowBackg = (dd.length != 0 || myDoc) ? "white" : "#dcdbfc"
                     });
                     commit(DOCS_SUCCESS, resp.data);
                     dispatch(DOCS_FILTER)
@@ -181,11 +186,15 @@ const actions = {
             axios
                 .post(path + '/api/docs/i',
                     data.d, { headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: "Token " + rootState.auth.token
                     }
                 })
                 .then(resp => {
-                    dispatch(DOC_SIGNATURE, resp.data.id)
+                    dispatch(DOC_SIGNATURE, {
+                        id: resp.data.id,
+                        first: 1
+                    })
                     if(data.signature_request) {
                         data.signature_request.forEach((s, i) => {
                             console.log(s)
@@ -236,7 +245,9 @@ const actions = {
     [DOC_DOWNLOAD]: ({ commit, dispatch, rootState }, id) => {
         return new Promise((resolve, reject) => {
             axios
-            .get(path + '/api/docs/download/' + id + '/')
+            .get(path + '/api/docs/download/' + id + '/', {
+                headers: { Authorization: "Token " + rootState.auth.token }
+            })
             .then((response) => {
                 resolve(response.data);
             })
@@ -251,10 +262,12 @@ const actions = {
         })
     },
     // ПОДПИСЫВАТЬ НАДО ПОДПИСЬ, ЕСЛИ ОНА УЖЕ ЕСТЬ
-    [DOC_SIGNATURE]: ({ commit, dispatch, rootState }, id) => {
+    [DOC_SIGNATURE]: ({ commit, dispatch, rootState }, data) => {
         return new Promise((resolve, reject) => {
             axios
-                .get(path + '/api/docs/add_signature/' + id + '/')
+                .get(path + '/api/docs/add_signature/' + data.id + '/' + data.first + '/', {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
                 .then(resp => {
                     resolve(resp.data)
                 })

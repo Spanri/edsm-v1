@@ -30,10 +30,7 @@ def delete_image(sender, **kwargs):
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=255, blank=True, null=True)
-    # notif_is_read = serializers.HyperlinkedRelatedField(
-    #     many=True, read_only=True,
-    #     view_name='notif_is_read'
-    # )
+    is_get_notif_email = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 

@@ -7,6 +7,7 @@
             </div>
             <div style="margin-left:25px">
                 <p v-if="error" style="color: red">{{error}}</p>
+                <p></p>Получать уведомления на почту<input type="checkbox" name="common" true-value="true"  false-value="false" v-model="is_get_notif_email">
                 <p>Выбрать новый аватар</p>
                 <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange" accept="image/*">
                 <p>{{upload}}</p>
@@ -77,7 +78,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import { USER_UPDATE, USER_UPDATE_IMAGE, DOC_FOLDER_PAGE_PROFILE } from '../../store/mutation-types';
+import { USER_UPDATE, USER_REQUEST, USER_UPDATE_IMAGE, DOC_FOLDER_PAGE_PROFILE } from '../../store/mutation-types';
 import MaxInput from '@/components/addit/MaxInput'
 
 export default {
@@ -91,6 +92,7 @@ export default {
             second_name: '',
             patronymic: '',
             position: '',
+            is_get_notif_email: '',
             image: '',
             error: '',
             passError: '',
@@ -98,7 +100,8 @@ export default {
 		}
     },
     created(){
-        this.$store.commit(DOC_FOLDER_PAGE_PROFILE, 2)
+        this.$store.dispatch(USER_REQUEST)
+        this.is_get_notif_email = this.$store.getters.getProfile.is_get_notif_email;
     },
     methods: {
         onFileChange(e) {
@@ -162,31 +165,33 @@ export default {
                     profile: {}
                 }
                 if(this.password1) data.password = this.password1;
+                data.is_get_notif_email = this.is_get_notif_email;
                 if(this.first_name) data.profile.first_name = this.first_name;
                 if(this.second_name) data.profile.second_name = this.second_name;
                 if(this.patronymic) data.profile.patronymic = this.patronymic;
                 if(this.position) data.profile.position = this.position;
-                if('first_name' in data.profile || 'password' in data || 'second_name' in data.profile 
-                        || 'patronymic' in data.profile || 'position' in data.profile){
-                    this.$store.dispatch(USER_UPDATE, {
-                        token: this.$store.getters.token,
-                        data
-                    })
-                    .then(resp => {
-                        this.error = 'Данные профиля изменены.';
-                        this.password1 = '';
-                        this.password2 = '';
-                        this.first_name = '';
-                        this.second_name = '';
-                        this.patronymic = '';
-                        this.position = '';
-                    })
-                    .catch(err=>{
-                        this.error = 'Ошибка. Что-то пошло не так.'
-                    })
-                }
+                this.$store.dispatch(USER_UPDATE, {
+                    token: this.$store.getters.token,
+                    data
+                })
+                .then(resp => {
+                    this.error = 'Данные профиля изменены.';
+                    this.password1 = '';
+                    this.password2 = '';
+                    this.first_name = '';
+                    this.second_name = '';
+                    this.patronymic = '';
+                    this.position = '';
+                    setTimeout(() => {
+						this.error = '';
+					}, 3000);
+                })
+                .catch(err=>{
+                    this.error = 'Ошибка. Что-то пошло не так.'
+                })
             } catch (error) {
-                this.eror = 'Ошибка. Что-то пошло не так...'
+                console.log(error)
+                this.error = 'Ошибка. Что-то пошло не так...'
             }
         },
     }
@@ -207,7 +212,7 @@ export default {
 	margin-bottom: 30px;
 }
 /* Поля ввода */
-.editProfile textarea, .editProfile [type]:not([type="button"]):not([type="file"]){
+.editProfile textarea, .editProfile [type]:not([type="button"]):not([type="checkbox"]):not([type="file"]){
 	border: 0;
 	margin: 0 auto;
     height: 30px;
@@ -245,16 +250,14 @@ export default {
     width: 150px;
     margin: 0 auto;
 }
-.addDoc img:hover{
-    cursor: pointer;
-}
 /**/
-.addDoc input[type="checkbox"]{
+.editProfile input[type="checkbox"]{
     width: 15px;
     height: 15px;
+    margin-left: 15px;
 }
 /**/
-.addDoc .disabled{
+.editProfile .disabled{
     pointer-events: none;
     background: rgb(133, 133, 133) !important;
 }

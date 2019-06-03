@@ -107,18 +107,23 @@ class AddSignature(generics.ListAPIView):
         edc = EDC()
         path = 'https://edms-mtuci.s3.amazonaws.com/' + str(doc.file)
 
-        s3 = boto3.resource(
-            's3',
-            aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-        )
-        s3.meta.client.download_file(
-            'edms-mtuci', str(doc.file), str(doc.file))
+        try:
+            s3 = boto3.resource(
+                's3',
+                aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+            )
+            s3.meta.client.download_file(
+                'edms-mtuci',
+                'media/'+str(doc.file),
+                'staticfiles/media/'+str(doc.file)
+            )
+        except: pass
 
-        file = open(str(doc.file), 'rb')
+        file = open('staticfiles/media/' + str(doc.file), 'rb')
         signature = edc.signFile(file, notifOwner.user.username)
 
-        print('fo0', str(doc.file))
+        # print('fo0', str(doc.file))
         # first_object = s3.Object('edms-mtuci', str(doc.file))
         # print('fo', first_object)
 
@@ -131,31 +136,32 @@ class AddSignature(generics.ListAPIView):
         doc.signature = signature
         doc.save()
 
-        # Найти нотиф, который с этим документом и
-        # где очередь подписывать и изменить на "подписано"
-        try:
-            notif = Notif.objects.get(
-                doc_id=doc.id,
-                status=2
-            )
-            notif.status = 3
-            notif.save()
-        except Exception as e:
-            raise exceptions.ValidationError(str(e))
+        # Подпись ставит не владелец
+        if self.kwargs['first'] == '0':
+            # Найти нотиф, который с этим документом и
+            # где очередь подписывать и изменить на "подписано"
+            try:
+                notif = Notif.objects.get(
+                    doc_id=doc.id,
+                    status=2
+                )
+                notif.status = 3
+                notif.save()
+                # Найти следующий нотиф, который с этим документом и
+                # где очередь = очередь+1
+                try:
+                    notifNext = Notif.objects.get(
+                        doc_id=doc.id,
+                        status=1,
+                        queue=notif.queue+1
+                    )
+                    notifNext.status = 2
+                    notifNext.save()
+                except:
+                    pass
+            except Exception as e:
+                pass
 
-        # Найти следующий нотиф, который с этим документом и
-        # где очередь = очередь+1
-        try:
-            notifNext = Notif.objects.get(
-                doc_id=doc.id,
-                status=1,
-                queue=notif.queue+1
-            )
-            notifNext.status = 2
-            notifNext.save()
-        except:
-            pass
-        
         doc = Doc.objects.filter(id=self.kwargs['pk'])
         serializer = DocSerializer(doc)
         return doc
@@ -182,8 +188,6 @@ class DownloadFile(generics.RetrieveAPIView):
             'edms-mtuci', 
             'media/'+str(doc.file), 
             'staticfiles/media/'+str(doc.file)
-            # str(doc.file)
         )
         print(str(doc.file))
         return Response({'file': 'media/'+str(doc.file)})
-        # return Response({'file': str(doc.file)})

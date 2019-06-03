@@ -29,7 +29,7 @@ const getters = {
 }
 
 const actions = {
-    [USER_REQUEST]: ({commit, dispatch, rootState}, token) => {
+    [USER_REQUEST]: ({commit, dispatch, rootState}) => {
         return new Promise((resolve, reject) => {
             axios
             .get(path + '/api/users/get_user_from_token/', {

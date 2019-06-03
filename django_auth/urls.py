@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'^api/users/(?P<pk>.+)/notif/$', Notif2.as_view()),
     url(r'^api/users/(?P<pk1>.+)/notif/(?P<pk2>.+)/(?P<pk3>.+)/$',
         NotifIsReadOrStatus4.as_view()),
-    url(r'^api/docs/add_signature/(?P<pk>.+)/$', AddSignature.as_view()),
+    url(r'^api/docs/add_signature/(?P<pk>.+)/(?P<first>.+)/$', AddSignature.as_view()),
     url(r'^api/docs/download/(?P<pk>.+)/$', DownloadFile.as_view()),
     url(r'^api/', include(router.urls)),
     url(r'^api/users/emails/$', GetEmails.as_view()),

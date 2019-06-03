@@ -40,14 +40,18 @@ class CustomIsAuthenticated2(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_staff:
             return True
+        notifOwner = Notif.objects.get(
+            doc_id=view.kwargs['pk'],
+            status=0
+        )
         try:
             notif1 = Notif.objects.get(
                 doc_id=view.kwargs['pk'],
                 status=2
             )
-            return request.user.is_authenticated and notif1.user.id == request.user.id
+            return request.user.is_authenticated and (notif1.user.id == request.user.id or notifOwner.user.id == request.user.id)
         except: pass
-        return request.user and request.user.is_authenticated and request.user.is_staff
+        return request.user and request.user.is_authenticated and notifOwner.user.id == request.user.id
 
 class CustomIsAuthenticated3(permissions.BasePermission):
     '''

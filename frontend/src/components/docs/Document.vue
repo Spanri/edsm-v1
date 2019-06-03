@@ -17,12 +17,35 @@
 			<div style="margin-left:25px;margin-top:0px;">
 				<h3 class="header">{{title}}</h3>
 				<p v-if="error" style="color: red">{{error}}</p>
-				<p>Владелец: {{doc.user.profile.full_name}} ({{doc.user.email}})</p>
-				<p>Картотека: {{doc.doc.fileCabinet.name}} </p>
-				<p>Общий доступ: {{doc.doc.common ? 'да' : 'нет'}} </p>
-				<p>Дата добавления: {{doc.doc.date}} </p>
-				<p>Описание:</p>
-				<p> {{ doc.doc.description }}</p>
+				<table class="aboutDoc">
+					<thead><tr><th></th><th></th></tr></thead>
+					<tbody>
+						<tr>
+							<td>Регистрационный номер</td>
+							<td>{{doc.doc.id}}</td>
+						</tr>
+						<tr>
+							<td>Владелец</td>
+							<td>{{doc.user.profile.full_name}} ({{doc.user.email}})</td>
+						</tr>
+						<tr>
+							<td>Картотека</td>
+							<td>{{doc.doc.fileCabinet.name}}</td>
+						</tr>
+						<tr>
+							<td>Общий доступ</td>
+							<td>{{doc.doc.common ? 'да' : 'нет'}}</td>
+						</tr>
+						<tr>
+							<td>Дата добавления</td>
+							<td>{{doc.doc.date}}</td>
+						</tr>
+						<tr>
+							<td>Описание</td>
+							<td>{{ doc.doc.description }}</td>
+						</tr>
+					</tbody>
+				</table>
 				<div v-if="isPreConfirm" class="confirm">
 					<div style="display: grid;grid-template-columns: auto max-content;">
 						<div></div>
@@ -101,7 +124,7 @@
                         class="code">
 					<div class="confirmButtons">
 						<div></div>
-						<button @click="addSignature()">ПОДТВЕРДИТЬ</button>
+						<button type="submit">ПОДТВЕРДИТЬ</button>
 						<div></div>
 					</div>
 					<p v-if="errorConfirm" style="color: red;text-align: center;padding: 5px">{{errorConfirm}}</p>
@@ -252,7 +275,10 @@ export default {
 		addSignature(){
 			if (this.confirm == this.confirmFromApp) {
 				this.errorConfirm = 'Ставим подпись...'
-				this.$store.dispatch(DOC_SIGNATURE, this.id)
+				this.$store.dispatch(DOC_SIGNATURE, {
+					id: this.id,
+					first: 0
+				})
 				.then(resp => {
 					this.doc.status = 3;
 					this.isConfirm = false;
@@ -400,8 +426,21 @@ export default {
     background: white;
 }
 /* Файл, который загружается при отклонении подписи*/
-.cancelFile{
+.document .cancelFile{
 	margin: 15px;
 	margin-bottom: 0;
+}
+/* Таблица */
+.document table {
+    border-collapse: collapse;
+}
+.document table, .document tr{
+    border: rgb(223, 243, 253) 2px solid;
+	border-left: 0;
+	border-right: 0;
+    border-radius: 5px;
+}
+.document td{
+    padding: 7px 15px;
 }
 </style>
