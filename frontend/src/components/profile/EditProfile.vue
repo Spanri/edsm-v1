@@ -1,76 +1,73 @@
 <template>
 	<div class="editProfile">
-		<h3 class="header">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</h3>
-        <div class="editProfile2Colon">
-            <div>
-                <img :src="image || 'https://img.icons8.com/wired/512/000000/document.png'">
-            </div>
-            <div style="margin-left:25px">
-                <p v-if="error" style="color: red">{{error}}</p>
-                <p></p>Получать уведомления на почту<input type="checkbox" name="common" true-value="true"  false-value="false" v-model="is_get_notif_email">
-                <p>Выбрать новый аватар</p>
-                <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange" accept="image/*">
-                <p>{{upload}}</p>
-                <form @submit.prevent="">
-                    <p>Пароль</p>
+        <div>
+            <img :src="image || 'https://img.icons8.com/wired/512/000000/document.png'">
+        </div>
+        <div style="margin-left:25px">
+            <p v-if="error" style="color: red">{{error}}</p>
+            <p></p>Получать уведомления на почту<input type="checkbox" name="common" true-value="true"  false-value="false" v-model="is_get_notif_email">
+            <p>Выбрать новый аватар</p>
+            <input type="file" id="file" class="inputfile" ref="file" name="file" @change="onFileChange" accept="image/*">
+            <p>{{upload}}</p>
+            <form @submit.prevent="">
+                <p>Пароль</p>
+                <MaxInput
+                    v-model="password1"
+                    type="password" 
+                    placeholder="Введите новый пароль"
+                    class="search-box"
+                    autocomplete="false"
+                    @keyup.native="passwordValidation"
+                    :max="50">
+                </MaxInput>
+                <div v-if="password1">
+                    <p>Повторите пароль</p>
                     <MaxInput
-                        v-model="password1"
+                        v-model="password2"
                         type="password" 
-                        placeholder="Введите новый пароль"
-                        class="search-box"
-                        autocomplete="false"
+                        :max="50"
+                        placeholder="Повторите пароль"
                         @keyup.native="passwordValidation"
-                        :max="50">
-                    </MaxInput>
-                    <div v-if="password1">
-                        <p>Повторите пароль</p>
-                        <MaxInput
-                            v-model="password2"
-                            type="password" 
-                            :max="50"
-                            placeholder="Повторите пароль"
-                            @keyup.native="passwordValidation"
-                            class="search-box">
-                        </MaxInput>
-                        <p v-if="passError" style="color: red;display:inline-block;margin:0;margin-left:5px;">{{passError}}</p>
-                    </div>
-                    <p>Имя</p>
-                    <MaxInput
-                        v-model="first_name"
-                        type="text" 
-                        :max="50"
-                        placeholder="Введите новое имя"
                         class="search-box">
                     </MaxInput>
-                    <p>Фамилия</p>
-                    <MaxInput
-                        v-model="second_name"
-                        type="text" 
-                        :max="50"
-                        placeholder="Введите новую фамилию"
-                        class="search-box"
-                        @keydown="onKeyDown">
-                    </MaxInput>
-                    <p>Отчество</p>
-                    <MaxInput
-                        v-model="patronymic"
-                        type="text" 
-                        :max="50"
-                        placeholder="Введите новое отчество"
-                        class="search-box">
-                    </MaxInput>
-                    <p>Должность</p>
-                    <MaxInput
-                        v-model="position"
-                        type="text" 
-                        :max="200"
-                        placeholder="Введите новую должность"
-                        class="search-box">
-                    </MaxInput>
-                    <div style="height:35px;"></div>
-                    <button type="button" @click="editProfile()">РЕДАКТИРОВАТЬ</button> <br>
-                </form>
-            </div>
+                    <p v-if="passError" style="color: red;display:inline-block;margin:0;margin-left:5px;">{{passError}}</p>
+                </div>
+                <p>Имя</p>
+                <MaxInput
+                    v-model="first_name"
+                    type="text" 
+                    :max="50"
+                    placeholder="Введите новое имя"
+                    class="search-box">
+                </MaxInput>
+                <p>Фамилия</p>
+                <MaxInput
+                    v-model="second_name"
+                    type="text" 
+                    :max="50"
+                    placeholder="Введите новую фамилию"
+                    class="search-box"
+                    @keydown="onKeyDown">
+                </MaxInput>
+                <p>Отчество</p>
+                <MaxInput
+                    v-model="patronymic"
+                    type="text" 
+                    :max="50"
+                    placeholder="Введите новое отчество"
+                    class="search-box">
+                </MaxInput>
+                <p>Должность</p>
+                <MaxInput
+                    v-model="position"
+                    type="text" 
+                    :max="200"
+                    placeholder="Введите новую должность"
+                    class="search-box">
+                </MaxInput>
+                <div style="height:35px;"></div>
+                <button type="button" @click="editProfile()">РЕДАКТИРОВАТЬ</button> <br>
+            </form>
         </div>
 	</div>
 </template>
@@ -206,10 +203,9 @@ export default {
     margin: 0 auto;
 	background: white;
     padding: 25px;
-}
-.editProfile .header{
-    margin-top: 0;
-	margin-bottom: 30px;
+    padding-top: 0;
+    display: grid;
+    grid-template-columns: max-content auto;
 }
 /* Поля ввода */
 .editProfile textarea, .editProfile [type]:not([type="button"]):not([type="checkbox"]):not([type="file"]){
@@ -239,11 +235,6 @@ export default {
 /**/
 .editProfile form > p{
     margin-bottom: 5px;
-}
-/**/
-.editProfile2Colon{
-    display: grid;
-    grid-template-columns: max-content auto;
 }
 /**/
 .editProfile img{

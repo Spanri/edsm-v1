@@ -1,6 +1,5 @@
 <template>
 	<div class="profile">
-		<headerProfile></headerProfile>
 		<div class="mainProfile">
 			<div v-if="closeMenu" style="background:#ADE0FC;height:300px" @click="closeMenu = false" class="openCloseMenuButton">
 				<svg class="openCloseMenuButton" fill="#347090" enable-background="new 0 0 96 96" height="26px" viewBox="0 0 96 96" width="26px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -8,7 +7,7 @@
 				</svg>
 			</div>
 			<div v-if="!closeMenu">
-				<p>Моя почта: {{getProfile.email}}</p>
+				<headerProfile></headerProfile>
 				<div class="menuProfile">
 					<div style="margin-top:10px"></div>
 					<router-link class="router-link" :to="{ path: '/profile/notif', }">УВЕДОМЛЕНИЯ</router-link>

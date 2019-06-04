@@ -77,7 +77,7 @@
         </table>
         <hr>
         <a name="usersManage"></a>
-        <h3>Настройка прав пользователей</h3>
+        <h3>Управление пользователями</h3>
         <table>
             <thead>
                 <tr>
@@ -99,6 +99,16 @@
                                 </g>
                             </svg>
                         </div>
+                        <div class="editNotif" v-else-if="key.code=='is_get_notif_email'">
+                            {{entry[key.code]}}
+                            <svg @click="entry[key.code]=!entry[key.code];editNotif(entry)" class="editNotif2" width="42" height="22" xmlns="http://www.w3.org/2000/svg">
+                                <g>
+                                    <path id="svg_2" d="m9.27039,21.301735l21.915211,0c5.075562,0 9.204388,-4.656818 9.204388,-10.381443s-4.128826,-10.381445 -9.204388,-10.381445l-21.915211,0c-5.07556,0 -9.204386,4.65682 -9.204386,10.381445s4.128826,10.381443 9.204386,10.381443zm0,-19.774178l21.915211,0c4.59211,0 8.327774,4.213385 8.327774,9.392735s-3.735664,9.392735 -8.327774,9.392735l-21.915211,0c-4.592112,0 -8.327778,-4.213383 -8.327778,-9.392735s3.735666,-9.392735 8.327778,-9.392735z"/>
+                                    <path id="svg_3" v-if="!entry[key.code]" d="m10.851694,17.103909c3.539827,0 6.419889,-2.827057 6.419889,-6.301741s-2.880062,-6.301731 -6.419889,-6.301731s-6.419897,2.827055 -6.419897,6.301731s2.880064,6.301741 6.419897,6.301741zm0,-11.495476c2.917307,0 5.291121,2.33012 5.291121,5.193735s-2.373814,5.193739 -5.291121,5.193739s-5.291124,-2.330116 -5.291124,-5.193739s2.373245,-5.193735 5.291124,-5.193735z"/>
+                                    <path id="svg_8" v-if="entry[key.code]" d="m28.549137,17.339874c3.539829,0 6.419888,-2.827057 6.419888,-6.301739s-2.880058,-6.301733 -6.419888,-6.301733s-6.419895,2.827055 -6.419895,6.301733s2.880062,6.301739 6.419895,6.301739zm0,-11.495476c2.917309,0 5.291119,2.33012 5.291119,5.193737s-2.37381,5.193737 -5.291119,5.193737s-5.291126,-2.330116 -5.291126,-5.193737s2.373245,-5.193737 5.291126,-5.193737z"/>
+                                </g>
+                            </svg>
+                        </div>
                         <div v-else>
                             {{entry[key.code]}}
                         </div>
@@ -113,7 +123,7 @@
 import {
     AUTH_SIGNUP, 
     USERS_REQUEST, 
-    USER_UPDATE_STAFF, 
+    USER_UPDATE_OTHER,
     DOC_FOLDER_PAGE_PROFILE,
     DOCS_FILE_CABINET, 
     DOCS_FILE_CABINET_CREATE, 
@@ -147,6 +157,10 @@ export default {
                 {
                     name: 'Администратор',
                     code: 'is_staff'
+                },
+                {
+                    name: 'Уведомления на почту',
+                    code: 'is_get_notif_email'
                 },
             ],
         }
@@ -243,9 +257,18 @@ export default {
             }
         },
         editStaff(user){
-            this.$store.dispatch(USER_UPDATE_STAFF, {
+            this.$store.dispatch(USER_UPDATE_OTHER, {
                 id: user.id,
                 is_staff: user.is_staff
+            })
+            .catch(err=>{
+                this.error = 'Ошибка. Что-то пошло не так.'
+            })
+        },
+        editNotif(user){
+            this.$store.dispatch(USER_UPDATE_OTHER, {
+                id: user.id,
+                is_get_notif_email: user.is_get_notif_email
             })
             .catch(err=>{
                 this.error = 'Ошибка. Что-то пошло не так.'
@@ -329,12 +352,16 @@ export default {
     display: grid;
 	grid-template-columns: 1fr auto;
 }
-.adm .editStaff{
+.adm .editNotif{
+    display: grid;
+	grid-template-columns: 1fr auto;
+}
+.adm .editStaff, .adm .editNotif2{
     fill: #64b2db;
     vertical-align: text-bottom;
     text-align: right;
 }
-.adm .editStaff:hover{
+.adm .editStaff:hover, .adm .editNotif2:hover{
     cursor: pointer;
     fill: #347090;
 }

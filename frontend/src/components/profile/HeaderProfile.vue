@@ -1,18 +1,19 @@
 <template>
     <div class="headerProfileGradient">
         <div class="headerProfile">
-            <img class="avatar" :src="profile.photo">
-            <div v-if="profile.first_name">
-                <p style="font-size:20px;margin-bottom:0">
-					{{profile.second_name}}
-					{{profile.first_name}}
-					{{profile.patronymic}}
+            <img class="avatar" :src="profile.profile.photo">
+            <div v-if="profile.profile.first_name" class="rightPart">
+                <p style="margin-top:0;padding-top:7px">
+					{{profile.profile.second_name}} 
+					{{profile.profile.first_name}}
+					{{profile.profile.patronymic}}
 				</p>
-                <p style="font-size:16px;margin-top:2px">
-					{{profile.position}}
+                <p>
+					{{profile.profile.position}}
 				</p>
             </div>
         </div>
+		<p style="padding:15px;margin:0">Моя почта: {{profile.email}}</p>
     </div>
 </template>
 
@@ -23,7 +24,7 @@ export default {
 	name: 'headerProfile',
 	computed: {
 		profile: function(){
-			return this.$store.getters.getProfile.profile
+			return this.$store.getters.getProfile
 		}
 	},
 	methods: {
@@ -34,28 +35,33 @@ export default {
 
 <style>
 .headerProfileGradient{
-	background: radial-gradient(1448.86px at 0% 100%, #ADE0FC 0%, #93ADDF 53.65%, #DFB8FE 100%);
+	background: rgb(173,224,252);
+	background: linear-gradient(90deg, rgb(101, 189, 236) 0%, rgb(99, 138, 211) 50%, rgb(186, 125, 236) 100%);
+	color: white;
+	font-size: 16px;
+	margin-bottom: 20px;
+	max-width: 330px;
+	border-radius: 5px;
 }
 .headerProfile{
-	font-family: 'El Messiri', sans-serif;
-    max-width: 900px;
-	margin: auto;
-	color: white;
-	font-size: 18px;
+	padding: 15px;
+	padding-bottom: 0;
 	display: grid;
 	grid-template-columns: max-content auto;
 }
-.headerProfile p{
-	margin-top: 13px;
-	color: white;
-	font-size: 18px;
-}
-.avatar{
-	margin: 8px 30px;
+.headerProfileGradient .avatar{
+	margin: 8px 10px;
 	margin-left: 0;
     width: 70px;
     height: 70px;
 	background-color: white;
-    border-radius: 30%;
+    border-radius: 10px;
+}
+.headerProfileGradient .rightPart *{
+	max-width: 210px;
+	word-wrap: break-word;
+	margin: 0;
+	padding: 10px;
+	padding-bottom: 0;
 }
 </style>

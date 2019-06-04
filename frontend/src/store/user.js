@@ -8,7 +8,7 @@ import {
     USERS_EMAILS,
     // USER_NOTIF_REQUEST,
     USER_CHANGE_PASSWORD,
-    USER_UPDATE_STAFF,
+    USER_UPDATE_OTHER,
     USER_UPDATE_IMAGE,
     USER_NOTIF_R,
     path,
@@ -152,12 +152,12 @@ const actions = {
             })
         })
     },
-    [USER_UPDATE_STAFF]: ({commit, dispatch, rootState}, data) => {
+    [USER_UPDATE_OTHER]: ({commit, dispatch, rootState}, data) => {
         return new Promise((resolve, reject) => {
+            let id = data.id;
+            delete data.id;
             axios
-            .patch(path + '/api/users/i/'+data.id, {
-                "is_staff": data.is_staff
-            },{
+            .patch(path + '/api/users/i/'+ id, data, {
                 headers: { Authorization: "Token " + rootState.auth.token }
             })
             .catch(err => {

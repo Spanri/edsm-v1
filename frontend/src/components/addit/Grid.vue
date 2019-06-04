@@ -12,53 +12,48 @@
                 <input placeholder="Введите что-то" name="query" v-model="filterKey">
             </form>
             <p v-if="error" style="color: red;">{{error}}</p>
-            <div style="display: flex; align-items: flex-start">
-                <table class="showData">
-                    <thead>
-                        <tr>
-                            <th v-for="(key,i) in columns"
-                                :key="i"
-                                @click="sortBy(key.title)"
-                                :class="{ active: sortKey == key }">
-                                {{ key.title | capitalize }}
-                                <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-                                </span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(entry,j) in filteredHeroes" :key="j" @click="toDoc(entry)" :style="{background: entry.rowBackg}">
-                            <td v-for="(key,i) in columns" :key="i">
-                                {{entry[key.key]}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table style="border: white 3px solid;border-radius: 5px;" v-if="id == 'notif'">
-                    <thead>
-                        <tr>
-                            <th style="border:0;">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(entry,j) in filteredHeroes" :key="j">
-                            <td style="padding:0px">
-                                <div v-if="entry.status != 3" style="padding:7.5px;magrin:0;">&nbsp;</div>
-                                <svg v-if="entry.status == 3" @click="hideNotif(j);" style="margin:0;padding:7px;cursor:pointer;" height="17px" viewBox="0 0 33 33" width="18px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    <g id="Cancel" stroke="black" stroke-width="1">
-                                        <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
-                                            fill="#121313" fill-rule="evenodd"/>
-                                        <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
-                                            fill="#121313" fill-rule="evenodd"/>
-                                    </g>
-                                </svg>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th v-for="(key,i) in columns"
+                            :key="i"
+                            @click="sortBy(key.title)"
+                            :class="{ active: sortKey == key }">
+                            {{ key.title | capitalize }}
+                            <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+                            </span>
+                        </th>
+                        <th v-if="id == 'notif'" style="padding: 0px 9px;">
+                            <svg height="17px" viewBox="0 0 33 33" width="18px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <g id="Cancel" stroke="black" stroke-width="1">
+                                    <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                    <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                </g>
+                            </svg>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(entry,j) in filteredHeroes" :key="j" :style="styleObject(entry)" class="rowData">
+                        <td v-for="(key,i) in columns" :key="i" @click="i != 5 ? toDoc(entry) : ''">
+                            {{entry[key.key]}}
+                        </td>
+                        <td style="padding: 0px 2px;" v-if="id == 'notif'">
+                            <svg v-if="id == 'notif' && entry.status == 3" @click="hideNotif(j);" style="margin:auto;padding:7px;cursor:pointer;" height="17px" viewBox="0 0 33 33" width="18px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <g id="Cancel" stroke="black" stroke-width="1">
+                                    <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                    <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+                                        fill="#121313" fill-rule="evenodd"/>
+                                </g>
+                            </svg>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-		
 	</div>
 </template>
 
@@ -171,6 +166,9 @@ export default {
         }
     },
     methods: {
+        styleObject(entry) {
+            return {'--button-background-color': entry.rowBackg}
+        },
         sortBy(key) {
             this.sortKey = key
             this.sortOrders[key] = this.sortOrders[key] * -1
@@ -198,6 +196,9 @@ export default {
                 notif: this.filteredHeroes[j].id,
                 pk3: 1,
             })
+            .then(r => {
+                this.error = ''
+            })
             .catch(err=>{
                 console.log(err)
                 this.error = 'Ошибка. Что-то пошло не так.'
@@ -207,7 +208,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .grid{
 	width: 100%;
 	background: white;
@@ -219,17 +220,19 @@ export default {
 .grid table {
     border-collapse: collapse;
 }
-.grid .showData table, .grid .showData th, .grid .showData td{
-    border: #64b2db 2px solid;
-    border-radius: 5px;
+.grid table, .grid th, .grid td{
+    border: #64b2db 1px solid;
 }
 .grid td, .grid th{
     padding: 7px 15px;
 }
-.grid .showData th{
+.grid th{
     background: rgb(223, 243, 253);
 }
-.grid .showData tr:hover{
+.grid .rowData{
+    background: var(--button-background-color);
+}
+.grid .rowData:hover{
     cursor: pointer;
     background: rgb(223, 243, 253);
 }
