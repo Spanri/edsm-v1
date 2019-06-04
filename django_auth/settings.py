@@ -137,28 +137,28 @@ import django_heroku
 django_heroku.settings(locals())
 
 
-def create_bucket(bucket_name):
-    """ Create an Amazon S3 bucket
+# def create_bucket(bucket_name):
+#     """ Create an Amazon S3 bucket
 
-    :param bucket_name: Unique string name
-    :return: True if bucket is created, else False
-    """
+#     :param bucket_name: Unique string name
+#     :return: True if bucket is created, else False
+#     """
 
-    # Let's use Amazon S3
-    s3 = boto3.resource(
-        's3',
-        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-    )
-    for bucket in s3.buckets.all():
-        print(bucket.name)
-    try:
-        data = open('media/Ф123.doc', 'rb')
-        s3.Bucket(bucket_name).put_object(Key='Ф1234.doc', Body=data)
-    except ClientError as e:
-        logging.error(e)
-        return False
-    return True
+#     # Let's use Amazon S3
+#     s3 = boto3.resource(
+#         's3',
+#         aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+#         aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+#     )
+#     for bucket in s3.buckets.all():
+#         print(bucket.name)
+#     try:
+#         data = open('media/Ф123.doc', 'rb')
+#         s3.Bucket(bucket_name).put_object(Key='Ф1234.doc', Body=data)
+#     except ClientError as e:
+#         logging.error(e)
+#         return False
+#     return True
 
 # create_bucket('edms-mtuci')
 
