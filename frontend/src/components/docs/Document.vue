@@ -12,7 +12,7 @@
 		<div class="document2Colon">
 			<div>
 				<preview :typeFile="type"></preview>
-				<button style="margin-top:20px;margin-left:6px;background: rgb(243, 92, 92);" v-if="doc.status == 0" @click="deleteDoc()">УДАЛИТЬ</button>
+				<button style="margin-top:20px;margin-left:6px;background: rgb(243, 92, 92);" v-if="this.$store.getters.getProfile.is_staff || (doc.status == 0 && (doc.doc.common != true || doc.user.id == this.$store.getters.getProfile.id))" @click="deleteDoc()">УДАЛИТЬ</button>
 			</div>
 			<div style="margin-left:25px;margin-top:0px;">
 				<h3 class="header">{{title}}</h3>
@@ -176,6 +176,7 @@ export default {
 		this.type = typeFile[typeFile.length-1];
 		this.title = this.doc.doc.title.replace("." + this.type, "");
 		this.type = this.type.toLowerCase();
+		console.log(this.doc)
 	},
 	methods: {
 		viewDoc() {

@@ -126,6 +126,7 @@ export default {
             return heroes
         },
 		heroes() {
+            console.log(this.getDocs)
             if(this.$route.params.id == 'all'){
 			    return this.getDocs;
             } else if(this.$route.params.id == 'common') {
