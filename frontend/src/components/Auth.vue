@@ -131,7 +131,7 @@
 import {AUTH_REQUEST, USER_CONFIRM_UPDATE_PASSWORD, USER_CHANGE_PASSWORD} from '../store/mutation-types'
 
 export default {
-	name: 'main',
+	name: 'auth',
 	data () {
 		return {
 			email: null,
