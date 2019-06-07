@@ -185,7 +185,6 @@ export default {
             this.sortOrders[key] = this.sortOrders[key] * -1
         },
         toDoc(entry){
-            console.log(entry)
             if(entry.rowBackg == '#dcdbfc'){
                 let id = this.getProfile.id;
                 this.$store.dispatch(DOC_EDIT_NOTIF, {

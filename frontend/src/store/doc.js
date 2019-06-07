@@ -337,7 +337,9 @@ const actions = {
     [DOC_DELETE]: ({ commit, dispatch, rootState }, id) => {
         return new Promise((resolve, reject) => {
             axios
-                .delete(path + '/api/docs/i/' + id)
+                .delete(path + '/api/docs/i/' + id, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
                 .then(resp => {
                     resolve(resp.data)
                 })

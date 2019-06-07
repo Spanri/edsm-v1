@@ -312,7 +312,11 @@ export default {
 			console.log('repeatSignatures')
 		},
 		async deleteDoc(){
-			let res = await confirm('Вы уверены, что хотите удалить документ?', { title: 'Подтверждение' });
+			let res = await confirm(
+				'Вы уверены, что хотите удалить документ?\n'+
+				'Примечание: если вы запретите создание этого окна в настройках браузера, вы не сможете удалить документ.', 
+				{ title: 'Подтверждение' }
+			)
 			if (res) {
 				this.$store.dispatch(DOC_DELETE, this.id)
 				.then(resp => {
