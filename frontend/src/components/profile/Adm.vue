@@ -288,7 +288,7 @@ export default {
     padding-left: 60px;
 }
 /* Поле ввода */
-.adm input[type="email"], .adm input[type="text"]{
+input[type="email"], input[type="text"]{
 	border: 0;
 	margin: 0;
     height: 35px;
@@ -298,7 +298,7 @@ export default {
     background: rgb(223, 243, 253);
 }
 /* Кнопка СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ */
-.adm button{
+button{
 	border: 0;
     margin-top: 15px;
 	border-radius: 5px;
@@ -306,66 +306,66 @@ export default {
 	color: white;
 	background-color: #347090;
 }
-.adm button:hover{
+button:hover{
 	cursor: pointer;
 }
 /**/
-.adm input[type="checkbox"]{
+input[type="checkbox"]{
     height: 15px;
     width: 15px;
     margin: 0;
     vertical-align: middle;
 }
 /* Картотеки */
-.adm .fileCabinet{
+.fileCabinet{
     border: #347090 1px solid;
     border-bottom: 0;
     padding: 5px;
 }
-.adm .editNameFileCabinet{
+.editNameFileCabinet{
     display: grid;
 	grid-template-columns: 1fr auto;
 }
-.adm .editNameFileCabinet2{
+.editNameFileCabinet2{
     display: grid;
 	grid-template-columns: 1fr auto auto;
 }
 /**/
-.adm table {
+table {
     border-collapse: collapse;
     text-align: left;
 }
-.adm table, .adm th, .adm td{
+table, th, td{
     border: #64b2db 2px solid;
     border-radius: 5px;
 }
-.adm th{
+th{
     background: rgb(223, 243, 253);
 }
-.adm td, .adm th{
+td, th{
     padding: 7px 15px;
 }
-.adm .arrow{
+.arrow{
     display: inline-block;
 }
-.adm .editAdm{
+.editAdm{
     display: grid;
 	grid-template-columns: 1fr auto;
 }
-.adm .editNotif{
+.editNotif{
     display: grid;
 	grid-template-columns: 1fr auto;
 }
-.adm .editStaff, .adm .editNotif2{
+.editStaff, .editNotif2{
     fill: #64b2db;
     vertical-align: text-bottom;
     text-align: right;
 }
-.adm .editStaff:hover, .adm .editNotif2:hover{
+.editStaff:hover, .editNotif2:hover{
     cursor: pointer;
     fill: #347090;
 }
-.adm .fastLink a{
+.fastLink a{
     text-decoration: none;
 }
 /**/

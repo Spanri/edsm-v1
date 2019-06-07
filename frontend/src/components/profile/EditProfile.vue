@@ -195,7 +195,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .editProfile{
     height: 100%;
 	width: 100%;
@@ -208,7 +208,7 @@ export default {
     grid-template-columns: max-content auto;
 }
 /* Поля ввода */
-.editProfile textarea, .editProfile [type]:not([type="button"]):not([type="checkbox"]):not([type="file"]){
+textarea, [type]:not([type="button"]):not([type="checkbox"]):not([type="file"]){
 	border: 0;
 	margin: 0 auto;
     height: 30px;
@@ -218,7 +218,7 @@ export default {
     background: rgb(223, 243, 253);
 }
 /* Кнопки ЗАГРУЗИТЬ и СОЗДАТЬ */
-.editProfile button, .editProfile input[type="button"], .fileContainer{
+button, input[type="button"], .fileContainer{
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
@@ -229,26 +229,26 @@ export default {
     font-size: 14px;
 	background-color: #347090;
 }
-.editProfile button:hover, .editProfile a:hover{
+button:hover, a:hover{
     cursor: pointer;
 }
 /**/
-.editProfile form > p{
+form > p{
     margin-bottom: 5px;
 }
 /**/
-.editProfile img{
+img{
     width: 150px;
     margin: 0 auto;
 }
 /**/
-.editProfile input[type="checkbox"]{
+input[type="checkbox"]{
     width: 15px;
     height: 15px;
     margin-left: 15px;
 }
 /**/
-.editProfile .disabled{
+.disabled{
     pointer-events: none;
     background: rgb(133, 133, 133) !important;
 }

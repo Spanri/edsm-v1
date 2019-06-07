@@ -7,18 +7,14 @@
 
 <script>
 import Menu from '../components/Menu';
-import {DOCS_REQUEST, USER_REQUEST} from '../store/mutation-types'
 
 export default {
 	name: 'auth',
 	components: { Menu },
-	created(){
-
-	},
 }
 </script>
 
-<style>
+<style scoped>
 .maing{
     height: 100%;
 	width: 100%;

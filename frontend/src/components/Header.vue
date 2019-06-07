@@ -18,6 +18,7 @@
                     </g>
                 </svg>
                 <p>СЭД МТУСИ</p>
+                <!-- <avatar fullname="My Sticker" size="96"></avatar> -->
             </div>
             <div></div>
             <div class="header-right">
@@ -140,7 +141,7 @@ export default {
     color:white;
 }
 /* Логотип */
-.header .logo{
+.logo{
     margin: 14px;
     fill: white;
     color: white;
@@ -150,33 +151,33 @@ export default {
     display: grid;
     grid-template-columns: max-content max-content;
 }
-.header .logo:hover{
+.logo:hover{
     fill: #aaa9f8;
     color: #aaa9f8;
 }
-.header .logo > *{
+.logo > *{
     margin: 0;
     margin-right: 10px;
 }
-.header .logo:hover{
+.logo:hover{
     cursor: pointer;
 }
 /* Добавить документ, уведомления, профиль */
-.header .header-right{
+.header-right{
     display: inline-grid;
     grid-template-columns: repeat(3, max-content);
 }
-.header .header-right > .tasks, .header-right > .messages{
+.header-right > .tasks, .header-right > .messages{
     margin: 0px;
     margin-right: 10px;
     margin-left: 10px;
     padding: 0;
 }
-.header .header-right p{
+.header-right p{
     padding: 5px;
 }
 /* Профиль */
-.header .profile{
+.profile{
     margin: 10.5px;
     margin-left: 8px;
     margin-right: 20px;
@@ -186,44 +187,44 @@ export default {
     background-color: white;
     border-radius: 50%;
 }
-.header .profile:hover{
+.profile:hover{
     cursor: pointer;
     box-shadow: 0px 0px 10px 0px #aaa9f8;
 }
 /* Уведомления */
-.header .messages{
+.messages{
     display: inline-grid;
     grid-template-columns: repeat(2, max-content);
 }
 /*  */
-.header .registr{
+.registr{
     border: 0;
     padding: 7px;
     margin: 7px;
     background-color: #7cb0c1;
     color: white;
 }
-.header .registr:hover{
+.registr:hover{
     cursor: pointer;
     background-color: #aaa9f8;
     transition: background-color .3s ease-out;
 }
 /**/
-.header .icon{
+.icon{
     font-size: 24px;
     font-weight: 700;
     margin: 12.5px;
     display: grid;
     grid-template-columns: max-content max-content;
 }
-.header .icon:hover{
+.icon:hover{
     cursor: pointer;
     color: #aaa9f8;
 }
-.header .icon:hover svg{
+.icon:hover svg{
     fill: #aaa9f8;
 }
-.header .icon div{
+.icon div{
     padding: 0px;
     margin: 0;
     margin-left: 2px;

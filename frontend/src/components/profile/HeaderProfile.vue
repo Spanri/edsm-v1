@@ -27,13 +27,10 @@ export default {
 			return this.$store.getters.getProfile
 		}
 	},
-	methods: {
-		
-	}
 }
 </script>
 
-<style>
+<style scoped>
 .headerProfileGradient{
 	background: rgb(173,224,252);
 	background: linear-gradient(90deg, rgb(101, 189, 236) 0%, rgb(99, 138, 211) 50%, rgb(186, 125, 236) 100%);
@@ -49,7 +46,7 @@ export default {
 	display: grid;
 	grid-template-columns: max-content auto;
 }
-.headerProfileGradient .avatar{
+.avatar{
 	margin: 8px 10px;
 	margin-left: 0;
     width: 70px;
@@ -57,7 +54,7 @@ export default {
 	background-color: white;
     border-radius: 10px;
 }
-.headerProfileGradient .rightPart *{
+.rightPart *{
 	max-width: 210px;
 	word-wrap: break-word;
 	margin: 0;

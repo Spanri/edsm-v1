@@ -36,7 +36,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(entry,j) in filteredHeroes" :key="j" :style="styleObject(entry)" class="rowData">
+                    <tr v-for="(entry,j) in filteredHeroes" :key="j" :style="styleObject(entry)" class="rowData" :class="{disabled: disable}">
                         <td v-for="(key,i) in columns" :key="i" @click="i != 5 ? toDoc(entry) : ''">
                             {{entry[key.key]}}
                         </td>
@@ -61,13 +61,15 @@
 import { mapGetters, mapState } from 'vuex'
 import {
     DOCS_REQUEST, 
-    DOC_REQUEST, 
+    DOC_UPDATE, 
     USER_REQUEST, 
     USER_NOTIF_REQUEST, 
     DOC_FOLDER_PAGE, 
     DOC_FOLDER_PAGE_PROFILE,
     DOCS_FILTER,
     DOC_EDIT_NOTIF,
+    DOC_REQUEST,
+    DOC_RELOAD,
 } from '../../store/mutation-types'
 
 export default {
@@ -89,9 +91,9 @@ export default {
             error: '',
         }
     },
-    created(){
-        this.$store.dispatch(USER_REQUEST)
-        this.$store.dispatch(DOCS_REQUEST)
+    async created(){
+        await this.$store.dispatch(DOCS_REQUEST)
+        await this.$store.dispatch(DOCS_FILTER)
     },
     computed: {
         ...mapGetters({
@@ -99,6 +101,9 @@ export default {
             getDocs: 'getDocs',
             getDocsOld: 'getDocsOld',
         }),
+        disable() {
+            return this.$store.getters.getReload;
+        },
         filteredHeroes() {
             var sortKey = ''
             var sortOrders = {}
@@ -126,23 +131,25 @@ export default {
             return heroes
         },
 		heroes() {
-            console.log(this.getDocs)
-            if(this.$route.params.id == 'all'){
-			    return this.getDocs;
-            } else if(this.$route.params.id == 'common') {
-                return this.getDocs
+            let id = this.$route.params.id;
+            // console.log(this.getDocs)
+            let output = [];
+            if(id == 'all'){
+			    output = this.getDocs;
+            } else if(id == 'common') {
+                output = this.getDocs
                 .filter(d => d.doc.common);
-            } else if(this.$route.params.id == 'myDocs') {
-                return this.getDocs.filter(d =>
+            } else if(id == 'myDocs') {
+                output = this.getDocs.filter(d =>
                     d.user.id == this.getProfile.id && 
                     d.status == 0
                 );
-            } else if(this.$route.params.id == 'signature-request') {
-                return this.getDocs.filter(d => d.status == 2);
-            } else if(this.$route.params.id == 'signature-success') {
-                return this.getDocs.filter(d => d.status == 6);
-            } else if(this.$route.params.id == 'available-to-me') {
-                return this.getDocs
+            } else if(id == 'signature-request') {
+                output = this.getDocs.filter(d => d.status == 2);
+            } else if(id == 'signature-success') {
+                output = this.getDocs.filter(d => d.status == 6);
+            } else if(id == 'available-to-me') {
+                output = this.getDocs
                 .filter(d => d.status == 5);
             } else if(this.id == 'notif') {
                 let docs = this.getDocsOld.filter(d => 
@@ -156,9 +163,12 @@ export default {
                         d.message = "Вас просят подписать документ."
                     }
                 })
-                return docs;
+                output = docs;
+            } else {
+                output = null;
             }
-            return null;
+            // this.disable = false;
+            return output;
 		}
     },
     filters: {
@@ -175,20 +185,34 @@ export default {
             this.sortOrders[key] = this.sortOrders[key] * -1
         },
         toDoc(entry){
-            let id = this.getProfile.id;
-            this.$store.dispatch(DOC_EDIT_NOTIF, {
-                user: id,
-                notif: entry.id,
-                pk3: 0,
-            })
-            .then(r => {
-                this.$store.dispatch(DOCS_REQUEST)
-                this.$router.push('/document/' + entry.doc.id);
-            })
-            .catch(err=>{
-                console.log(err)
-                this.error = 'Ошибка. Что-то пошло не так.'
-            })
+            console.log(entry)
+            if(entry.rowBackg == '#dcdbfc'){
+                let id = this.getProfile.id;
+                this.$store.dispatch(DOC_EDIT_NOTIF, {
+                    user: id,
+                    notif: entry.id,
+                    pk3: 0,
+                })
+                .then(r => {
+                    this.$store.dispatch(DOC_UPDATE, entry.id)
+                    .then(s => {
+                        this.$router.push('/document/' + entry.doc.id);
+                    })
+                })
+                .catch(err => {
+                    console.log(err)
+                    this.error = 'Ошибка. Что-то пошло не так.'
+                })
+            } else if(entry.rowBackg == "white") {
+                this.$store.dispatch(DOC_REQUEST, entry.id)
+                .then(r => {
+                    this.$router.push('/document/' + entry.doc.id);
+                })
+                .catch(err=>{
+                    console.log(err)
+                    this.error = 'Ошибка. Что-то пошло не так.'
+                })
+            }
         },
         hideNotif(j){
             let id = this.getProfile.id;
@@ -218,35 +242,33 @@ export default {
 	margin: 50px;
     margin-top: 35px;
 }
-.grid table {
+table {
     border-collapse: collapse;
 }
-.grid table, .grid th, .grid td{
+table, th, td{
     border: #64b2db 1px solid;
 }
-.grid td, .grid th{
+td, th{
     padding: 7px 15px;
 }
-.grid th{
+th{
     background: rgb(223, 243, 253);
 }
-.grid .rowData{
+.rowData{
     background: var(--button-background-color);
 }
-.grid .rowData:hover{
+.rowData:hover{
     cursor: pointer;
     background: rgb(223, 243, 253);
 }
-.grid .arrow{
+.arrow{
     display: inline-block;
 }
-.grid .search{
+.search{
     margin-top: 35px;
     margin-bottom: 35px;
 }
-.grid input{
-	/* border: #e0e0e0 3px solid; */
-    /* border-radius: 5px; */
+input{
     border: 0;
     background: rgb(223, 243, 253);
 	height: 30px;
@@ -255,5 +277,12 @@ export default {
 	margin-left: 0px;
 	padding-left: 15px;
 	padding-right: 15px;
+}
+/* Недоступность документов при обновлении данных */
+.disabled{
+    display: none;
+    /* pointer-events: none;
+    background: #d6d6d6;
+    color: #4e4848; */
 }
 </style>

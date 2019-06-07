@@ -7,7 +7,11 @@
         </div>
         <div v-if="!closeMenu" class="menuOpen">
             <div title="Скрыть" style="display: grid;grid-template-columns: 1fr auto;">
-                <div></div>
+                <!-- <p style="color: red;font-size:14px;">{{reload}}&nbsp;</p> -->
+                <p v-if="!reload">&nbsp;</p>
+                <svg v-if="reload" class="reload" version="1.1" viewBox="0 0 16 16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path d="M14,8c-0.609,0-0.898,0.43-1,0.883C12.635,10.516,11.084,13,8,13c-0.757,0-1.473-0.172-2.114-0.474L6.414,12  C6.773,11.656,7,11.445,7,11c0-0.523-0.438-1-1-1H3c-0.609,0-1,0.492-1,1v3c0,0.541,0.428,1,1,1c0.484,0,0.688-0.273,1-0.594  l0.408-0.407C5.458,14.632,6.685,15,8,15c4.99,0,7-4.75,7-5.938C15,8.336,14.469,8,14,8z M3,7.117C3.365,5.485,4.916,3,8,3  c0.757,0,1.473,0.171,2.114,0.473L9.586,4C9.227,4.344,9,4.555,9,5c0,0.523,0.438,1,1,1h3c0.609,0,1-0.492,1-1V2  c0-0.541-0.428-1-1-1c-0.484,0-0.688,0.273-1,0.594l-0.408,0.407C10.542,1.368,9.315,1,8,1C3.01,1,1,5.75,1,6.938  C1,7.664,1.531,8,2,8C2.609,8,2.898,7.57,3,7.117z"/>
+                </svg>
                 <svg class="openCloseMenuButton" style="margin-bottom:0px;margin-top:15px;margin-right:15px;" @click="closeMenu = true" height="21px" viewBox="0 0 31 32" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="Cancel" stroke="#347090" stroke-width="1">
                         <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
@@ -21,19 +25,24 @@
             <select v-model="fileCabinet" @change="onChange()">
                 <option v-for="(fileC) in fileCabinets" :key="fileC.id" :value="fileC">{{fileC.name}}</option>
             </select>
-            <router-link class="router-link" :to="{ path: '/documents/all', }">ВСЕ ДОКУМЕНТЫ</router-link>
-            <router-link class="router-link" :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
-            <router-link class="router-link" :to="{ path: '/documents/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
-            <router-link class="router-link" :to="{ path: '/documents/signature-request', }">НА ПОДПИСЬ</router-link>
-            <router-link class="router-link" :to="{ path: '/documents/signature-success', }">ПОДПИСАННОЕ</router-link>
-            <router-link class="router-link" :to="{ path: '/documents/available-to-me', }">ДОСТУПНЫ МНЕ</router-link>    
+            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/all', }">ВСЕ ДОКУМЕНТЫ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
+            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/signature-request', }">НА ПОДПИСЬ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/signature-success', }">ПОДПИСАННОЕ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/available-to-me', }">ДОСТУПНЫ МНЕ</router-link>    
         </div>
     </div>
 </template>
 
 <script>
 import { } from '../store/mutation-types'
-import {DOCS_FILE_CABINET, DOCS_REQUEST, DOCS_FILTER} from '../store/mutation-types'
+import {
+    DOCS_FILE_CABINET, 
+    DOCS_REQUEST, 
+    DOCS_FILTER, 
+    DOC_RELOAD,
+} from '../store/mutation-types'
 
 export default {
     name: 'Menu',
@@ -42,10 +51,13 @@ export default {
             fileCabinets: [],
             fileCabinet: '',
             closeMenu: false,
+            reload: '',
         }
     },
-    created(){
-        this.$store.dispatch(DOCS_FILTER)
+    async created(){
+        this.reload = true;
+        await this.$store.commit(DOC_RELOAD, true);
+        await this.$store.dispatch(DOCS_FILTER)
         let docs = this.$store.getters.getDocsOld;
         this.fileCabinets = this.$store.getters.getFileCabinets;
         let dfc = [];
@@ -61,12 +73,24 @@ export default {
         if (this.fileCabinet in this.fileCabinets === false) {
             this.fileCabinet = this.fileCabinets[0];
         }
+        this.reload = false;
+        await this.$store.commit(DOC_RELOAD, false);
     },
     methods: {
-        onChange() {
-            this.$store.commit(DOCS_FILE_CABINET, this.fileCabinet)
-            this.$store.dispatch(DOCS_FILTER)
+        async onChange(){
+            this.reload = true;
+            await this.$store.commit(DOCS_FILE_CABINET, this.fileCabinet)
+            await this.$store.dispatch(DOCS_FILTER)
+            this.reload = false;
         },
+        async goToFolder(){
+            this.reload = true;
+            await this.$store.commit(DOC_RELOAD, true);
+            await this.$store.dispatch(DOCS_REQUEST)
+            await this.$store.dispatch(DOCS_FILTER)
+            this.reload = false;
+            await this.$store.commit(DOC_RELOAD, false);
+        }
     },
 }
 </script>
@@ -80,25 +104,27 @@ export default {
     /* padding-top: 40px; */
 }
 /**/
-.menu .menuOpen{
+.menuOpen{
     min-width: 250px;
 }
-.menu .openCloseMenuButton{
+.openCloseMenuButton{
     margin: 5px;
 }
-.menu .openCloseMenuButton:hover, .menu .openCloseMenuButton:hover *{
+.openCloseMenuButton:hover, .openCloseMenuButton:hover *{
     cursor: pointer;
     fill:#7cb0c1;
 }
 /**/
-.menu a{
+a{
     text-decoration: none;
     color: #373737;
 }
-.menu .router-link-exact-active{
+.router-link-exact-active{
     background: #64b2db;
+    pointer-events: none;
+    cursor: default;
 }
-.menu .router-link{
+.router-link{
     font-size: 16px;
     color: #373737;
     padding: 11px 20px;
@@ -112,10 +138,10 @@ export default {
 	margin-right: 0;
 	display: block;
 }
-.menu .link > router-link:hover{
+.link > router-link:hover{
     cursor: pointer;
 }
-.menu select{
+select{
     margin: 25px;
     margin-top: 5px;
     padding: 6px;
@@ -123,13 +149,28 @@ export default {
     min-width: 250px;
     border: 1;
 }
-.menu select button{
+select button{
     border: 10px solid black;
 }
-.menu p{
+p{
     margin: 25px;
     margin-bottom: 0;
     font-weight: 500;
+}
+/**/
+.reload{
+    fill: white;
+    enable-background: new 0 0 16 16;
+    padding: 15px;
+    margin-left: 10px;
+    height: 20px;
+    width: 20px;
+    animation: spin 2s linear infinite;
+}
+@keyframes spin {
+    100% {
+        transform: rotate(360deg); 
+    }
 }
 /* @media (max-width: 500px) {
     .menu{

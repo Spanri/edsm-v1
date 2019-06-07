@@ -12,7 +12,7 @@
 					<div style="margin-top:10px"></div>
 					<router-link class="router-link" :to="{ path: '/profile/notif', }">УВЕДОМЛЕНИЯ</router-link>
 					<router-link class="router-link" :to="{ path: '/profile/edit', }">РЕДАКТИРОВАНИЕ ПРОФИЛЯ</router-link>
-					<router-link v-if="getProfile.is_staff" class="router-link" :to="{ path: '/profile/adm', }">АДМИНИСТРИРОВАНИЕ ПРОФИЛЕЙ</router-link>
+					<router-link v-if="getProfile.is_staff" class="router-link" :to="{ path: '/profile/adm', }">АДМИНИСТРИРОВАНИЕ</router-link>
 					<div style="height:15px;"></div>
 					<p class="router-link" @click="logout()">ВЫЙТИ</p>
 				</div>
@@ -62,7 +62,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .profile{
     height: 100%;
 	background: white;
@@ -83,7 +83,7 @@ export default {
 	border: #e0e0e0 3px solid;
 	border-radius: 5px;
 }
-.profile .router-link{
+.router-link{
 	padding: 10px 20px;
 	margin-top: 5px;
 	margin-bottom: 5px;
@@ -94,19 +94,19 @@ export default {
 	margin-right: 0;
 	display: block;
 }
-.profile .router-link:hover{
+.router-link:hover{
 	cursor: pointer;
 	color: #7cb0c1;
 }
 /**/
-.profile .router-link-exact-active{
+.router-link-exact-active{
 	background: rgb(223, 243, 253);
 }
 /**/
-.profile .openCloseMenuButton{
+.openCloseMenuButton{
     margin: 5px;
 }
-.profile .openCloseMenuButton:hover, .profile .openCloseMenuButton:hover *{
+.openCloseMenuButton:hover, .openCloseMenuButton:hover *{
     cursor: pointer;
 	color: #7cb0c1;
 	fill: #7cb0c1;

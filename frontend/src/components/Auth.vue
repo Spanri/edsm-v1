@@ -255,36 +255,36 @@ export default {
 	display: grid;
     grid-template-columns: auto max-content auto;
 }
-.mainAuth .login{
+.login{
 	display: grid;
 	grid-template-rows: 1fr max-content 2fr;
 }
 .mainAuth > *{
 	text-align: center;
 }
-.mainAuth .auth{
+.auth{
 	width: 400px;
 	background: #ADE0FC;
 }
 /* Кнопки переключения вход и регистрация */
-.mainAuth .switch{
+.switch{
 	font-size: 26px;
 	padding-top: 8px;
 	padding-bottom: 8px;
 }
 /* Кнопки ВОЙТИ и ЗАРЕГЕСТРИРОВАТЬСЯ */
-.mainAuth button{
+button{
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
 	color: white;
 	background-color: #347090;
 }
-.mainAuth button:hover{
+button:hover{
 	cursor: pointer;
 }
 /* Поля ввода */
-.mainAuth input{
+input{
 	border: 0;
 	height: 30px;
 	margin: 0 auto;

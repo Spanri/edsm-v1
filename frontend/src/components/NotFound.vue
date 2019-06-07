@@ -1,30 +1,22 @@
 <template>
-	<div class="account">
-		<div class="account2">
-			<p>Не найдено.</p>
-		</div>
+	<div class="notFound">
+		<p>Не найдено.</p>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-    name: 'account',
+    name: 'notFound',
 }
 </script>
 
-<style>
-.account{
+<style scoped>
+.notFound{
     height: 100%;
 	width: 100%;
 	background: white;
-}
-.account > *{
-	padding: 25px;
-}
-.account2{
 	max-width: 900px;
 	margin: auto;
+	padding: 25px;
 }
 </style>

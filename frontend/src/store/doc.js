@@ -14,6 +14,9 @@ import {
     DOC_DELETE,
     DOC_SIGNATURE,
     DOC_EDIT,
+    DOC_UPDATE,
+    DOC_REQUEST,
+    DOC_RELOAD,
     DOC_REQUEST_SUCCESS,
     DOCS_FILE_CABINETS,
     DOCS_FILE_CABINET,
@@ -27,7 +30,8 @@ const state = {
     docs: [],
     docsFiltering: [],
     fileCabinets: [],
-    fileCabinet: ''
+    fileCabinet: '',
+    reload: '',
 }
 
 const getters = {
@@ -38,6 +42,7 @@ const getters = {
     },
     getFileCabinets: state => state.fileCabinets,
     getFileCabinet: state => state.fileCabinet,
+    getReload: state => state.reload,
 }
 
 const actions = {
@@ -61,8 +66,16 @@ const actions = {
                         let myDoc = d.status == 0 && d.user.id == rootState.user.profile.id
                         d.rowBackg = (dd.length != 0 || myDoc) ? "white" : "#dcdbfc"
                     });
+                    let d1 = resp.data.filter(d => {
+                        return d.rowBackg == "#dcdbfc"
+                    })
+                    let d2 = resp.data.filter(d => {
+                        return d.rowBackg == "white"
+                    })
+                    resp.data = d1.concat(d2);
+                    // console.log('resp.data', resp.data)
                     commit(DOCS_SUCCESS, resp.data);
-                    dispatch(DOCS_FILTER)
+                    // dispatch(DOCS_FILTER)
                     resolve(resp.data);
                 } catch (err) {
                     console.log(err)
@@ -75,6 +88,46 @@ const actions = {
                     reject(err)
                 }
             })
+        })
+    },
+    [DOC_REQUEST]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(path + '/api/users/notif/' + id, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(resp => {
+                    // let updateId = rootState.doc.docs.findIndex(x => x.id == id);
+                    // rootState.doc.docs[updateId] = resp.data;
+                    resolve(resp)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOC_UPDATE]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(path + '/api/users/notif/' + id, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(resp => {
+                    let updateId = rootState.doc.docs.findIndex(x => x.id == id);
+                    rootState.doc.docs[updateId] = resp.data;
+                    resolve(resp)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
         })
     },
     [DOC_EDIT_NOTIF]: ({ commit, dispatch, rootState }, data) => {
@@ -110,6 +163,7 @@ const actions = {
                 if (rootState.doc.fileCabinet == '') commit(DOCS_FILE_CABINET, res.data[0]);
                 let d = rootState.doc.docs.filter(r => r.doc.fileCabinet.id == rootState.doc.fileCabinet.id)
                 commit(DOCS_FILTER_SUCCESS, d)
+                resolve(res)
             })
             .catch(err => {
                 try {
@@ -340,6 +394,9 @@ const mutations = {
     },
     [DOC_FOLDER_PAGE_PROFILE]: (state, resp) => {
         Vue.set(state, 'pageProfile', resp)
+    },
+    [DOC_RELOAD]: (state, resp) => {
+        Vue.set(state, 'reload', resp)
     },
 }
 

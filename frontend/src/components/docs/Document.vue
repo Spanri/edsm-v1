@@ -137,7 +137,14 @@
 <script>
 // import FileReader from 'vue-filereader'
 import { mapState } from 'vuex'
-import { DOC_REQUEST, DOCS_REQUEST, DOC_SIGNATURE, DOC_DELETE, DOC_DOWNLOAD } from '../../store/mutation-types';
+import { 
+	DOC_UPDATE, 
+	DOCS_REQUEST,
+	DOC_REQUEST,
+	DOC_SIGNATURE, 
+	DOC_DELETE, 
+	DOC_DOWNLOAD 
+} from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 
 import axios from 'axios'
@@ -167,16 +174,15 @@ export default {
         }
 	},
 	created() {
-		this.$store.dispatch(DOCS_REQUEST)
 		if (!this.$store.getters.getDoc(this.id)) {
 			this.$router.push('/404');
+			return;
 		}
 		this.doc = this.$store.getters.getDoc(this.id);
 		let typeFile = this.doc.doc.title.split('.');
 		this.type = typeFile[typeFile.length-1];
 		this.title = this.doc.doc.title.replace("." + this.type, "");
 		this.type = this.type.toLowerCase();
-		console.log(this.doc)
 	},
 	methods: {
 		viewDoc() {
@@ -322,7 +328,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .document{
     height: 100%;
 	width: 100%;
@@ -331,18 +337,18 @@ export default {
 	background: white;
     padding: 25px;
 }
-.document .header{
+.header{
     margin-top: 0;
 	margin-bottom: 10px;
 }
 /**/
-.document .document2Colon{
+.document2Colon{
     display: grid;
     grid-template-columns: max-content auto;
 	margin-top: 20px;
 }
 /**/
-.document button, .document .button{
+button, .button{
 	width: auto;
 	border: 0;
 	border-radius: 5px;
@@ -355,35 +361,35 @@ export default {
 	background-color: #347090;
 	text-align: center;
 }
-.document .buttons{
+.buttons{
 	max-width: 900px;
 }
-.document .signButtons{
+.signButtons{
 	display: grid;
     grid-template-columns: 1fr auto auto 1fr;
 }
-.document .signButtons button{
+.signButtons button{
 	margin: 10px;
 	margin-top: 5px;
 	margin-bottom: 20px;
 }
-.document .confirmButtons{
+.confirmButtons{
 	display: grid;
     grid-template-columns: 1fr auto 1fr;
 }
-.document .confirmButtons button{
+.confirmButtons button{
 	margin: 10px;
 	margin-top: 25px;
 }
-.document a{
+a{
 	color: white;
 	text-decoration: none;
 }
-.document button:hover, .document .button:hover{
+button:hover, .button:hover{
 	cursor: pointer;
 }
 /* Подтверждение */
-.document .confirm{
+.confirm{
 	position: fixed;
 	top: 20%;
 	left: calc(50% - 200px);
@@ -392,18 +398,18 @@ export default {
 	background: rgb(223, 243, 253);
 	border: 1px solid #347090;
 }
-.document .notAddHeight{
+.notAddHeight{
 	height: 240px;
 }
-.document .addHeight{
+.addHeight{
 	height: 300px;
 }
-.document .confirm p{
+.confirm p{
 	padding: 20px;
 	padding-bottom: 10px;
 	text-align: justify;
 }
-.document .code{
+.code{
 	border: 0;
 	margin: 0 auto;
 	margin-left: 20px;
@@ -415,7 +421,7 @@ export default {
 	color: black;
 }
 /* Причина отклонения, комментарий */
-.document textarea{
+textarea{
 	border: 0;
 	margin: 0 15px;
     padding: 10px;
@@ -427,21 +433,21 @@ export default {
     background: white;
 }
 /* Файл, который загружается при отклонении подписи*/
-.document .cancelFile{
+.cancelFile{
 	margin: 15px;
 	margin-bottom: 0;
 }
 /* Таблица */
-.document table {
+table {
     border-collapse: collapse;
 }
-.document table, .document tr{
+table, tr{
     border: rgb(223, 243, 253) 2px solid;
 	border-left: 0;
 	border-right: 0;
     border-radius: 5px;
 }
-.document td{
+td{
     padding: 7px 15px;
 }
 </style>

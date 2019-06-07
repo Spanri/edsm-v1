@@ -105,7 +105,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .editDocument{
     height: 100%;
 	width: 100%;
@@ -114,17 +114,17 @@ export default {
 	background: white;
     padding: 25px;
 }
-.editDocument .header{
+.header{
     margin-top: 0;
 	margin-bottom: 30px;
 }
 /**/
-.editDocument .document2Colon{
+.document2Colon{
     display: grid;
     grid-template-columns: max-content auto;
 }
 /**/
-.editDocument button, .editDocument .button{
+button, .button{
 	width: auto;
 	border: 0;
 	border-radius: 5px;
@@ -137,15 +137,15 @@ export default {
 	background-color: #347090;
 	text-align: center;
 }
-.editDocument a{
+a{
 	color: white;
 	text-decoration: none;
 }
-.editDocument button:hover, .editDocument .button:hover{
+button:hover, .button:hover{
 	cursor: pointer;
 }
 /* Поля ввода */
-.editDocument input[type="text"]{
+input[type="text"]{
 	border: 0;
 	margin: 0 auto;
     height: 30px;
@@ -154,7 +154,7 @@ export default {
     min-width: 350px;
     background: rgb(223, 243, 253);
 }
-.editDocument textarea{
+textarea{
 	border: 0;
 	margin: 0 auto;
     padding: 10px;
@@ -163,14 +163,10 @@ export default {
     background: rgb(223, 243, 253);
 }
 /* Картотека */
-.editDocument select{
+select{
     margin-right: 10px;
     padding: 6px;
     font-size: 13.5px;
     min-width: 250px;
-}
-/* Общий доступ */
-.addeditDocumentDoc input[type="checkbox"]{
-    height: 15px;
 }
 </style>

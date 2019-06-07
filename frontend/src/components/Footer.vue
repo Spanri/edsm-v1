@@ -39,11 +39,11 @@ p{
 	margin: 8px;
 	color: white;
 }
-.background label{
+label{
 	color: white;
 	text-decoration: none;
 }
-.background label:hover{
+label:hover{
 	cursor: pointer;
 	color: #aaa9f8;
 }

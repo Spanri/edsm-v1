@@ -89,7 +89,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
-import { DOC_UPLOAD, DOC_REQUEST, DOCS_REQUEST, USERS_EMAILS } from '../../store/mutation-types';
+import { DOC_UPLOAD, DOC_UPDATE, DOCS_REQUEST, USERS_EMAILS } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 import draggable from 'vuedraggable'
 
@@ -120,7 +120,6 @@ export default {
         this.$store.dispatch(USERS_EMAILS)
         .then(resp=>{
             this.users = resp.filter(r => r.id != this.$store.getters.getProfile.id)
-            // console.log(this.users)
         })
         this.fileCabinets = this.$store.getters.getFileCabinets;
         this.fileCabinet = this.$store.getters.getFileCabinet;
@@ -130,30 +129,17 @@ export default {
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
             this.file = files[0];
-            /* Расширение файла */
             let typeFile = files[0].name.split('.')
             this.typeFile = typeFile[typeFile.length-1];
             this.title = files[0].name.replace("." + this.typeFile, "");
             this.file = files[0];
             this.disable = false;
-            // console.log(files[0].size/1024/1024 + " мб")
         },
         blobToFile(theBlob, fileName) {
-            //A Blob() is almost a File() - it's just missing the two properties below which we will add
             theBlob.lastModifiedDate = new Date();
             theBlob.name = fileName;
             return theBlob;
         },
-        /* Конвертирование файла в картинку для превью */
-        // dataURItoBlob(dataURI) {
-        //     var byteString = atob(dataURI);
-        //     var ab = new ArrayBuffer(byteString.length);
-        //     var ia = new Uint8Array(ab);
-        //     for (var i = 0; i < byteString.length; i++) {
-        //         ia[i] = byteString.charCodeAt(i);
-        //     }
-        //     return new Blob([ab], {type: 'image/png'});
-        // },
         addUser(num){
             if (num == 1){
                 if(this.selectedUser != '') {
@@ -174,7 +160,6 @@ export default {
             }
         },
         deleteSelectedUser(i, item){
-            // console.log(item)
             if(i==1){
                 this.selectedUsers = this.selectedUsers.filter(el => {
                     return el != item;
@@ -198,7 +183,6 @@ export default {
                     {type: this.file.type}
                 );             
                 d.append('file', newFile);
-                // console.log(this.file.size)
                 d.append('size', this.file.size);
             }
             d.append('user_id', this.$store.getters.getProfile.id);
@@ -230,7 +214,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .addDoc{
     height: 100%;
 	width: 100%;
@@ -239,12 +223,12 @@ export default {
 	background: white;
     padding: 25px;
 }
-.addDoc .header{
+.header{
     margin-top: 0;
 	margin-bottom: 30px;
 }
 /* Поля ввода */
-.addDoc .filename, .addDoc textarea{
+.filename, textarea{
 	border: 0;
 	margin: 0 auto;
     padding: 10px;
@@ -253,20 +237,20 @@ export default {
     max-width: 900px;
     background: rgb(223, 243, 253);
 }
-.addDoc select{
+select{
     margin-right: 10px;
     padding: 6px;
     font-size: 13.5px;
     min-width: 250px;
 }
-.addDoc .selectedUser{
+.selectedUser{
     display:inline-block;
     margin: 0;
     padding:0;
     vertical-align:top;
     font-weight: 400;
 }
-.addDoc .selectedUserWithCancel{
+.selectedUserWithCancel{
     background: rgb(223, 243, 253);
     margin-top: 10px;
     margin-bottom: 10px;
@@ -275,16 +259,16 @@ export default {
     grid-template-columns: 1fr auto;
     grid-template-rows: auto;
 }
-.addDoc .selectedUserWithCancel:hover{
+.selectedUserWithCancel:hover{
     background: rgb(223, 243, 253);
     cursor: pointer;
 }
-.addDoc .deleteSelectedUser{
+.deleteSelectedUser{
     padding: 0px;
     padding-left: 5px;
 }
 /* Кнопки ЗАГРУЗИТЬ и СОЗДАТЬ */
-.addDoc button, .addDoc input[type="submit"] [type]:not([type="checkbox"]), .fileContainer{
+button, input[type="submit"] [type]:not([type="checkbox"]), .fileContainer{
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
@@ -295,11 +279,11 @@ export default {
     font-size: 14px;
 	background-color: #347090;
 }
-.addDoc button:hover, .addDoc a:hover{
+button:hover, a:hover{
     cursor: pointer;
 }
 /**/
-.addDoc form > p{
+form > p{
     margin-bottom: 5px;
 }
 /**/
@@ -308,16 +292,16 @@ export default {
     grid-template-columns: max-content auto;
 }
 /**/
-.addDoc img{
+img{
     width: 110px;
 }
 /**/
-.addDoc input[type="checkbox"]{
+input[type="checkbox"]{
     height: 15px;
 }
 /**/
-.addDoc .disabled{
+.disabled{
     pointer-events: none;
-    background: rgb(133, 133, 133) !important;
+    background: rgb(133, 133, 133);
 }
 </style>

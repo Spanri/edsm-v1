@@ -19,7 +19,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .preview{
     border: 4px solid #5a95b4;
     border-radius: 10px;
@@ -30,7 +30,7 @@ export default {
     display: grid;
     grid-template-rows: auto auto 1fr auto 1fr;
 }
-.preview p{
+p{
     border: 4px solid #5a95b4;
     border-radius: 5px;
     background: rgb(255, 255, 255);
@@ -45,7 +45,7 @@ export default {
     font-weight: 900;
     font-size: 18px;
 }
-.preview .bb0{
+.bb0{
     width: 40px;
     height: 40px;
     border: 0;
@@ -53,7 +53,7 @@ export default {
     margin-left:-5px;
     background: white;
 }
-.preview .bb1{
+.bb1{
     margin-top:-35px;
     width: 35px;
     height: 35px;
@@ -61,7 +61,7 @@ export default {
     border-width: 0 5px 5px 0;
     border-radius: 0 0 5px 0;
 }
-.preview .bb2{
+.bb2{
     width: 55px;
     height: 17px;
     border: 5px solid #5a95b4;
