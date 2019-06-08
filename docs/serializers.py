@@ -28,6 +28,8 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'common',
             'description',
             'signature',
+            'cancel_description',
+            'cancel_file',
             'file_cabinet',
             'file_cabinet_id',
         )

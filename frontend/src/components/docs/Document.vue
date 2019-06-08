@@ -1,144 +1,153 @@
 <template>
 	<div class="document">
-		<div class="buttons">
-			<button v-if="doc.doc.size/1024/1024 < 25" @click="viewDoc()">СМОТРЕТЬ ДОКУМЕНТ</button>
-			<button v-if="doc.doc.size/1024/1024 < 25" @click="viewSign()">СМОТРЕТЬ ПОДПИСЬ (не работает)</button>
-			<button @click="download()">СКАЧАТЬ</button>
-			<button @click="downloadSign()">СКАЧАТЬ ПОДПИСЬ (не работает)</button>
-			<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="editDoc()">РЕДАКТИРОВАТЬ</button>
-			<button v-if="doc.status == 2" @click="isPreConfirm = true">ПОДПИСАТЬ/ОТКЛОНИТЬ</button>
-			<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ ПОДПИСЕЙ СНОВА (не работает)</button>
+		<div v-if="refresh">
+			<h3>Загружается...</h3>
+			<svg id="Layer_1" width="80px" style="enable-background:new 0 0 30 30;" version="1.1" viewBox="0 0 30 30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<path style="fill:#41A6F9;" d="M15,4C8.9,4,4,8.9,4,15s4.9,11,11,11s11-4.9,11-11S21.1,4,15,4z M21.7,16.8c-0.1,0.4-0.5,0.6-0.9,0.5l-5.6-1.1  c-0.2,0-0.4-0.2-0.6-0.3C14.2,15.7,14,15.4,14,15c0,0,0,0,0,0l0.2-8c0-0.5,0.4-0.8,0.8-0.8c0.4,0,0.8,0.4,0.8,0.8l0.1,6.9l5.2,1.8  C21.6,15.8,21.8,16.3,21.7,16.8z"/>
+			</svg>
 		</div>
-		<div class="document2Colon">
-			<div>
-				<preview :typeFile="type"></preview>
-				<button style="margin-top:20px;margin-left:6px;background: rgb(243, 92, 92);" v-if="this.$store.getters.getProfile.is_staff || (doc.status == 0 && (doc.doc.common != true || doc.user.id == this.$store.getters.getProfile.id))" @click="deleteDoc()">УДАЛИТЬ</button>
+		<div v-else>
+			<div class="buttons">
+				<button v-if="doc.doc.size/1024/1024 < 25" @click="viewDoc()">СМОТРЕТЬ ДОКУМЕНТ</button>
+				<button v-if="doc.doc.size/1024/1024 < 25" @click="viewSign()">СМОТРЕТЬ ПОДПИСЬ (не работает)</button>
+				<button @click="download()">СКАЧАТЬ</button>
+				<button @click="downloadSign()">СКАЧАТЬ ПОДПИСЬ (не работает)</button>
+				<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="editDoc()">РЕДАКТИРОВАТЬ</button>
+				<button v-if="doc.status == 2" @click="isPreConfirm = true">ПОДПИСАТЬ/ОТКЛОНИТЬ</button>
+				<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ ПОДПИСЕЙ СНОВА (не работает)</button>
 			</div>
-			<div style="margin-left:25px;margin-top:0px;">
-				<h3 class="header">{{title}}</h3>
-				<p v-if="error" style="color: red">{{error}}</p>
-				<table class="aboutDoc">
-					<thead><tr><th></th><th></th></tr></thead>
-					<tbody>
-						<tr>
-							<td>Регистрационный номер</td>
-							<td>{{doc.doc.id}}</td>
-						</tr>
-						<tr>
-							<td>Владелец</td>
-							<td>{{doc.user.profile.full_name}} ({{doc.user.email}})</td>
-						</tr>
-						<tr>
-							<td>Картотека</td>
-							<td>{{doc.doc.file_cabinet.name}}</td>
-						</tr>
-						<tr>
-							<td>Общий доступ</td>
-							<td>{{doc.doc.common ? 'да' : 'нет'}}</td>
-						</tr>
-						<tr>
-							<td>Дата добавления</td>
-							<td>{{doc.doc.date}}</td>
-						</tr>
-						<tr>
-							<td>Описание</td>
-							<td>{{ doc.doc.description }}</td>
-						</tr>
-						<tr>
-							<td>Размер файла</td>
-							<td>{{Math.round(doc.doc.size/1024/1024 * 1000) / 1000}} Мб</td>
-						</tr>
-						<tr>
-							<td>Подпись</td>
-							<td>{{ doc.doc.signature }}</td>
-						</tr>
-					</tbody>
-				</table>
-				<div v-if="isPreConfirm" class="confirm">
-					<div style="display: grid;grid-template-columns: auto max-content;">
-						<div></div>
-						<svg @click="isPreConfirm = false" style="margin-right: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-							<g id="Cancel" stroke="black" stroke-width="1">
-								<path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
-									fill="#121313" fill-rule="evenodd"/>
-								<path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
-									fill="#121313" fill-rule="evenodd"/>
-							</g>
-						</svg>
-					</div>
-					<p style="margin:0">
-						Просмотрите документ с помощью кнопок СМОТРЕТЬ ДОКУМЕНТ (если документ меньше 25мб) 
-						или СКАЧАТЬ. Примите решение, поставить подпись или отклонить документ.
-					</p>
-					<div class="signButtons" style="margin-top:5px;">
-						<div></div>
-						<button @click="isCancelSign = true;isPreConfirm = false;" style="background: rgb(243, 92, 92)">ОТКЛОНИТЬ</button>
-						<button @click="confirmCode()">ПОСТАВИТЬ ПОДПИСЬ</button>
-						<div></div>
-					</div>
+			<div class="document2Colon">
+				<div>
+					<preview :typeFile="type"></preview>
+					<button style="margin-top:20px;margin-left:6px;background: rgb(243, 92, 92);" v-if="this.$store.getters.getProfile.is_staff || (doc.status == 0 && (doc.doc.common != true || doc.user.id == this.$store.getters.getProfile.id))" @click="deleteDoc()">УДАЛИТЬ</button>
 				</div>
-				<div v-if="isCancelSign" class="confirm" style="height:380px" @submit.prevent="cancelSign">
-					<div style="display: grid;grid-template-columns: auto max-content;">
-						<div></div>
-						<svg @click="isCancelSign = false;" style="margin-right: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-							<g id="Cancel" stroke="black" stroke-width="1">
-								<path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
-									fill="#121313" fill-rule="evenodd"/>
-								<path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
-									fill="#121313" fill-rule="evenodd"/>
-							</g>
-						</svg>
+				<div style="margin-left:25px;margin-top:0px;">
+					<h3 class="header">{{title}}</h3>
+					<p v-if="error" style="color: red">{{error}}</p>
+					<table class="aboutDoc">
+						<thead><tr><th></th><th></th></tr></thead>
+						<tbody>
+							<tr>
+								<td>Регистрационный номер</td>
+								<td>{{doc.doc.id}}</td>
+							</tr>
+							<tr>
+								<td>Владелец</td>
+								<td>{{doc.user.profile.full_name}} ({{doc.user.email}})</td>
+							</tr>
+							<tr>
+								<td>Картотека</td>
+								<td>{{doc.doc.file_cabinet.name}}</td>
+							</tr>
+							<tr>
+								<td>Общий доступ</td>
+								<td>{{doc.doc.common ? 'да' : 'нет'}}</td>
+							</tr>
+							<tr>
+								<td>Дата добавления</td>
+								<td>{{doc.doc.date}}</td>
+							</tr>
+							<tr>
+								<td>Описание</td>
+								<td>{{ doc.doc.description }}</td>
+							</tr>
+							<tr>
+								<td>Размер файла</td>
+								<td>{{Math.round(doc.doc.size/1024/1024 * 1000) / 1000}} Мб</td>
+							</tr>
+							<tr>
+								<td>Подпись</td>
+								<td>{{ doc.doc.signature }}</td>
+							</tr>
+						</tbody>
+					</table>
+					<div v-if="isPreConfirm" class="confirm">
+						<div style="display: grid;grid-template-columns: auto max-content;">
+							<div></div>
+							<svg @click="isPreConfirm = false" style="margin-right: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+								<g id="Cancel" stroke="black" stroke-width="1">
+									<path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+										fill="#121313" fill-rule="evenodd"/>
+									<path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+										fill="#121313" fill-rule="evenodd"/>
+								</g>
+							</svg>
+						</div>
+						<p style="margin:0">
+							Просмотрите документ с помощью кнопок СМОТРЕТЬ ДОКУМЕНТ (если документ меньше 25мб) 
+							или СКАЧАТЬ. Примите решение, поставить подпись или отклонить документ.
+						</p>
+						<div class="signButtons" style="margin-top:5px;">
+							<div></div>
+							<button @click="isCancelSign = true;isPreConfirm = false;" style="background: rgb(243, 92, 92)">ОТКЛОНИТЬ</button>
+							<button @click="confirmCode()">ПОСТАВИТЬ ПОДПИСЬ</button>
+							<div></div>
+						</div>
 					</div>
-					<p style="margin-top:0">
-						Напишите, почему документ отклонен. Вы также можете загрузить исправленный документ 
-						(не обязательно). Тот, кто просил вас поставить подпись, сможет просмотреть ваш 
-						вариант документа. 
-					</p>
-					<textarea
-						v-model="cancelCause" 
-						placeholder="Введите комментарий"
-					></textarea>
-					<input 
-                        type="file"
-                        id="file"
-                        name="file"
-						class="cancelFile"
-                        @change="onFileChangeCancel">
-					<div class="confirmButtons">
-						<div></div>
-						<button @click="cancelSign()">ОТКЛОНИТЬ И ОТПРАВИТЬ КОММЕНТАРИЙ</button>
-						<div></div>
+					<div v-if="isCancelSign" class="confirm" style="height:380px" @submit.prevent="cancelSign">
+						<div style="display: grid;grid-template-columns: auto max-content;">
+							<div></div>
+							<svg @click="isCancelSign = false;" style="margin-right: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+								<g id="Cancel" stroke="black" stroke-width="1">
+									<path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+										fill="#121313" fill-rule="evenodd"/>
+									<path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+										fill="#121313" fill-rule="evenodd"/>
+								</g>
+							</svg>
+						</div>
+						<p style="margin-top:0">
+							Напишите, почему документ отклонен. Вы также можете загрузить исправленный документ 
+							(не обязательно). Тот, кто просил вас поставить подпись, сможет просмотреть ваш 
+							вариант документа. 
+						</p>
+						<textarea
+							v-model="cancelCause" 
+							placeholder="Введите комментарий"
+						></textarea>
+						<input 
+							type="file"
+							id="file"
+							name="file"
+							class="cancelFile"
+							@change="onFileChangeCancel">
+						<div class="confirmButtons">
+							<div></div>
+							<button @click="cancelSign()">ОТКЛОНИТЬ И ОТПРАВИТЬ КОММЕНТАРИЙ</button>
+							<div></div>
+						</div>
+						<p v-if="errorConfirm" style="color: red;text-align: center;padding: 5px">{{errorConfirm}}</p>
 					</div>
-					<p v-if="errorConfirm" style="color: red;text-align: center;padding: 5px">{{errorConfirm}}</p>
+					<form v-if="isConfirm" class="confirm" :class="{addHeight: errorConfirm, notAddHeight: !errorConfirm}" @submit.prevent="addSignature">
+						<div style="display: grid;grid-template-columns: auto max-content;">
+							<div></div>
+							<svg @click="isConfirm = false;confirmFromApp = '';confirm = '';" style="margin-right: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+								<g id="Cancel" stroke="black" stroke-width="1">
+									<path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+										fill="#121313" fill-rule="evenodd"/>
+									<path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+										fill="#121313" fill-rule="evenodd"/>
+								</g>
+							</svg>
+						</div>
+						<p style="margin-top:0">Заглушка - код "1234". На ваше мобильное приложение отправлен код подтверждения. Введите его ниже.</p>
+						<input 
+							required
+							v-model="confirm"
+							type="text"
+							placeholder="Введите код подтверждения"
+							class="code">
+						<div class="confirmButtons">
+							<div></div>
+							<button type="submit">ПОДТВЕРДИТЬ</button>
+							<div></div>
+						</div>
+						<p v-if="errorConfirm" style="color: red;text-align: center;padding: 5px">{{errorConfirm}}</p>
+					</form>
 				</div>
-				<form v-if="isConfirm" class="confirm" :class="{addHeight: errorConfirm, notAddHeight: !errorConfirm}" @submit.prevent="addSignature">
-					<div style="display: grid;grid-template-columns: auto max-content;">
-						<div></div>
-						<svg @click="isConfirm = false;confirmFromApp = '';confirm = '';" style="margin-right: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-							<g id="Cancel" stroke="black" stroke-width="1">
-								<path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
-									fill="#121313" fill-rule="evenodd"/>
-								<path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
-									fill="#121313" fill-rule="evenodd"/>
-							</g>
-						</svg>
-					</div>
-					<p style="margin-top:0">Заглушка - код "1234". На ваше мобильное приложение отправлен код подтверждения. Введите его ниже.</p>
-					<input 
-                        required
-                        v-model="confirm"
-                        type="text"
-                        placeholder="Введите код подтверждения"
-                        class="code">
-					<div class="confirmButtons">
-						<div></div>
-						<button type="submit">ПОДТВЕРДИТЬ</button>
-						<div></div>
-					</div>
-					<p v-if="errorConfirm" style="color: red;text-align: center;padding: 5px">{{errorConfirm}}</p>
-				</form>
 			</div>
 		</div>
+		
 	</div>
 </template>
 
@@ -198,10 +207,11 @@ export default {
 			confirmFromApp: '',
 			cancelCause: '',
 			cancelFile: '',
+			refresh: '',
         }
 	},
 	created() {
-		this.error = 'Загрузка...'
+		this.refresh = true;
 		this.$store.dispatch(DOCS_REQUEST)
 		.then(s => {
 			if (!this.$store.getters.getDoc(this.id)) {
@@ -213,7 +223,7 @@ export default {
 			this.type = typeFile[typeFile.length-1];
 			this.title = this.doc.doc.title.replace("." + this.type, "");
 			this.type = this.type.toLowerCase();
-			this.error = ''
+			this.refresh = false;
 		})
 	},
 	methods: {
@@ -324,7 +334,7 @@ export default {
 					this.error = 'Подпись успешно поставлена!'
 					this.confirmFromApp = '';
 					this.confirm = '';
-					this.$store.dispatch(DOC_UPDATE, this.id);
+					this.$store.dispatch(DOCS_REQUEST);
 					setTimeout(() => {
 						this.error = '';
 					}, 3000);

@@ -13,6 +13,7 @@ import {
     DOC_DOWNLOAD,
     DOC_DELETE,
     DOC_SIGNATURE,
+    DOC_SIGNATURE_CANCEL,
     DOC_EDIT,
     DOC_UPDATE,
     DOC_REQUEST,
@@ -344,11 +345,29 @@ const actions = {
             });
         })
     },
-    // ПОДПИСЫВАТЬ НАДО ПОДПИСЬ, ЕСЛИ ОНА УЖЕ ЕСТЬ
     [DOC_SIGNATURE]: ({ commit, dispatch, rootState }, data) => {
         return new Promise((resolve, reject) => {
             axios
                 .get(path + '/api/docs/add_signature/' + data.id + '/' + data.first + '/', {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(resp => {
+                    resolve(resp.data)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    // не работает пока что
+    [DOC_SIGNATURE_CANCEL]: ({ commit, dispatch, rootState }, data) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(path + '/api/docs/cancel_signature/' + data.id + '/', {
                     headers: { Authorization: "Token " + rootState.auth.token }
                 })
                 .then(resp => {

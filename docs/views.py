@@ -170,6 +170,62 @@ class AddSignature(generics.ListAPIView):
         serializer = DocSerializer(doc)
         return doc
 
+# не работает пока что
+class CancelSignature(generics.ListAPIView):
+    '''
+    Добавить подпись к документу. Принимает id документа.
+    Права - нет (они проверяются на сервере генерации подписи).
+    '''
+    serializer_class = DocSerializer
+    queryset = Doc.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated2,)
+
+    def get_queryset(self):
+        doc = Doc.objects.get(id=self.kwargs['pk'])
+        # Найти нужный документ
+        doc = Doc.objects.get(id=self.kwargs['pk'])
+
+        # Найти нотиф, который с этим документом и
+        # пользователь - владелец документа
+        notifOwner = Notif.objects.get(
+            doc_id=doc.id,
+            status=0
+        )
+
+        # удаляем все подписи
+        doc.signature = null
+        doc.save()
+
+        # Подпись ставит не владелец
+        if self.kwargs['first'] == '0':
+            # Найти нотиф, который с этим документом и
+            # где очередь подписывать и изменить на "подписано"
+            try:
+                notif = Notif.objects.get(
+                    doc_id=doc.id,
+                    status=2
+                )
+                notif.status = 3
+                notif.save()
+                # Найти следующий нотиф, который с этим документом и
+                # где очередь = очередь+1
+                try:
+                    notifNext = Notif.objects.get(
+                        doc_id=doc.id,
+                        status=1,
+                        queue=notif.queue+1
+                    )
+                    notifNext.status = 2
+                    notifNext.save()
+                except:
+                    pass
+            except Exception as e:
+                pass
+        doc = Doc.objects.filter(id=self.kwargs['pk'])
+        serializer = DocSerializer(doc)
+        return doc
+
 class DownloadFile(generics.RetrieveAPIView):
     '''
     Скачать файл.
