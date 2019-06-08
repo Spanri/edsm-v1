@@ -30,7 +30,7 @@
 						</tr>
 						<tr>
 							<td>Картотека</td>
-							<td>{{doc.doc.fileCabinet.name}}</td>
+							<td>{{doc.doc.file_cabinet.name}}</td>
 						</tr>
 						<tr>
 							<td>Общий доступ</td>
@@ -43,6 +43,14 @@
 						<tr>
 							<td>Описание</td>
 							<td>{{ doc.doc.description }}</td>
+						</tr>
+						<tr>
+							<td>Размер файла</td>
+							<td>{{Math.round(doc.doc.size/1024/1024 * 1000) / 1000}} Мб</td>
+						</tr>
+						<tr>
+							<td>Подпись</td>
+							<td>{{ doc.doc.signature }}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -158,7 +166,26 @@ export default {
 	data () {
         return {
 			file: '',
-			doc: {},
+			doc: {
+				status: '',
+				user: {
+					profile: {
+						full_name: ''
+					}
+				},
+				doc: {
+					id: '',
+					title: '',
+					size: '',
+					file_cabinet: {
+						name: ''
+					},
+					common: '',
+					description: '',
+					date: '',
+					signature: '',
+				}
+			},
 			title: '',
 			type: '',
 			fileWithSignature: 'ddd',
@@ -174,15 +201,20 @@ export default {
         }
 	},
 	created() {
-		if (!this.$store.getters.getDoc(this.id)) {
-			this.$router.push('/404');
-			return;
-		}
-		this.doc = this.$store.getters.getDoc(this.id);
-		let typeFile = this.doc.doc.title.split('.');
-		this.type = typeFile[typeFile.length-1];
-		this.title = this.doc.doc.title.replace("." + this.type, "");
-		this.type = this.type.toLowerCase();
+		this.error = 'Загрузка...'
+		this.$store.dispatch(DOCS_REQUEST)
+		.then(s => {
+			if (!this.$store.getters.getDoc(this.id)) {
+				this.$router.push('/404');
+				return;
+			}
+			this.doc = this.$store.getters.getDoc(this.id);
+			let typeFile = this.doc.doc.title.split('.');
+			this.type = typeFile[typeFile.length-1];
+			this.title = this.doc.doc.title.replace("." + this.type, "");
+			this.type = this.type.toLowerCase();
+			this.error = ''
+		})
 	},
 	methods: {
 		viewDoc() {
@@ -256,7 +288,7 @@ export default {
 			console.log('downloadSign')
 		},
 		editDoc(){
-			this.$router.push('/document/'+this.id+'/edit');
+			this.$router.push('/document/' + this.id + '/edit');
 		},
 		confirmCode(){
 			// функция отправки кода подтверждения
@@ -292,7 +324,7 @@ export default {
 					this.error = 'Подпись успешно поставлена!'
 					this.confirmFromApp = '';
 					this.confirm = '';
-					this.$store.dispatch(DOCS_REQUEST);
+					this.$store.dispatch(DOC_UPDATE, this.id);
 					setTimeout(() => {
 						this.error = '';
 					}, 3000);
@@ -444,6 +476,10 @@ textarea{
 /* Таблица */
 table {
     border-collapse: collapse;
+}
+.aboutDoc *{
+	max-width: 500px;
+	word-wrap: break-word;
 }
 table, tr{
     border: rgb(223, 243, 253) 2px solid;

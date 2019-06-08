@@ -62,7 +62,7 @@ export default {
         this.fileCabinets = this.$store.getters.getFileCabinets;
         let dfc = [];
         this.fileCabinets = this.fileCabinets.filter(re => {
-            dfc = docs.filter(r => r.doc.fileCabinet.id == re.id);
+            dfc = docs.filter(r => r.doc.file_cabinet.id == re.id);
             if (dfc.length != 0) {
                 return true;
             } else {

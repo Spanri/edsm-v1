@@ -13,7 +13,7 @@
 					placeholder="Введите название"
 					class="code">
 				<p>Картотека</p>
-				<select v-model="fileCabinet">
+				<select v-model="file_cabinet">
 					<option v-for="(fileC,i) in fileCabinets" :key="i" :value="fileC">{{fileC.name}}</option>
 				</select>
 				<p>Описание</p>
@@ -32,7 +32,7 @@
 <script>
 // import FileReader from 'vue-filereader'
 import { mapState } from 'vuex'
-import { DOCS_REQUEST, DOC_EDIT } from '../../store/mutation-types';
+import { DOC_EDIT, DOC_UPDATE, DOCS_REQUEST } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 
 import axios from 'axios'
@@ -53,11 +53,10 @@ export default {
 			common: false,
 			error: '',
 			fileCabinets: [],
-            fileCabinet: '',
+            file_cabinet: '',
         }
 	},
 	created() {
-		this.$store.dispatch(DOCS_REQUEST)
 		if (!this.$store.getters.getDoc(this.id)) {
 			this.$router.push('/documents/all');
 		}
@@ -68,13 +67,8 @@ export default {
 		this.type = this.type.toLowerCase();
 		this.description = this.doc.doc.description;
 		this.common = this.doc.doc.common;
-		// this.$store.dispatch(USERS_EMAILS)
-        // .then(resp=>{
-        //     this.users = resp.filter(r => r.id != this.$store.getters.getProfile.id)
-        //     console.log(this.users)
-        // })
-        this.fileCabinets = this.$store.getters.getFileCabinets;
-        this.fileCabinet = this.doc.doc.fileCabinet;
+		this.fileCabinets = this.$store.getters.getFileCabinets;
+		this.file_cabinet = this.doc.doc.file_cabinet;
 	},
 	methods: {
 		editDoc(){
@@ -83,18 +77,11 @@ export default {
 				title: this.title + '.' + this.type,
 				description: this.description,
 				common: this.common,
-				fileCabinet_id: this.fileCabinet.id
+				file_cabinet_id: this.file_cabinet.id
 			};
 			this.$store.dispatch(DOC_EDIT, d)
 			.then(resp => {
-				this.$store.dispatch(DOCS_REQUEST)
-				.then(r => {
-					this.$router.push('/document/' + this.id);
-				})
-				.catch(err => {
-					console.log(err)
-					this.error = 'Что-то пошло не так.'
-				})
+				this.$router.push('/document/' + this.id);
 			})
 			.catch(err => {
 				console.log(err)

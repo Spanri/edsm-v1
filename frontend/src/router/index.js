@@ -122,7 +122,7 @@ const router = new Router({
 							{key: 'title', title: 'Документ' },
 							{key: 'message', title: 'Сообщение'},
 							{key: 'date_notif', title: 'Дата добавления'},
-							{key: 'fileCabinet', title: 'Картотека' },
+							{key: 'file_cabinet', title: 'Картотека' },
 						],
 					} 
 				},

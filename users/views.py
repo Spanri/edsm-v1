@@ -1,3 +1,4 @@
+from django.core.files.base import ContentFile
 from rest_framework.response import Response
 from users.serializers import (
     UserSerializer, 
@@ -260,7 +261,10 @@ class SendInviteView(viewsets.ModelViewSet):
 
     def send_the_mail(self, request):
         email = request.data['email']
-        is_staff = request.data['is_staff']
+        if request.data['is_staff'] == 'true': is_staff = True
+        else: is_staff = False
+        print(is_staff)
+        photo = request.data['photo']
         password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
         message_text = (
             'Вашу почту зарегистрировали на '
@@ -272,6 +276,32 @@ class SendInviteView(viewsets.ModelViewSet):
             + 'не действуют.'
         )
 
+        user = User.objects.create_user(
+            email = email,
+            password = password,
+            username = email,
+            is_staff = is_staff
+        )
+        uP = UserProfile.objects.filter(user_id=user.id)
+        uP.update(
+            second_name = email,
+            position = "Должность не указана",
+        )
+        uP1 = UserProfile.objects.get(user_id=user.id)
+
+        print(type(photo))
+        print(photo)
+
+        import base64
+        format, imgstr = photo.split(';base64,')
+        ext = format.split('/')[-1]
+        data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+
+        uP1.photo.save('new_file_name', data)
+
+        uP1.save()
+        user.save()
+        
         send_mail(
             'Приглашение от СЭД МТУСИ',
             message_text,
@@ -280,18 +310,6 @@ class SendInviteView(viewsets.ModelViewSet):
             fail_silently=False,
         )
 
-        user = User.objects.create_user(
-            email = email,
-            password = password,
-            username = email,
-            is_staff = is_staff
-        )
-        UserProfile.objects.filter(user_id=user.id).update(
-            second_name = email,
-            position = "Должность не указана"
-        )
-        user.save()
-        
         return Response({'password':password})
 
 # проверить наличие почты в бд, потом отправить email

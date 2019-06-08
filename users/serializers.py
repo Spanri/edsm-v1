@@ -9,6 +9,7 @@ from django.core import exceptions
 from rest_framework import status
 from rest_framework.response import Response
 import datetime
+from django.utils import timezone
 from django.core.mail import send_mail, EmailMessage
 import boto3
 import os
@@ -107,9 +108,9 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         # Создаем нотиф и указываем текущее время, сохраняем
-        now = datetime.datetime.now()
+        now = timezone.now()
         notif = Notif.objects.create(**validated_data)
-        notif.date = now.strftime("%Y-%m-%d")
+        notif.date = now
         notif.save()
 
         # Проверяем, есть ли статус 2. Если да, отправляем пользователю уведомление на почту.

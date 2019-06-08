@@ -22,7 +22,7 @@
         </form>
         <hr>
         <a name="addDoc"></a>
-        <form @submit.prevent="addDoc" style="margin-bottom:40px">
+        <form @submit.prevent="addUser" style="margin-bottom:40px">
             <h3>Создать пользователя</h3>
             <p>Email того, кому нужно создать аккаунт</p>
             <input
@@ -31,6 +31,8 @@
                 type="email" 
                 placeholder="Введите email"
             />
+            <canvas ref="canvas" width="100" height="100" v-insert-message="email[0]"></canvas>
+            <img :src=img>
             <p style="display: inline-block;padding-left:15px;padding-right:7px"> Администратор</p>
             <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="is_staff">
             <br>
@@ -145,6 +147,7 @@ export default {
             email: '',
             is_staff: false,
             error: '',
+            img: '',
             columns: [
                 {
                     name: 'Пользователь',
@@ -180,6 +183,18 @@ export default {
             this.users = resp
         })
     },
+    directives: {
+        insertMessage(canvasElement, binding, vnode) {
+            var ctx = canvasElement.getContext("2d");
+            ctx.clearRect(0, 0, 100, 100);
+            ctx.fillStyle = "#347090";
+            ctx.font = "80px Comic Sans MS";
+            ctx.fillText(binding.value, 30, 70);
+
+            var canvas = vnode.context.$refs.canvas;
+            vnode.context.img = canvas.toDataURL("image/png");
+        }
+    },
     computed: {
         filteredEvents() {
             return this.users.filter(
@@ -189,9 +204,6 @@ export default {
         fileCabinets() {
             return this.$store.getters.getFileCabinets;
         },
-        // users(){
-        //     return this.$store.getters.getUsers;
-        // }
     },
     methods: {
         addUser(){
@@ -201,12 +213,19 @@ export default {
                 this.error = 'Неправильный email.'
             } else {
                 this.error = 'Пользователь создается...'
-                this.$store.dispatch(AUTH_SIGNUP, { email: this.email, is_staff: this.is_staff })
+
+                var d = new FormData();
+                console.log(this.email)
+                d.append('email', this.email);
+                this.is_staff ? d.append('is_staff', true) : d.append('is_staff', false);
+                d.append('photo', this.img);
+                this.$store.dispatch(AUTH_SIGNUP, d)
                 .then((resp) => {
                     this.email = ''
                     this.error = 'Пользователь создан.'
                 })
                 .catch(err=>{
+                    console.log(err)
                     this.error = 'Пользователь не создан. Такой пользователь уже существует.'
                 });
             }
@@ -375,4 +394,9 @@ hr {
     margin-left: -2px;
     border-top: dotted #347090 4px;
 } 
+/**/
+canvas {
+    border: 1px solid #BBB;
+    display: none;
+}
 </style>

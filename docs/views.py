@@ -57,20 +57,21 @@ class DocViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        now = datetime.datetime.now()
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
         try:
+            now = datetime.datetime.now()
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
             notif = Notif.objects.create(
                 user_id=request.data["user_id"], 
                 doc_id=serializer.data["id"],
                 status=0,
                 date=now.strftime("%Y-%m-%d")
             )
+            serializerNotif = NotifSerializer(notif)
+            return Response(serializerNotif.data)
         except Exception as e:
             raise exceptions.ValidationError(str(e))
-        return Response(serializer.data)
 
 
 class FileCabinetViewSet(viewsets.ModelViewSet):
@@ -105,7 +106,11 @@ class AddSignature(generics.ListAPIView):
 
         # Тут должна быть функция генерации подписи
         edc = EDC()
-        path = 'https://edms-mtuci.s3.amazonaws.com/' + str(doc.file)
+        if self.kwargs['first'] == '0':
+            path = 'https://edms-mtuci.s3.amazonaws.com/' + str(doc.file)
+        elif self.kwargs['first'] == '1':
+            print('Первая подпись')
+            path = 'https://edms-mtuci.s3.amazonaws.com/' + str(doc.file)
 
         try:
             s3 = boto3.resource(
@@ -161,7 +166,6 @@ class AddSignature(generics.ListAPIView):
                     pass
             except Exception as e:
                 pass
-
         doc = Doc.objects.filter(id=self.kwargs['pk'])
         serializer = DocSerializer(doc)
         return doc

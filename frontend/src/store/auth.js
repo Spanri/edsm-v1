@@ -4,6 +4,7 @@ import {
     USER_REQUEST,
     AUTH_LOGOUT,
     AUTH_SIGNUP,
+    DOCS_FILE_CABINET,
     path,
 } from './mutation-types'
 import axios from 'axios'
@@ -18,14 +19,15 @@ const getters = {
 }
 
 const actions = {
-    [AUTH_SIGNUP]: ({commit, dispatch, state}, user) => {
+    [AUTH_SIGNUP]: ({commit, dispatch, rootState}, data) => {
         return new Promise((resolve, reject) => {
+            console.log(data)
             axios
-            .post(path + '/api/users/send_invite/', {
-                "email": user.email,
-                "is_staff": user.is_staff
-            },{
-                headers: { Authorization: "Token " + state.token }
+            .post(path + '/api/users/send_invite/', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: "Token " + rootState.auth.token
+                }
             })
             .then(resp => {
                 console.log(resp.data);
@@ -40,7 +42,7 @@ const actions = {
             })
         })
     },
-    [AUTH_REQUEST]: ({commit, dispatch, state}, user) => {
+    [AUTH_REQUEST]: ({commit, dispatch, rootState}, user) => {
         return new Promise((resolve, reject) => {
             axios
             .post(path + '/api/users/get_auth_token/', {
@@ -53,6 +55,7 @@ const actions = {
                 localStorage.setItem('user-token', token)
                 axios.defaults.headers.common['Authorization'] = token
                 dispatch(USER_REQUEST)
+                commit(DOCS_FILE_CABINET, '');
                 resolve(response)
             })
             .catch(err => {

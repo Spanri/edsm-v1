@@ -132,7 +132,6 @@ export default {
         },
 		heroes() {
             let id = this.$route.params.id;
-            // console.log(this.getDocs)
             let output = [];
             if(id == 'all'){
 			    output = this.getDocs;
@@ -167,7 +166,6 @@ export default {
             } else {
                 output = null;
             }
-            // this.disable = false;
             return output;
 		}
     },
@@ -193,19 +191,24 @@ export default {
                     pk3: 0,
                 })
                 .then(r => {
-                    this.$store.dispatch(DOC_UPDATE, entry.id)
-                    .then(s => {
-                        this.$router.push('/document/' + entry.doc.id);
-                    })
+                    this.$router.push('/document/' + entry.doc.id);
                 })
                 .catch(err => {
                     console.log(err)
                     this.error = 'Ошибка. Что-то пошло не так.'
                 })
             } else if(entry.rowBackg == "white") {
-                this.$store.dispatch(DOC_REQUEST, entry.id)
+                this.$store.dispatch(DOC_UPDATE, entry.id)
                 .then(r => {
-                    this.$router.push('/document/' + entry.doc.id);
+                    console.log(entry)
+                    this.$router.push({
+                        name: 'document',
+                        params: { 
+                            id: entry.doc.id.toString(),
+                            idNotif: entry.id.toString(),
+                        }
+                    })
+                    // this.$router.push('/document/' + entry.doc.id);
                 })
                 .catch(err=>{
                     console.log(err)

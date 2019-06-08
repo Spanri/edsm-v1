@@ -61,6 +61,6 @@ class Notif(models.Model):
     user = models.ForeignKey(User, related_name="notif", on_delete=models.CASCADE)
     doc = models.ForeignKey(Doc, related_name="notif", on_delete=models.CASCADE)
     status = models.IntegerField(blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
     queue = models.IntegerField(blank=True, null=True)
     is_read = models.ManyToManyField(User, related_name="notif_is_read")

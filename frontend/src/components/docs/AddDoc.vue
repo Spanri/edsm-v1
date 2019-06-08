@@ -23,7 +23,7 @@
                         class="filename"
                     />
                     <p>Картотека</p>
-                    <select v-model="fileCabinet">
+                    <select v-model="file_cabinet">
                         <option v-for="(fileC,i) in fileCabinets" :key="i" :value="fileC">{{fileC.name}}</option>
                     </select>
                     <div style="border: 1px solid #347090;border-radius:3px;padding:15px;margin-top:10px">
@@ -89,7 +89,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
-import { DOC_UPLOAD, DOC_UPDATE, DOCS_REQUEST, USERS_EMAILS } from '../../store/mutation-types';
+import { DOC_UPLOAD, DOC_UPDATE, USERS_EMAILS } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 import draggable from 'vuedraggable'
 
@@ -113,7 +113,7 @@ export default {
             file:'',
             disable: true,
             fileCabinets: [],
-            fileCabinet: '',
+            file_cabinet: '',
 		}
     },
     created(){
@@ -122,7 +122,7 @@ export default {
             this.users = resp.filter(r => r.id != this.$store.getters.getProfile.id)
         })
         this.fileCabinets = this.$store.getters.getFileCabinets;
-        this.fileCabinet = this.$store.getters.getFileCabinet;
+        this.file_cabinet = this.$store.getters.getFileCabinet;
     },
     methods: {
         onFileChange(e) {
@@ -188,7 +188,7 @@ export default {
             d.append('user_id', this.$store.getters.getProfile.id);
             if (this.title) d.append('title', this.title+'.'+this.typeFile);
             if (this.description) d.append('description', this.description);
-            if (this.fileCabinet) d.append('fileCabinet_id', this.fileCabinet.id);
+            if (this.file_cabinet) d.append('file_cabinet_id', this.file_cabinet.id);
             d.common = this.common ? d.append('common', true) : d.append('common', false);
             let dd = { d }
             if (this.selectedUsers) dd.signature_request = this.selectedUsers;
@@ -197,18 +197,17 @@ export default {
             // ДОДЕЛАТЬ С ПОДПИСЬЮ САМОГО ПОЛЬЗОВАТЕЛЯ selfSignature
             this.$store.dispatch(DOC_UPLOAD, dd)
 			.then((resp) => {
-                this.$store.dispatch(DOCS_REQUEST)
-                .then(res => {
-                    this.error = "Загружено!"
-                    this.$router.push({
-                        name: 'document',
-                        params: { id: resp.id.toString() }
-                    })
-                })
-                .catch(e => {
-                    console.log(e)
+                this.error = "Загружено!"
+                this.$router.push({
+                    name: 'document',
+                    params: { id: resp.doc.id.toString() }
                 })
             })
+            .catch(e => {
+                console.log(e)
+                this.disable = false;
+				this.error = 'Ошибка. Что-то пошло не так.';
+			})
         },
     }
 }

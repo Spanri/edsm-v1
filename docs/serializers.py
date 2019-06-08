@@ -3,6 +3,7 @@ from .models import Doc, FileCabinet
 from users.models import Notif
 from rest_framework import serializers
 import datetime
+from django.utils import timezone
 
 class FileCabinetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -13,8 +14,8 @@ class FileCabinetSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 class DocSerializer(serializers.HyperlinkedModelSerializer):
-    fileCabinet = FileCabinetSerializer(required=False)
-    fileCabinet_id = serializers.IntegerField(write_only=True, required=False)
+    file_cabinet = FileCabinetSerializer(required=False)
+    file_cabinet_id = serializers.IntegerField(write_only=True, required=False)
 
     class Meta:
         model = Doc
@@ -27,14 +28,14 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'common',
             'description',
             'signature',
-            'fileCabinet',
-            'fileCabinet_id',
+            'file_cabinet',
+            'file_cabinet_id',
         )
     
     def create(self, validated_data):
-        now = datetime.datetime.now()
+        now = timezone.now()
         doc = Doc.objects.create(**validated_data)
-        doc.date = now.strftime("%Y-%m-%d")
+        doc.date = now
         doc.save()
         return doc
     

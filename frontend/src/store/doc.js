@@ -45,6 +45,21 @@ const getters = {
     getReload: state => state.reload,
 }
 
+function formatDate(date) {
+    date = new Date(date)
+    var year = date.getFullYear(),
+        month = date.getMonth() + 1, // months are zero indexed
+        monthFormatted = month < 10 ? "0" + month : month,
+        day = date.getDate(),
+        dayFormatted = day < 10 ? "0" + day : day,
+        hour = date.getHours(),
+        minute = date.getMinutes(),
+        minuteFormatted = minute < 10 ? "0" + minute : minute;
+
+    return dayFormatted + "-" + monthFormatted + "-" + year + " " + hour + ":" +
+        minuteFormatted;
+}
+
 const actions = {
     [DOCS_REQUEST]: ({commit, dispatch, rootState}) => {
         return new Promise((resolve, reject) => {
@@ -57,9 +72,10 @@ const actions = {
                     resp.data.forEach(d => {
                         d.full_name = d.user.profile.full_name
                         d.title = d.doc.title;
+                        if (d.doc.date) d.doc.date = formatDate(d.doc.date);
                         d.date_doc = d.doc.date;
                         d.date_notif = d.date;
-                        d.fileCabinet = d.doc.fileCabinet.name;
+                        d.file_cabinet = d.doc.file_cabinet.name;
                         let dd = d.is_read.filter(d0 => {
                             return d0.id == rootState.user.profile.id
                         })
@@ -118,6 +134,18 @@ const actions = {
                 })
                 .then(resp => {
                     let updateId = rootState.doc.docs.findIndex(x => x.id == id);
+                    
+                    // resp.data.full_name = resp.data.user.profile.full_name
+                    // resp.data.title = resp.data.doc.title;
+                    // resp.data.date_doc = resp.data.doc.date;
+                    // resp.data.date_notif = resp.data.date;
+                    // resp.data.file_cabinet = resp.data.doc.file_cabinet.name;
+                    // let dd = resp.data.is_read.filter(d0 => {
+                    //     return d0.id == rootState.user.profile.id
+                    // })
+                    // let myDoc = resp.data.status == 0 && resp.data.user.id == rootState.user.profile.id
+                    // resp.data.rowBackg = (dd.length != 0 || myDoc) ? "white" : "#dcdbfc"
+
                     rootState.doc.docs[updateId] = resp.data;
                     resolve(resp)
                 })
@@ -139,7 +167,7 @@ const actions = {
                 })
                 .then(resp => {
                     try {
-                        dispatch(DOCS_REQUEST)
+                        dispatch(DOC_UPDATE, resp.data.id)
                         resolve(resp.data);
                     } catch (err) {
                         console.log(err)
@@ -161,7 +189,7 @@ const actions = {
             .then(res => {
                 commit(DOCS_FILE_CABINETS, res.data)
                 if (rootState.doc.fileCabinet == '') commit(DOCS_FILE_CABINET, res.data[0]);
-                let d = rootState.doc.docs.filter(r => r.doc.fileCabinet.id == rootState.doc.fileCabinet.id)
+                let d = rootState.doc.docs.filter(r => r.doc.file_cabinet.id == rootState.doc.fileCabinet.id)
                 commit(DOCS_FILTER_SUCCESS, d)
                 resolve(res)
             })
@@ -237,6 +265,7 @@ const actions = {
     },
     [DOC_UPLOAD]: ({commit, dispatch, rootState}, data) => {
         return new Promise((resolve, reject) => {
+            console.log(data)
             axios
                 .post(path + '/api/docs/i',
                     data.d, { headers: {
@@ -244,17 +273,16 @@ const actions = {
                         Authorization: "Token " + rootState.auth.token
                     }
                 })
-                .then(resp => {
-                    dispatch(DOC_SIGNATURE, {
-                        id: resp.data.id,
+                .then(async resp => {
+                    await dispatch(DOC_SIGNATURE, {
+                        id: resp.data.doc.id,
                         first: 1
                     })
-                    if(data.signature_request) {
-                        data.signature_request.forEach((s, i) => {
-                            console.log(s)
+                    if(data.signature_request.length != 0) {
+                        await data.signature_request.forEach((s, i) => {
                             axios
                                 .post(path + '/api/users/notif', {
-                                    doc_id: resp.data.id,
+                                    doc_id: resp.data.doc.id,
                                     user_id: s.id,
                                     status: i == 0 ? 2 : 1,
                                     queue: i,
@@ -267,11 +295,12 @@ const actions = {
                                     }
                                 })
                         })
-                        data.show_request.forEach(s => {
-                            console.log(s)
+                    }
+                    if (data.show_request.length != 0) {
+                        await data.show_request.forEach(s => {
                             axios
                                 .post(path + '/api/users/notif', {
-                                    doc_id: resp.data.id,
+                                    doc_id: resp.data.doc.id,
                                     user_id: s.id,
                                     status: 5,
                                 })
@@ -283,9 +312,9 @@ const actions = {
                                     }
                                 })
                         })
-                        dispatch(DOCS_REQUEST)
-                        resolve(resp.data)
                     }
+                    // dispatch(DOC_UPDATE, resp.data.id)
+                    await resolve(resp.data)
                 })
                 .catch(err => {
                     try {

@@ -62,8 +62,12 @@ WSGI_APPLICATION = 'django_auth.wsgi.application'
 #Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'db8r9jops1rb5r',
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': 'ec2-54-75-238-138.eu-west-1.compute.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
