@@ -194,7 +194,6 @@ export default {
             if (this.selectedUsers) dd.signature_request = this.selectedUsers;
             if (this.selectedUsers2) dd.show_request = this.selectedUsers2;
             dd.selfSignature = this.selfSignature;
-            // ДОДЕЛАТЬ С ПОДПИСЬЮ САМОГО ПОЛЬЗОВАТЕЛЯ selfSignature
             this.$store.dispatch(DOC_UPLOAD, dd)
 			.then((resp) => {
                 this.error = "Загружено!"

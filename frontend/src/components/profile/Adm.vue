@@ -32,7 +32,7 @@
                 placeholder="Введите email"
             />
             <canvas ref="canvas" width="100" height="100" v-insert-message="email[0]"></canvas>
-            <img :src=img>
+            <img :src=img style="display:none">
             <p style="display: inline-block;padding-left:15px;padding-right:7px"> Администратор</p>
             <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="is_staff">
             <br>
