@@ -1,4 +1,5 @@
 from django.conf.urls import url, include
+from django.urls import include, re_path
 from django.contrib import admin
 from django.views.generic import TemplateView
 from rest_framework.documentation import include_docs_urls
@@ -21,6 +22,8 @@ from docs.views import (
     DocViewSet,
     FileCabinetViewSet,
     AddSignature,
+    CancelSignature,
+    SignatureAgain,
     DownloadFile,
 )
 
@@ -39,6 +42,9 @@ urlpatterns = [
     url(r'^api/users/(?P<pk1>.+)/notif/(?P<pk2>.+)/(?P<pk3>.+)/$',
         NotifIsReadOrStatus4.as_view()),
     url(r'^api/docs/add_signature/(?P<pk>.+)/(?P<first>.+)/$', AddSignature.as_view()),
+    url(r'^api/docs/cancel_signature/(?P<pk>.+)/$',
+        CancelSignature.as_view({'post': 'cancel_signature'})),
+    url(r'^api/docs/signature_again/(?P<pk>.+)/$', SignatureAgain.as_view()),
     url(r'^api/docs/download/(?P<pk>.+)/$', DownloadFile.as_view()),
     url(r'^api/', include(router.urls)),
     url(r'^api/users/emails/$', GetEmails.as_view()),
@@ -76,9 +82,12 @@ urlpatterns += [
     )
 ]
 
+favicon_view = RedirectView.as_view(url='/staticfiles/favicon.ico', permanent=True)
+
 urlpatterns += [
     url(r'^$', RedirectView.as_view(url='/app')),
     url(r'^app/*', Index.as_view(), name='index'),
+    re_path(r'^favicon\.ico$', favicon_view),
 ]
 
 # Для файлов

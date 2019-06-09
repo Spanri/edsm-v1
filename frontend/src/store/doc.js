@@ -14,6 +14,7 @@ import {
     DOC_DELETE,
     DOC_SIGNATURE,
     DOC_SIGNATURE_CANCEL,
+    DOC_SIGNATURE_AGAIN,
     DOC_EDIT,
     DOC_UPDATE,
     DOC_REQUEST,
@@ -266,7 +267,6 @@ const actions = {
     },
     [DOC_UPLOAD]: ({commit, dispatch, rootState}, data) => {
         return new Promise((resolve, reject) => {
-            console.log(data)
             axios
                 .post(path + '/api/docs/i',
                     data.d, { headers: {
@@ -367,7 +367,26 @@ const actions = {
     [DOC_SIGNATURE_CANCEL]: ({ commit, dispatch, rootState }, data) => {
         return new Promise((resolve, reject) => {
             axios
-                .get(path + '/api/docs/cancel_signature/' + data.id + '/', {
+                .post(path + '/api/docs/cancel_signature/' + data.id + '/', data.data, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(resp => {
+                    resolve(resp.data)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOC_SIGNATURE_AGAIN]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            console.log(id)
+            axios
+                .get(path + '/api/docs/signature_again/' + id + '/', {
                     headers: { Authorization: "Token " + rootState.auth.token }
                 })
                 .then(resp => {

@@ -1,5 +1,6 @@
 <template>
 	<div class="grid">
+        <div v-if="disable && id == 'notif'" style="color: red;">Загрузка...</div>
         <div v-if="filteredHeroes.length == 0">
             <p>Так грустно... Здесь ничего нет.</p>
             <svg fill="#7cb0c1" height="44" viewBox="0 0 24 24" width="44" xmlns="http://www.w3.org/2000/svg">
@@ -11,6 +12,11 @@
                 <p style="display: inline-block;margin:0;margin-bottom:15px;margin-right: 20px;">Поиск по всем столбцам</p>
                 <input placeholder="Введите что-то" name="query" v-model="filterKey">
             </form>
+            <div v-if="$route.params.id == 'common'">
+                <button :class="[commonActive == 1 ? 'commonButton' : '']" @click="commonActive=1">ВСЕ ДОКУМЕНТЫ</button>
+                <button :class="[commonActive == 2 ? 'commonButton' : '']" @click="commonActive=2">МОИ ДОКУМЕНТЫ</button>
+                <button :class="[commonActive == 3 ? 'commonButton' : '']" @click="commonActive=3">НЕ МОИ ДОКУМЕНТЫ</button>
+            </div>
             <p v-if="error" style="color: red;">{{error}}</p>
             <table>
                 <thead>
@@ -89,11 +95,13 @@ export default {
             filterKey: '',
             sortOrders: sortOrders,
             error: '',
+            commonActive: '',
         }
     },
     async created(){
         await this.$store.dispatch(DOCS_REQUEST)
         await this.$store.dispatch(DOCS_FILTER)
+        this.commonActive = 1;
     },
     computed: {
         ...mapGetters({
@@ -132,12 +140,18 @@ export default {
         },
 		heroes() {
             let id = this.$route.params.id;
-            let output = [];
+            let output = this.getDocs
+                .filter(d => d.status != 3 || d.status != 7);;
             if(id == 'all'){
-			    output = this.getDocs;
+                output = output;
             } else if(id == 'common') {
-                output = this.getDocs
-                .filter(d => d.doc.common);
+                output = output.filter(d => d.doc.common);
+                if(this.commonActive == 2) {
+                    output = output.filter(d => d.user.id == this.getProfile.id);
+                }
+                if(this.commonActive == 3) {
+                    output = output.filter(d => d.user.id != this.getProfile.id);
+                }
             } else if(id == 'myDocs') {
                 output = this.getDocs.filter(d =>
                     d.user.id == this.getProfile.id && 
@@ -152,14 +166,17 @@ export default {
                 .filter(d => d.status == 5);
             } else if(this.id == 'notif') {
                 let docs = this.getDocsOld.filter(d => 
-                    d.status == 3 || d.status == 2
+                    d.status == 2 || d.status == 3 || d.status == 7
                 );
                 docs.forEach(d => {
-                    if(d.status == 3){
-                        d.message = "Ваш документ подписали."
-                    }
                     if(d.status == 2){
                         d.message = "Вас просят подписать документ."
+                    }
+                    else if(d.status == 3){
+                        d.message = "Ваш документ подписали."
+                    }
+                    else if(d.status == 7){
+                        d.message = "Ваш документ отклонили."
                     }
                 })
                 output = docs;
@@ -200,7 +217,6 @@ export default {
             } else if(entry.rowBackg == "white") {
                 this.$store.dispatch(DOC_UPDATE, entry.id)
                 .then(r => {
-                    console.log(entry)
                     this.$router.push({
                         name: 'document',
                         params: { 
@@ -208,7 +224,6 @@ export default {
                             idNotif: entry.id.toString(),
                         }
                     })
-                    // this.$router.push('/document/' + entry.doc.id);
                 })
                 .catch(err=>{
                     console.log(err)
@@ -286,5 +301,26 @@ input{
     /* pointer-events: none;
     background: #d6d6d6;
     color: #4e4848; */
+}
+/* Кнопки в общих документах */
+button{
+	width: auto;
+	border: 0;
+	border-radius: 5px;
+	padding: 8px;
+    margin-top: -20px;
+    margin-bottom: 15px;
+    margin-right: 10px;
+	color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+	background-color: #77abc7;
+	text-align: center;
+}
+button:hover{
+    cursor: pointer;
+}
+.commonButton{
+    background-color: #347090;
 }
 </style>

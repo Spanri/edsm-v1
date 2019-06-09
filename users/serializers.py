@@ -15,6 +15,48 @@ import boto3
 import os
 from django.template.loader import get_template
 
+def send_notif(notif):
+    notifOwner = Notif.objects.get(
+        doc_id=notif.doc.id,
+        status=0
+    )
+    if notif.user.is_get_notif_email:
+        if (notifOwner.user.profile.first_name != "" and notifOwner.user.profile.patronymic != ""):
+            full_name = notifOwner.user.profile.second_name + " " + \
+                notifOwner.user.profile.first_name[0] + \
+                "." + notifOwner.user.profile.patronymic[0] + "."
+        else:
+            full_name = notifOwner.user.profile.second_name
+        message = (
+            '<p>Пользователь ' + full_name + ' (' + notifOwner.user.email + ') просит вас подписать документ "' +
+            notif.doc.title + '".</p><p>Пожалуйста, зайдите в систему СЭД МТУСИ, чтобы принять решение, подписать ' +
+            'документ или отклонить.</p><a href="https://edms-mtuci.herokuapp.com/document/' +
+            str(notif.doc.id) + '">https://edms-mtuci.herokuapp.com/document/' +
+            str(notif.doc.id) +
+            '</a><p>Отключить получение уведомлений на почту можно в настройках профиля.</p>'
+        )
+        msg = EmailMessage(
+            'Вас просят подписать документ, СЭД МТУСИ',
+            message,
+            'edmsmtuci@gmail.com',
+            [notif.user.email, ],
+        )
+        msg.content_subtype = "html"
+        # Скачиваем файл из хранилища
+        s3 = boto3.resource(
+            's3',
+            aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+            aws_secret_access_key=os.environ.get(
+                'AWS_SECRET_ACCESS_KEY'),
+        )
+        s3.meta.client.download_file(
+            'edms-mtuci',
+            'media/' + str(notif.doc.file),
+            'staticfiles/media/' + str(notif.doc.file)
+        )
+        msg.attach_file('staticfiles/media/' + str(notif.doc.file))
+        msg.send()
+
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer): 
     full_name = serializers.SerializerMethodField()
 
@@ -113,46 +155,10 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
         notif.date = now
         notif.save()
 
-        # Проверяем, есть ли статус 2. Если да, отправляем пользователю уведомление на почту.
+        # Проверяем, есть ли статус 2. Если да, отправляем
+        # пользователю уведомление на почту.
         if notif.status == 2:
-            notifOwner = Notif.objects.get(
-                doc_id=notif.doc.id,
-                status=0
-            )
-            if notif.user.is_get_notif_email:
-                if (notifOwner.user.profile.first_name != "" and notifOwner.user.profile.patronymic != ""):
-                    full_name = notifOwner.user.profile.second_name + " " + \
-                        notifOwner.user.profile.first_name[0] + \
-                        "." + notifOwner.user.profile.patronymic[0] + "."
-                else:
-                    full_name = notifOwner.user.profile.second_name
-                message = (
-                    '<p>Пользователь ' + full_name + ' (' + notifOwner.user.email + ') просит вас подписать документ "' + 
-                    notif.doc.title + '".</p><p>Пожалуйста, зайдите в систему СЭД МТУСИ, чтобы принять решение, подписать ' +
-                    'документ или отклонить.</p><a href="https://edms-mtuci.herokuapp.com/document/' +
-                    str(notif.doc.id) +'">https://edms-mtuci.herokuapp.com/document/' +
-                    str(notif.doc.id) + '</a><p>Отключить получение уведомлений на почту можно в настройках профиля.</p>'
-                )              
-                msg = EmailMessage(
-                    'Вас просят подписать документ, СЭД МТУСИ', 
-                    message,
-                    'edmsmtuci@gmail.com',
-                    [notif.user.email, ],
-                )
-                msg.content_subtype = "html"
-                # Скачиваем файл из хранилища
-                s3 = boto3.resource(
-                    's3',
-                    aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-                    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-                )
-                s3.meta.client.download_file(
-                    'edms-mtuci',
-                    'media/' + str(notif.doc.file),
-                    'staticfiles/media/' + str(notif.doc.file)
-                )
-                msg.attach_file('staticfiles/media/' + str(notif.doc.file))
-                msg.send()
+            send_notif(notif)
 
         return notif
     

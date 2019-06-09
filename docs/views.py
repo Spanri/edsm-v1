@@ -10,7 +10,8 @@ from .serializers import (
 )
 from users.serializers import (
     UserSerializer,
-    NotifSerializer
+    NotifSerializer,
+    send_notif,
 )
 from users.models import (
     Notif,
@@ -86,7 +87,8 @@ class FileCabinetViewSet(viewsets.ModelViewSet):
 class AddSignature(generics.ListAPIView):
     '''
     Добавить подпись к документу. Принимает id документа.
-    Права - нет (они проверяются на сервере генерации подписи).
+    Права - админ или владелец нотифа, который с этим доком и 
+    который надо подписать.
     '''
     serializer_class = DocSerializer
     queryset = Doc.objects.all()
@@ -104,7 +106,7 @@ class AddSignature(generics.ListAPIView):
             status=0
         )
 
-        # Тут должна быть функция генерации подписи
+        # Функция генерации подписи
         edc = EDC()
         if self.kwargs['first'] == '0':
             path = 'https://edms-mtuci.s3.amazonaws.com/' + str(doc.file)
@@ -127,15 +129,6 @@ class AddSignature(generics.ListAPIView):
 
         file = open('staticfiles/media/' + str(doc.file), 'rb')
         signature = edc.signFile(file, notifOwner.user.username)
-
-        # print('fo0', str(doc.file))
-        # first_object = s3.Object('edms-mtuci', str(doc.file))
-        # print('fo', first_object)
-
-        # import base64
-        # # f = open(signature, 'r').read()
-        # c = base64.b64decode(signature)
-        # print(c)
 
         # Добавить подпись
         doc.signature = signature
@@ -170,61 +163,100 @@ class AddSignature(generics.ListAPIView):
         serializer = DocSerializer(doc)
         return doc
 
-# не работает пока что
-class CancelSignature(generics.ListAPIView):
+class CancelSignature(viewsets.ModelViewSet):
     '''
-    Добавить подпись к документу. Принимает id документа.
-    Права - нет (они проверяются на сервере генерации подписи).
+    Отменить подпись и удалить все подписи.
+    Права - админ или владелец нотифа, который с этим доком и 
+    который надо подписать.
     '''
     serializer_class = DocSerializer
     queryset = Doc.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated2,)
 
-    def get_queryset(self):
-        doc = Doc.objects.get(id=self.kwargs['pk'])
+    def cancel_signature(self, request, pk):
         # Найти нужный документ
         doc = Doc.objects.get(id=self.kwargs['pk'])
-
-        # Найти нотиф, который с этим документом и
-        # пользователь - владелец документа
-        notifOwner = Notif.objects.get(
-            doc_id=doc.id,
-            status=0
-        )
-
-        # удаляем все подписи
-        doc.signature = null
+        # Поменять данные
+        if ('file' in request.data):
+            doc.cancel_file = request.data['file']
+        doc.signature = None
+        doc.cancel_description = request.data['cancel_description']
         doc.save()
 
-        # Подпись ставит не владелец
-        if self.kwargs['first'] == '0':
-            # Найти нотиф, который с этим документом и
-            # где очередь подписывать и изменить на "подписано"
-            try:
-                notif = Notif.objects.get(
-                    doc_id=doc.id,
-                    status=2
-                )
-                notif.status = 3
-                notif.save()
-                # Найти следующий нотиф, который с этим документом и
-                # где очередь = очередь+1
-                try:
-                    notifNext = Notif.objects.get(
-                        doc_id=doc.id,
-                        status=1,
-                        queue=notif.queue+1
-                    )
-                    notifNext.status = 2
-                    notifNext.save()
-                except:
-                    pass
-            except Exception as e:
-                pass
-        doc = Doc.objects.filter(id=self.kwargs['pk'])
-        serializer = DocSerializer(doc)
-        return doc
+        # Теперь тот, кто должен был подписать, 
+        # становится "отказчиком"
+        notifCancel = Notif.objects.get(
+            doc_id=doc.id,
+            status=2,
+        )
+        notifCancel.status = 7
+        notifCancel.save()
+
+        return Response(DocSerializer(doc).data)
+
+class SignatureAgain(generics.ListAPIView):
+    '''
+    Начать цепочку подписей снова.
+    Права - админ или владелец документа.
+    '''
+    serializer_class = DocSerializer
+    queryset = Doc.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated,)
+
+    def get_context_data(self, **kwargs):
+        return super(AddSignature, self).get_context_data(**kwargs)
+
+    def get_queryset(self):
+        id = id = self.kwargs['pk']
+        # Найти нужный документ, убрать комментарий отказа
+        doc = Doc.objects.get(id=id)
+        doc.cancel_description = None
+        doc.save()
+
+        # Владелец должен подписать
+        notifOwner = Notif.objects.get(
+            doc_id=id,
+            status=0,
+        )
+        self.kwargs['first'] = '1'
+        doc = AddSignature.as_view()(self.request._request, **self.kwargs)
+        # doc = list(doc.data)
+        # print('doc', doc)
+
+        # Все статусы 2, 3 и 7 с этим документом 
+        # превратить в статус 1 (хотя бы один должен быть)
+        notif = Notif.objects.filter(
+            doc_id=id,
+            status=2,
+        )
+        notif = notif | Notif.objects.filter(
+            doc_id=id,
+            status=3,
+        )
+        notif = notif | Notif.objects.filter(
+            doc_id=id,
+            status=7,
+        )
+        for i, n in enumerate(notif):
+            n.status = 1
+            notif[i].save()
+
+        # Отправить уведомление человеку, который должен
+        # подписать и нулевой в очереди
+        try:
+            notif0 = Notif.objects.get(
+                doc_id=id,
+                status=1,
+                queue=0,
+            )
+            notif0.status = 2
+            notif0.save()
+            send_notif(notif0)
+        except: pass
+
+        return Doc.objects.filter(id=id)
 
 class DownloadFile(generics.RetrieveAPIView):
     '''

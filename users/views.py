@@ -89,14 +89,23 @@ class Notif2(generics.ListAPIView):
             notif.data[i] = d
             # надо подписать и очередь или
             # подписан и есть уведомления или
+            # отклонил документ 
             # просто смотрю, не надо подписывать
             if(
-                n['user']['id'] == user_id and
                 (
-                    n['status'] == 2 or
-                    n['status'] == 3 or
-                    n['status'] == 5
+                    n['user']['id'] == user_id and
+                    (
+                        n['status'] == 2 or
+                        n['status'] == 3 or
+                        n['status'] == 5
+                    )
+                ) or (
+                    n['user']['id'] != user_id and
+                    (
+                        n['status'] == 7
+                    )
                 )
+
             ):
                 notif2.append(notif.data[i])
             # владелец (отдельно, ибо нужно дальше)

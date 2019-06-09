@@ -3,7 +3,7 @@ from .models import Doc, FileCabinet
 
 @admin.register(Doc)
 class DocAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date', 'common', 'id')
+    list_display = ('title', 'date', 'common', 'cancel_description', 'id')
     search_fields = ('id',)
     ordering = ('id',)
 

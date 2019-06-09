@@ -14,7 +14,7 @@
 				<button @click="downloadSign()">СКАЧАТЬ ПОДПИСЬ (не работает)</button>
 				<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="editDoc()">РЕДАКТИРОВАТЬ</button>
 				<button v-if="doc.status == 2" @click="isPreConfirm = true">ПОДПИСАТЬ/ОТКЛОНИТЬ</button>
-				<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ ПОДПИСЕЙ СНОВА (не работает)</button>
+				<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ ПОДПИСЕЙ СНОВА</button>
 			</div>
 			<div class="document2Colon">
 				<div>
@@ -23,6 +23,13 @@
 				</div>
 				<div style="margin-left:25px;margin-top:0px;">
 					<h3 class="header">{{title}}</h3>
+					<p v-if="doc.doc.cancel_description" style="color: red">
+						Ваш документ отказались подписывать. Посмотрите комментарий отказа и 
+						нажмите кнопку "Запустить цепочку подписей снова". Выберите в появившемся 
+						окне новый документ (необязательно) и нажмите "Подтвердить", чтобы запустить 
+						цепочку подписей.
+					</p>
+					<p v-if="doc.doc.cancel_description">Комментарий отказа: {{doc.doc.cancel_description}}</p>
 					<p v-if="error" style="color: red">{{error}}</p>
 					<table class="aboutDoc">
 						<thead><tr><th></th><th></th></tr></thead>
@@ -159,6 +166,8 @@ import {
 	DOCS_REQUEST,
 	DOC_REQUEST,
 	DOC_SIGNATURE, 
+	DOC_SIGNATURE_CANCEL,
+	DOC_SIGNATURE_AGAIN,
 	DOC_DELETE, 
 	DOC_DOWNLOAD 
 } from '../../store/mutation-types';
@@ -307,7 +316,37 @@ export default {
 			this.isPreConfirm = false;
 		},
 		cancelSign(){
-			console.log(this.cancelCause)
+			this.error = 'Документ отклоняется...'
+			let d = {
+				cancel_description: this.cancelCause
+			}
+			if (this.cancelFile) d.cancel_file = this.cancelFile;
+			this.$store.dispatch(DOC_SIGNATURE_CANCEL, {
+					id: this.id,
+					data: d
+				})
+				.then(resp => {
+					this.refresh = true;
+					this.$store.dispatch(DOCS_REQUEST)
+					.then(r => {
+						this.doc = this.$store.getters.getDoc(this.id);
+						this.error = 'Документ отклонен. Через несколько секунд вы перейдете на главную страницу.'
+						this.isConfirm = false;
+						this.confirmFromApp = '';
+						this.confirm = '';
+						this.refresh = false;
+						setTimeout(() => {
+							this.error = '';
+							this.$router.push('/documents/all');
+						}, 5000);
+					})
+				})
+				.catch(err=>{
+					console.log(err)
+					this.isConfirm = false;
+					this.confirm = '';
+					this.error = 'Ошибка. Что-то пошло не так.'
+				})
 		},
 		onFileChangeCancel(e) {
             // var files = e.target.files || e.dataTransfer.files;
@@ -329,15 +368,19 @@ export default {
 					first: 0
 				})
 				.then(resp => {
-					this.doc.status = 3;
-					this.isConfirm = false;
-					this.error = 'Подпись успешно поставлена!'
-					this.confirmFromApp = '';
-					this.confirm = '';
-					this.$store.dispatch(DOCS_REQUEST);
-					setTimeout(() => {
-						this.error = '';
-					}, 3000);
+					this.refresh = true;
+					this.$store.dispatch(DOCS_REQUEST)
+					.then(r => {
+						this.doc = this.$store.getters.getDoc(this.id);
+						this.error = 'Подпись успешно поставлена!'
+						this.isConfirm = false;
+						this.confirmFromApp = '';
+						this.confirm = '';
+						this.refresh = false;
+						setTimeout(() => {
+							this.error = '';
+						}, 3000);
+					})
 				})
 				.catch(err=>{
 					console.log(err)
@@ -351,7 +394,29 @@ export default {
 			}
 		},
 		repeatSignatures(){
-			console.log('repeatSignatures')
+			this.error = 'Цепочка запускается...'
+			this.$store.dispatch(DOC_SIGNATURE_AGAIN, this.id)
+				.then(resp => {
+					this.refresh = true;
+					this.$store.dispatch(DOCS_REQUEST)
+					.then(r => {
+						this.doc = this.$store.getters.getDoc(this.id);
+						this.error = 'Цепочка запущена снова.'
+						this.isConfirm = false;
+						this.confirmFromApp = '';
+						this.confirm = '';
+						this.refresh = false;
+						setTimeout(() => {
+							this.error = '';
+						}, 3000);
+					})
+				})
+				.catch(err=>{
+					console.log(err);
+					this.isConfirm = false;
+					this.confirm = '';
+					this.error = 'Ошибка. Что-то пошло не так.'
+				})
 		},
 		async deleteDoc(){
 			let res = await confirm(
