@@ -9,6 +9,9 @@ from users.serializers import (
 from docs.serializers import (
     DocSerializer,
 )
+from docs.permissions import (
+    CustomIsAuthenticated as CustomIsAuthenticatedDoc,
+)
 from .permissions import (
     CustomIsAuthenticated,
     CustomIsAuthenticated2,
@@ -96,16 +99,13 @@ class Notif2(generics.ListAPIView):
                     n['user']['id'] == user_id and
                     (
                         n['status'] == 2 or
-                        n['status'] == 3 or
-                        n['status'] == 5
+                        n['status'] == 3
                     )
                 ) or (
-                    n['user']['id'] != user_id and
-                    (
-                        n['status'] == 7
-                    )
+                    n['user']['id'] == user_id and 
+                    n['doc']['signature_end'] == True and
+                    n['status'] == 5
                 )
-
             ):
                 notif2.append(notif.data[i])
             # владелец (отдельно, ибо нужно дальше)
@@ -117,6 +117,7 @@ class Notif2(generics.ListAPIView):
             # документ в общем доступе
             if(
                 n['doc']['common'] and
+                n['doc']['signature_end'] == True and
                 n['status'] == 0
             ):
                 notif2.append(notif.data[i])
@@ -124,14 +125,16 @@ class Notif2(generics.ListAPIView):
         # Находим документы пользователя, которые подписали, чтобы
         # вывести это в уведомления с сообщением "Ваш документ подписали."
         # Для каждого документа, где пользователь - владелец, проверяем,
-        # есть ли нотиф, где этот документ и
-        # is_owner=false, is_signature_request=true, is_signature=true
+        # есть ли нотиф, где этот документ и он (подписан или отклонен)
         notif_signature = []
         for i, n in enumerate(notif_owner):
             for j, n2 in enumerate(notif.data):
                 if(
                     n2['doc']['id'] == n['doc']['id'] and
-                    n2['status'] == 3
+                    (
+                        n2['status'] == 3 or
+                        n2['status'] == 7
+                    )
                 ):
                     notif_signature.append(n2)
                     break
@@ -162,6 +165,24 @@ class Notif2(generics.ListAPIView):
                     break
         notif2 = unique(notif2)
         return Response(notif2)
+
+class NotifQueue(generics.ListAPIView):
+    '''
+    У кого сейчас очередь подписывать этот документ.
+    Права - владелец документа или админ.
+    '''
+    serializer_class = NotifSerializer
+    queryset = Notif.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticatedDoc,)
+
+    def get_queryset(self):
+        doc = Doc.objects.get(id=self.kwargs['pk'])
+        notif = Notif.objects.filter(
+            doc_id=doc.id,
+            status=2
+        )
+        return notif
 
 class ObtainAuthToken(views.APIView):
     '''

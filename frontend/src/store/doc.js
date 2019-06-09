@@ -15,6 +15,7 @@ import {
     DOC_SIGNATURE,
     DOC_SIGNATURE_CANCEL,
     DOC_SIGNATURE_AGAIN,
+    DOC_SIGNATURE_QUEUE,
     DOC_EDIT,
     DOC_UPDATE,
     DOC_REQUEST,
@@ -76,6 +77,7 @@ const actions = {
                         d.title = d.doc.title;
                         if (d.doc.date) d.doc.date = formatDate(d.doc.date);
                         d.date_doc = d.doc.date;
+                        if (d.date) d.date = formatDate(d.date);
                         d.date_notif = d.date;
                         d.file_cabinet = d.doc.file_cabinet.name;
                         let dd = d.is_read.filter(d0 => {
@@ -83,7 +85,17 @@ const actions = {
                         })
                         let myDoc = d.status == 0 && d.user.id == rootState.user.profile.id
                         d.rowBackg = (dd.length != 0 || myDoc) ? "white" : "#dcdbfc"
+                        if (myDoc && !d.doc.signature_end) {
+                            dispatch(DOC_SIGNATURE_QUEUE, d.doc.id)
+                                .then(r => {
+                                    if (r.length != 0) d.signUser = r[0].user.profile.full_name;
+                                    else {
+                                        d.signUser = '';
+                                    }
+                                })
+                        }
                     });
+                        
                     let d1 = resp.data.filter(d => {
                         return d.rowBackg == "#dcdbfc"
                     })
@@ -275,10 +287,6 @@ const actions = {
                     }
                 })
                 .then(async resp => {
-                    await dispatch(DOC_SIGNATURE, {
-                        id: resp.data.doc.id,
-                        first: 1
-                    })
                     if(data.signature_request.length != 0) {
                         await data.signature_request.forEach((s, i) => {
                             axios
@@ -314,7 +322,10 @@ const actions = {
                                 })
                         })
                     }
-                    // dispatch(DOC_UPDATE, resp.data.id)
+                    await dispatch(DOC_SIGNATURE, {
+                        id: resp.data.doc.id,
+                        first: 1
+                    })
                     await resolve(resp.data)
                 })
                 .catch(err => {
@@ -363,7 +374,6 @@ const actions = {
                 })
         })
     },
-    // не работает пока что
     [DOC_SIGNATURE_CANCEL]: ({ commit, dispatch, rootState }, data) => {
         return new Promise((resolve, reject) => {
             axios
@@ -382,11 +392,55 @@ const actions = {
                 })
         })
     },
-    [DOC_SIGNATURE_AGAIN]: ({ commit, dispatch, rootState }, id) => {
+    [DOC_SIGNATURE_AGAIN]: ({ commit, dispatch, rootState }, data) => {
         return new Promise((resolve, reject) => {
-            console.log(id)
             axios
-                .get(path + '/api/docs/signature_again/' + id + '/', {
+                .get(path + '/api/docs/signature_again/' + data.id + '/', {
+                    headers: {Authorization: "Token " + rootState.auth.token}
+                })
+                .then(resp => {
+                    if(data) {
+                        console.log('data', data.data)
+                        axios
+                        .patch(path + '/api/docs/i/' + data.id, data.data, {
+                            headers: { 
+                                'Content-Type': 'multipart/form-data',
+                                Authorization: "Token " + rootState.auth.token 
+                            }
+                        })
+                        .then(r => {
+                            dispatch(DOCS_REQUEST)
+                                .then(s => {
+                                    resolve(resp.data)
+                                })
+                        })
+                        .catch(err => {
+                            try {
+                                reject(err.response.request.response)
+                            } catch (error) {
+                                reject(err)
+                            }
+                        })
+                    } else {
+                        dispatch(DOCS_REQUEST)
+                            .then(s => {
+                                resolve(resp.data)
+                            })
+                    }
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+            })
+    },
+    [DOC_SIGNATURE_QUEUE]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(path + '/api/docs/signature_queue/' + id + '/', {
                     headers: { Authorization: "Token " + rootState.auth.token }
                 })
                 .then(resp => {

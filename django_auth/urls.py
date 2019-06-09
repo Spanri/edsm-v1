@@ -15,6 +15,7 @@ from users.views import (
     Index,
     ConfirmUpdatePasswordView,
     Notif2,
+    NotifQueue,
     NotifIsReadOrStatus4,
     GetEmails,
 )
@@ -45,6 +46,7 @@ urlpatterns = [
     url(r'^api/docs/cancel_signature/(?P<pk>.+)/$',
         CancelSignature.as_view({'post': 'cancel_signature'})),
     url(r'^api/docs/signature_again/(?P<pk>.+)/$', SignatureAgain.as_view()),
+    url(r'^api/docs/signature_queue/(?P<pk>.+)/$', NotifQueue.as_view()),
     url(r'^api/docs/download/(?P<pk>.+)/$', DownloadFile.as_view()),
     url(r'^api/', include(router.urls)),
     url(r'^api/users/emails/$', GetEmails.as_view()),

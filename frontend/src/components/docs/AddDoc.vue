@@ -181,7 +181,7 @@ export default {
                     [this.file],
                     this.title+'.'+this.typeFile,
                     {type: this.file.type}
-                );             
+                );          
                 d.append('file', newFile);
                 d.append('size', this.file.size);
             }

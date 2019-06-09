@@ -28,6 +28,7 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'common',
             'description',
             'signature',
+            'signature_end',
             'cancel_description',
             'cancel_file',
             'file_cabinet',
@@ -44,6 +45,7 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
     def update(self, instance, validated_data):
         try:
             return super(DocSerializer, self).update(instance, validated_data)
-        except:
+        except Exception as e:
+            print(str(e))
             content = {'error': 'Something else went wrong'}
             return Response(content, status=status.HTTP_404_NOT_FOUND)

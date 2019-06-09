@@ -59,4 +59,10 @@ router-view{
 	overflow-y: auto;
 	height: 100vh;
 }
+@media (max-width: 500px) {
+	.maing{
+		grid-template-columns: auto;
+		grid-template-rows: min-content auto;
+	}
+}
 </style>

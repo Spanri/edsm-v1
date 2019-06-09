@@ -37,7 +37,7 @@ from rest_framework import (
 from edc.EDC import EDC
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
-import datetime
+from django.utils import timezone
 
 class DocViewSet(viewsets.ModelViewSet):
     '''
@@ -133,8 +133,8 @@ class AddSignature(generics.ListAPIView):
         # Добавить подпись
         doc.signature = signature
         doc.save()
-
-        # Подпись ставит не владелец
+        id = doc.id
+        # Если подпись ставит не владелец
         if self.kwargs['first'] == '0':
             # Найти нотиф, который с этим документом и
             # где очередь подписывать и изменить на "подписано"
@@ -144,21 +144,37 @@ class AddSignature(generics.ListAPIView):
                     status=2
                 )
                 notif.status = 3
+                notif.date = timezone.now()
                 notif.save()
-                # Найти следующий нотиф, который с этим документом и
-                # где очередь = очередь+1
-                try:
-                    notifNext = Notif.objects.get(
-                        doc_id=doc.id,
-                        status=1,
-                        queue=notif.queue+1
-                    )
-                    notifNext.status = 2
-                    notifNext.save()
-                except:
-                    pass
-            except Exception as e:
-                pass
+            except: pass
+            # Найти следующий нотиф, который с этим документом и
+            # где очередь = очередь+1
+            try:
+                notifNext = Notif.objects.get(
+                    doc_id=doc.id,
+                    status=1,
+                    queue=notif.queue+1
+                )
+                notifNext.status = 2
+                notifNext.save()
+            # Если следующего нотифа нет, значит подпись больше не нужна
+            except:
+                print('0')
+                doc.signature_end = True
+                doc.save()
+
+        if self.kwargs['first'] == '1':
+            try:
+                notifNext = Notif.objects.get(
+                    doc_id=id,
+                    status=2,
+                    queue=0
+                )
+            # Если нулевого нотифа нет, значит подпись не нужна
+            except:
+                doc.signature_end = True
+                doc.save()
+                
         doc = Doc.objects.filter(id=self.kwargs['pk'])
         serializer = DocSerializer(doc)
         return doc
@@ -205,14 +221,12 @@ class SignatureAgain(generics.ListAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated,)
 
-    def get_context_data(self, **kwargs):
-        return super(AddSignature, self).get_context_data(**kwargs)
-
     def get_queryset(self):
         id = id = self.kwargs['pk']
         # Найти нужный документ, убрать комментарий отказа
         doc = Doc.objects.get(id=id)
         doc.cancel_description = None
+        doc.signature_end = False
         doc.save()
 
         # Владелец должен подписать

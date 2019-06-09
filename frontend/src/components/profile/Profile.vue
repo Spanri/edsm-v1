@@ -111,4 +111,11 @@ export default {
 	color: #7cb0c1;
 	fill: #7cb0c1;
 }
+@media (max-width: 500px) {
+	.mainProfile{
+		grid-template-columns: auto;
+		grid-template-rows: min-content auto;
+		padding: 0;
+	}
+}
 </style>

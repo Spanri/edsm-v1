@@ -7,14 +7,9 @@
 			</svg>
 		</div>
 		<div v-else>
-			<div class="buttons">
-				<button v-if="doc.doc.size/1024/1024 < 25" @click="viewDoc()">СМОТРЕТЬ ДОКУМЕНТ</button>
-				<button v-if="doc.doc.size/1024/1024 < 25" @click="viewSign()">СМОТРЕТЬ ПОДПИСЬ (не работает)</button>
-				<button @click="download()">СКАЧАТЬ</button>
-				<button @click="downloadSign()">СКАЧАТЬ ПОДПИСЬ (не работает)</button>
-				<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="editDoc()">РЕДАКТИРОВАТЬ</button>
-				<button v-if="doc.status == 2" @click="isPreConfirm = true">ПОДПИСАТЬ/ОТКЛОНИТЬ</button>
-				<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="repeatSignatures()">ЗАПУСТИТЬ ЦЕПОЧКУ ПОДПИСЕЙ СНОВА</button>
+			<div class="buttons">				
+				<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="editDoc()">РЕДАКТИРОВАТЬ ИНФОРМАЦИЮ О ФАЙЛЕ</button>
+				<button v-if="doc.status == 0 && doc.user.id == this.$store.getters.getProfile.id" @click="isRepeatSign=true">ИЗМЕНИТЬ ФАЙЛ/ПЕРЕЗАПУСТИТЬ ЦЕПОЧКУ ПОДПИСЕЙ</button>
 			</div>
 			<div class="document2Colon">
 				<div>
@@ -63,8 +58,20 @@
 								<td>{{Math.round(doc.doc.size/1024/1024 * 1000) / 1000}} Мб</td>
 							</tr>
 							<tr>
+								<td>Файл</td>
+								<td>
+									<button v-if="doc.doc.size/1024/1024 < 25" @click="viewDoc()">СМОТРЕТЬ</button>
+									<button @click="download()">СКАЧАТЬ</button>
+								</td>
+							</tr>
+							<tr>
 								<td>Подпись</td>
-								<td>{{ doc.doc.signature }}</td>
+								<td>
+									{{ doc.doc.signature }}
+									<button v-if="doc.doc.size/1024/1024 < 25" @click="viewSign()">СМОТРЕТЬ ПОДПИСЬ Х</button>
+									<button @click="downloadSign()">СКАЧАТЬ ПОДПИСЬ Х</button>
+									<button v-if="doc.status == 2" @click="isPreConfirm = true">ПОДПИСАТЬ/ОТКЛОНИТЬ</button>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -151,6 +158,41 @@
 						</div>
 						<p v-if="errorConfirm" style="color: red;text-align: center;padding: 5px">{{errorConfirm}}</p>
 					</form>
+					<div v-if="isRepeatSign" class="confirm">
+						<div style="display: grid;grid-template-columns: auto max-content;">
+							<div></div>
+							<svg @click="isRepeatSign = false;fileRepeat='';titleRepeatFile=''" style="margin-right: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+								<g id="Cancel" stroke="black" stroke-width="1">
+									<path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+										fill="#121313" fill-rule="evenodd"/>
+									<path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+										fill="#121313" fill-rule="evenodd"/>
+								</g>
+							</svg>
+						</div>
+						<p style="margin:0">
+							Загрузите новый файл (необязательно) и нажмите "ПЕРЕЗАПУСТИТЬ".
+						</p>
+						<input 
+							type="file"
+							id="file"
+							name="file"
+							class="cancelFile"
+							@change="onFileChangeRepeat">
+						<input 
+							v-if="titleRepeatFile"
+							type="text"
+							v-model="titleRepeatFile" 
+							placeholder="Имя файла"
+							style="margin-top:15px"
+							class="code">
+						<p style="padding-top:0;padding-bottom:0;">{{repeatP}}</p>
+						<div class="confirmButtons">
+							<div></div>
+							<button @click="repeatSignatures()">ПЕРЕЗАПУСТИТЬ</button>
+							<div></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -207,16 +249,21 @@ export default {
 			title: '',
 			type: '',
 			fileWithSignature: 'ddd',
+			fileRepeat: '',
 			error: '',
 			errorConfirm: '',
 			isPreConfirm: false,
 			isConfirm: false,
 			isCancelSign: false,
+			isRepeatSign: false,
+			titleRepeatFile: '',
+			typeRepeatFile: '',
 			confirm: '',
 			confirmFromApp: '',
 			cancelCause: '',
 			cancelFile: '',
 			refresh: '',
+			repeatP: '',
         }
 	},
 	created() {
@@ -359,7 +406,15 @@ export default {
             // this.file = files[0];
             // this.disable = false;
             // console.log(files[0].size/1024/1024 + " мб")
-        },
+		},
+		onFileChangeRepeat(e) {
+			var files = e.target.files || e.dataTransfer.files;
+            if (!files.length) return;
+            this.fileRepeat = files[0];
+			let typeRepeatFile = files[0].name.split('.')
+            this.typeRepeatFile = typeRepeatFile[typeRepeatFile.length-1];
+            this.titleRepeatFile = files[0].name.replace("." + this.typeRepeatFile, "");
+		},
 		addSignature(){
 			if (this.confirm == this.confirmFromApp) {
 				this.errorConfirm = 'Ставим подпись...'
@@ -368,7 +423,7 @@ export default {
 					first: 0
 				})
 				.then(resp => {
-					this.refresh = true;
+					// this.refresh = true;
 					this.$store.dispatch(DOCS_REQUEST)
 					.then(r => {
 						this.doc = this.$store.getters.getDoc(this.id);
@@ -376,7 +431,7 @@ export default {
 						this.isConfirm = false;
 						this.confirmFromApp = '';
 						this.confirm = '';
-						this.refresh = false;
+						// this.refresh = false;
 						setTimeout(() => {
 							this.error = '';
 						}, 3000);
@@ -394,17 +449,35 @@ export default {
 			}
 		},
 		repeatSignatures(){
-			this.error = 'Цепочка запускается...'
-			this.$store.dispatch(DOC_SIGNATURE_AGAIN, this.id)
+			this.repeatP = 'Цепочка запускается...'
+			// для файла
+			let d = '';
+            if (this.fileRepeat) { 
+				d = new FormData();  
+                const newFile = new File(
+                    [this.fileRepeat],
+                    this.titleRepeatFile+'.'+this.typeRepeatFile,
+                    {type: this.fileRepeat.type}
+                );             
+                d.append('file', newFile);
+				d.append('size', this.fileRepeat.size);
+				d.append('title', this.titleRepeatFile+'.'+this.typeRepeatFile);
+			}
+			this.$store.dispatch(DOC_SIGNATURE_AGAIN, {
+				data: d,
+				id: this.id
+			})
 				.then(resp => {
 					this.refresh = true;
 					this.$store.dispatch(DOCS_REQUEST)
 					.then(r => {
 						this.doc = this.$store.getters.getDoc(this.id);
+						this.repeatP = '';
+						this.fileRepeat = '';
+						this.titleRepeatFile = '';
+						this.typeRepeatFile = '';
 						this.error = 'Цепочка запущена снова.'
-						this.isConfirm = false;
-						this.confirmFromApp = '';
-						this.confirm = '';
+						this.isRepeatSign = false;
 						this.refresh = false;
 						setTimeout(() => {
 							this.error = '';

@@ -8,7 +8,6 @@ from django.conf import settings
 from django.core import exceptions
 from rest_framework import status
 from rest_framework.response import Response
-import datetime
 from django.utils import timezone
 from django.core.mail import send_mail, EmailMessage
 import boto3

@@ -1,18 +1,18 @@
 <template>
 	<div class="grid">
         <div v-if="disable && id == 'notif'" style="color: red;">Загрузка...</div>
-        <div v-if="filteredHeroes.length == 0">
+        <div v-if="filteredHeroes.length == 0 && $route.params.id != 'common'">
             <p>Так грустно... Здесь ничего нет.</p>
             <svg fill="#7cb0c1" height="44" viewBox="0 0 24 24" width="44" xmlns="http://www.w3.org/2000/svg">
                 <path class="heroicon-ui" d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-3.54-4.54a5 5 0 0 1 7.08 0 1 1 0 0 1-1.42 1.42 3 3 0 0 0-4.24 0 1 1 0 0 1-1.42-1.42zM9 11a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm6 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
             </svg>
         </div>
-        <div v-if="filteredHeroes.length != 0">
+        <div v-if="filteredHeroes.length != 0 || $route.params.id == 'common'" class="dataDiv">
             <form class="search">
                 <p style="display: inline-block;margin:0;margin-bottom:15px;margin-right: 20px;">Поиск по всем столбцам</p>
                 <input placeholder="Введите что-то" name="query" v-model="filterKey">
             </form>
-            <div v-if="$route.params.id == 'common'">
+            <div v-if="$route.params.id == 'common' && !disable">
                 <button :class="[commonActive == 1 ? 'commonButton' : '']" @click="commonActive=1">ВСЕ ДОКУМЕНТЫ</button>
                 <button :class="[commonActive == 2 ? 'commonButton' : '']" @click="commonActive=2">МОИ ДОКУМЕНТЫ</button>
                 <button :class="[commonActive == 3 ? 'commonButton' : '']" @click="commonActive=3">НЕ МОИ ДОКУМЕНТЫ</button>
@@ -29,6 +29,7 @@
                             <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
                             </span>
                         </th>
+                        <th v-if="$route.params.id == 'my-doc-signature-request'">Кто подписывает</th>
                         <th v-if="id == 'notif'" style="padding: 0px 9px;">
                             <svg height="17px" viewBox="0 0 33 33" width="18px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <g id="Cancel" stroke="black" stroke-width="1">
@@ -46,6 +47,7 @@
                         <td v-for="(key,i) in columns" :key="i" @click="i != 5 ? toDoc(entry) : ''">
                             {{entry[key.key]}}
                         </td>
+                        <td v-if="$route.params.id == 'my-doc-signature-request'">{{entry.signUser}}</td>
                         <td style="padding: 0px 2px;" v-if="id == 'notif'">
                             <svg v-if="id == 'notif' && entry.status == 3" @click="hideNotif(j);" style="margin:auto;padding:7px;cursor:pointer;" height="17px" viewBox="0 0 33 33" width="18px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <g id="Cancel" stroke="black" stroke-width="1">
@@ -70,6 +72,7 @@ import {
     DOC_UPDATE, 
     USER_REQUEST, 
     USER_NOTIF_REQUEST, 
+    DOC_SIGNATURE_QUEUE,
     DOC_FOLDER_PAGE, 
     DOC_FOLDER_PAGE_PROFILE,
     DOCS_FILTER,
@@ -95,13 +98,14 @@ export default {
             filterKey: '',
             sortOrders: sortOrders,
             error: '',
-            commonActive: '',
+            commonActive: '1',
         }
     },
-    async created(){
-        await this.$store.dispatch(DOCS_REQUEST)
-        await this.$store.dispatch(DOCS_FILTER)
-        this.commonActive = 1;
+    created(){
+        this.$store.dispatch(DOCS_REQUEST)
+        .then(t => {
+            this.$store.dispatch(DOCS_FILTER)
+        })
     },
     computed: {
         ...mapGetters({
@@ -135,13 +139,11 @@ export default {
                     return (a === b ? 0 : a > b ? 1 : -1) * order
                 })
             }
-            // console.log('heroes', heroes)
             return heroes
         },
 		heroes() {
             let id = this.$route.params.id;
-            let output = this.getDocs
-                .filter(d => d.status != 3 || d.status != 7);;
+            let output = this.getDocs.filter(d => d.status != 3 || d.status != 7);;
             if(id == 'all'){
                 output = output;
             } else if(id == 'common') {
@@ -152,6 +154,7 @@ export default {
                 if(this.commonActive == 3) {
                     output = output.filter(d => d.user.id != this.getProfile.id);
                 }
+                output = output
             } else if(id == 'myDocs') {
                 output = this.getDocs.filter(d =>
                     d.user.id == this.getProfile.id && 
@@ -164,6 +167,12 @@ export default {
             } else if(id == 'available-to-me') {
                 output = this.getDocs
                 .filter(d => d.status == 5);
+            } else if(id == 'my-doc-signature-request') {
+                output = this.getDocs
+                .filter(d =>
+                    d.user.id == this.getProfile.id &&
+                    d.status == 0 && !d.doc.signature_end
+                )
             } else if(this.id == 'notif') {
                 let docs = this.getDocsOld.filter(d => 
                     d.status == 2 || d.status == 3 || d.status == 7
@@ -184,8 +193,8 @@ export default {
                 output = null;
             }
             return output;
-		}
-    },
+        },
+    }, 
     filters: {
         capitalize(str) {
             return str.charAt(0).toUpperCase() + str.slice(1)
@@ -322,5 +331,21 @@ button:hover{
 }
 .commonButton{
     background-color: #347090;
+}
+@media (max-width: 500px) {
+	.grid > *{
+		margin: 0;
+	}
+    .dataDiv{
+        margin: 0;
+    }
+    .search{
+        margin: 10px;
+    }
+}
+@media (max-width: 350px) {
+    *{
+        font-size: 12px;
+    }
 }
 </style>

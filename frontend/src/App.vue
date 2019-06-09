@@ -76,7 +76,6 @@ export default {
 #app{
 	font-family: 'Roboto', serif;
 	font-weight: 500;
-	
 }
 .a {
 	height: 100vh;
@@ -90,5 +89,10 @@ export default {
 router-view{
 	overflow-y: auto;
 	height: 100vh;
+}
+@media (max-width: 500px) {
+	*{
+		font-size: 14px;
+	}
 }
 </style>
