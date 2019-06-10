@@ -59,7 +59,7 @@ class DocViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            now = datetime.datetime.now()
+            now = timezone.now()
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
