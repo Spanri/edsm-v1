@@ -218,7 +218,7 @@ def job():
             n.is_notif_expire = True
             n.save()
 
-scheduler = BackgroundScheduler()
+# scheduler = BackgroundScheduler()
 # scheduler.start()
 # scheduler.add_job(job, 'interval', seconds=REFRESH_INTERVAL)
 
