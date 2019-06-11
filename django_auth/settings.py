@@ -1,3 +1,5 @@
+
+# from django_auth import aps
 from botocore.exceptions import ClientError
 import logging
 import boto3
@@ -68,6 +70,7 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': 'ec2-54-75-238-138.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
+        'CONN_MAX_AGE': 0
     }
 }
 
@@ -88,12 +91,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Для 
 REST_AUTH_SERIALIZERS = {
     'PASSWORD_RESET_SERIALIZER': 
         'users.serializers.PasswordResetSerializer',
 }
-
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -101,19 +102,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# Для деплоймента
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static/')
-# # STATIC_DIR = os.path.join(BASE_DIR, 'staticfiles/')
-# # STATIC_URL = 'staticfiles/'
-# STATICFILES_DIRS = (
-#     # os.path.join(BASE_DIR, 'staticfiles/static/'),
-#     os.path.join(BASE_DIR, 'frontend/dist/'),
-# )
-# MEDIA_ROOT = os.path.join(BASE_DIR, '')
-# MEDIA_URL = '/'
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -139,7 +127,6 @@ AUTH_USER_MODEL = 'users.User'
 # Хероку
 import django_heroku
 django_heroku.settings(locals())
-
 
 # def create_bucket(bucket_name):
 #     """ Create an Amazon S3 bucket
