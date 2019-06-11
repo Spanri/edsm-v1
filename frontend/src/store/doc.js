@@ -26,6 +26,7 @@ import {
     DOCS_SUCCESS,
     path,
 } from './mutation-types'
+import {formatDate} from '../otherFun'
 import Vue from 'vue'
 import axios from 'axios'
 
@@ -48,21 +49,6 @@ const getters = {
     getReload: state => state.reload,
 }
 
-function formatDate(date) {
-    date = new Date(date)
-    var year = date.getFullYear(),
-        month = date.getMonth() + 1, // months are zero indexed
-        monthFormatted = month < 10 ? "0" + month : month,
-        day = date.getDate(),
-        dayFormatted = day < 10 ? "0" + day : day,
-        hour = date.getHours(),
-        minute = date.getMinutes(),
-        minuteFormatted = minute < 10 ? "0" + minute : minute;
-
-    return dayFormatted + "-" + monthFormatted + "-" + year + " " + hour + ":" +
-        minuteFormatted;
-}
-
 const actions = {
     [DOCS_REQUEST]: ({commit, dispatch, rootState}) => {
         return new Promise((resolve, reject) => {
@@ -72,9 +58,11 @@ const actions = {
             })
             .then(resp => {
                 try {
+                    console.log(resp)
                     resp.data.forEach(d => {
                         d.full_name = d.user.profile.full_name
                         d.title = d.doc.title;
+                        // d.initiator = d.initiator.profile['id'];
                         if (d.doc.date) d.doc.date = formatDate(d.doc.date);
                         d.date_doc = d.doc.date;
                         if (d.date) d.date = formatDate(d.date);
@@ -85,15 +73,15 @@ const actions = {
                         })
                         let myDoc = d.status == 0 && d.user.id == rootState.user.profile.id
                         d.rowBackg = (dd.length != 0 || myDoc) ? "white" : "#dcdbfc"
-                        if (myDoc && !d.doc.signature_end) {
-                            dispatch(DOC_SIGNATURE_QUEUE, d.doc.id)
-                                .then(r => {
-                                    if (r.length != 0) d.signUser = r[0].user.profile.full_name;
-                                    else {
-                                        d.signUser = '';
-                                    }
-                                })
-                        }
+                        // if (myDoc && !d.doc.signature_end) {
+                        //     dispatch(DOC_SIGNATURE_QUEUE, d.doc.id)
+                        //         .then(r => {
+                        //             if (r.length != 0) d.signUser = r[0].user.profile.full_name;
+                        //             else {
+                        //                 d.signUser = '';
+                        //             }
+                        //         })
+                        // }
                     });
                         
                     let d1 = resp.data.filter(d => {

@@ -10,16 +10,6 @@
         <p v-if="error" style="color:red">{{error}}</p>
         <hr>
         <a name="addFileCabinet"></a>
-        <form @submit.prevent="addFileCabinet" style="margin-bottom:40px">
-            <h3>Создать картотеку</h3>
-            <input
-                required
-                v-model="fileCabinet"
-                type="text" 
-                placeholder="Введите название картотеки"
-            />
-            <button type="submit">СОЗДАТЬ</button> <br>
-        </form>
         <hr>
         <a name="addDoc"></a>
         <form @submit.prevent="addUser" style="margin-bottom:40px">
@@ -77,6 +67,18 @@
                 </tr>
             </tbody>
         </table>
+        <p @click='isAddFileCab=true' v-if="!isAddFileCab">Добавить картотеку</p>
+        <form v-if="isAddFileCab" @submit.prevent="addFileCabinet" style="margin-bottom:40px">
+            <p @click='isAddFileCab=false'>Скрыть добавление картотеки</p>
+            <h3>Создать картотеку</h3>
+            <input
+                required
+                v-model="fileCabinet"
+                type="text" 
+                placeholder="Введите название картотеки"
+            />
+            <button type="submit">СОЗДАТЬ</button> <br>
+        </form>
         <hr>
         <a name="usersManage"></a>
         <h3>Управление пользователями</h3>
@@ -133,6 +135,7 @@ import {
     DOCS_FILE_CABINET_EDIT,
     DOCS_FILE_CABINET_DELETE
 } from '../../store/mutation-types'
+import {compress} from '../../otherFun'
 
 export default {
     name: 'adm',
@@ -141,6 +144,7 @@ export default {
             self_id: this.$store.getters.getProfile.id,
             fileCabinet: '',
             fileCabinetsNew: [],
+            isAddFileCab: false,
             // fileCabinets: [],
             editFileCabinetName: [],
             users: [],
@@ -218,6 +222,8 @@ export default {
                 console.log(this.email)
                 d.append('email', this.email);
                 this.is_staff ? d.append('is_staff', true) : d.append('is_staff', false);
+                this.img = compress(this.img, 70, 300, 'jpg').src;
+                console.log(this.img);
                 d.append('photo', this.img);
                 this.$store.dispatch(AUTH_SIGNUP, d)
                 .then((resp) => {

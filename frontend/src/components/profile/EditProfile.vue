@@ -1,7 +1,7 @@
 <template>
 	<div class="editProfile">
         <div>
-            <img :src="image || 'https://img.icons8.com/wired/512/000000/document.png'">
+            <img ref="img" :src="image || 'https://img.icons8.com/wired/512/000000/document.png'">
         </div>
         <div style="margin-left:25px">
             <p v-if="error" style="color: red">{{error}}</p>
@@ -13,7 +13,7 @@
                 <p>Пароль</p>
                 <MaxInput
                     v-model="password1"
-                    type="password" 
+                    type="password"
                     placeholder="Введите новый пароль"
                     class="search-box"
                     autocomplete="false"
@@ -24,7 +24,7 @@
                     <p>Повторите пароль</p>
                     <MaxInput
                         v-model="password2"
-                        type="password" 
+                        type="password"
                         :max="50"
                         placeholder="Повторите пароль"
                         @keyup.native="passwordValidation"
@@ -35,7 +35,7 @@
                 <p>Имя</p>
                 <MaxInput
                     v-model="first_name"
-                    type="text" 
+                    type="text"
                     :max="50"
                     placeholder="Введите новое имя"
                     class="search-box">
@@ -43,7 +43,7 @@
                 <p>Фамилия</p>
                 <MaxInput
                     v-model="second_name"
-                    type="text" 
+                    type="text"
                     :max="50"
                     placeholder="Введите новую фамилию"
                     class="search-box"
@@ -52,7 +52,7 @@
                 <p>Отчество</p>
                 <MaxInput
                     v-model="patronymic"
-                    type="text" 
+                    type="text"
                     :max="50"
                     placeholder="Введите новое отчество"
                     class="search-box">
@@ -60,7 +60,7 @@
                 <p>Должность</p>
                 <MaxInput
                     v-model="position"
-                    type="text" 
+                    type="text"
                     :max="200"
                     placeholder="Введите новую должность"
                     class="search-box">
@@ -77,6 +77,7 @@ import { mapState } from 'vuex'
 import axios from 'axios'
 import { USER_UPDATE, USER_REQUEST, USER_UPDATE_IMAGE, DOC_FOLDER_PAGE_PROFILE } from '../../store/mutation-types';
 import MaxInput from '@/components/addit/MaxInput'
+import {compress, dataURLtoFile, imagetoblob} from '../../otherFun'
 
 export default {
     name: 'edirProfile',
@@ -106,20 +107,30 @@ export default {
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
             let formData = new FormData();
-            formData.append('profile.photo', files[0]); 
+            formData.append('profile.photo', files[0]);
             this.file = formData;
             this.createImage(files[0]);
             this.upload = "";
         },
         createImage(file) {
-            var image = new Image();
-            var reader = new FileReader();
-            var vm = this;
+            return new Promise((resolve, reject) => {
+                this.error = 'Загружаем...'
+                var image = new Image();
+                var reader = new FileReader();
+                var vm = this;
 
-            reader.onload = (e) => {
-                vm.image = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    compress(e.target.result, 60, 1000, 'jpg')
+                    .then(r => {
+                        vm.image = r.src;
+                        vm.file = dataURLtoFile(r.src, file.name)
+                        // vm.file = r.src
+                        this.error = ''
+                        resolve('')
+                    });
+                };
+                reader.readAsDataURL(file);
+            })
         },
         onKeyDown(evt){
             if (this.second_name.length >= 50) {
@@ -144,19 +155,28 @@ export default {
                     this.passError = '';
                 }
                 this.error = 'Профиль обновляется...'
+                // console.log(this.image)
                 if(this.file){
-                    this.$store.dispatch(USER_UPDATE_IMAGE, {
-                        token: this.$store.getters.token, 
-                        data: this.file
-                    })
-                    .then(resp => {
-                        this.error = 'Данные профиля изменены.';
-                        this.file = '';
-                    })
-                    .catch(err => {
-                        console.log(err)
-                        this.error = 'Ошибка. Что-то пошло не так.'
-                    })
+                    var data = new FormData();
+                    console.log(imagetoblob(this.image))
+                    data.append("profile.photo", imagetoblob(this.image))
+                    
+                        console.log(data)
+                        this.$store.dispatch(USER_UPDATE_IMAGE, {
+                            token: this.$store.getters.token,
+                            data
+                        })
+                        .then(resp => {
+                            this.error = 'Данные профиля изменены.';
+                            this.image = '';
+                            this.file = '';
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            this.error = 'Ошибка. Что-то пошло не так.'
+                        })
+                    
+                    
                 }
                 let data = {
                     profile: {}

@@ -47,7 +47,7 @@
                         <td v-for="(key,i) in columns" :key="i" @click="i != 5 ? toDoc(entry) : ''">
                             {{entry[key.key]}}
                         </td>
-                        <td v-if="$route.params.id == 'my-doc-signature-request'">{{entry.signUser}}</td>
+                        <td v-if="$route.params.id == 'my-doc-signature-request'">{{entry.initiator}}</td>
                         <td style="padding: 0px 2px;" v-if="id == 'notif'">
                             <svg v-if="id == 'notif' && entry.status == 3" @click="hideNotif(j);" style="margin:auto;padding:7px;cursor:pointer;" height="17px" viewBox="0 0 33 33" width="18px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <g id="Cancel" stroke="black" stroke-width="1">
@@ -113,8 +113,14 @@ export default {
             getDocs: 'getDocs',
             getDocsOld: 'getDocsOld',
         }),
-        disable() {
-            return this.$store.getters.getReload;
+        disable: {
+            get() {
+                return this.$store.getters.getReload;
+            },
+            set(newValue) {
+                this.$store.commit(DOC_RELOAD, !newValue);
+            }
+            
         },
         filteredHeroes() {
             var sortKey = ''
@@ -173,6 +179,13 @@ export default {
                     d.user.id == this.getProfile.id &&
                     d.status == 0 && !d.doc.signature_end
                 )
+                output = JSON.parse(JSON.stringify(output));
+                output.forEach(d => {
+                    if(d.initiator != '') {
+                        d.initiator = d.initiator.profile.full_name
+                    } 
+                })
+                // console.log(output[0].initiator.profile.id)
             } else if(this.id == 'notif') {
                 let docs = this.getDocsOld.filter(d => 
                     d.status == 2 || d.status == 3 || d.status == 7

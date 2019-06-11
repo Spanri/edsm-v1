@@ -62,7 +62,7 @@ def unique(list1):
         if x not in unique_list: 
             unique_list.append(x)
     return unique_list
-
+    
 class Notif2(generics.ListAPIView):
     '''
     Нотифы конкретного пользователя
@@ -80,11 +80,13 @@ class Notif2(generics.ListAPIView):
     permission_classes = (CustomIsAuthenticated2,)
 
     def list(self, request, *args, **kwargs):
+        print('a-1')
         notif = super(Notif2, self).list(request, args, kwargs)
         notif2 = []
         notif_owner = []
         notif_common = []
         user_id = int(self.kwargs['pk'])
+        print('a0')
         for i, n in enumerate(notif.data):
             d = {}
             for idx, val in enumerate(n):
@@ -92,7 +94,7 @@ class Notif2(generics.ListAPIView):
             notif.data[i] = d
             # надо подписать и очередь или
             # подписан и есть уведомления или
-            # отклонил документ 
+            # отклонил документ
             # просто смотрю, не надо подписывать
             if(
                 (
@@ -102,7 +104,7 @@ class Notif2(generics.ListAPIView):
                         n['status'] == 3
                     )
                 ) or (
-                    n['user']['id'] == user_id and 
+                    n['user']['id'] == user_id and
                     n['doc']['signature_end'] == True and
                     n['status'] == 5
                 )
@@ -139,10 +141,10 @@ class Notif2(generics.ListAPIView):
                     notif_signature.append(n2)
                     break
         notif2 = notif2 + notif_signature
-        # Если подписал сам владелец, то пусть будет
-        # статус = 6 (в таблице оригинальной он нигде не занят)
         for i, n in enumerate(notif2):
             for j, n2 in enumerate(notif2):
+                # Если подписал сам владелец, то пусть будет
+                # статус = 6 (в таблице оригинальной он нигде не занят)
                 if(
                     n2['user']['id'] == user_id and
                     (n2['status'] == 3 or n2['status'] == 4)
@@ -150,6 +152,21 @@ class Notif2(generics.ListAPIView):
                     notif2[j]['status'] = 6
                     break
         notif3 = copy.deepcopy(notif.data)
+        # Ищем все "мои документы", потом для каждого "моего
+        # документа" пытаемся найти нотиф с тем же документом и
+        # который надо подписать другому пользователю 
+        # ДОЛГО ДЕЛАЕТСЯ
+        for i, n in enumerate(notif2):
+            notif2[i]['initiator'] = ''
+            if n['status'] == 0:
+                for j, n2 in enumerate(notif3):
+                    if (
+                        n2['doc']['id'] == n['doc']['id'] and
+                        n2['status'] == 2
+                    ):
+                        notif2[i]['initiator'] = n2['user']
+                        break
+        # Заменяем не владельцев на владельцев
         for i, n in enumerate(notif3):
             for j, n2 in enumerate(notif3):
                 if (
@@ -164,6 +181,7 @@ class Notif2(generics.ListAPIView):
                             break
                     break
         notif2 = unique(notif2)
+        print('a2.9')
         return Response(notif2)
 
 class NotifQueue(generics.ListAPIView):
