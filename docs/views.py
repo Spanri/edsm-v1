@@ -1,5 +1,5 @@
 from django.core.mail import send_mail
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
 REFRESH_INTERVAL = 10
 import time
 from PIL import Image
