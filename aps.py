@@ -1,3 +1,5 @@
+import django
+django.setup()
 from users.models import Notif, User
 from apscheduler.schedulers.blocking import BlockingScheduler
 import subprocess
