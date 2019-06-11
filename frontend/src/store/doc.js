@@ -165,7 +165,7 @@ const actions = {
     },
     [DOC_EDIT_NOTIF]: ({ commit, dispatch, rootState }, data) => {
         return new Promise((resolve, reject) => {
-            console.log('data hide', data)
+            // console.log('data hide', data)
             axios
                 .get(path + '/api/users/' + data.user + '/notif/' + data.notif + '/' + data.pk3 +'/', {
                     headers: { Authorization: "Token " + rootState.auth.token }

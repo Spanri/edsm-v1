@@ -93,20 +93,20 @@ class Notif2(generics.ListAPIView):
             # надо мне подписать и подошла очередь или
             # мой документ подписан и есть уведомления 
             # или отклонили мой документ
-            
+            notif.data[i]['initiator'] = ''
             if(
+                n['user']['id'] == user_id and
                 (
-                    n['user']['id'] == user_id and
-                    (
-                        n['status'] == 2 or
-                        n['status'] == 3
-                    )
-                ) or (
-                    # просто смотрю, не надо подписывать
-                    n['user']['id'] == user_id and
-                    n['doc']['signature_end'] == True and
-                    n['status'] == 5
+                    n['status'] == 2 or
+                    n['status'] == 3
                 )
+            ):
+                notif2.append(notif.data[i])
+            if(
+                # просто смотрю, не надо подписывать
+                n['user']['id'] == user_id and
+                n['doc']['signature_end'] == True and
+                n['status'] == 5
             ):
                 notif2.append(notif.data[i])
             # владелец (отдельно, ибо нужно дальше)
@@ -138,6 +138,7 @@ class Notif2(generics.ListAPIView):
                         n2['status'] == 7
                     )
                 ):
+                    n2['initiator'] = n2['user']
                     notif_signature.append(n2)
                     break
         notif2 = notif2 + notif_signature
@@ -156,19 +157,24 @@ class Notif2(generics.ListAPIView):
         # документа" пытаемся найти нотиф с тем же документом и
         # который надо подписать другому пользователю
         for i, n in enumerate(notif2):
-            notif2[i]['initiator'] = ''
+            
             for j, n2 in enumerate(notif3):
                 if (
                     n2['doc']['id'] == n['doc']['id'] and
                     (
                         n['status'] == 0 and
                         n2['status'] == 2
-                    ) or (
-                        n2['status'] == 3 or
-                        n2['status'] == 7
                     )
                 ):
                     notif2[i]['initiator'] = n2['user']
+                if (
+                    n2['doc']['id'] == n['doc']['id'] and
+                    (
+                        n['status'] != 0 and
+                        n2['status'] == 2
+                    )
+                ):
+                    notif2[i]['initiator'] = n['user']
         # Заменяем не владельцев на владельцев
         for i, n in enumerate(notif3):
             for j, n2 in enumerate(notif3):

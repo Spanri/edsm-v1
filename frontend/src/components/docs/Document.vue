@@ -299,7 +299,7 @@ export default {
 					this.error = "Открылось!";
 					setTimeout(() => {
 						this.error = '';
-					}, 3000);
+					}, 5000);
 				})
 				.catch(err => {
 					console.log(err)
@@ -338,7 +338,7 @@ export default {
 					this.error = 'Скачано!';
 					setTimeout(() => {
 						this.error = '';
-					}, 3000);
+					}, 5000);
 				})
 				.catch(err => {
 					console.log(err)
@@ -434,7 +434,7 @@ export default {
 						// this.refresh = false;
 						setTimeout(() => {
 							this.error = '';
-						}, 3000);
+						}, 5000);
 					})
 				})
 				.catch(err=>{
@@ -481,7 +481,7 @@ export default {
 						this.refresh = false;
 						setTimeout(() => {
 							this.error = '';
-						}, 3000);
+						}, 5000);
 					})
 				})
 				.catch(err=>{

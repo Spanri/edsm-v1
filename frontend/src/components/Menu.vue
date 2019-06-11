@@ -81,6 +81,7 @@ export default {
         async onChange(){
             this.reload = true;
             await this.$store.commit(DOCS_FILE_CABINET, this.fileCabinet)
+            await this.$store.dispatch(DOCS_REQUEST)
             await this.$store.dispatch(DOCS_FILTER)
             this.reload = false;
         },
