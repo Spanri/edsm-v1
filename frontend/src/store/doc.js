@@ -62,6 +62,9 @@ const actions = {
                     resp.data.forEach(d => {
                         d.full_name = d.user.profile.full_name
                         d.title = d.doc.title;
+                        if (d.initiator != '') {
+                            d.initiator = d.initiator.profile.full_name
+                        }
                         // d.initiator = d.initiator.profile['id'];
                         if (d.doc.date) d.doc.date = formatDate(d.doc.date);
                         d.date_doc = d.doc.date;

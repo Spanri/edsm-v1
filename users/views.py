@@ -80,22 +80,20 @@ class Notif2(generics.ListAPIView):
     permission_classes = (CustomIsAuthenticated2,)
 
     def list(self, request, *args, **kwargs):
-        print('a-1')
         notif = super(Notif2, self).list(request, args, kwargs)
         notif2 = []
         notif_owner = []
         notif_common = []
         user_id = int(self.kwargs['pk'])
-        print('a0')
         for i, n in enumerate(notif.data):
             d = {}
             for idx, val in enumerate(n):
                 d.setdefault(val, n[val])
             notif.data[i] = d
-            # надо подписать и очередь или
-            # подписан и есть уведомления или
-            # отклонил документ
-            # просто смотрю, не надо подписывать
+            # надо мне подписать и подошла очередь или
+            # мой документ подписан и есть уведомления 
+            # или отклонили мой документ
+            
             if(
                 (
                     n['user']['id'] == user_id and
@@ -104,6 +102,7 @@ class Notif2(generics.ListAPIView):
                         n['status'] == 3
                     )
                 ) or (
+                    # просто смотрю, не надо подписывать
                     n['user']['id'] == user_id and
                     n['doc']['signature_end'] == True and
                     n['status'] == 5
@@ -126,6 +125,7 @@ class Notif2(generics.ListAPIView):
         notif2 = notif2 + notif_owner
         # Находим документы пользователя, которые подписали, чтобы
         # вывести это в уведомления с сообщением "Ваш документ подписали."
+        # или "Ваш документ отклонили".
         # Для каждого документа, где пользователь - владелец, проверяем,
         # есть ли нотиф, где этот документ и он (подписан или отклонен)
         notif_signature = []
@@ -154,18 +154,21 @@ class Notif2(generics.ListAPIView):
         notif3 = copy.deepcopy(notif.data)
         # Ищем все "мои документы", потом для каждого "моего
         # документа" пытаемся найти нотиф с тем же документом и
-        # который надо подписать другому пользователю 
-        # ДОЛГО ДЕЛАЕТСЯ
+        # который надо подписать другому пользователю
         for i, n in enumerate(notif2):
             notif2[i]['initiator'] = ''
-            if n['status'] == 0:
-                for j, n2 in enumerate(notif3):
-                    if (
-                        n2['doc']['id'] == n['doc']['id'] and
+            for j, n2 in enumerate(notif3):
+                if (
+                    n2['doc']['id'] == n['doc']['id'] and
+                    (
+                        n['status'] == 0 and
                         n2['status'] == 2
-                    ):
-                        notif2[i]['initiator'] = n2['user']
-                        break
+                    ) or (
+                        n2['status'] == 3 or
+                        n2['status'] == 7
+                    )
+                ):
+                    notif2[i]['initiator'] = n2['user']
         # Заменяем не владельцев на владельцев
         for i, n in enumerate(notif3):
             for j, n2 in enumerate(notif3):

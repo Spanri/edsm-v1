@@ -179,12 +179,6 @@ export default {
                     d.user.id == this.getProfile.id &&
                     d.status == 0 && !d.doc.signature_end
                 )
-                output = JSON.parse(JSON.stringify(output));
-                output.forEach(d => {
-                    if(d.initiator != '') {
-                        d.initiator = d.initiator.profile.full_name
-                    } 
-                })
                 // console.log(output[0].initiator.profile.id)
             } else if(this.id == 'notif') {
                 let docs = this.getDocsOld.filter(d => 
