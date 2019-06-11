@@ -219,8 +219,8 @@ def job():
             n.save()
 
 scheduler = BackgroundScheduler()
-scheduler.start()
-scheduler.add_job(job, 'interval', seconds=REFRESH_INTERVAL)
+# scheduler.start()
+# scheduler.add_job(job, 'interval', seconds=REFRESH_INTERVAL)
 
 class CancelSignature(viewsets.ModelViewSet):
     '''
