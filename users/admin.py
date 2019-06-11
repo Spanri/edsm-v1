@@ -18,7 +18,8 @@ class NotifAdmin(admin.ModelAdmin):
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, 
-            {'fields': ('email', 'password', 'username')}
+            {'fields': ('email', 'password', 'username',
+                        'is_get_notif_expired_email')}
         ),
         (_('Permissions'),
             {'fields': 

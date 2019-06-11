@@ -149,7 +149,9 @@ export default {
         },
 		heroes() {
             let id = this.$route.params.id;
-            let output = this.getDocs.filter(d => d.status != 3 || d.status != 7);;
+            let output = this.getDocs.filter(d => 
+                d.status != 2 && d.status != 3 && d.status != 7
+            );
             if(id == 'all'){
                 output = output;
             } else if(id == 'common') {
@@ -181,7 +183,7 @@ export default {
                 )
                 // console.log(output[0].initiator.profile.id)
             } else if(this.id == 'notif') {
-                let docs = this.getDocsOld.filter(d => 
+                let docs = this.getDocsOld.filter(d =>
                     d.status == 2 || d.status == 3 || d.status == 7
                 );
                 docs.forEach(d => {

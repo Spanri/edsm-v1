@@ -280,12 +280,15 @@ const actions = {
                 .then(async resp => {
                     if(data.signature_request.length != 0) {
                         await data.signature_request.forEach((s, i) => {
+                            // let D = new Date()
+                            // console.log(D.setDate(D.getDate() + 3))
                             axios
                                 .post(path + '/api/users/notif', {
                                     doc_id: resp.data.doc.id,
                                     user_id: s.id,
                                     status: i == 0 ? 2 : 1,
                                     queue: i,
+                                    // date_expire: D.setDate(D.getDate() + 3)
                                 })
                                 .catch(err => {
                                     try {

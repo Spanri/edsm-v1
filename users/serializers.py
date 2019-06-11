@@ -89,6 +89,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'date_joined',
             'is_staff',
             'is_get_notif_email',
+            'is_get_notif_expired_email',
             'profile',
         )
 
@@ -139,6 +140,8 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
             'doc_id',
             'is_read_id',
             'date',
+            'date_expire',
+            'is_notif_expire',
             'status',
             'queue',
             'is_read',
@@ -149,9 +152,8 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         # Создаем нотиф и указываем текущее время, сохраняем
-        now = timezone.now()
         notif = Notif.objects.create(**validated_data)
-        notif.date = now
+        notif.date = timezone.now()
         notif.save()
 
         # Проверяем, есть ли статус 2. Если да, отправляем

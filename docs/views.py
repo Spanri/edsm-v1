@@ -1,3 +1,7 @@
+from django.core.mail import send_mail
+from apscheduler.schedulers.background import BackgroundScheduler
+REFRESH_INTERVAL = 10
+import time
 from PIL import Image
 from rest_framework import status
 import boto3
@@ -38,6 +42,7 @@ from edc.EDC import EDC
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 from django.utils import timezone
+from datetime import timedelta
 
 class DocViewSet(viewsets.ModelViewSet):
     '''
@@ -59,7 +64,6 @@ class DocViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            now = timezone.now()
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
@@ -67,7 +71,7 @@ class DocViewSet(viewsets.ModelViewSet):
                 user_id=request.data["user_id"], 
                 doc_id=serializer.data["id"],
                 status=0,
-                date=now.strftime("%Y-%m-%d")
+                date=timezone.now()
             )
             serializerNotif = NotifSerializer(notif)
             return Response(serializerNotif.data)
@@ -134,7 +138,7 @@ class AddSignature(generics.ListAPIView):
         doc.signature = signature
         doc.save()
         id = doc.id
-        # Если подпись ставит не владелец
+        
         if self.kwargs['first'] == '0':
             # Найти нотиф, который с этим документом и
             # где очередь подписывать и изменить на "подписано"
@@ -156,6 +160,8 @@ class AddSignature(generics.ListAPIView):
                     queue=notif.queue+1
                 )
                 notifNext.status = 2
+                notifNext.is_notif_expire = False
+                notifNext.date_expire = timezone.now() + timedelta(days=3)
                 notifNext.save()
             # Если следующего нотифа нет, значит подпись больше не нужна
             except:
@@ -170,6 +176,9 @@ class AddSignature(generics.ListAPIView):
                     status=2,
                     queue=0
                 )
+                notifNext.is_notif_expire = False
+                notifNext.date_expire = timezone.now() + timedelta(days=3)
+                notifNext.save()
             # Если нулевого нотифа нет, значит подпись не нужна
             except:
                 doc.signature_end = True
@@ -178,6 +187,40 @@ class AddSignature(generics.ListAPIView):
         doc = Doc.objects.filter(id=self.kwargs['pk'])
         serializer = DocSerializer(doc)
         return doc
+
+# Смотрим, если время подписи истекло, указываем это и
+# посылаем уведомление
+def job():
+    # Ищем нотифы, где статус 2 (то есть те, которые надл подписать)
+    notif = Notif.objects.filter(status=2)
+    # Находим людей, которым нужно отправлять уведомление
+    users = User.objects.filter(is_get_notif_expired_email=True)
+    # Проверяем, может в них время date_expire истекло.
+    # Если время истекло, то посылаем уведомления
+    for i, n in enumerate(notif):
+        if n.date_expire and n.date_expire < timezone.now() and n.is_notif_expire == False:
+            if (n.user.profile.first_name != "" and n.user.profile.patronymic != ""):
+                full_name = n.user.profile.second_name + " " + \
+                n.user.profile.first_name[0] + \
+                "." + n.user.profile.patronymic[0] + "."
+            else:
+                full_name = n.user.profile.second_name
+            for i, u in enumerate(users):
+                print(u.email)
+                send_mail(
+                    'Уведомление от СЭД МТУСИ',
+                    'Уведомляем, что пользователь ' + full_name + ' (' + n.user.email + 
+                    ') просрочил срок подписи документа "' + n.doc.title + '".',
+                    'edmsmtuci@gmail.com',
+                    [u.email, ],
+                    fail_silently=False,
+                )
+            n.is_notif_expire = True
+            n.save()
+
+scheduler = BackgroundScheduler()
+scheduler.start()
+scheduler.add_job(job, 'interval', seconds=REFRESH_INTERVAL)
 
 class CancelSignature(viewsets.ModelViewSet):
     '''

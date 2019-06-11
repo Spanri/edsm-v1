@@ -1,37 +1,9 @@
 <template>
     <div class="adm">
-        <div class="fastLink">
-            <p>Быстрый переход:</p>
-            <a href="#addFileCabinet">Создать картотеку&#8195;</a>
-            <a href="#addDoc">Создать пользователя&#8195;</a>
-            <a href="#fileCabManage">Управление картотеками&#8195;</a>
-            <a href="#usersManage">Настройка прав пользователей</a>
-        </div>
         <p v-if="error" style="color:red">{{error}}</p>
-        <hr>
-        <a name="addFileCabinet"></a>
-        <hr>
-        <a name="addDoc"></a>
-        <form @submit.prevent="addUser" style="margin-bottom:40px">
-            <h3>Создать пользователя</h3>
-            <p>Email того, кому нужно создать аккаунт</p>
-            <input
-                required
-                v-model="email"
-                type="email" 
-                placeholder="Введите email"
-            />
-            <canvas ref="canvas" width="100" height="100" v-insert-message="email[0]"></canvas>
-            <img :src=img style="display:none">
-            <p style="display: inline-block;padding-left:15px;padding-right:7px"> Администратор</p>
-            <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="is_staff">
-            <br>
-            <button type="submit">СОЗДАТЬ</button> <br>
-        </form>
-        <hr>
         <a name="fileCabManage"></a>
         <h3>Управление картотеками</h3>
-        <table style="margin-bottom:40px">
+        <table>
             <thead><tr><th>Название</th><th>Действия</th></tr>
             </thead>
             <tbody>
@@ -65,11 +37,13 @@
                         <button type="button" style="margin-top:0;" @click="deleteFileCabinet(j)">УДАЛИТЬ КАРТОТЕКУ</button> <br>
                     </td>
                 </tr>
+                <tr>
+                    <p @click='isAddFileCab=true' v-if="!isAddFileCab" class="addFileCabP" style="margin:0;padding:10px;padding-left:15px;">Добавить картотеку</p>
+                </tr>
             </tbody>
         </table>
-        <p @click='isAddFileCab=true' v-if="!isAddFileCab">Добавить картотеку</p>
         <form v-if="isAddFileCab" @submit.prevent="addFileCabinet" style="margin-bottom:40px">
-            <p @click='isAddFileCab=false'>Скрыть добавление картотеки</p>
+            <p @click='isAddFileCab=false' class="addFileCabP">Скрыть добавление картотеки</p>
             <h3>Создать картотеку</h3>
             <input
                 required
@@ -79,8 +53,8 @@
             />
             <button type="submit">СОЗДАТЬ</button> <br>
         </form>
+        <div style="margin-bottom:40px"></div>
         <hr>
-        <a name="usersManage"></a>
         <h3>Управление пользователями</h3>
         <table>
             <thead>
@@ -113,13 +87,44 @@
                                 </g>
                             </svg>
                         </div>
+                        <div class="editNotif" v-else-if="key.code=='is_get_notif_expired_email'">
+                            {{entry[key.code]}}
+                            <svg @click="entry[key.code]=!entry[key.code];editNotifExpired(entry)" class="editNotif2" width="42" height="22" xmlns="http://www.w3.org/2000/svg">
+                                <g>
+                                    <path id="svg_2" d="m9.27039,21.301735l21.915211,0c5.075562,0 9.204388,-4.656818 9.204388,-10.381443s-4.128826,-10.381445 -9.204388,-10.381445l-21.915211,0c-5.07556,0 -9.204386,4.65682 -9.204386,10.381445s4.128826,10.381443 9.204386,10.381443zm0,-19.774178l21.915211,0c4.59211,0 8.327774,4.213385 8.327774,9.392735s-3.735664,9.392735 -8.327774,9.392735l-21.915211,0c-4.592112,0 -8.327778,-4.213383 -8.327778,-9.392735s3.735666,-9.392735 8.327778,-9.392735z"/>
+                                    <path id="svg_3" v-if="!entry[key.code]" d="m10.851694,17.103909c3.539827,0 6.419889,-2.827057 6.419889,-6.301741s-2.880062,-6.301731 -6.419889,-6.301731s-6.419897,2.827055 -6.419897,6.301731s2.880064,6.301741 6.419897,6.301741zm0,-11.495476c2.917307,0 5.291121,2.33012 5.291121,5.193735s-2.373814,5.193739 -5.291121,5.193739s-5.291124,-2.330116 -5.291124,-5.193739s2.373245,-5.193735 5.291124,-5.193735z"/>
+                                    <path id="svg_8" v-if="entry[key.code]" d="m28.549137,17.339874c3.539829,0 6.419888,-2.827057 6.419888,-6.301739s-2.880058,-6.301733 -6.419888,-6.301733s-6.419895,2.827055 -6.419895,6.301733s2.880062,6.301739 6.419895,6.301739zm0,-11.495476c2.917309,0 5.291119,2.33012 5.291119,5.193737s-2.37381,5.193737 -5.291119,5.193737s-5.291126,-2.330116 -5.291126,-5.193737s2.373245,-5.193737 5.291126,-5.193737z"/>
+                                </g>
+                            </svg>
+                        </div>
                         <div v-else>
                             {{entry[key.code]}}
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <p @click='isAddUser=true' v-if="!isAddUser" class="addUserP" style="margin:0;padding:10px;padding-left:15px;">Добавить пользователя</p>
+                </tr>
             </tbody>
         </table>
+        <p v-if="error2" style="color:red">{{error2}}</p>
+        <form v-if="isAddUser" @submit.prevent="addUser" style="margin-bottom:40px">
+            <p @click='isAddUser=false' class="addUserP">Скрыть добавление пользователя</p>
+            <h3>Создать пользователя</h3>
+            <p>Email того, кому нужно создать аккаунт</p>
+            <input
+                required
+                v-model="email"
+                type="email" 
+                placeholder="Введите email"
+            />
+            <canvas ref="canvas" width="100" height="100" v-insert-message="email[0]"></canvas>
+            <img :src=img style="display:none">
+            <p style="display: inline-block;padding-left:15px;padding-right:7px"> Администратор</p>
+            <input class="checkbox" type="checkbox" name="common" true-value="1"  false-value="0" v-model="is_staff">
+            <br>
+            <button type="submit">СОЗДАТЬ</button> <br>
+        </form>
     </div>
 </template>
 
@@ -135,7 +140,6 @@ import {
     DOCS_FILE_CABINET_EDIT,
     DOCS_FILE_CABINET_DELETE
 } from '../../store/mutation-types'
-import {compress} from '../../otherFun'
 
 export default {
     name: 'adm',
@@ -145,12 +149,14 @@ export default {
             fileCabinet: '',
             fileCabinetsNew: [],
             isAddFileCab: false,
+            isAddUser: false,
             // fileCabinets: [],
             editFileCabinetName: [],
             users: [],
             email: '',
             is_staff: false,
             error: '',
+            error2: '',
             img: '',
             columns: [
                 {
@@ -168,6 +174,10 @@ export default {
                 {
                     name: 'Уведомления на почту',
                     code: 'is_get_notif_email'
+                },
+                {
+                    name: 'Уведомления о просроченных документах',
+                    code: 'is_get_notif_expired_email'
                 },
             ],
         }
@@ -214,25 +224,24 @@ export default {
             let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
             let isVaid = (this.email == "") ? "" : (reg.test(this.email));
             if (isVaid == false) {
-                this.error = 'Неправильный email.'
+                this.error2 = 'Неправильный email.'
             } else {
-                this.error = 'Пользователь создается...'
+                this.error2 = 'Пользователь создается...'
 
                 var d = new FormData();
                 console.log(this.email)
                 d.append('email', this.email);
                 this.is_staff ? d.append('is_staff', true) : d.append('is_staff', false);
-                this.img = compress(this.img, 70, 300, 'jpg').src;
                 console.log(this.img);
                 d.append('photo', this.img);
                 this.$store.dispatch(AUTH_SIGNUP, d)
                 .then((resp) => {
                     this.email = ''
-                    this.error = 'Пользователь создан.'
+                    this.error2 = 'Пользователь создан.'
                 })
                 .catch(err=>{
                     console.log(err)
-                    this.error = 'Пользователь не создан. Такой пользователь уже существует.'
+                    this.error2 = 'Пользователь не создан. Такой пользователь уже существует.'
                 });
             }
         },
@@ -299,6 +308,15 @@ export default {
                 this.error = 'Ошибка. Что-то пошло не так.'
             })
         },
+        editNotifExpired(user){
+            this.$store.dispatch(USER_UPDATE_OTHER, {
+                id: user.id,
+                is_get_notif_expired_email: user.is_get_notif_expired_email
+            })
+            .catch(err=>{
+                this.error = 'Ошибка. Что-то пошло не так.'
+            })
+        }
     }
 }
 </script>
@@ -355,6 +373,9 @@ input[type="checkbox"]{
     display: grid;
 	grid-template-columns: 1fr auto auto;
 }
+.addFileCabP:hover, .addUserP:hover{
+    cursor: pointer;
+}
 /**/
 table {
     border-collapse: collapse;
@@ -389,9 +410,6 @@ td, th{
 .editStaff:hover, .editNotif2:hover{
     cursor: pointer;
     fill: #347090;
-}
-.fastLink a{
-    text-decoration: none;
 }
 /**/
 hr { 

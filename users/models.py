@@ -31,6 +31,7 @@ class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     is_get_notif_email = models.BooleanField(default=False)
+    is_get_notif_expired_email = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -62,5 +63,7 @@ class Notif(models.Model):
     doc = models.ForeignKey(Doc, related_name="notif", on_delete=models.CASCADE)
     status = models.IntegerField(blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
+    date_expire = models.DateTimeField(blank=True, null=True)
+    is_notif_expire = models.BooleanField(default=False)
     queue = models.IntegerField(blank=True, null=True)
     is_read = models.ManyToManyField(User, related_name="notif_is_read")
