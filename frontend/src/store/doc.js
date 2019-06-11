@@ -71,6 +71,10 @@ const actions = {
                         if (d.date) d.date = formatDate(d.date);
                         d.date_notif = d.date;
                         d.file_cabinet = d.doc.file_cabinet.name;
+                        console.log(d)
+                        if (d.date_expire && d.date_expire < new Date()) {
+                            console.log(d)
+                        }
                         let dd = d.is_read.filter(d0 => {
                             return d0.id == rootState.user.profile.id
                         })
