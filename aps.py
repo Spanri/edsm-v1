@@ -1,5 +1,17 @@
+# import django
+# from django.conf import settings
+# from django_auth import settings as s
+# settings.configure(default_settings=s, DEBUG=True)
+# django.setup()
+
+import os
+import sys
 import django
+sys.path.append('django_auth')
+#from django_project import *
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_auth.settings')
 django.setup()
+
 from users.models import Notif, User
 from apscheduler.schedulers.blocking import BlockingScheduler
 import subprocess
