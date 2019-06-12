@@ -1,28 +1,18 @@
-# import django
-# from django.conf import settings
-# from django_auth import settings as s
-# settings.configure(default_settings=s, DEBUG=True)
-# django.setup()
-
+from apscheduler.schedulers.background import BackgroundScheduler
 import os
-import sys
+# import sys
 import django
-sys.path.append('django_auth')
-#from django_project import *
+# sys.path.append('django_auth')
+# #from django_project import *
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_auth.settings')
 django.setup()
 
 from users.models import Notif, User
-from apscheduler.schedulers.blocking import BlockingScheduler
-import subprocess
-from apscheduler.schedulers.background import BackgroundScheduler
-REFRESH_INTERVAL = 10
-
+# from apscheduler.scheduler import Scheduler
 sched = BackgroundScheduler()
 
-# Смотрим, если время подписи истекло, указываем это и
-# посылаем уведомление
-@sched.scheduled_job('interval', seconds=REFRESH_INTERVAL)
+
+@sched.scheduled_job('interval', seconds=10)
 def job():
     print('sss')
     # Ищем нотифы, где статус 2 (то есть те, которые надл подписать)
@@ -52,10 +42,10 @@ def job():
             n.is_notif_expire = True
             n.save()
 
-
-def scheduler_sample():
-    print('sdsd')
-    # subprocess.call('python manage.py scheduler', shell = True, close_fds = True)
-
-
+# sched.configure(options_from_ini_file)
 sched.start()
+
+
+
+
+

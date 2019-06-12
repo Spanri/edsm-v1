@@ -1,8 +1,3 @@
-
-# from django_auth import aps
-
-# from docs.views import job0
-# from apscheduler.schedulers.background import BackgroundScheduler
 from botocore.exceptions import ClientError
 import logging
 import boto3
@@ -11,44 +6,29 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'klc=#bj7qm#iiz%1ru-6y3%guc5_e(hq+3hm3&65dg6%c%@(*y'
 
-
-# REFRESH_INTERVAL = 10
-# sched = BackgroundScheduler()
-# # Смотрим, если время подписи истекло, указываем это и
-# # посылаем уведомление
-# @sched.scheduled_job('interval', seconds=REFRESH_INTERVAL)
-# def job():
-#     print('sss')
-#     # Ищем нотифы, где статус 2 (то есть те, которые надл подписать)
-#     notif = Notif.objects.filter(status=2)
-#     # Находим людей, которым нужно отправлять уведомление
-#     users = User.objects.filter(is_get_notif_expired_email=True)
-#     # Проверяем, может в них время date_expire истекло.
-#     # Если время истекло, то посылаем уведомления
-#     for i, n in enumerate(notif):
-#         if n.date_expire and n.date_expire < timezone.now() and n.is_notif_expire == False:
-#             if (n.user.profile.first_name != "" and n.user.profile.patronymic != ""):
-#                 full_name = n.user.profile.second_name + " " + \
-#                     n.user.profile.first_name[0] + \
-#                     "." + n.user.profile.patronymic[0] + "."
-#             else:
-#                 full_name = n.user.profile.second_name
-#             for i, u in enumerate(users):
-#                 print(u.email)
-#                 send_mail(
-#                     'Уведомление от СЭД МТУСИ',
-#                     'Уведомляем, что пользователь ' + full_name + ' (' + n.user.email +
-#                     ') просрочил срок подписи документа "' + n.doc.title + '".',
-#                     'edmsmtuci@gmail.com',
-#                     [u.email, ],
-#                     fail_silently=False,
-#                 )
-#             n.is_notif_expire = True
-#             n.save()
-# def scheduler_sample():
-#     print('sdsd')
-#     # subprocess.call('python manage.py scheduler', shell = True, close_fds = True)
-# sched.start()
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    'formatters': {
+        'default': {
+            'format': '%(name)s:%(levelname)s %(asctime)s  %(message)s'
+        }
+    },
+    'handlers': {
+        'default': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'default'
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+            'propagate': False
+        }
+    }
+}
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,7 +62,6 @@ INSTALLED_APPS = [
     'storages',
     'users',
     'docs',
-    
 ]
 
 MIDDLEWARE = [
