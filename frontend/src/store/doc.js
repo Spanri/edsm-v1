@@ -320,10 +320,10 @@ const actions = {
                                 })
                         })
                     }
-                    await dispatch(DOC_SIGNATURE, {
-                        id: resp.data.doc.id,
-                        first: 1
-                    })
+                    // await dispatch(DOC_SIGNATURE, {
+                    //     id: resp.data.doc.id,
+                    //     first: 1
+                    // })
                     await resolve(resp.data)
                 })
                 .catch(err => {

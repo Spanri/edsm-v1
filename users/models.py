@@ -4,6 +4,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.db.models.signals import post_save, post_delete
 from docs.models import Doc
+# Для FTP сервера
+from storages.backends.ftp import FTPStorage
+fs = FTPStorage()
 
 def change_image(post_object):
     ''' 
@@ -44,7 +47,8 @@ class UserProfile(models.Model):
     second_name = models.CharField(max_length=50, blank=True)
     patronymic = models.CharField(max_length=50, blank=True)
     position = models.CharField(max_length=200, blank=True)
-    photo = models.ImageField(upload_to='', blank=True)
+    photo = models.ImageField(
+        upload_to='avatars', storage=fs, blank=True, null=True)
     # photo = models.ImageField(blank=True)
 
     def create_user_profile(sender, instance, created, **kwargs):

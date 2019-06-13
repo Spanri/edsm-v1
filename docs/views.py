@@ -293,6 +293,7 @@ class DownloadFile(generics.RetrieveAPIView):
 
     def get(self, request, pk):
         doc = Doc.objects.get(id=self.kwargs['pk'])
+        
         s3 = boto3.resource(
             's3',
             aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),

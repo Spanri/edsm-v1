@@ -45,5 +45,6 @@ export const DOCS_FILE_CABINET_CREATE = 'DOCS_FILE_CABINET_CREATE'
 export const DOCS_FILE_CABINET_EDIT = 'DOCS_FILE_CABINET_EDIT'
 export const DOCS_FILE_CABINET_DELETE = 'DOCS_FILE_CABINET_DELETE'
 
-// export const path = 'http://localhost:8000'
-export const path = 'https://edms-mtuci.herokuapp.com'
+export const path_media = 'ftp://admin:nysha2161@91.238.69.56:21/CPRA_X64FRE/edms-mtuci/'
+export const path = 'http://localhost:8000'
+// export const path = 'https://edms-mtuci.herokuapp.com'

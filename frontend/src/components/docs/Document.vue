@@ -211,7 +211,8 @@ import {
 	DOC_SIGNATURE_CANCEL,
 	DOC_SIGNATURE_AGAIN,
 	DOC_DELETE, 
-	DOC_DOWNLOAD 
+	DOC_DOWNLOAD,
+	path_media
 } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 
@@ -286,11 +287,11 @@ export default {
 		viewDoc() {
 			try{
 				this.error = "Открывается..."
-				this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
-				.then((response) => {
+				// this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
+				// .then((response) => {
 					let url = '';
-					let path = 'https://edms-mtuci.herokuapp.com/' + response.file;
-					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png"){
+					let path = path_media + this.doc.doc.file;
+					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png" && this.type != "pdf"){
 						url = "https://docs.google.com/viewerng/viewer?url=" + path;  
 					} else {
 						url = path;
@@ -300,11 +301,11 @@ export default {
 					setTimeout(() => {
 						this.error = '';
 					}, 5000);
-				})
-				.catch(err => {
-					console.log(err)
-					this.error = 'Ошибка. Что-то пошло не так.';
-				});
+				// })
+				// .catch(err => {
+				// 	console.log(err)
+				// 	this.error = 'Ошибка. Что-то пошло не так.';
+				// });
 			} catch (e){
 				console.log(e)
 				this.error = 'Ошибка. Что-то пошло не так.';
@@ -320,12 +321,12 @@ export default {
 		download(){
 			this.error = "Скачивается..."
 			let title = this.doc.doc.title
-			this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
-			.then((response) => {
+			// this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
+			// .then((response) => {
 				// console.log(response)
 				// console.log('https://edms-mtuci.herokuapp.com/' + response.file)
 				axios({
-					url: 'https://edms-mtuci.herokuapp.com/' + response.file,
+					url: path_media + this.doc.doc.file,
 					method: 'GET',
 					responseType: 'blob',
 				}).then((resp) => {
@@ -344,11 +345,11 @@ export default {
 					console.log(err)
 					this.error = 'Ошибка. Что-то пошло не так.';
 				});
-			})
-			.catch(err => {
-				console.log(err)
-				this.error = 'Ошибка. Что-то пошло не так.';
-			});
+			// })
+			// .catch(err => {
+			// 	console.log(err)
+			// 	this.error = 'Ошибка. Что-то пошло не так.';
+			// });
 		},
 		downloadSign(){
 			console.log('downloadSign')

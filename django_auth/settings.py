@@ -6,35 +6,36 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'klc=#bj7qm#iiz%1ru-6y3%guc5_e(hq+3hm3&65dg6%c%@(*y'
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    'formatters': {
-        'default': {
-            'format': '%(name)s:%(levelname)s %(asctime)s  %(message)s'
-        }
-    },
-    'handlers': {
-        'default': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'default'
-        }
-    },
-    'loggers': {
-        '': {
-            'handlers': ['default'],
-            'level': 'DEBUG',
-            'propagate': False
-        }
-    }
-}
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     'formatters': {
+#         'default': {
+#             'format': '%(name)s:%(levelname)s %(asctime)s  %(message)s'
+#         }
+#     },
+#     'handlers': {
+#         'default': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'default'
+#         }
+#     },
+#     'loggers': {
+#         '': {
+#             'handlers': ['default'],
+#             'level': 'DEBUG',
+#             'propagate': False
+#         }
+#     }
+# }
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',
-                 'edms-mtuci.s3.amazonaws.com']
+                #  'edms-mtuci.s3.amazonaws.com'
+                ]
 
 from corsheaders.defaults import default_methods
 # CORS_ORIGIN_WHITELIST = (
@@ -91,7 +92,8 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': 'ec2-54-75-238-138.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
-        'CONN_MAX_AGE': 0
+        'CONN_MAX_AGE': 0,
+        'DEFAULT_CHARSET': 'utf-8'
     }
 }
 
@@ -174,32 +176,38 @@ django_heroku.settings(locals())
 
 # create_bucket('edms-mtuci')
 
-# Для статических файлов, Amazon S3
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_S3_REGION_NAME = 'us-east-1'
-AWS_STORAGE_BUCKET_NAME = 'edms-mtuci'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-#AWS S3 Static
-STATIC_URL = 'https://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
-# для автоматического collectstatic
-# для статики
-STATICFILES_LOCATION = 'static'
-# STATICFILES_STORAGE = 'storage_backends.StaticStorage'
-# для медиа
-MEDIAFILES_LOCATION = 'media'
-DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
-#
-AWS_S3_FILE_OVERWRITE = False
-# from django_auth import storage_backends
+# # Для статических файлов, Amazon S3
+# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+# AWS_S3_REGION_NAME = 'us-east-1'
+# AWS_STORAGE_BUCKET_NAME = 'edms-mtuci'
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+# #AWS S3 Static
+# STATIC_URL = 'https://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
+# # для автоматического collectstatic
+# # для статики
+# STATICFILES_LOCATION = 'static'
+# # STATICFILES_STORAGE = 'storage_backends.StaticStorage'
+# # для медиа
+# MEDIAFILES_LOCATION = 'media'
+# DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
+# #
+# AWS_S3_FILE_OVERWRITE = False
+# # from django_auth import storage_backends
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/dist/'),]
-ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
-AWS_DEFAULT_ACL = None
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/dist/'),]
+# ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+# STATICFILES_FINDERS = (
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+# )
+# AWS_DEFAULT_ACL = None
+
+MEDIA_ROOT = os.path.join(BASE_DIR, '')
+MEDIA_URL = '/'
+STATIC_URL = '/static/'
+DEFAULT_FILE_STORAGE = 'storages.backends.ftp.FTPStorage'
+FTP_STORAGE_LOCATION = 'ftp://admin:nysha2161@91.238.69.56:21/CPRA_X64FRE/edms-mtuci'
 
 TEMPLATES = [
     {
