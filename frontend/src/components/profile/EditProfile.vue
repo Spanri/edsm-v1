@@ -120,14 +120,17 @@ export default {
                 var vm = this;
 
                 reader.onload = (e) => {
-                    compress(e.target.result, 60, 1000, 'jpg')
-                    .then(r => {
-                        vm.image = r.src;
-                        vm.file = dataURLtoFile(r.src, file.name)
-                        // vm.file = r.src
-                        this.error = ''
-                        resolve('')
-                    });
+                    vm.image = e.target.result;
+                    this.error = ''
+                    resolve('');
+                    // compress(e.target.result, 60, 1000, 'jpg')
+                    // .then(r => {
+                    //     vm.image = r.src;
+                    //     vm.file = dataURLtoFile(r.src, file.name)
+                    //     // vm.file = r.src
+                    //     this.error = ''
+                    //     resolve('')
+                    // });
                 };
                 reader.readAsDataURL(file);
             })
@@ -158,13 +161,12 @@ export default {
                 // console.log(this.image)
                 if(this.file){
                     var data = new FormData();
-                    console.log(imagetoblob(this.image))
-                    data.append("profile.photo", imagetoblob(this.image))
-                    
+                    // console.log(imagetoblob(this.image))
+                    // data.append("profile.photo", imagetoblob(this.image))
                         console.log(data)
                         this.$store.dispatch(USER_UPDATE_IMAGE, {
                             token: this.$store.getters.token,
-                            data
+                            data: this.file
                         })
                         .then(resp => {
                             this.error = 'Данные профиля изменены.';

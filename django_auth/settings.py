@@ -79,7 +79,21 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'django_auth.urls'
 
-
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'staticfiles')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 WSGI_APPLICATION = 'django_auth.wsgi.application'
 
@@ -203,24 +217,14 @@ django_heroku.settings(locals())
 # )
 # AWS_DEFAULT_ACL = None
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static/')
+STATICFILES_DIRS = (
+    # os.path.join(BASE_DIR, 'staticfiles/static/'),
+    os.path.join(BASE_DIR, 'frontend/dist/'),
+)
+STATIC_URL = 'static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '')
 MEDIA_URL = '/'
-STATIC_URL = '/static/'
+
 DEFAULT_FILE_STORAGE = 'storages.backends.ftp.FTPStorage'
 FTP_STORAGE_LOCATION = 'ftp://admin:nysha2161@91.238.69.56:21/CPRA_X64FRE/edms-mtuci'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'staticfiles')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]

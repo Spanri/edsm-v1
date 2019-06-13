@@ -114,6 +114,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             if('profile' in validated_data):
                 nested_serializer = self.fields['profile']
                 nested_instance = instance.profile
+                # if('photo' in nested_serializer):
+                #     uP = UserProfile.objects.get(id=nested_instance.id)
+                #     image = Image.open(uP.photo.path)
+                #     image.save(uP.image.path, quality=20, optimize=True)
                 nested_data = validated_data.pop('profile')
                 nested_serializer.update(nested_instance, nested_data)
                 return nested_serializer.update(instance, validated_data)
