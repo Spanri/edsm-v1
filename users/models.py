@@ -49,7 +49,7 @@ class UserProfile(models.Model):
     patronymic = models.CharField(max_length=50, blank=True)
     position = models.CharField(max_length=200, blank=True)
     photo = models.ImageField(
-        upload_to='avatars', storage=fs, blank=True, null=True)
+        upload_to='./avatars/', storage=fs, blank=True, null=True)
     # photo = models.ImageField(blank=True)
 
     def create_user_profile(sender, instance, created, **kwargs):

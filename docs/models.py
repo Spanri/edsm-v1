@@ -25,7 +25,7 @@ class FileCabinet(models.Model):
 
 class Doc(models.Model):
     title = models.CharField(max_length=100, blank=True, null=True)
-    file = models.FileField(upload_to='docs', storage=fs, blank=True, null=True)
+    file = models.FileField(upload_to='./docs/', storage=fs, blank=True, null=True)
     size = models.IntegerField(blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
@@ -34,7 +34,7 @@ class Doc(models.Model):
     signature_end = models.BooleanField(default=False)
     cancel_description = models.CharField(max_length=500, blank=True, null=True)
     cancel_file = models.FileField(
-        upload_to='cancel_docs', storage=fs, blank=True, null=True)
+        upload_to='./cancel_docs/', storage=fs, blank=True, null=True)
     file_cabinet = models.ForeignKey(FileCabinet, related_name="doc",
                                     on_delete=models.CASCADE, default=1)
 
