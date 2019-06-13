@@ -159,6 +159,7 @@ class AddSignature(generics.ListAPIView):
                 )
                 notifNext.status = 2
                 notifNext.is_notif_expire = False
+                notifNext.date = timezone.now()
                 notifNext.date_expire = timezone.now() + timedelta(days=3)
                 notifNext.save()
             # Если следующего нотифа нет, значит подпись больше не нужна
@@ -213,6 +214,7 @@ class CancelSignature(viewsets.ModelViewSet):
             doc_id=doc.id,
             status=2,
         )
+        notifCancel.date = timezone.now()
         notifCancel.status = 7
         notifCancel.save()
 
