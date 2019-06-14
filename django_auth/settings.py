@@ -217,14 +217,14 @@ django_heroku.settings(locals())
 # )
 # AWS_DEFAULT_ACL = None
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static')
 STATICFILES_DIRS = (
     # os.path.join(BASE_DIR, 'staticfiles/static/'),
     os.path.join(BASE_DIR, 'frontend/dist/'),
 )
 STATIC_URL = 'static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '')
-MEDIA_URL = '/'
+MEDIA_URL = 'media/'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.ftp.FTPStorage'
 FTP_STORAGE_LOCATION = 'ftp://91.238.69.56:21/'
