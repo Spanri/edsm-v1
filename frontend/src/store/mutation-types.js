@@ -46,5 +46,5 @@ export const DOCS_FILE_CABINET_EDIT = 'DOCS_FILE_CABINET_EDIT'
 export const DOCS_FILE_CABINET_DELETE = 'DOCS_FILE_CABINET_DELETE'
 
 export const path_media = 'ftp://91.238.69.56:21/'
-export const path = 'http://localhost:8000'
-// export const path = 'https://edms-mtuci.herokuapp.com'
+// export const path = 'http://localhost:8000'
+export const path = 'https://edms-mtuci.herokuapp.com'
