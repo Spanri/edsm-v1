@@ -227,4 +227,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '')
 MEDIA_URL = '/'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.ftp.FTPStorage'
-FTP_STORAGE_LOCATION = 'ftp://admin:nysha2161@91.238.69.56:21/CPRA_X64FRE/edms-mtuci'
+FTP_STORAGE_LOCATION = 'ftp://91.238.69.56:21/'

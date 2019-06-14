@@ -290,7 +290,7 @@ export default {
 				// this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
 				// .then((response) => {
 					let url = '';
-					let path = path_media + this.doc.doc.file;
+					let path = path_media + this.doc.doc.file.replace('http://localhost:8000/','');
 					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png" && this.type != "pdf"){
 						url = "https://docs.google.com/viewerng/viewer?url=" + path;  
 					} else {
@@ -319,6 +319,7 @@ export default {
 			}
 		},
 		download(){
+			console.log(this.doc.doc.file.path)
 			this.error = "Скачивается..."
 			let title = this.doc.doc.title
 			// this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
@@ -326,7 +327,7 @@ export default {
 				// console.log(response)
 				// console.log('https://edms-mtuci.herokuapp.com/' + response.file)
 				axios({
-					url: path_media + this.doc.doc.file,
+					url: path_media + this.doc.doc.file.replace('http://localhost:8000/',''),
 					method: 'GET',
 					responseType: 'blob',
 				}).then((resp) => {
