@@ -11,6 +11,7 @@ import {
     DOC_FOLDER_PAGE_PROFILE,
     DOC_UPLOAD,
     DOC_DOWNLOAD,
+    DOC_DOWNLOAD_SIGN,
     DOC_DELETE,
     DOC_SIGNATURE,
     DOC_SIGNATURE_CANCEL,
@@ -320,10 +321,10 @@ const actions = {
                                 })
                         })
                     }
-                    // await dispatch(DOC_SIGNATURE, {
-                    //     id: resp.data.doc.id,
-                    //     first: 1
-                    // })
+                    await dispatch(DOC_SIGNATURE, {
+                        id: resp.data.doc.id,
+                        first: 1
+                    })
                     await resolve(resp.data)
                 })
                 .catch(err => {
@@ -351,6 +352,24 @@ const actions = {
                     reject(err);
                 }
             });
+        })
+    },
+    [DOC_DOWNLOAD_SIGN]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(path + '/api/docs/download_sign/' + id + '/', {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response);
+                    } catch (error) {
+                        reject(err);
+                    }
+                });
         })
     },
     [DOC_SIGNATURE]: ({ commit, dispatch, rootState }, data) => {

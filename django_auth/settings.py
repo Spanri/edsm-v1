@@ -1,6 +1,4 @@
-from botocore.exceptions import ClientError
 import logging
-import boto3
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -46,11 +44,6 @@ from corsheaders.defaults import default_methods
 # )
 CORS_ORIGIN_ALLOW_ALL = True
 
-# MEDIA_URL = STATIC_URL + 'media/'
-# # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
-# STATIC_ROOT = 'staticfiles/'
-# # ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -85,7 +78,7 @@ ROOT_URLCONF = 'django_auth.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'staticfiles')],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -194,12 +187,6 @@ django_heroku.settings(locals())
 # create_bucket('edms-mtuci')
 
 # # Для статических файлов, Amazon S3
-# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-# AWS_S3_REGION_NAME = 'us-east-1'
-# AWS_STORAGE_BUCKET_NAME = 'edms-mtuci'
-# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-# #AWS S3 Static
 # STATIC_URL = 'https://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
 # # для автоматического collectstatic
 # # для статики
@@ -209,7 +196,6 @@ django_heroku.settings(locals())
 # MEDIAFILES_LOCATION = 'media'
 # DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
 # #
-# AWS_S3_FILE_OVERWRITE = False
 # # from django_auth import storage_backends
 
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/dist/'),]
@@ -220,14 +206,21 @@ django_heroku.settings(locals())
 # )
 # AWS_DEFAULT_ACL = None
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static')
+# fs = FTPStorage()
+
+STATICFILES_STORAGE = 'ftp.FTPStorage'
+DEFAULT_FILE_STORAGE = 'ftp.FTPStorage'
+# STATIC_ROOT = 'ftp://91.238.69.56:21/'
 STATICFILES_DIRS = (
-    # os.path.join(BASE_DIR, 'staticfiles/static/'),
     os.path.join(BASE_DIR, 'frontend/dist/'),
 )
-STATIC_URL = 'static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '')
-MEDIA_URL = 'media/'
+STATIC_URL = 'ftp://91.238.69.56:21/'
+MEDIA_ROOT = '/'
+MEDIA_URL = '/'
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    # 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
 
-DEFAULT_FILE_STORAGE = 'storages.backends.ftp.FTPStorage'
+DEFAULT_FILE_STORAGE = 'ftp.FTPStorage'
 FTP_STORAGE_LOCATION = 'ftp://91.238.69.56:21/'

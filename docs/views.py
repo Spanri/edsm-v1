@@ -80,6 +80,69 @@ class DocViewSet(viewsets.ModelViewSet):
         except Exception as e:
             raise exceptions.ValidationError(str(e))
 
+class DownloadFile(generics.RetrieveAPIView):
+    '''
+    Скачать файл.
+    Права - нет (они проверяются на сервере генерации подписи).
+    '''
+    serializer_class = DocSerializer
+    queryset = Doc.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated3,)
+
+    def get(self, request, pk):
+        doc = Doc.objects.get(id=self.kwargs['pk'])
+        fsFile = FTPStorageFile('/'+str(doc.file), fs, 'rw')
+        f = open('staticfiles/'+str(doc.file), 'wb')
+        file = fsFile.read()
+        f.write(file)
+
+        f.close()
+        fsFile.close()
+
+        return Response({'file': str(doc.file)})
+
+class DownloadSign(generics.RetrieveAPIView):
+    '''
+    Скачать файл.
+    Права - нет (они проверяются на сервере генерации подписи).
+    '''
+    serializer_class = DocSerializer
+    queryset = Doc.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated3,)
+
+    def get(self, request, pk):
+        doc = Doc.objects.get(id=self.kwargs['pk'])
+        fsFile = FTPStorageFile('/'+str(doc.sign), fs, 'rw')
+        f = open('staticfiles/sign/'+str(doc.sign), 'wb')
+        file = fsFile.read()
+        f.write(file)
+
+        f.close()
+        fsFile.close()
+
+        return Response({'file': str(doc.sign)})
+
+
+class DeleteFileFromLocal(generics.RetrieveAPIView):
+    '''
+    Скачать файл.
+    Права - нет (они проверяются на сервере генерации подписи).
+    '''
+    serializer_class = DocSerializer
+    queryset = Doc.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated3,)
+
+    def get(self, request, pk):
+        doc = Doc.objects.get(id=self.kwargs['pk'])
+        if self.kwargs['type'] == 'file':
+            os.remove('staticfiles/'+str(doc.file))
+        else:
+            os.remove('staticfiles/sign/'+str(doc.file))
+
+        return Response({'doc': doc})
 
 class FileCabinetViewSet(viewsets.ModelViewSet):
     '''
@@ -104,6 +167,8 @@ class AddSignature(generics.ListAPIView):
     def get_queryset(self):
         # Найти нужный документ
         doc = Doc.objects.get(id=self.kwargs['pk'])
+        first = self.kwargs['first']
+        del self.kwargs['first']
 
         # Найти нотиф, который с этим документом и
         # пользователь - владелец документа
@@ -114,34 +179,31 @@ class AddSignature(generics.ListAPIView):
 
         # Функция генерации подписи
         edc = EDC()
-        if self.kwargs['first'] == '0':
-            path = 'https://edms-mtuci.s3.amazonaws.com/' + str(doc.file)
-        elif self.kwargs['first'] == '1':
-            print('Первая подпись')
-            path = 'https://edms-mtuci.s3.amazonaws.com/' + str(doc.file)
-
-        try:
-            s3 = boto3.resource(
-                's3',
-                aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-                aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-            )
-            s3.meta.client.download_file(
-                'edms-mtuci',
-                'media/'+str(doc.file),
-                'staticfiles/media/'+str(doc.file)
-            )
-        except: pass
-
-        file = open('staticfiles/media/' + str(doc.file), 'rb')
+        fileLocal = DownloadFile.as_view()(self.request._request, **self.kwargs)
+        file = open('staticfiles/'+str(doc.file), 'rb')
         signature = edc.signFile(file, notifOwner.user.username)
+        file.close()
+
+        ff = open('staticfiles/sign/'+str(doc.file), 'w')
+        ff.write(signature)
+        ff.close()
+
+        ff = open('staticfiles/sign/'+str(doc.file), 'rb')
+        ff_content = {}
+        ff_content['file'] = ff
+        ff_content['DEFAULT_CHUNK_SIZE'] = 1024
+        filename = str(doc.file).split('\\')[1].split('.')[0]
+        fs._put_file('/sign/'+ filename +'.txt', ff_content)
+        ff.close()
+        os.remove('staticfiles/sign/'+str(doc.file))
+        os.remove('staticfiles/'+str(doc.file))
 
         # Добавить подпись
-        doc.signature = signature
+        doc.signature = 'sign/'+filename
         doc.save()
         id = doc.id
         
-        if self.kwargs['first'] == '0':
+        if first == '0':
             # Найти нотиф, который с этим документом и
             # где очередь подписывать и изменить на "подписано"
             try:
@@ -172,7 +234,7 @@ class AddSignature(generics.ListAPIView):
                 doc.signature_end = True
                 doc.save()
 
-        if self.kwargs['first'] == '1':
+        if first == '1':
             try:
                 notifNext = Notif.objects.get(
                     doc_id=id,
@@ -284,26 +346,3 @@ class SignatureAgain(generics.ListAPIView):
         except: pass
 
         return Doc.objects.filter(id=id)
-
-class DownloadFile(generics.RetrieveAPIView):
-    '''
-    Скачать файл.
-    Права - нет (они проверяются на сервере генерации подписи).
-    '''
-    serializer_class = DocSerializer
-    queryset = Doc.objects.all()
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (CustomIsAuthenticated3,)
-
-    def get(self, request, pk):
-        doc = Doc.objects.get(id=self.kwargs['pk'])
-        print('dd')
-        fsFile = FTPStorageFile('/'+str(doc.file), fs, 'rw')
-        f = open('staticfiles/static/'+str(doc.file), 'wb')
-        file = fsFile.read()
-        f.write(file)
-
-        f.close()
-        fsFile.close()
-
-        return Response({'file': 'static/'+str(doc.file)})

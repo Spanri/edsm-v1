@@ -157,7 +157,6 @@ class Notif2(generics.ListAPIView):
         # документа" пытаемся найти нотиф с тем же документом и
         # который надо подписать другому пользователю
         for i, n in enumerate(notif2):
-            
             for j, n2 in enumerate(notif3):
                 if (
                     n2['doc']['id'] == n['doc']['id'] and
@@ -177,6 +176,12 @@ class Notif2(generics.ListAPIView):
                     notif2[i]['initiator'] = n['user']
         # Заменяем не владельцев на владельцев
         for i, n in enumerate(notif3):
+            notif3[i]['signature'] = ''
+            try:
+                filename = notif3[i]['doc']['file']
+                file = open(filename)
+                notif3[i]['signature'] = file.read()
+            except: pass
             for j, n2 in enumerate(notif3):
                 if (
                     n2['doc']['id'] == n['doc']['id'] and

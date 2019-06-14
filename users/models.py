@@ -4,7 +4,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.db.models.signals import post_save, post_delete
 from docs.models import Doc
-from PIL import Image
 # Для FTP сервера
 from ftp import FTPStorage
 fs = FTPStorage()

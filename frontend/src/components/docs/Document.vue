@@ -67,10 +67,10 @@
 							<tr>
 								<td>Подпись</td>
 								<td>
-									{{ doc.doc.signature }}
-									<button v-if="doc.doc.size/1024/1024 < 25" @click="viewSign()">СМОТРЕТЬ ПОДПИСЬ Х</button>
-									<button @click="downloadSign()">СКАЧАТЬ ПОДПИСЬ Х</button>
+									<button v-if="doc.doc.size/1024/1024 < 25" @click="viewSign()">СМОТРЕТЬ ПОДПИСЬ</button>
+									<button @click="downloadSign()">СКАЧАТЬ ПОДПИСЬ</button>
 									<button v-if="doc.status == 2" @click="isPreConfirm = true">ПОДПИСАТЬ/ОТКЛОНИТЬ</button>
+									{{doc.signature}}
 								</td>
 							</tr>
 						</tbody>
@@ -212,6 +212,7 @@ import {
 	DOC_SIGNATURE_AGAIN,
 	DOC_DELETE, 
 	DOC_DOWNLOAD,
+	DOC_DOWNLOAD_SIGN,
 	path
 } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
@@ -290,7 +291,7 @@ export default {
 				this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
 				.then((response) => {
 					let url = '';
-					let path2 = path + response.file;
+					let path2 = path + '/' + response.file;
 					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png" && this.type != "pdf"){
 						url = "https://docs.google.com/viewerng/viewer?url=" + path2;  
 					} else {
@@ -311,20 +312,13 @@ export default {
 				this.error = 'Ошибка. Что-то пошло не так.';
 			}
 		},
-		viewSign(){
-			if (this.error == "") {
-				this.error = this.doc.doc.signature;
-			} else {
-				this.error = "";
-			}
-		},
 		download(){
 			this.error = "Скачивается..."
 			let title = this.doc.doc.title
 			this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
 			.then((response) => {
 				const link = document.createElement('a');
-				link.href = path + response.file;
+				link.href = path + '/' + response.file;
 				link.setAttribute('download', title);
 				document.body.appendChild(link);
 				link.click();
@@ -339,7 +333,51 @@ export default {
 			});
 		},
 		downloadSign(){
-			console.log('downloadSign')
+			this.error = "Скачивается..."
+			let title = this.doc.doc.title
+			this.$store.dispatch(DOC_DOWNLOAD_SIGN, this.doc.doc.id)
+			.then((response) => {
+				const link = document.createElement('a');
+				link.href = path + '/' + response.file;
+				link.setAttribute('download', title);
+				document.body.appendChild(link);
+				link.click();
+				this.error = 'Скачано!';
+				setTimeout(() => {
+					this.error = '';
+				}, 5000);
+			})
+			.catch(err => {
+				console.log(err)
+				this.error = 'Ошибка. Что-то пошло не так.';
+			});
+		},
+		viewSign(){
+			try{
+				this.error = "Открывается..."
+				this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
+				.then((response) => {
+					let url = '';
+					let path2 = path + '/' + response.file;
+					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png" && this.type != "pdf"){
+						url = "https://docs.google.com/viewerng/viewer?url=" + path2;  
+					} else {
+						url = path2;
+					}
+					window.open(url, "_blank");
+					this.error = "Открылось!";
+					setTimeout(() => {
+						this.error = '';
+					}, 5000);
+				})
+				.catch(err => {
+					console.log(err)
+					this.error = 'Ошибка. Что-то пошло не так.';
+				});
+			} catch (e){
+				console.log(e)
+				this.error = 'Ошибка. Что-то пошло не так.';
+			}
 		},
 		editDoc(){
 			this.$router.push('/document/' + this.id + '/edit');

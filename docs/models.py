@@ -29,7 +29,8 @@ class Doc(models.Model):
     description = models.CharField(max_length=500, blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
     common = models.BooleanField(default=False)
-    signature = models.CharField(max_length=500, blank=True, null=True)
+    signature = models.FileField(
+        upload_to='./sign/', storage=fs, blank=True, null=True)
     signature_end = models.BooleanField(default=False)
     cancel_description = models.CharField(max_length=500, blank=True, null=True)
     cancel_file = models.FileField(

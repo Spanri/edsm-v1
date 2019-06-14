@@ -26,6 +26,8 @@ from docs.views import (
     CancelSignature,
     SignatureAgain,
     DownloadFile,
+    DownloadSign,
+    DeleteFileFromLocal
 )
 
 # Создание пользователей, получение всего списка, получение 
@@ -48,6 +50,8 @@ urlpatterns = [
     url(r'^api/docs/signature_again/(?P<pk>.+)/$', SignatureAgain.as_view()),
     url(r'^api/docs/signature_queue/(?P<pk>.+)/$', NotifQueue.as_view()),
     url(r'^api/docs/download/(?P<pk>.+)/$', DownloadFile.as_view()),
+    url(r'^api/docs/download_sign/(?P<pk>.+)/$', DownloadSign.as_view()),
+    url(r'^api/docs/delete_from_local/(?P<pk>.+)/(?P<type>.+)/$', DeleteFileFromLocal.as_view()),
     url(r'^api/', include(router.urls)),
     url(r'^api/users/emails/$', GetEmails.as_view()),
     url(r'^api/users/send_invite/$', SendInviteView.as_view({'post': 'send_the_mail'})),
@@ -84,7 +88,7 @@ urlpatterns += [
     )
 ]
 
-favicon_view = RedirectView.as_view(url='/staticfiles/favicon.ico', permanent=True)
+favicon_view = RedirectView.as_view(url='/favicon.ico', permanent=True)
 
 urlpatterns += [
     url(r'^$', RedirectView.as_view(url='/app')),

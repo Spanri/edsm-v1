@@ -106,7 +106,7 @@ class FTPStorage(Storage):
 
     def _mkremdirs(self, path):
         pwd = self._connection.pwd()
-        path_splitted = path.split('/')
+        path_splitted = path.split('\\')
         for path_part in path_splitted:
             try:
                 self._connection.cwd(path_part)
@@ -116,7 +116,7 @@ class FTPStorage(Storage):
                     self._connection.cwd(path_part)
                 except ftplib.all_errors:
                     raise FTPStorageException(
-                        'Cannot create directory chain %s' % path
+                        'Cannot create directory chain ' + path + ' ' + path_part
                     )
         self._connection.cwd(pwd)
         return
@@ -124,14 +124,28 @@ class FTPStorage(Storage):
     def _put_file(self, name, content):
         # Connection must be open!
         try:
+            # print(os.path.basename(name))
             self._mkremdirs(os.path.dirname(name))
             pwd = self._connection.pwd()
-            self._connection.cwd(os.path.dirname(name))
-            self._connection.storbinary('STOR ' + os.path.basename(name),
-                                        content.file,
-                                        content.DEFAULT_CHUNK_SIZE)
-            self._connection.cwd(pwd)
+            p = os.path.dirname(name).replace('\\','/')
+            self._connection.cwd(p)
+            print(name)
+            try:
+                self._connection.storbinary('STOR ' + os.path.basename(name),
+                                            content.file,
+                                            content.DEFAULT_CHUNK_SIZE)
+            except:
+                try:
+                    self._connection.storbinary('STOR ' + os.path.basename(name),
+                                                content['file'], 1024)
+                except ftplib.all_errors:
+                    print('error', name)
+                    raise FTPStorageException('Error writing file %s' % name)
+                    self._connection.cwd(pwd)
+        # except Exception as e:
+        #     print(str(e))
         except ftplib.all_errors:
+            print('error', name)
             raise FTPStorageException('Error writing file %s' % name)
 
     def _open(self, name, mode='rb'):
