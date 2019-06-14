@@ -115,7 +115,7 @@ class DownloadSign(generics.RetrieveAPIView):
     def get(self, request, pk):
         doc = Doc.objects.get(id=self.kwargs['pk'])
         fsFile = FTPStorageFile('/'+str(doc.signature), fs, 'rw')
-        f = open('staticfiles/sign/'+str(doc.signature), 'wb')
+        f = open('staticfiles/'+str(doc.signature), 'wb')
         file = fsFile.read()
         f.write(file)
 
