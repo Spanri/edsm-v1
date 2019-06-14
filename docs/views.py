@@ -114,15 +114,15 @@ class DownloadSign(generics.RetrieveAPIView):
 
     def get(self, request, pk):
         doc = Doc.objects.get(id=self.kwargs['pk'])
-        fsFile = FTPStorageFile('/'+str(doc.sign), fs, 'rw')
-        f = open('staticfiles/sign/'+str(doc.sign), 'wb')
+        fsFile = FTPStorageFile('/'+str(doc.signature), fs, 'rw')
+        f = open('staticfiles/sign/'+str(doc.signature), 'wb')
         file = fsFile.read()
         f.write(file)
 
         f.close()
         fsFile.close()
 
-        return Response({'file': str(doc.sign)})
+        return Response({'file': str(doc.signature)})
 
 
 class DeleteFileFromLocal(generics.RetrieveAPIView):
