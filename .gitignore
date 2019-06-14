@@ -12,7 +12,7 @@ bfg.jar
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
-staticfiles/
+# staticfiles/
 # staticfiles/static
 # staticfiles/rest_framework
 # staticfiles/admin

@@ -77,7 +77,6 @@ import { mapState } from 'vuex'
 import axios from 'axios'
 import { USER_UPDATE, USER_REQUEST, USER_UPDATE_IMAGE, DOC_FOLDER_PAGE_PROFILE } from '../../store/mutation-types';
 import MaxInput from '@/components/addit/MaxInput'
-import {compress, dataURLtoFile, imagetoblob} from '../../otherFun'
 
 export default {
     name: 'edirProfile',
@@ -113,7 +112,6 @@ export default {
             this.upload = "";
         },
         createImage(file) {
-            return new Promise((resolve, reject) => {
                 this.error = 'Загружаем...'
                 var image = new Image();
                 var reader = new FileReader();
@@ -122,18 +120,8 @@ export default {
                 reader.onload = (e) => {
                     vm.image = e.target.result;
                     this.error = ''
-                    resolve('');
-                    // compress(e.target.result, 60, 1000, 'jpg')
-                    // .then(r => {
-                    //     vm.image = r.src;
-                    //     vm.file = dataURLtoFile(r.src, file.name)
-                    //     // vm.file = r.src
-                    //     this.error = ''
-                    //     resolve('')
-                    // });
                 };
                 reader.readAsDataURL(file);
-            })
         },
         onKeyDown(evt){
             if (this.second_name.length >= 50) {
@@ -158,11 +146,8 @@ export default {
                     this.passError = '';
                 }
                 this.error = 'Профиль обновляется...'
-                // console.log(this.image)
                 if(this.file){
                     var data = new FormData();
-                    // console.log(imagetoblob(this.image))
-                    // data.append("profile.photo", imagetoblob(this.image))
                         console.log(data)
                         this.$store.dispatch(USER_UPDATE_IMAGE, {
                             token: this.$store.getters.token,
