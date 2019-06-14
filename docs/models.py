@@ -4,7 +4,6 @@ from django.conf import settings
 import uuid
 from django.db.models.signals import post_save, post_delete
 # Для FTP сервера
-# from storages.backends.ftp import FTPStorage
 from ftp import FTPStorage
 fs = FTPStorage()
 

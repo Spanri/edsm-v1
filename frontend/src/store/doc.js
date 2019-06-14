@@ -345,7 +345,6 @@ const actions = {
                 resolve(response.data);
             })
             .catch(err => {
-                console.log('response.data')
                 try {
                     reject(err.response.request.response);
                 } catch (error) {

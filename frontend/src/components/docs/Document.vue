@@ -212,7 +212,7 @@ import {
 	DOC_SIGNATURE_AGAIN,
 	DOC_DELETE, 
 	DOC_DOWNLOAD,
-	path_media
+	path
 } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 
@@ -287,25 +287,25 @@ export default {
 		viewDoc() {
 			try{
 				this.error = "Открывается..."
-				// this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
-				// .then((response) => {
+				this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
+				.then((response) => {
 					let url = '';
-					let path = path_media + this.doc.doc.file.replace('http://localhost:8000/','');
+					let path2 = path + response.file;
 					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png" && this.type != "pdf"){
-						url = "https://docs.google.com/viewerng/viewer?url=" + path;  
+						url = "https://docs.google.com/viewerng/viewer?url=" + path2;  
 					} else {
-						url = path;
+						url = path2;
 					}
 					window.open(url, "_blank");
 					this.error = "Открылось!";
 					setTimeout(() => {
 						this.error = '';
 					}, 5000);
-				// })
-				// .catch(err => {
-				// 	console.log(err)
-				// 	this.error = 'Ошибка. Что-то пошло не так.';
-				// });
+				})
+				.catch(err => {
+					console.log(err)
+					this.error = 'Ошибка. Что-то пошло не так.';
+				});
 			} catch (e){
 				console.log(e)
 				this.error = 'Ошибка. Что-то пошло не так.';
@@ -319,38 +319,24 @@ export default {
 			}
 		},
 		download(){
-			console.log(this.doc.doc.file.path)
 			this.error = "Скачивается..."
 			let title = this.doc.doc.title
-			// this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
-			// .then((response) => {
-				// console.log(response)
-				// console.log('https://edms-mtuci.herokuapp.com/' + response.file)
-				axios({
-					url: path_media + this.doc.doc.file.replace('http://localhost:8000/',''),
-					method: 'GET',
-					responseType: 'blob',
-				}).then((resp) => {
-					const url = window.URL.createObjectURL(new Blob([resp.data]));
-					const link = document.createElement('a');
-					link.href = url;
-					link.setAttribute('download', title);
-					document.body.appendChild(link);
-					link.click();
-					this.error = 'Скачано!';
-					setTimeout(() => {
-						this.error = '';
-					}, 5000);
-				})
-				.catch(err => {
-					console.log(err)
-					this.error = 'Ошибка. Что-то пошло не так.';
-				});
-			// })
-			// .catch(err => {
-			// 	console.log(err)
-			// 	this.error = 'Ошибка. Что-то пошло не так.';
-			// });
+			this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
+			.then((response) => {
+				const link = document.createElement('a');
+				link.href = path + response.file;
+				link.setAttribute('download', title);
+				document.body.appendChild(link);
+				link.click();
+				this.error = 'Скачано!';
+				setTimeout(() => {
+					this.error = '';
+				}, 5000);
+			})
+			.catch(err => {
+				console.log(err)
+				this.error = 'Ошибка. Что-то пошло не так.';
+			});
 		},
 		downloadSign(){
 			console.log('downloadSign')

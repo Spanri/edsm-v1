@@ -41,6 +41,10 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 from django.utils import timezone
 from datetime import timedelta
+from six.moves import urllib
+# Для FTP сервера
+from ftp import FTPStorage, FTPStorageFile
+fs = FTPStorage()
 
 class DocViewSet(viewsets.ModelViewSet):
     '''
@@ -293,17 +297,13 @@ class DownloadFile(generics.RetrieveAPIView):
 
     def get(self, request, pk):
         doc = Doc.objects.get(id=self.kwargs['pk'])
-        
-        s3 = boto3.resource(
-            's3',
-            aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-        )
-        print(str(doc.file))
-        s3.meta.client.download_file(
-            'edms-mtuci', 
-            'media/'+str(doc.file), 
-            'staticfiles/media/'+str(doc.file)
-        )
-        print(str(doc.file))
-        return Response({'file': 'media/'+str(doc.file)})
+        print('dd')
+        fsFile = FTPStorageFile('/'+str(doc.file), fs, 'rw')
+        f = open('staticfiles/static/'+str(doc.file), 'wb')
+        file = fsFile.read()
+        f.write(file)
+
+        f.close()
+        fsFile.close()
+
+        return Response({'file': 'static/'+str(doc.file)})
