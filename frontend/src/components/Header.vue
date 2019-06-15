@@ -45,14 +45,14 @@
                     </svg>
                     <!-- <img :src="notifIcon"> -->
                 </div>
-                <img class="profile" @click="toProfile()" :title="title" :src="getProfile.profile.photo">
+                <img class="profile" @click="toProfile()" :title="title" :src="photo">
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import {AUTH_LOGOUT, USER_NOTIF_REQUEST} from '../store/mutation-types'
+import {AUTH_LOGOUT, USER_NOTIF_REQUEST, USER_PHOTO, path} from '../store/mutation-types'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -62,17 +62,15 @@ export default {
         return {
             search: '',
             n: '',
-            // title: '',
-            // notif: '',
             notifHover: false,
+            photo: '',
         }
     },
     created() {
-        // this.title = 'Открыть профиль\n' + this.getProfile.email;
-        // this.$store.dispatch(USER_NOTIF_REQUEST, this.getProfile.id)
-        // .then(resp=>{
-        //     this.notif = resp.length;
-        // });
+        this.$store.dispatch(USER_PHOTO)
+        .then(r => {
+            this.photo = path + '/' + r;
+        })
     },
     computed: {
         ...mapGetters({

@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.db.models.signals import post_save, post_delete
-from docs.models import Doc
+from docs.models import Doc, Block
 # Для FTP сервера
 from ftp import FTPStorage
 fs = FTPStorage()
@@ -35,6 +35,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=255, blank=True, null=True)
     is_get_notif_email = models.BooleanField(default=False)
     is_get_notif_expired_email = models.BooleanField(default=False)
+    block = models.ManyToManyField(Block, related_name="user_block")
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -48,14 +49,10 @@ class UserProfile(models.Model):
     patronymic = models.CharField(max_length=50, blank=True)
     position = models.CharField(max_length=200, blank=True)
     photo = models.ImageField(
-        upload_to='./avatars/', storage=fs, blank=True, null=True)
-    # photo = models.ImageField(blank=True)
+        upload_to='avatars', storage=fs, blank=True, null=True)
 
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-            # uP = UserProfile.objects.get(id=instance.id)
-            # image = Image.open(uP.photo.path)
-            # image.save(uP.image.path, quality=20, optimize=True)
             UserProfile.objects.create(user=instance)
 
     def save(self, *args, **kwargs):

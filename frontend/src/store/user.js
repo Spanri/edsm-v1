@@ -4,6 +4,7 @@ import {
     USER_SUCCESS,
     AUTH_LOGOUT,
     USER_UPDATE,
+    USER_PHOTO,
     USER_CONFIRM_UPDATE_PASSWORD,
     USERS_EMAILS,
     // USER_NOTIF_REQUEST,
@@ -128,6 +129,24 @@ const actions = {
                     reject(err)
                 }
             })
+        })
+    },
+    [USER_PHOTO]: ({ commit, dispatch, rootState }) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(path + '/api/users/' + rootState.user.profile.id + '/photo/', {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(resp => {
+                    resolve(resp.data.photo)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
         })
     },
     [USER_UPDATE_IMAGE]: ({commit, dispatch, state}, data) => {

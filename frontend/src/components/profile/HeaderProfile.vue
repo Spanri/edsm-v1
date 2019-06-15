@@ -1,7 +1,7 @@
 <template>
     <div class="headerProfileGradient">
         <div class="headerProfile">
-            <img class="avatar" :src="profile.profile.photo">
+            <img class="avatar" :src="photo">
             <div v-if="profile.profile.first_name" class="rightPart">
                 <p style="margin-top:0;padding-top:7px">
 					{{profile.profile.second_name}} 
@@ -18,14 +18,35 @@
 </template>
 
 <script>
-// import {USER_REQUEST} from '../../store/mutation-types'
+import {USER_PHOTO, path} from '../../store/mutation-types'
 
 export default {
 	name: 'headerProfile',
-	computed: {
-		profile: function(){
-			return this.$store.getters.getProfile
+	data () {
+		return {
+			photo: '',
 		}
+	},
+	created() {
+		this.$store.dispatch(USER_PHOTO)
+		.then(r => {
+			this.photo = path + '/' + r;
+		})
+	},
+	computed: {
+		profile() {
+			this.$store.dispatch(USER_PHOTO)
+			.then(r => {
+				this.photo = path + '/' + r;
+			})
+			return this.$store.getters.getProfile
+		},
+		// async photo() {
+		// 	this.$store.getters.getProfile;
+		// 	let p = await this.$store.dispatch(USER_PHOTO);
+		// 	console.log(p)
+		// 	return p;
+		// }
 	},
 }
 </script>

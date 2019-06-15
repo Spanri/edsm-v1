@@ -13,6 +13,7 @@ import {
     DOC_DOWNLOAD,
     DOC_DOWNLOAD_SIGN,
     DOC_DELETE,
+    DOC_DELETE_FROM_LOCAL,
     DOC_SIGNATURE,
     DOC_SIGNATURE_CANCEL,
     DOC_SIGNATURE_AGAIN,
@@ -59,7 +60,6 @@ const actions = {
             })
             .then(resp => {
                 try {
-                    console.log(resp)
                     resp.data.forEach(d => {
                         d.full_name = d.user.profile.full_name
                         d.title = d.doc.title;
@@ -475,6 +475,24 @@ const actions = {
         return new Promise((resolve, reject) => {
             axios
                 .delete(path + '/api/docs/i/' + id, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(resp => {
+                    resolve(resp.data)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOC_DELETE_FROM_LOCAL]: ({ commit, dispatch, rootState }, data) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .delete(path + '/api/docs/delete_from_local/' + data.id + '/' + data.type + '/', {
                     headers: { Authorization: "Token " + rootState.auth.token }
                 })
                 .then(resp => {

@@ -29,8 +29,7 @@ class Doc(models.Model):
     description = models.CharField(max_length=500, blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
     common = models.BooleanField(default=False)
-    signature = models.FileField(
-        upload_to='./sign/', storage=fs, blank=True, null=True)
+    signature = models.CharField(max_length=500, blank=True, null=True)
     signature_end = models.BooleanField(default=False)
     cancel_description = models.CharField(max_length=500, blank=True, null=True)
     cancel_file = models.FileField(
@@ -39,3 +38,9 @@ class Doc(models.Model):
                                     on_delete=models.CASCADE, default=1)
 
     post_delete.connect(receiver=delete_doc)
+
+
+class Block(models.Model):
+    data = models.CharField(max_length=500, blank=True, null=True)
+    hash = models.CharField(max_length=500, blank=True, null=True)
+    previous_hash = models.CharField(max_length=500, blank=True, null=True)

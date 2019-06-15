@@ -1,5 +1,6 @@
 from django.core.files.base import ContentFile
 from rest_framework.response import Response
+from django.http import JsonResponse
 from users.serializers import (
     UserSerializer, 
     AuthTokenSerializer, 
@@ -41,6 +42,9 @@ from rest_framework.decorators import api_view
 from rest_framework import parsers, renderers
 from itertools import chain
 import copy
+# Для FTP сервера
+from ftp import FTPStorage, FTPStorageFile
+fs = FTPStorage()
 
 ## Работает
 class Index(TemplateView):
@@ -63,6 +67,23 @@ def unique(list1):
             unique_list.append(x)
     return unique_list
     
+def UserPhoto(request, pk):
+    user = User.objects.get(id=pk)
+    uP = UserProfile.objects.get(user_id=user.id)
+    try:
+        fsFile = FTPStorageFile('/'+str(uP.photo), fs, 'rw')
+        f = open('staticfiles/'+str(uP.photo), 'wb')
+        file = fsFile.read()
+        f.write(file)
+
+        f.close()
+        fsFile.close()
+    except Exception as e:
+        print(str(e))
+
+    return JsonResponse({'photo': str(uP.photo)}, status=200)
+
+
 class Notif2(generics.ListAPIView):
     '''
     Нотифы конкретного пользователя
@@ -176,12 +197,6 @@ class Notif2(generics.ListAPIView):
                     notif2[i]['initiator'] = n['user']
         # Заменяем не владельцев на владельцев
         for i, n in enumerate(notif3):
-            notif3[i]['signature'] = ''
-            try:
-                filename = notif3[i]['doc']['file']
-                file = open(filename)
-                notif3[i]['signature'] = file.read()
-            except: pass
             for j, n2 in enumerate(notif3):
                 if (
                     n2['doc']['id'] == n['doc']['id'] and
@@ -195,7 +210,6 @@ class Notif2(generics.ListAPIView):
                             break
                     break
         notif2 = unique(notif2)
-        print('a2.9')
         return Response(notif2)
 
 class NotifQueue(generics.ListAPIView):

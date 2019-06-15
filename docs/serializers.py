@@ -1,4 +1,4 @@
-from .models import Doc, FileCabinet
+from .models import Doc, FileCabinet, Block
 # from users.serializers import NotifSerializer
 from users.models import Notif
 from rest_framework import serializers
@@ -11,6 +11,16 @@ class FileCabinetSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'id',
             'name',
+        )
+
+class BlockSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Block
+        fields = (
+            'id',
+            'data',
+            'hash',
+            'previous_hash'
         )
 
 class DocSerializer(serializers.HyperlinkedModelSerializer):

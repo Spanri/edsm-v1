@@ -42,6 +42,7 @@ from rest_framework.authentication import TokenAuthentication
 from django.utils import timezone
 from datetime import timedelta
 from six.moves import urllib
+import re
 # Для FTP сервера
 from ftp import FTPStorage, FTPStorageFile
 fs = FTPStorage()
@@ -100,7 +101,12 @@ class DownloadFile(generics.RetrieveAPIView):
         f.close()
         fsFile.close()
 
-        return Response({'file': str(doc.file)})
+        filename = str(doc.file)
+        try:
+            filename = re.sub('\\\\', '/', str(doc.file))
+        except: pass
+
+        return Response({'file': filename})
 
 class DownloadSign(generics.RetrieveAPIView):
     '''
@@ -114,15 +120,15 @@ class DownloadSign(generics.RetrieveAPIView):
 
     def get(self, request, pk):
         doc = Doc.objects.get(id=self.kwargs['pk'])
-        fsFile = FTPStorageFile('/'+str(doc.signature), fs, 'rw')
-        f = open('staticfiles/'+str(doc.signature), 'wb')
-        file = fsFile.read()
-        f.write(file)
 
-        f.close()
-        fsFile.close()
+        filename = str(doc.file).split('\\')[1].split('.')[0]
+        filename = 'staticfiles/sign/' + filename + '.txt'
 
-        return Response({'file': str(doc.signature)})
+        ff = open(filename, 'w')
+        ff.write(doc.signature)
+        ff.close()
+
+        return Response({'file': filename})
 
 
 class DeleteFileFromLocal(generics.RetrieveAPIView):
@@ -135,14 +141,20 @@ class DeleteFileFromLocal(generics.RetrieveAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated3,)
 
-    def get(self, request, pk):
+    def get(self, request, pk, type):
         doc = Doc.objects.get(id=self.kwargs['pk'])
-        if self.kwargs['type'] == 'file':
-            os.remove('staticfiles/'+str(doc.file))
-        else:
-            os.remove('staticfiles/sign/'+str(doc.file))
 
-        return Response({'doc': doc})
+        try:
+            if self.kwargs['type'] == 'file':
+                os.remove('staticfiles/'+str(doc.file))
+            else:
+                filename = str(doc.file).split('\\')[1].split('.')[0]
+                filename = 'staticfiles/sign/' + filename + '.txt'
+                os.remove(filename)
+        except Exception as e:
+            print(str(e))
+
+        return Response({'status': 200})
 
 class FileCabinetViewSet(viewsets.ModelViewSet):
     '''
@@ -179,27 +191,24 @@ class AddSignature(generics.ListAPIView):
 
         # Функция генерации подписи
         edc = EDC()
-        fileLocal = DownloadFile.as_view()(self.request._request, **self.kwargs)
-        file = open('staticfiles/'+str(doc.file), 'rb')
-        signature = edc.signFile(file, notifOwner.user.username)
-        file.close()
-
-        ff = open('staticfiles/sign/'+str(doc.file), 'w')
-        ff.write(signature)
-        ff.close()
-
-        ff = open('staticfiles/sign/'+str(doc.file), 'rb')
-        ff_content = {}
-        ff_content['file'] = ff
-        ff_content['DEFAULT_CHUNK_SIZE'] = 1024
-        filename = str(doc.file).split('\\')[1].split('.')[0]
-        fs._put_file('/sign/'+ filename +'.txt', ff_content)
-        ff.close()
-        os.remove('staticfiles/sign/'+str(doc.file))
-        os.remove('staticfiles/'+str(doc.file))
+    
+        if first == '1':
+            fileLocal = DownloadFile.as_view()(self.request._request, **self.kwargs)
+            file = open('staticfiles/'+str(doc.file), 'rb')
+            signature = edc.signFile(file, notifOwner.user.username)
+            file.close()
+            os.remove('staticfiles/'+str(doc.file))
+        if first == '0':
+            fileLocal = DownloadSign.as_view()(self.request._request, **self.kwargs)
+            filename = str(doc.file).split('\\')[1].split('.')[0]
+            filename = 'staticfiles/sign/' + filename + '.txt'
+            file = open(filename, 'rb')
+            signature = edc.signFile(file, notifOwner.user.username)
+            file.close()
+            os.remove(filename)
 
         # Добавить подпись
-        doc.signature = 'sign/'+filename
+        doc.signature = signature
         doc.save()
         id = doc.id
         

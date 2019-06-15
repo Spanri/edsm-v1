@@ -18,6 +18,7 @@ from users.views import (
     NotifQueue,
     NotifIsReadOrStatus4,
     GetEmails,
+    UserPhoto
 )
 from docs.views import (
     DocViewSet,
@@ -41,6 +42,7 @@ router.register(r'^docs/fileCabinets', FileCabinetViewSet)
 # router.register(r'^docs2', DocViewSet2)
 
 urlpatterns = [
+    url(r'^api/users/(?P<pk>.+)/photo/$', UserPhoto),
     url(r'^api/users/(?P<pk>.+)/notif/$', Notif2.as_view()),
     url(r'^api/users/(?P<pk1>.+)/notif/(?P<pk2>.+)/(?P<pk3>.+)/$',
         NotifIsReadOrStatus4.as_view()),

@@ -13,6 +13,9 @@ from django.core.mail import send_mail, EmailMessage
 import boto3
 import os
 from django.template.loader import get_template
+# Для FTP сервера
+from ftp import FTPStorage, FTPStorageFile
+fs = FTPStorage()
 
 def send_notif(notif):
     notifOwner = Notif.objects.get(
@@ -42,19 +45,16 @@ def send_notif(notif):
         )
         msg.content_subtype = "html"
         # Скачиваем файл из хранилища
-        s3 = boto3.resource(
-            's3',
-            aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key=os.environ.get(
-                'AWS_SECRET_ACCESS_KEY'),
-        )
-        s3.meta.client.download_file(
-            'edms-mtuci',
-            'media/' + str(notif.doc.file),
-            'staticfiles/media/' + str(notif.doc.file)
-        )
+        fsFile = FTPStorageFile('/'+str(notif.doc.file), fs, 'rw')
+        f = open('staticfiles/'+str(notif.doc.file), 'wb')
+        file = fsFile.read()
+        f.write(file)
+        f.close()
+        fsFile.close()
+        # Прикрепляем файл к письму и удаляем из локального хранилища
         msg.attach_file('staticfiles/media/' + str(notif.doc.file))
         msg.send()
+        os.remove('staticfiles/'+str(notif.doc.file))
 
 class UserProfileSerializer(serializers.HyperlinkedModelSerializer): 
     full_name = serializers.SerializerMethodField()
@@ -114,10 +114,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             if('profile' in validated_data):
                 nested_serializer = self.fields['profile']
                 nested_instance = instance.profile
-                # if('photo' in nested_serializer):
-                #     uP = UserProfile.objects.get(id=nested_instance.id)
-                #     image = Image.open(uP.photo.path)
-                #     image.save(uP.image.path, quality=20, optimize=True)
                 nested_data = validated_data.pop('profile')
                 nested_serializer.update(nested_instance, nested_data)
                 return nested_serializer.update(instance, validated_data)

@@ -162,8 +162,6 @@ export default {
                             console.log(err)
                             this.error = 'Ошибка. Что-то пошло не так.'
                         })
-                    
-                    
                 }
                 let data = {
                     profile: {}
@@ -179,7 +177,7 @@ export default {
                     data
                 })
                 .then(resp => {
-                    this.error = 'Данные профиля изменены.';
+                    this.error = 'Данные профиля изменены. Чтобы фотография профиля в шапке сайта обновилась, перезагрузите страницу.';
                     this.password1 = '';
                     this.password2 = '';
                     this.first_name = '';
@@ -188,7 +186,7 @@ export default {
                     this.position = '';
                     setTimeout(() => {
 						this.error = '';
-					}, 3000);
+					}, 5000);
                 })
                 .catch(err=>{
                     this.error = 'Ошибка. Что-то пошло не так.'
