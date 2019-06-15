@@ -52,7 +52,7 @@ def send_notif(notif):
         f.close()
         fsFile.close()
         # Прикрепляем файл к письму и удаляем из локального хранилища
-        msg.attach_file('staticfiles/media/' + str(notif.doc.file))
+        msg.attach_file('staticfiles/' + str(notif.doc.file))
         msg.send()
         os.remove('staticfiles/'+str(notif.doc.file))
 

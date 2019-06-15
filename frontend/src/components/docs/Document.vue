@@ -67,18 +67,18 @@
 							<tr>
 								<td>Подпись</td>
 								<td>
-									<button v-if="doc.doc.size/1024/1024 < 25" @click="viewSign()">СМОТРЕТЬ ПОДПИСЬ</button>
+									<button @click="checkSign()">ПРОВЕРИТЬ НА ДОСТОВЕРНОСТЬ</button>
 									<button @click="downloadSign()">СКАЧАТЬ ПОДПИСЬ</button>
-									<button v-if="doc.status == 2" @click="isPreConfirm = true">ПОДПИСАТЬ/ОТКЛОНИТЬ</button>
+									<button v-if="doc.status == 2" @click="isConfirm = true">ПОДПИСАТЬ/ОТКЛОНИТЬ</button>
 									{{doc.doc.signature}}
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div v-if="isPreConfirm" class="confirm">
+					<div v-if="isConfirm" class="confirm">
 						<div style="display: grid;grid-template-columns: auto max-content;">
 							<div></div>
-							<svg @click="isPreConfirm = false" style="margin-right: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+							<svg @click="isConfirm = false" style="margin-right: 10px;cursor: pointer;margin-top: 7px;" height="22px" viewBox="0 0 33 33" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 								<g id="Cancel" stroke="black" stroke-width="1">
 									<path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
 										fill="#121313" fill-rule="evenodd"/>
@@ -95,7 +95,7 @@
 							<div></div>
 							<button @click="isCancelSign = true;isPreConfirm = false;" style="background: rgb(243, 92, 92)">ОТКЛОНИТЬ</button>
 							<button @click="addSignature()">ПОСТАВИТЬ ПОДПИСЬ</button>
-							<div></div>
+							<p v-if="errorAddSign" style="color: red;text-align: center;padding: 5px">{{errorAddSign}}</p>
 						</div>
 					</div>
 					<div v-if="isCancelSign" class="confirm" style="height:380px" @submit.prevent="cancelSign">
@@ -228,7 +228,7 @@ export default {
 			fileRepeat: '',
 			error: '',
 			errorConfirm: '',
-			isPreConfirm: false,
+			errorAddSign: '',
 			isConfirm: false,
 			isCancelSign: false,
 			isRepeatSign: false,
@@ -326,33 +326,6 @@ export default {
 				this.error = 'Ошибка. Что-то пошло не так.';
 			});
 		},
-		viewSign(){
-			try{
-				this.error = "Открывается..."
-				this.$store.dispatch(DOC_DOWNLOAD, this.doc.doc.id)
-				.then((response) => {
-					let url = '';
-					let path2 = path + '/' + response.file;
-					if(this.type != "jpg" && this.type != "jpeg" && this.type != "png" && this.type != "pdf"){
-						url = "https://docs.google.com/viewerng/viewer?url=" + path2;  
-					} else {
-						url = path2;
-					}
-					window.open(url, "_blank");
-					this.error = "Открылось!";
-					setTimeout(() => {
-						this.error = '';
-					}, 5000);
-				})
-				.catch(err => {
-					console.log(err)
-					this.error = 'Ошибка. Что-то пошло не так.';
-				});
-			} catch (e){
-				console.log(e)
-				this.error = 'Ошибка. Что-то пошло не так.';
-			}
-		},
 		editDoc(){
 			this.$router.push('/document/' + this.id + '/edit');
 		},
@@ -416,37 +389,36 @@ export default {
             this.titleRepeatFile = files[0].name.replace("." + this.typeRepeatFile, "");
 		},
 		addSignature(){
-			if (this.confirm == this.confirmFromApp) {
-				this.errorConfirm = 'Ставим подпись...'
-				this.$store.dispatch(DOC_SIGNATURE, {
-					id: this.id,
-					first: 0
-				})
-				.then(resp => {
-					// this.refresh = true;
-					this.$store.dispatch(DOCS_REQUEST)
-					.then(r => {
-						this.doc = this.$store.getters.getDoc(this.id);
-						this.error = 'Подпись успешно поставлена!'
-						this.isConfirm = false;
-						this.confirmFromApp = '';
-						this.confirm = '';
-						// this.refresh = false;
-						setTimeout(() => {
-							this.error = '';
-						}, 5000);
-					})
-				})
-				.catch(err=>{
-					console.log(err)
+			this.errorAddSign = 'Ставим подпись...'
+			this.$store.dispatch(DOC_SIGNATURE, {
+				id: this.id,
+				first: 0
+			})
+			.then(resp => {
+				this.refresh = true;
+				this.$store.dispatch(DOCS_REQUEST)
+				.then(r => {
+					this.doc = this.$store.getters.getDoc(this.id);
+					this.error = 'Подпись успешно поставлена!'
 					this.isConfirm = false;
-					// this.confirmFromApp = '';
+					this.confirmFromApp = '';
 					this.confirm = '';
-					this.error = 'Ошибка. Что-то пошло не так.'
+					this.errorAddSign = ''
+					this.refresh = false;
+					setTimeout(() => {
+						this.error = '';
+					}, 5000);
 				})
-			} else {
-				this.errorConfirm = 'Неправильный код подтверждения.';
-			}
+			})
+			.catch(err=>{
+				console.log(err)
+				this.isConfirm = false;
+				this.confirm = '';
+				this.error = 'Ошибка. Что-то пошло не так.'
+			})
+		},
+		checkSign(){
+
 		},
 		repeatSignatures(){
 			this.repeatP = 'Цепочка запускается...'

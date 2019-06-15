@@ -28,9 +28,9 @@
             <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/all', }">ВСЕ ДОКУМЕНТЫ</router-link>
             <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
             <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/my-doc-signature-request', }">Я ПРОШУ ПОДПИСЬ</router-link> 
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/signature-request', }">У МЕНЯ ПРОСЯТ ПОДПИСЬ</router-link>
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/signature-success', }">ПОДПИСАННОЕ МНОЮ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/my-doc-signature-request', }">НА ПОДПИСИ</router-link> 
+            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/signature-request', }">НА ПОДПИСЬ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/signature-success', }">ПОДПИСАННОЕ</router-link>
             <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/available-to-me', }">ДОСТУПНЫ МНЕ</router-link>
         </div>
     </div>
