@@ -49,5 +49,5 @@ export const DOCS_FILE_CABINET_EDIT = 'DOCS_FILE_CABINET_EDIT'
 export const DOCS_FILE_CABINET_DELETE = 'DOCS_FILE_CABINET_DELETE'
 export const DOC_DELETE_FROM_LOCAL = 'DOC_DELETE_FROM_LOCAL'
 
-export const path = 'http://localhost:8000'
-// export const path = 'https://edms-mtuci.herokuapp.com'
+// export const path = 'http://localhost:8000'
+export const path = 'https://edms-mtuci.herokuapp.com'

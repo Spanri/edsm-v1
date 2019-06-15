@@ -5,6 +5,8 @@ from rest_framework import status
 import boto3
 import os
 from django.core import exceptions
+import hashlib
+import json
 from rest_framework.response import Response
 from .serializers import (
     DocSerializer,
@@ -223,6 +225,25 @@ class AddSignature(generics.ListAPIView):
                 notif.status = 3
                 notif.date = timezone.now()
                 notif.save()
+                block = Block.objects.create(data=signature)
+                if len(Block.objects.all()) == 1:
+                    temp = {
+                        'id': block.id,
+                        'data': block.data
+                    }
+                    block_string = json.dumps(temp, sort_keys=True).encode()
+                    block.hash = hashlib.sha256(block_string).hexdigest()
+                    block.save()
+                else:
+                    last_block = Block.objects.last()
+                    temp = {
+                        'id': block.id,
+                        'data': block.data,
+                        'previous_hash': last_block.hash
+                    }
+                    block_string = json.dumps(temp, sort_keys=True).encode()
+                    block.hash = hashlib.sha256(block_string).hexdigest()
+                    block.save()
             except: pass
             # Найти следующий нотиф, который с этим документом и
             # где очередь = очередь+1

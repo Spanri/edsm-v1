@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Doc, FileCabinet
+from .models import Doc, FileCabinet, Block
 
 @admin.register(Doc)
 class DocAdmin(admin.ModelAdmin):
@@ -7,6 +7,12 @@ class DocAdmin(admin.ModelAdmin):
     search_fields = ('id',)
     ordering = ('id',)
 
+
+@admin.register(Block)
+class BlockAdmin(admin.ModelAdmin):
+    list_display = ('id', 'data', 'hash', 'previous_hash')
+    search_fields = ('id',)
+    ordering = ('id',)
 
 @admin.register(FileCabinet)
 class FileCabinetAdmin(admin.ModelAdmin):
