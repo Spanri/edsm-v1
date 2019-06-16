@@ -24,29 +24,18 @@ export default {
 	name: 'headerProfile',
 	data () {
 		return {
-			photo: '',
 		}
 	},
 	created() {
 		this.$store.dispatch(USER_PHOTO)
-		.then(r => {
-			this.photo = path + '/' + r;
-		})
 	},
 	computed: {
+		photo(){
+            return this.$store.getters.getPhoto;
+        },
 		profile() {
-			this.$store.dispatch(USER_PHOTO)
-			.then(r => {
-				this.photo = path + '/' + r;
-			})
 			return this.$store.getters.getProfile
 		},
-		// async photo() {
-		// 	this.$store.getters.getProfile;
-		// 	let p = await this.$store.dispatch(USER_PHOTO);
-		// 	console.log(p)
-		// 	return p;
-		// }
 	},
 }
 </script>

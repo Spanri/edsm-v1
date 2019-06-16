@@ -31,7 +31,7 @@
 						<tbody>
 							<tr>
 								<td>Регистрационный номер</td>
-								<td>{{doc.doc.id}}</td>
+								<td>{{doc.reg}}</td>
 							</tr>
 							<tr>
 								<td>Владелец</td>
@@ -70,6 +70,7 @@
 									<button @click="checkSign()">ПРОВЕРИТЬ НА ДОСТОВЕРНОСТЬ</button>
 									<button @click="downloadSign()">СКАЧАТЬ ПОДПИСЬ</button>
 									<button v-if="doc.status == 2" @click="isConfirm = true">ПОДПИСАТЬ/ОТКЛОНИТЬ</button>
+									<br>
 									{{doc.doc.signature}}
 								</td>
 							</tr>
@@ -95,6 +96,7 @@
 							<div></div>
 							<button @click="isCancelSign = true;isPreConfirm = false;" style="background: rgb(243, 92, 92)">ОТКЛОНИТЬ</button>
 							<button @click="addSignature()">ПОСТАВИТЬ ПОДПИСЬ</button>
+							<br>
 							<p v-if="errorAddSign" style="color: red;text-align: center;padding: 5px">{{errorAddSign}}</p>
 						</div>
 					</div>

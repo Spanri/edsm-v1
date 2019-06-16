@@ -12,6 +12,10 @@
 					type="text"
 					placeholder="Введите название"
 					class="code">
+				<p>Приставка к регистрационному номеру</p>
+				<select v-model="reg">
+					<option v-for="(regC,i) in regs" :key="i" :value="regC">{{regC.name}}</option>
+				</select>
 				<p>Картотека</p>
 				<select v-model="file_cabinet">
 					<option v-for="(fileC,i) in fileCabinets" :key="i" :value="fileC">{{fileC.name}}</option>
@@ -32,7 +36,12 @@
 <script>
 // import FileReader from 'vue-filereader'
 import { mapState } from 'vuex'
-import { DOC_EDIT, DOC_UPDATE, DOCS_REQUEST } from '../../store/mutation-types';
+import { 
+	DOC_EDIT, 
+	DOC_UPDATE, 
+	DOCS_REQUEST,
+	DOCS_REGS,
+} from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 
 import axios from 'axios'
@@ -52,6 +61,8 @@ export default {
 			description: '',
 			common: false,
 			error: '',
+			regs: [],
+			reg: '',
 			fileCabinets: [],
             file_cabinet: '',
         }
@@ -69,6 +80,9 @@ export default {
 		this.common = this.doc.doc.common;
 		this.fileCabinets = this.$store.getters.getFileCabinets;
 		this.file_cabinet = this.doc.doc.file_cabinet;
+		this.$store.dispatch(DOCS_REGS);
+		this.regs = this.$store.getters.getRegs;
+		this.reg = this.doc.doc.reg;
 	},
 	methods: {
 		editDoc(){
@@ -77,7 +91,8 @@ export default {
 				title: this.title + '.' + this.type,
 				description: this.description,
 				common: this.common,
-				file_cabinet_id: this.file_cabinet.id
+				file_cabinet_id: this.file_cabinet.id,
+				reg_id: this.reg.id
 			};
 			this.$store.dispatch(DOC_EDIT, d)
 			.then(resp => {

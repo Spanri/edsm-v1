@@ -180,7 +180,6 @@ export default {
 					console.log(err)
 				}
 			})
-			this.$router.push('/')
 		},
 		rememberPassword(){
 			const { emailForConfirm } = this;

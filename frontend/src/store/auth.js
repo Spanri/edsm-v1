@@ -5,6 +5,8 @@ import {
     AUTH_LOGOUT,
     AUTH_SIGNUP,
     DOCS_FILE_CABINET,
+    DOCS_SUCCESS,
+    DOCS_REQUEST,
     path,
 } from './mutation-types'
 import axios from 'axios'
@@ -49,14 +51,16 @@ const actions = {
                 "email": user.email,
                 "password": user.password
             })
-            .then(response => {
-                const token = response.data.token
-                commit(AUTH_TOKEN, response.data)
-                localStorage.setItem('user-token', token)
-                axios.defaults.headers.common['Authorization'] = token
-                dispatch(USER_REQUEST)
-                commit(DOCS_FILE_CABINET, '');
-                resolve(response)
+            .then(async response => {
+                const token = response.data.token;
+                await commit(AUTH_TOKEN, response.data);
+                localStorage.setItem('user-token', token);
+                axios.defaults.headers.common['Authorization'] = token;
+                await dispatch(USER_REQUEST);
+                await commit(DOCS_FILE_CABINET, '');
+                await commit(DOCS_SUCCESS, '');
+                await dispatch(DOCS_REQUEST);
+                resolve(response);
             })
             .catch(err => {
                 localStorage.removeItem('user-token')
@@ -70,10 +74,10 @@ const actions = {
     },
     [AUTH_LOGOUT]: ({commit, dispatch}) => {
         return new Promise((resolve, reject) => {
-            commit(AUTH_LOGOUT)
-            localStorage.removeItem('user-token')
-            delete axios.defaults.headers.common['Authorization']
-            resolve()
+            commit(AUTH_LOGOUT);
+            localStorage.removeItem('user-token');
+            delete axios.defaults.headers.common['Authorization'];
+            resolve();
         })
     }
 }

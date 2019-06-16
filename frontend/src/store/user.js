@@ -4,14 +4,13 @@ import {
     USER_SUCCESS,
     AUTH_LOGOUT,
     USER_UPDATE,
-    USER_PHOTO,
     USER_CONFIRM_UPDATE_PASSWORD,
     USERS_EMAILS,
-    // USER_NOTIF_REQUEST,
     USER_CHANGE_PASSWORD,
     USER_UPDATE_OTHER,
     USER_UPDATE_IMAGE,
-    USER_NOTIF_R,
+    USER_PHOTO,
+    USER_PHOTO_SUCCESS,
     path,
     DOCS_REQUEST,
 } from './mutation-types'
@@ -21,10 +20,12 @@ import axios from 'axios'
 const state = {
     profile: {},
     users: [],
+    photo: '',
 }
 
 const getters = {
     getProfile: state => state.profile,
+    getPhoto: tate => state.photo,
     getUsers: tate => state.users,
     isProfileLoaded: state => !!state.profile.name,
 }
@@ -38,6 +39,7 @@ const actions = {
             })
             .then(response => {
                 commit(USER_SUCCESS, response.data[0])
+                dispatch(USER_PHOTO)
                 dispatch(DOCS_REQUEST)
             })
             .catch(err => {
@@ -87,18 +89,6 @@ const actions = {
                 })
         })
     },
-    // [USER_NOTIF_REQUEST]: ({commit, dispatch, rootState}) => {
-    //     return new Promise(async (resolve, reject) => {
-    //         let response = await axios.get(path + '/api/users/' + rootState.user.profile.id + '/notif/');
-    //         await response.data.forEach(async (r, i) => {
-    //             r.title = r.doc.title
-    //             r.full_name = r.user.profile.full_name;
-    //             r.date = 'r.message';
-    //         })
-    //         await console.log(response.data)
-    //         await resolve(response.data)
-    //     })
-    // },
     [USER_UPDATE]: ({commit, dispatch}, data) => {
         return new Promise((resolve, reject) => {
             axios
@@ -138,6 +128,7 @@ const actions = {
                     headers: { Authorization: "Token " + rootState.auth.token }
                 })
                 .then(resp => {
+                    commit(USER_PHOTO_SUCCESS, resp.data.photo)
                     resolve(resp.data.photo)
                 })
                 .catch(err => {
@@ -234,9 +225,10 @@ const mutations = {
     [USER_SUCCESS]: (state, resp) => {
         Vue.set(state, 'profile', resp)
     },
-    // [USER_NOTIF_R]: (state, resp) => {
-    //     Vue.set(state, 'r', resp)
-    // }
+    [USER_PHOTO_SUCCESS]: (state, resp) => {
+        console.log(path + '/' + resp)
+        Vue.set(state, 'photo', path + '/' + resp)
+    },
 }
 
 export default {

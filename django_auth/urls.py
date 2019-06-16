@@ -23,6 +23,8 @@ from users.views import (
 from docs.views import (
     DocViewSet,
     FileCabinetViewSet,
+    BlockViewSet,
+    RegViewSet,
     AddSignature,
     CancelSignature,
     SignatureAgain,
@@ -39,6 +41,8 @@ router.register(r'^users/i', UserViewSet)
 router.register(r'^users/notif', NotifViewSet)
 router.register(r'^docs/i', DocViewSet)
 router.register(r'^docs/fileCabinets', FileCabinetViewSet)
+router.register(r'^docs/regs', RegViewSet)
+router.register(r'^docs/blocks', BlockViewSet)
 # router.register(r'^docs2', DocViewSet2)
 
 urlpatterns = [

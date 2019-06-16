@@ -4,30 +4,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'klc=#bj7qm#iiz%1ru-6y3%guc5_e(hq+3hm3&65dg6%c%@(*y'
 
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     'formatters': {
-#         'default': {
-#             'format': '%(name)s:%(levelname)s %(asctime)s  %(message)s'
-#         }
-#     },
-#     'handlers': {
-#         'default': {
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'default'
-#         }
-#     },
-#     'loggers': {
-#         '': {
-#             'handlers': ['default'],
-#             'level': 'DEBUG',
-#             'propagate': False
-#         }
-#     }
-# }
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -209,7 +185,6 @@ django_heroku.settings(locals())
 # fs = FTPStorage()
 
 STATICFILES_STORAGE = 'ftp.FTPStorage'
-DEFAULT_FILE_STORAGE = 'ftp.FTPStorage'
 # STATIC_ROOT = 'ftp://91.238.69.56:21/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'frontend/dist/'),
@@ -218,8 +193,8 @@ STATIC_URL = 'ftp://91.238.69.56:21/'
 MEDIA_ROOT = '/'
 MEDIA_URL = '/'
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    # 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # 'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
 DEFAULT_FILE_STORAGE = 'ftp.FTPStorage'

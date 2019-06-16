@@ -22,7 +22,13 @@ def delete_doc(sender, **kwargs):
 class FileCabinet(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
 
+
+class Reg(models.Model):
+    name = models.CharField(max_length=10, blank=True, null=True)
+
 class Doc(models.Model):
+    reg = models.ForeignKey(Reg, related_name="doc_reg",
+                            on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=100, blank=True, null=True)
     file = models.FileField(upload_to='./docs/', storage=fs, blank=True, null=True)
     size = models.IntegerField(blank=True, null=True)
@@ -34,8 +40,8 @@ class Doc(models.Model):
     cancel_description = models.CharField(max_length=500, blank=True, null=True)
     cancel_file = models.FileField(
         upload_to='./cancel_docs/', storage=fs, blank=True, null=True)
-    file_cabinet = models.ForeignKey(FileCabinet, related_name="doc",
-                                    on_delete=models.CASCADE, default=1)
+    file_cabinet = models.ForeignKey(FileCabinet, related_name="doc_fc",
+                                     on_delete=models.CASCADE, blank=True, null=True)
 
     post_delete.connect(receiver=delete_doc)
 

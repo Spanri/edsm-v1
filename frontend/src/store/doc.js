@@ -1,14 +1,16 @@
 import { 
     DOCS_REQUEST,
     DOC_EDIT_NOTIF,
-    DOC_EDIT_NOTIF_IS_READ,
+    DOCS_REGS,
+    DOCS_REG_CREATE,
+    DOCS_REG_EDIT,
+    DOCS_REG_DELETE,
+    DOCS_REGS_SUCCESS,
     DOCS_FILTER,
     DOCS_FILTER_SUCCESS,
     DOCS_FILE_CABINET_CREATE,
     DOCS_FILE_CABINET_EDIT,
     DOCS_FILE_CABINET_DELETE,
-    DOC_FOLDER_PAGE,
-    DOC_FOLDER_PAGE_PROFILE,
     DOC_UPLOAD,
     DOC_DOWNLOAD,
     DOC_DOWNLOAD_SIGN,
@@ -36,6 +38,7 @@ const state = {
     docs: [],
     docsFiltering: [],
     fileCabinets: [],
+    regs: [],
     fileCabinet: '',
     reload: '',
 }
@@ -48,6 +51,7 @@ const getters = {
     },
     getFileCabinets: state => state.fileCabinets,
     getFileCabinet: state => state.fileCabinet,
+    getRegs: state => state.regs,
     getReload: state => state.reload,
 }
 
@@ -72,6 +76,12 @@ const actions = {
                         if (d.date) d.date = formatDate(d.date);
                         d.date_notif = d.date;
                         d.file_cabinet = d.doc.file_cabinet.name;
+                        try{
+                            d.reg = d.doc.id + '-' + d.doc.reg.name;
+                        }
+                        catch(e) {
+                            d.reg = d.doc.id
+                        }
                         // console.log(d)
                         if (d.date_expire && d.date_expire < new Date()) {
                             console.log(d)
@@ -81,15 +91,6 @@ const actions = {
                         })
                         let myDoc = d.status == 0 && d.user.id == rootState.user.profile.id
                         d.rowBackg = (dd.length != 0 || myDoc) ? "white" : "#dcdbfc"
-                        // if (myDoc && !d.doc.signature_end) {
-                        //     dispatch(DOC_SIGNATURE_QUEUE, d.doc.id)
-                        //         .then(r => {
-                        //             if (r.length != 0) d.signUser = r[0].user.profile.full_name;
-                        //             else {
-                        //                 d.signUser = '';
-                        //             }
-                        //         })
-                        // }
                     });
                         
                     let d1 = resp.data.filter(d => {
@@ -144,18 +145,6 @@ const actions = {
                 })
                 .then(resp => {
                     let updateId = rootState.doc.docs.findIndex(x => x.id == id);
-                    
-                    // resp.data.full_name = resp.data.user.profile.full_name
-                    // resp.data.title = resp.data.doc.title;
-                    // resp.data.date_doc = resp.data.doc.date;
-                    // resp.data.date_notif = resp.data.date;
-                    // resp.data.file_cabinet = resp.data.doc.file_cabinet.name;
-                    // let dd = resp.data.is_read.filter(d0 => {
-                    //     return d0.id == rootState.user.profile.id
-                    // })
-                    // let myDoc = resp.data.status == 0 && resp.data.user.id == rootState.user.profile.id
-                    // resp.data.rowBackg = (dd.length != 0 || myDoc) ? "white" : "#dcdbfc"
-
                     rootState.doc.docs[updateId] = resp.data;
                     resolve(resp)
                 })
@@ -170,7 +159,6 @@ const actions = {
     },
     [DOC_EDIT_NOTIF]: ({ commit, dispatch, rootState }, data) => {
         return new Promise((resolve, reject) => {
-            // console.log('data hide', data)
             axios
                 .get(path + '/api/users/' + data.user + '/notif/' + data.notif + '/' + data.pk3 +'/', {
                     headers: { Authorization: "Token " + rootState.auth.token }
@@ -273,6 +261,84 @@ const actions = {
                 })
         })
     },
+    [DOCS_REGS]: ({ commit, dispatch, rootState }) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(path + '/api/docs/regs')
+                .then(res => {
+                    commit(DOCS_REGS_SUCCESS, res.data)
+                    resolve(res)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOCS_REG_CREATE]: ({ commit, dispatch, rootState }, name) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(path + '/api/docs/regs', {
+                    name: name
+                }, {
+                        headers: { Authorization: "Token " + rootState.auth.token }
+                    })
+                .then(res => {
+                    dispatch(DOCS_REGS)
+                    resolve(res)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOCS_REG_EDIT]: ({ commit, dispatch, rootState }, data) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .patch(path + '/api/docs/regs/' + data.id, {
+                    name: data.name
+                }, {
+                        headers: { Authorization: "Token " + rootState.auth.token }
+                    })
+                .then(res => {
+                    dispatch(DOCS_REGS)
+                    resolve(res)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOCS_REG_DELETE]: ({ commit, dispatch, rootState }, data) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .delete(path + '/api/docs/regs/' + data.id, {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(res => {
+                    dispatch(DOCS_REGS)
+                    resolve(res)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
     [DOC_UPLOAD]: ({commit, dispatch, rootState}, data) => {
         return new Promise((resolve, reject) => {
             axios
@@ -285,15 +351,12 @@ const actions = {
                 .then(async resp => {
                     if(data.signature_request.length != 0) {
                         await data.signature_request.forEach((s, i) => {
-                            // let D = new Date()
-                            // console.log(D.setDate(D.getDate() + 3))
                             axios
                                 .post(path + '/api/users/notif', {
                                     doc_id: resp.data.doc.id,
                                     user_id: s.id,
                                     status: i == 0 ? 2 : 1,
                                     queue: i,
-                                    // date_expire: D.setDate(D.getDate() + 3)
                                 })
                                 .catch(err => {
                                     try {
@@ -537,6 +600,9 @@ const mutations = {
     [DOCS_FILTER_SUCCESS]: (state, resp) => {
         Vue.set(state, 'docsFiltering', resp)
     },
+    [DOCS_REGS_SUCCESS]: (state, resp) => {
+        Vue.set(state, 'regs', resp)
+    },
     [DOCS_FILE_CABINETS]: (state, resp) => {
         Vue.set(state, 'fileCabinets', resp)
     },
@@ -545,12 +611,6 @@ const mutations = {
     },
     [DOC_REQUEST_SUCCESS]: (state, resp) => { 
         state.doc.push(resp)
-    },
-    [DOC_FOLDER_PAGE]: (state, resp) => {
-        Vue.set(state, 'page', resp)
-    },
-    [DOC_FOLDER_PAGE_PROFILE]: (state, resp) => {
-        Vue.set(state, 'pageProfile', resp)
     },
     [DOC_RELOAD]: (state, resp) => {
         Vue.set(state, 'reload', resp)

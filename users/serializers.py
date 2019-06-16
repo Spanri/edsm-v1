@@ -89,7 +89,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'date_joined',
             'is_staff',
             'is_get_notif_email',
-            'is_get_notif_expired_email',
             'profile',
         )
 
@@ -140,8 +139,6 @@ class NotifSerializer(serializers.HyperlinkedModelSerializer):
             'doc_id',
             'is_read_id',
             'date',
-            'date_expire',
-            'is_notif_expire',
             'status',
             'queue',
             'is_read',

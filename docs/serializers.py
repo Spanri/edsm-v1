@@ -1,4 +1,4 @@
-from .models import Doc, FileCabinet, Block
+from .models import Doc, FileCabinet, Block, Reg
 # from users.serializers import NotifSerializer
 from users.models import Notif
 from rest_framework import serializers
@@ -8,6 +8,14 @@ from django.utils import timezone
 class FileCabinetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = FileCabinet
+        fields = (
+            'id',
+            'name',
+        )
+
+class RegSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Reg
         fields = (
             'id',
             'name',
@@ -26,11 +34,15 @@ class BlockSerializer(serializers.HyperlinkedModelSerializer):
 class DocSerializer(serializers.HyperlinkedModelSerializer):
     file_cabinet = FileCabinetSerializer(required=False)
     file_cabinet_id = serializers.IntegerField(write_only=True, required=False)
+    reg = FileCabinetSerializer(required=False)
+    reg_id = serializers.IntegerField(write_only=True, required=False)
+
 
     class Meta:
         model = Doc
         fields = (
             'id',
+            'reg',
             'title',
             'file',
             'size',
@@ -43,6 +55,7 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'cancel_file',
             'file_cabinet',
             'file_cabinet_id',
+            'reg_id',
         )
     
     def create(self, validated_data):

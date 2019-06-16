@@ -60,9 +60,10 @@ const router = new Router({
 					component: Grid,
 					props: {
 						columns: [
-							{key: 'title', title: 'Название'},
-							{key: 'full_name', title: 'Владелец'},
-							{key: 'date_doc', title: 'Дата добавления'},
+							{ key: 'reg', title: '№' },
+							{ key: 'title', title: 'Название' },
+							{ key: 'full_name', title: 'Владелец' },
+							{ key: 'date_doc', title: 'Дата добавления' },
 						],
 					} 
 				},

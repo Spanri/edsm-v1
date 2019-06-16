@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT, USER_NOTIF_REQUEST, USER_PHOTO, path} from '../store/mutation-types'
+import {AUTH_LOGOUT, USER_NOTIF_REQUEST, USER_PHOTO, DOCS_REQUEST, path} from '../store/mutation-types'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -63,26 +63,27 @@ export default {
             search: '',
             n: '',
             notifHover: false,
-            photo: '',
         }
     },
     created() {
         this.$store.dispatch(USER_PHOTO)
-        .then(r => {
-            this.photo = path + '/' + r;
-        })
+        this.$store.dispatch(DOCS_REQUEST)
     },
     computed: {
         ...mapGetters({
             getProfile: 'getProfile',
+            getPhoto: 'getPhoto',
             getDocsOld: 'getDocsOld'
         }),
+        photo(){
+            return this.getPhoto;
+        },
         title(){
             return 'Открыть профиль\n' + this.getProfile.email;
         },
         notif(){
             return this.getDocsOld
-                .filter(d => d.status == 3 || d.status == 2).length;
+                .filter(d => d.status == 3 || d.status == 2).length || 0;
         },
         notifColor(){
             if(this.notifHover){

@@ -75,7 +75,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import { USER_UPDATE, USER_REQUEST, USER_UPDATE_IMAGE, DOC_FOLDER_PAGE_PROFILE } from '../../store/mutation-types';
+import { USER_UPDATE, USER_REQUEST, USER_UPDATE_IMAGE} from '../../store/mutation-types';
 import MaxInput from '@/components/addit/MaxInput'
 
 export default {

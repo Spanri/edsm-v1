@@ -22,6 +22,10 @@
                         autocomplete = usernameNew
                         class="filename"
                     />
+                    <p>Приставка к регистрационному номеру</p>
+                    <select v-model="reg">
+                        <option v-for="(regC,i) in regs" :key="i" :value="regC">{{regC.name}}</option>
+                    </select>
                     <p>Картотека</p>
                     <select v-model="file_cabinet">
                         <option v-for="(fileC,i) in fileCabinets" :key="i" :value="fileC">{{fileC.name}}</option>
@@ -89,7 +93,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
-import { DOC_UPLOAD, DOC_UPDATE, USERS_EMAILS } from '../../store/mutation-types';
+import { DOC_UPLOAD, DOC_UPDATE, USERS_EMAILS, DOCS_REGS } from '../../store/mutation-types';
 import Preview from '../addit/Preview';
 import draggable from 'vuedraggable'
 
@@ -112,6 +116,8 @@ export default {
             error: null,
             file:'',
             disable: true,
+            regs: [],
+            reg: '',
             fileCabinets: [],
             file_cabinet: '',
 		}
@@ -123,6 +129,8 @@ export default {
         })
         this.fileCabinets = this.$store.getters.getFileCabinets;
         this.file_cabinet = this.$store.getters.getFileCabinet;
+        this.$store.dispatch(DOCS_REGS)
+        this.regs = this.$store.getters.getRegs;
     },
     methods: {
         onFileChange(e) {
@@ -189,6 +197,7 @@ export default {
             if (this.title) d.append('title', this.title+'.'+this.typeFile);
             if (this.description) d.append('description', this.description);
             if (this.file_cabinet) d.append('file_cabinet_id', this.file_cabinet.id);
+            if (this.reg) d.append('reg_id', this.reg.id);
             d.common = this.common ? d.append('common', true) : d.append('common', false);
             let dd = { d }
             if (this.selectedUsers) dd.signature_request = this.selectedUsers;

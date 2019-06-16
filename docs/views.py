@@ -10,7 +10,9 @@ import json
 from rest_framework.response import Response
 from .serializers import (
     DocSerializer,
-    FileCabinetSerializer
+    FileCabinetSerializer,
+    RegSerializer,
+    BlockSerializer
 )
 from users.serializers import (
     UserSerializer,
@@ -29,7 +31,9 @@ from .permissions import (
 )
 from .models import (
     Doc,
-    FileCabinet
+    FileCabinet,
+    Reg,
+    Block
 )
 from rest_framework import (
     generics,
@@ -167,6 +171,26 @@ class FileCabinetViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated4,)
 
+
+class RegViewSet(viewsets.ModelViewSet):
+    '''
+    Универсальное представление для работы с приставками к регистрационным номерам.
+    '''
+    serializer_class = RegSerializer
+    queryset = Reg.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated4,)
+
+
+class BlockViewSet(viewsets.ModelViewSet):
+    '''
+    Универсальное представление для работы с блоками.
+    '''
+    serializer_class = BlockSerializer
+    queryset = Block.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (CustomIsAuthenticated4,)
+
 class AddSignature(generics.ListAPIView):
     '''
     Добавить подпись к документу. Принимает id документа.
@@ -225,25 +249,6 @@ class AddSignature(generics.ListAPIView):
                 notif.status = 3
                 notif.date = timezone.now()
                 notif.save()
-                block = Block.objects.create(data=signature)
-                if len(Block.objects.all()) == 1:
-                    temp = {
-                        'id': block.id,
-                        'data': block.data
-                    }
-                    block_string = json.dumps(temp, sort_keys=True).encode()
-                    block.hash = hashlib.sha256(block_string).hexdigest()
-                    block.save()
-                else:
-                    last_block = Block.objects.last()
-                    temp = {
-                        'id': block.id,
-                        'data': block.data,
-                        'previous_hash': last_block.hash
-                    }
-                    block_string = json.dumps(temp, sort_keys=True).encode()
-                    block.hash = hashlib.sha256(block_string).hexdigest()
-                    block.save()
             except: pass
             # Найти следующий нотиф, который с этим документом и
             # где очередь = очередь+1
@@ -254,9 +259,7 @@ class AddSignature(generics.ListAPIView):
                     queue=notif.queue+1
                 )
                 notifNext.status = 2
-                notifNext.is_notif_expire = False
                 notifNext.date = timezone.now()
-                notifNext.date_expire = timezone.now() + timedelta(days=3)
                 notifNext.save()
             # Если следующего нотифа нет, значит подпись больше не нужна
             except:
@@ -271,14 +274,33 @@ class AddSignature(generics.ListAPIView):
                     status=2,
                     queue=0
                 )
-                notifNext.is_notif_expire = False
-                notifNext.date_expire = timezone.now() + timedelta(days=3)
                 notifNext.save()
             # Если нулевого нотифа нет, значит подпись не нужна
             except:
                 doc.signature_end = True
                 doc.save()
-                
+        
+        block = Block.objects.create(data=signature)
+        print(len(Block.objects.all()))
+        if len(Block.objects.all()) == 1:
+            temp = {
+                'id': block.id,
+                'data': block.data
+            }
+            block_string = json.dumps(temp, sort_keys=True).encode()
+            block.hash = hashlib.sha256(block_string).hexdigest()
+            block.save()
+        else:
+            last_block = Block.objects.last()
+            temp = {
+                'id': block.id,
+                'data': block.data,
+                'previous_hash': last_block.hash
+            }
+            block_string = json.dumps(temp, sort_keys=True).encode()
+            block.hash = hashlib.sha256(block_string).hexdigest()
+            block.save()
+            
         doc = Doc.objects.filter(id=self.kwargs['pk'])
         serializer = DocSerializer(doc)
         return doc

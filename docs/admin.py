@@ -1,12 +1,17 @@
 from django.contrib import admin
-from .models import Doc, FileCabinet, Block
+from .models import Doc, FileCabinet, Block, Reg
 
 @admin.register(Doc)
 class DocAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date', 'common', 'cancel_description', 'id')
+    list_display = ('id', 'reg', 'title', 'date', 'common', 'cancel_description')
     search_fields = ('id',)
     ordering = ('id',)
 
+@admin.register(Reg)
+class RegAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    search_fields = ('id',)
+    ordering = ('id',)
 
 @admin.register(Block)
 class BlockAdmin(admin.ModelAdmin):
