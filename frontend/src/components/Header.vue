@@ -66,8 +66,9 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch(USER_PHOTO)
-        this.$store.dispatch(DOCS_REQUEST)
+        this.$store.dispatch(USER_PHOTO);
+        this.$store.dispatch(DOCS_REQUEST);
+        console.log(this.$store.getters.getPhoto);
     },
     computed: {
         ...mapGetters({
@@ -94,7 +95,7 @@ export default {
         },
         notifIcon(){
             if (this.notif > 0) {
-                return "https://img.icons8.com/material/30/ff7373/bell.png"
+                return "https://img.icons8.com/material/30/ff7373/bell.png";
             }
             else return "https://img.icons8.com/material/30/FFFFFF/bell.png";
         },

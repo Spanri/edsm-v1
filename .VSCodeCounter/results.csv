@@ -1,466 +1,109 @@
-filename, language, Batch, Python, pip requirements, Markdown, Ignore, Properties, JavaScript, HTML, JSON, Vue, XML, CSS, Database, comment, blank, total
-DoPass.bat, Batch, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4
-README.md, Markdown, 0, 0, 0, 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 95
-Thumbs.db, Database, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1396, 0, 8, 1404
-aps.py, Python, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 10, 52
-django_auth\settings.py, Python, 0, 145, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47, 27, 219
-django_auth\tests\__init__.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
-django_auth\tests\tests_models.py, Python, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 11, 83
-django_auth\urls.py, Python, 0, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 98
-django_auth\wsgi.py, Python, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 5, 17
-docs\__init__.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
-docs\admin.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 16
-docs\migrations\0001_initial.py, Python, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 37
-docs\migrations\0002_auto_20190607_2150.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-docs\migrations\0003_auto_20190608_0011.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-docs\migrations\0004_auto_20190608_0047.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-docs\migrations\0005_auto_20190609_0120.py, Python, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 29
-docs\migrations\0006_doc_signature_end.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-docs\migrations\__init__.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
-docs\models.py, Python, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 37
-docs\permissions.py, Python, 0, 77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 81
-docs\serializers.py, Python, 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 52
-docs\views.py, Python, 0, 258, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 28, 309
-edc\EDC.py, Python, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 24
-edc\init.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
-frontend\.editorconfig, Properties, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10
-frontend\.gitignore, Ignore, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 15
-frontend\.postcssrc.js, JavaScript, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 2, 2, 11
-frontend\build\build.js, JavaScript, 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 7, 42
-frontend\build\check-versions.js, JavaScript, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 0, 10, 55
-frontend\build\utils.js, JavaScript, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 5, 17, 102
-frontend\build\vue-loader.conf.js, JavaScript, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 2, 23
-frontend\build\webpack.base.conf.js, JavaScript, 0, 0, 0, 0, 0, 0, 74, 0, 0, 0, 0, 0, 0, 4, 5, 83
-frontend\build\webpack.dev.conf.js, JavaScript, 0, 0, 0, 0, 0, 0, 82, 0, 0, 0, 0, 0, 0, 7, 7, 96
-frontend\build\webpack.prod.conf.js, JavaScript, 0, 0, 0, 0, 0, 0, 108, 0, 0, 0, 0, 0, 0, 17, 7, 132
-frontend\config\dev.env.js, JavaScript, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 2, 8
-frontend\config\index.js, JavaScript, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 25, 16, 70
-frontend\config\prod.env.js, JavaScript, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 1, 5
-frontend\dist\index.html, HTML, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
-frontend\dist\static\css\app.eb48a30719633cbdd109.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-frontend\dist\static\js\0.ca778293f1ae79836774.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-frontend\dist\static\js\2.bfd211a2ab6a4828ed32.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 11, 0, 43
-frontend\dist\static\js\runtime.a2142094e45718454de0.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-frontend\index.html, HTML, 0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 2, 3, 27
-frontend\package-lock.json, JSON, 0, 0, 0, 0, 0, 0, 0, 0, 11369, 0, 0, 0, 0, 0, 1, 11370
-frontend\package.json, JSON, 0, 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0, 0, 1, 80
-frontend\src\App.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 89, 0, 0, 0, 6, 4, 99
-frontend\src\assets\iconfinder_Cancel_1063907.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-frontend\src\assets\iconfinder_arrow-right_227601.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-frontend\src\assets\iconfinder_free-09_463017.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-frontend\src\assets\iconfinder_icon-edit_2867890.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-frontend\src\assets\iconfinder_icon-emotion-sad_2867892.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-frontend\src\assets\logo.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 2
-frontend\src\components\Auth.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 294, 0, 0, 0, 5, 5, 304
-frontend\src\components\Footer.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47, 0, 0, 0, 1, 2, 50
-frontend\src\components\Header.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 225, 0, 0, 0, 15, 5, 245
-frontend\src\components\Help.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 2, 42
-frontend\src\components\Main.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 4, 69
-frontend\src\components\Menu.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 169, 0, 0, 0, 14, 3, 186
-frontend\src\components\NotFound.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 2, 22
-frontend\src\components\addit\Grid.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 350, 0, 0, 0, 6, 4, 360
-frontend\src\components\addit\MaxInput.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 1, 29
-frontend\src\components\addit\Preview.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 0, 0, 0, 0, 2, 72
-frontend\src\components\docs\AddDoc.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 294, 0, 0, 0, 8, 3, 305
-frontend\src\components\docs\Document.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 612, 0, 0, 0, 24, 5, 641
-frontend\src\components\docs\EditDocument.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 150, 0, 0, 0, 5, 4, 159
-frontend\src\components\profile\Adm.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 406, 0, 0, 0, 15, 5, 426
-frontend\src\components\profile\EditProfile.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 225, 0, 275
-frontend\src\components\profile\HeaderProfile.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 1, 3, 64
-frontend\src\components\profile\Profile.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 115, 0, 0, 0, 3, 3, 121
-frontend\src\main.js, JavaScript, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 3, 4, 26
-frontend\src\otherFun.js, JavaScript, 0, 0, 0, 0, 0, 0, 77, 0, 0, 0, 0, 0, 0, 1, 9, 87
-frontend\src\router\index.js, JavaScript, 0, 0, 0, 0, 0, 0, 152, 0, 0, 0, 0, 0, 0, 7, 8, 167
-frontend\src\store\auth.js, JavaScript, 0, 0, 0, 0, 0, 0, 91, 0, 0, 0, 0, 0, 0, 0, 5, 96
-frontend\src\store\doc.js, JavaScript, 0, 0, 0, 0, 0, 0, 493, 0, 0, 0, 0, 0, 0, 28, 8, 529
-frontend\src\store\index.js, JavaScript, 0, 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 2, 19
-frontend\src\store\mutation-types.js, JavaScript, 0, 0, 0, 0, 0, 0, 44, 0, 0, 0, 0, 0, 0, 2, 3, 49
-frontend\src\store\user.js, JavaScript, 0, 0, 0, 0, 0, 0, 207, 0, 0, 0, 0, 0, 0, 16, 5, 228
-manage.py, Python, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 16
-requirements.txt, pip requirements, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 63
-staticfiles\admin\css\autocomplete.781713f30664.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 213, 0, 0, 48, 261
-staticfiles\admin\css\autocomplete.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 213, 0, 0, 48, 261
-staticfiles\admin\css\base.41c06691d585.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 776, 0, 22, 190, 988
-staticfiles\admin\css\base.94893682937c.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 776, 0, 22, 190, 988
-staticfiles\admin\css\base.ae33e6383baa.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 776, 0, 22, 190, 988
-staticfiles\admin\css\base.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 776, 0, 22, 190, 988
-staticfiles\admin\css\changelists.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 277, 0, 7, 61, 345
-staticfiles\admin\css\changelists.f6dc691f8d62.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 277, 0, 7, 61, 345
-staticfiles\admin\css\dashboard.7ac78187c567.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 2, 7, 28
-staticfiles\admin\css\dashboard.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 2, 7, 28
-staticfiles\admin\css\fonts.168bab448fee.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, 0, 3, 21
-staticfiles\admin\css\fonts.cc6140298ba7.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, 0, 3, 21
-staticfiles\admin\css\fonts.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, 0, 3, 21
-staticfiles\admin\css\forms.005170d00292.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 417, 0, 11, 105, 533
-staticfiles\admin\css\forms.31b2f650d92e.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 417, 0, 11, 105, 533
-staticfiles\admin\css\forms.8e9f67423063.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 417, 0, 11, 105, 533
-staticfiles\admin\css\forms.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 417, 0, 11, 105, 533
-staticfiles\admin\css\login.252ffabd6548.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 1, 14, 80
-staticfiles\admin\css\login.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 1, 14, 80
-staticfiles\admin\css\responsive.3a465780d49f.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 748, 0, 28, 217, 993
-staticfiles\admin\css\responsive.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 748, 0, 28, 217, 993
-staticfiles\admin\css\responsive_rtl.51c7445ceeff.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 0, 2, 16, 85
-staticfiles\admin\css\responsive_rtl.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 0, 2, 16, 85
-staticfiles\admin\css\rtl.30f903442dc5.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 199, 0, 10, 61, 270
-staticfiles\admin\css\rtl.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 199, 0, 10, 61, 270
-staticfiles\admin\css\vendor\select2\LICENSE-SELECT2.7cf1de939f3b.md, Markdown, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 22
-staticfiles\admin\css\vendor\select2\LICENSE-SELECT2.md, Markdown, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 22
-staticfiles\admin\css\vendor\select2\select2.3805311d5fc1.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 427, 0, 0, 58, 485
-staticfiles\admin\css\vendor\select2\select2.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 427, 0, 0, 58, 485
-staticfiles\admin\css\vendor\select2\select2.min.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 2
-staticfiles\admin\css\vendor\select2\select2.min.d44571114a90.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 2
-staticfiles\admin\css\widgets.5e372b41c483.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 458, 0, 8, 100, 566
-staticfiles\admin\css\widgets.a7251c097987.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 458, 0, 8, 100, 566
-staticfiles\admin\css\widgets.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 458, 0, 8, 100, 566
-staticfiles\admin\img\calendar-icons.39b290681a8b.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 1, 15
-staticfiles\admin\img\calendar-icons.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 1, 15
-staticfiles\admin\img\gis\move_vertex_off.7a23bf31ef8a.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-staticfiles\admin\img\gis\move_vertex_off.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-staticfiles\admin\img\gis\move_vertex_on.0047eba25b67.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-staticfiles\admin\img\gis\move_vertex_on.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-staticfiles\admin\img\icon-addlink.d519b3bab011.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-addlink.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-alert.034cc7d8a67f.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-alert.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-calendar.ac7aea671bea.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 1, 10
-staticfiles\admin\img\icon-calendar.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 1, 10
-staticfiles\admin\img\icon-changelink.18d2fd706348.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-changelink.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-clock.e1d4dfac3f2b.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 1, 10
-staticfiles\admin\img\icon-clock.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 1, 10
-staticfiles\admin\img\icon-deletelink.564ef9dc3854.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-deletelink.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-no.439e821418cd.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-no.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-unknown-alt.81536e128bb6.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-unknown-alt.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-unknown.a18cb4398978.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-unknown.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-viewlink.41eb31f7826e.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-viewlink.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-yes.d2f9f035226a.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\icon-yes.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\inline-delete.fec1b761f254.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\inline-delete.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\search.7cf54ff789c6.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\search.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\selector-icons.b4555096cea2.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 34, 0, 0, 0, 1, 35
-staticfiles\admin\img\selector-icons.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 34, 0, 0, 0, 1, 35
-staticfiles\admin\img\sorting-icons.3a097b59f104.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 1, 20
-staticfiles\admin\img\sorting-icons.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 1, 20
-staticfiles\admin\img\tooltag-add.e59d620a9742.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\tooltag-add.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\tooltag-arrowright.bbfb788a849e.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\img\tooltag-arrowright.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 4
-staticfiles\admin\js\SelectBox.b49f008d186b.js, JavaScript, 0, 0, 0, 0, 0, 0, 138, 0, 0, 0, 0, 0, 0, 6, 1, 145
-staticfiles\admin\js\SelectBox.js, JavaScript, 0, 0, 0, 0, 0, 0, 138, 0, 0, 0, 0, 0, 0, 6, 1, 145
-staticfiles\admin\js\SelectFilter2.32ea9335ce47.js, JavaScript, 0, 0, 0, 0, 0, 0, 198, 0, 0, 0, 0, 0, 0, 29, 20, 247
-staticfiles\admin\js\SelectFilter2.js, JavaScript, 0, 0, 0, 0, 0, 0, 198, 0, 0, 0, 0, 0, 0, 29, 20, 247
-staticfiles\admin\js\actions.2fb8e8349c22.js, JavaScript, 0, 0, 0, 0, 0, 0, 146, 0, 0, 0, 0, 0, 0, 6, 2, 154
-staticfiles\admin\js\actions.js, JavaScript, 0, 0, 0, 0, 0, 0, 146, 0, 0, 0, 0, 0, 0, 6, 2, 154
-staticfiles\admin\js\actions.min.5fa8cb0403f1.js, JavaScript, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 1, 8
-staticfiles\admin\js\actions.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 1, 8
-staticfiles\admin\js\admin\DateTimeShortcuts.c085703ffd82.js, JavaScript, 0, 0, 0, 0, 0, 0, 327, 0, 0, 0, 0, 0, 0, 70, 27, 424
-staticfiles\admin\js\admin\DateTimeShortcuts.js, JavaScript, 0, 0, 0, 0, 0, 0, 327, 0, 0, 0, 0, 0, 0, 70, 27, 424
-staticfiles\admin\js\admin\RelatedObjectLookups.ea0683bea064.js, JavaScript, 0, 0, 0, 0, 0, 0, 153, 0, 0, 0, 0, 0, 0, 12, 17, 182
-staticfiles\admin\js\admin\RelatedObjectLookups.js, JavaScript, 0, 0, 0, 0, 0, 0, 153, 0, 0, 0, 0, 0, 0, 12, 17, 182
-staticfiles\admin\js\autocomplete.cfd2c4dc8981.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 2, 4, 38
-staticfiles\admin\js\autocomplete.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 2, 4, 38
-staticfiles\admin\js\calendar.aae57adab5f6.js, JavaScript, 0, 0, 0, 0, 0, 0, 164, 0, 0, 0, 0, 0, 0, 28, 17, 209
-staticfiles\admin\js\calendar.js, JavaScript, 0, 0, 0, 0, 0, 0, 164, 0, 0, 0, 0, 0, 0, 28, 17, 209
-staticfiles\admin\js\cancel.d6b4b556c3aa.js, JavaScript, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 1, 14
-staticfiles\admin\js\cancel.js, JavaScript, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 1, 14
-staticfiles\admin\js\change_form.9e85003a1a38.js, JavaScript, 0, 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 1, 3, 21
-staticfiles\admin\js\change_form.js, JavaScript, 0, 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 1, 3, 21
-staticfiles\admin\js\collapse.1007b1686bfd.js, JavaScript, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 6, 2, 53
-staticfiles\admin\js\collapse.js, JavaScript, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 6, 2, 53
-staticfiles\admin\js\collapse.min.d4e905d48000.js, JavaScript, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 3
-staticfiles\admin\js\collapse.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 3
-staticfiles\admin\js\core.9c3bce7d1006.js, JavaScript, 0, 0, 0, 0, 0, 0, 171, 0, 0, 0, 0, 0, 0, 22, 20, 213
-staticfiles\admin\js\core.js, JavaScript, 0, 0, 0, 0, 0, 0, 171, 0, 0, 0, 0, 0, 0, 22, 20, 213
-staticfiles\admin\js\inlines.3b3fb199b064.js, JavaScript, 0, 0, 0, 0, 0, 0, 236, 0, 0, 0, 0, 0, 0, 47, 16, 299
-staticfiles\admin\js\inlines.js, JavaScript, 0, 0, 0, 0, 0, 0, 236, 0, 0, 0, 0, 0, 0, 47, 16, 299
-staticfiles\admin\js\inlines.min.4d23f8660b21.js, JavaScript, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 1, 14
-staticfiles\admin\js\inlines.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 1, 14
-staticfiles\admin\js\jquery.init.95b62fa19378.js, JavaScript, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 6, 1, 9
-staticfiles\admin\js\jquery.init.js, JavaScript, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 6, 1, 9
-staticfiles\admin\js\popup_response.6ce3197f8fc8.js, JavaScript, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 1, 1, 17
-staticfiles\admin\js\popup_response.js, JavaScript, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 1, 1, 17
-staticfiles\admin\js\prepopulate.2f90da7170ec.js, JavaScript, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 10, 5, 43
-staticfiles\admin\js\prepopulate.js, JavaScript, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 10, 5, 43
-staticfiles\admin\js\prepopulate.min.85fd5e0fb706.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
-staticfiles\admin\js\prepopulate.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
-staticfiles\admin\js\prepopulate_init.0d3b53c37074.js, JavaScript, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 1, 11
-staticfiles\admin\js\prepopulate_init.js, JavaScript, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 1, 11
-staticfiles\admin\js\timeparse.51258861a46a.js, JavaScript, 0, 0, 0, 0, 0, 0, 97, 0, 0, 0, 0, 0, 0, 7, 3, 107
-staticfiles\admin\js\timeparse.js, JavaScript, 0, 0, 0, 0, 0, 0, 97, 0, 0, 0, 0, 0, 0, 7, 3, 107
-staticfiles\admin\js\urlify.4087f3e18796.js, JavaScript, 0, 0, 0, 0, 0, 0, 181, 0, 0, 0, 0, 0, 0, 8, 7, 196
-staticfiles\admin\js\urlify.js, JavaScript, 0, 0, 0, 0, 0, 0, 181, 0, 0, 0, 0, 0, 0, 8, 7, 196
-staticfiles\admin\js\vendor\jquery\jquery.6a07da9fae93.js, JavaScript, 0, 0, 0, 0, 0, 0, 6689, 0, 0, 0, 0, 0, 0, 1725, 1951, 10365
-staticfiles\admin\js\vendor\jquery\jquery.js, JavaScript, 0, 0, 0, 0, 0, 0, 6689, 0, 0, 0, 0, 0, 0, 1725, 1951, 10365
-staticfiles\admin\js\vendor\jquery\jquery.min.a09e13ee94d5.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\jquery\jquery.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\LICENSE.7cf1de939f3b.md, Markdown, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 22
-staticfiles\admin\js\vendor\select2\LICENSE.md, Markdown, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 22
-staticfiles\admin\js\vendor\select2\i18n\ar.a8bb27ec698c.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ar.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\az.498dc667b34e.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\az.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\bg.89cba4df3c86.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\bg.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ca.2eaad4eb1950.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ca.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\cs.a68bcd293adc.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\cs.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\da.cbf897a0ae53.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\da.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\de.366d0aacb55f.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\de.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\el.5629ce65500f.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\el.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\en.05649b26c086.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\en.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\es.dc9dbf9d65df.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\es.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\et.c3953fb90b6b.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\et.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\eu.11b925456433.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\eu.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\fa.98e52839b583.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\fa.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\fi.659847deefdc.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\fi.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\fr.b06a3340de45.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\fr.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\gl.78a87f7c0a51.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\gl.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\he.222d90ee0344.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\he.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\hi.116a90b7111b.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\hi.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\hr.e1d2c70b4df5.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\hr.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\hu.db45641f10b2.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\hu.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\id.6ee6c9c64b94.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\id.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\is.808c7d47acb5.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\is.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\it.bae1661dbb77.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\it.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ja.19cf1ce8a03d.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ja.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\km.6074a9c5575c.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\km.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ko.74b17541834f.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ko.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\lt.a0783b1bd159.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\lt.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\lv.07fe2a580d17.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\lv.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\mk.4986d7fc3ff3.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\mk.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ms.23e7b4369579.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ms.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\nb.137e184004aa.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\nb.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\nl.c363ace8aa05.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\nl.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\pl.76465b54a6b0.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\pl.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\pt-BR.9efbbac4fda8.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\pt-BR.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\pt.5d6ccc53b347.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\pt.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ro.1ddc2b9980dc.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ro.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ru.d83609abf2e0.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\ru.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\sk.a0f1a818d092.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\sk.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\sr-Cyrl.2f3047aad49e.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\sr-Cyrl.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\sr.157bc6eb978e.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\sr.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\sv.2b21bb3f6110.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\sv.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\th.2a4ece4c4355.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\th.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\tr.c1925d8817db.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\tr.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\uk.3d56f311192d.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\uk.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\vi.3520aa7bdea8.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\vi.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\zh-CN.419002d3c6c1.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\zh-CN.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\zh-TW.c021537edf2c.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\i18n\zh-TW.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\admin\js\vendor\select2\select2.full.a95323cb4760.js, JavaScript, 0, 0, 0, 0, 0, 0, 4841, 0, 0, 0, 0, 0, 0, 327, 1269, 6437
-staticfiles\admin\js\vendor\select2\select2.full.js, JavaScript, 0, 0, 0, 0, 0, 0, 4841, 0, 0, 0, 0, 0, 0, 327, 1269, 6437
-staticfiles\admin\js\vendor\select2\select2.full.min.da607360bcc6.js, JavaScript, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3
-staticfiles\admin\js\vendor\select2\select2.full.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3
-staticfiles\admin\js\vendor\xregexp\xregexp.1865b1cf5085.js, JavaScript, 0, 0, 0, 0, 0, 0, 1535, 0, 0, 0, 0, 0, 0, 682, 92, 2309
-staticfiles\admin\js\vendor\xregexp\xregexp.js, JavaScript, 0, 0, 0, 0, 0, 0, 1535, 0, 0, 0, 0, 0, 0, 682, 92, 2309
-staticfiles\admin\js\vendor\xregexp\xregexp.min.c95393b8ca4d.js, JavaScript, 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 1, 0, 19
-staticfiles\admin\js\vendor\xregexp\xregexp.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 1, 0, 19
-staticfiles\index.12b53159f37b.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.248d9c7edc51.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.31da6fc0858f.html, HTML, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
-staticfiles\index.3a6b5a6e8052.html, HTML, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
-staticfiles\index.496ce0951ae7.html, HTML, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
-staticfiles\index.713a9eda5be0.html, HTML, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
-staticfiles\index.7445d2b11390.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.8d1084c85071.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.8f191ee7174e.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.a139b75c5a2d.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.aa01b6b3949d.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.b869ccbd5ec4.html, HTML, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
-staticfiles\index.cdcf68efc2c7.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.d50748c091f0.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.da1460ffaf26.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.ee839ac9b568.html, HTML, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-staticfiles\index.html, HTML, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
-staticfiles\media\icons8-document.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 1, 7
-staticfiles\media\Кампус_211123.xml, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-staticfiles\media\Филиал_2111_yvfvGrG.xml, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
-staticfiles\registration\password_reset_email.html, HTML, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 3, 8
-staticfiles\rest_framework\css\bootstrap-theme.min.00b93e6ea6fb.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 8, 1, 12
-staticfiles\rest_framework\css\bootstrap-theme.min.321ccd3adb83.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 8, 1, 12
-staticfiles\rest_framework\css\bootstrap-theme.min.66b84a04375e.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
-staticfiles\rest_framework\css\bootstrap-theme.min.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
-staticfiles\rest_framework\css\bootstrap-tweaks.46ed116b0edd.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 174, 0, 15, 45, 234
-staticfiles\rest_framework\css\bootstrap-tweaks.b78ca7b14c57.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 174, 0, 15, 45, 234
-staticfiles\rest_framework\css\bootstrap-tweaks.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 174, 0, 15, 45, 234
-staticfiles\rest_framework\css\bootstrap.min.77017a69879a.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
-staticfiles\rest_framework\css\bootstrap.min.86ba6b6fae66.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
-staticfiles\rest_framework\css\bootstrap.min.9568d6466155.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
-staticfiles\rest_framework\css\bootstrap.min.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
-staticfiles\rest_framework\css\bootstrap.min.ec3bb52a00e1.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
-staticfiles\rest_framework\css\default.8d5591a6aabc.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 3, 18, 83
-staticfiles\rest_framework\css\default.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 3, 18, 83
-staticfiles\rest_framework\css\font-awesome-4.0.3.1f9e9d1a5a1d.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1329, 0, 9, 1, 1339
-staticfiles\rest_framework\css\font-awesome-4.0.3.c1e1ea213abf.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1329, 0, 9, 1, 1339
-staticfiles\rest_framework\css\font-awesome-4.0.3.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1329, 0, 9, 1, 1339
-staticfiles\rest_framework\css\prettify.a987f72342ee.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 1, 2, 30
-staticfiles\rest_framework\css\prettify.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 1, 2, 30
-staticfiles\rest_framework\docs\css\base.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 284, 0, 4, 65, 353
-staticfiles\rest_framework\docs\css\base.d9cd17260641.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 284, 0, 4, 65, 353
-staticfiles\rest_framework\docs\css\highlight.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 101, 0, 6, 19, 126
-staticfiles\rest_framework\docs\css\highlight.e0e4d973c6d7.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 101, 0, 6, 19, 126
-staticfiles\rest_framework\docs\css\jquery.json-view.min.a2e6beeb6710.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 11
-staticfiles\rest_framework\docs\css\jquery.json-view.min.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 11
-staticfiles\rest_framework\docs\js\api.c9743eab7a4f.js, JavaScript, 0, 0, 0, 0, 0, 0, 264, 0, 0, 0, 0, 0, 0, 21, 37, 322
-staticfiles\rest_framework\docs\js\api.js, JavaScript, 0, 0, 0, 0, 0, 0, 264, 0, 0, 0, 0, 0, 0, 21, 37, 322
-staticfiles\rest_framework\docs\js\highlight.pack.479b5f21dcba.js, JavaScript, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2
-staticfiles\rest_framework\docs\js\highlight.pack.js, JavaScript, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2
-staticfiles\rest_framework\docs\js\jquery.json-view.min.b7c2d6981377.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 6, 0, 7
-staticfiles\rest_framework\docs\js\jquery.json-view.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 6, 0, 7
-staticfiles\rest_framework\fonts\fontawesome-webfont.83e37a11f9d7.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 414, 0, 0, 0, 1, 415
-staticfiles\rest_framework\fonts\fontawesome-webfont.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 414, 0, 0, 0, 1, 415
-staticfiles\rest_framework\fonts\glyphicons-halflings-regular.08eda92397ae.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 288, 0, 0, 0, 1, 289
-staticfiles\rest_framework\fonts\glyphicons-halflings-regular.svg, XML, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 288, 0, 0, 0, 1, 289
-staticfiles\rest_framework\js\ajax-form.0ea6e6052ab5.js, JavaScript, 0, 0, 0, 0, 0, 0, 59, 0, 0, 0, 0, 0, 0, 57, 12, 128
-staticfiles\rest_framework\js\ajax-form.js, JavaScript, 0, 0, 0, 0, 0, 0, 59, 0, 0, 0, 0, 0, 0, 57, 12, 128
-staticfiles\rest_framework\js\bootstrap.min.3d8308804264.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0, 6
-staticfiles\rest_framework\js\bootstrap.min.5869c96cc8f1.js, JavaScript, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 5, 0, 7
-staticfiles\rest_framework\js\bootstrap.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0, 6
-staticfiles\rest_framework\js\coreapi-0.1.1.8851fb9336c9.js, JavaScript, 0, 0, 0, 0, 0, 0, 1229, 0, 0, 0, 0, 0, 0, 609, 205, 2043
-staticfiles\rest_framework\js\coreapi-0.1.1.js, JavaScript, 0, 0, 0, 0, 0, 0, 1229, 0, 0, 0, 0, 0, 0, 609, 205, 2043
-staticfiles\rest_framework\js\csrf.753b7a1f2ee7.js, JavaScript, 0, 0, 0, 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 9, 10, 53
-staticfiles\rest_framework\js\csrf.969930007329.js, JavaScript, 0, 0, 0, 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 9, 10, 53
-staticfiles\rest_framework\js\csrf.js, JavaScript, 0, 0, 0, 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 9, 10, 53
-staticfiles\rest_framework\js\default.5b08897dbdc3.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 6, 10, 48
-staticfiles\rest_framework\js\default.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 6, 10, 48
-staticfiles\rest_framework\js\jquery-3.3.1.min.a09e13ee94d5.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\rest_framework\js\jquery-3.3.1.min.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 3
-staticfiles\rest_framework\js\prettify-min.709bfcc456c6.js, JavaScript, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 29
-staticfiles\rest_framework\js\prettify-min.js, JavaScript, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 29
-staticfiles\static\css\app.110c29ab112abc1fd226.2aad626a9fe4.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.110c29ab112abc1fd226.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.2581963eb7f0e1481824d60492954eed.8081d35b1640.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2
-staticfiles\static\css\app.2581963eb7f0e1481824d60492954eed.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2
-staticfiles\static\css\app.306e13e4dbcc3da3a5358745aff4e29c.1b13554bda33.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2
-staticfiles\static\css\app.306e13e4dbcc3da3a5358745aff4e29c.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2
-staticfiles\static\css\app.30eef072434b75b66cdd.2dcc3eaeda98.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.30eef072434b75b66cdd.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.7b88f57b599f2e110bd5.40a3658530aa.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.7b88f57b599f2e110bd5.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.7e4cc03d8deefb5420dd.2dcc3eaeda98.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.7e4cc03d8deefb5420dd.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.a80083f8b06434ae4103.a3efc5034090.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.a80083f8b06434ae4103.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.c2dfd15533348bf98753f31ff201d201.39f88a2645b8.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2
-staticfiles\static\css\app.c2dfd15533348bf98753f31ff201d201.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2
-staticfiles\static\css\app.cfd2dceca43ffab36296197a4cb26b2e.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2
-staticfiles\static\css\app.cfd2dceca43ffab36296197a4cb26b2e.e7ca8fa02ae8.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2
-staticfiles\static\css\app.e5019089abc79276e9c6.40a3658530aa.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.e5019089abc79276e9c6.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.eb48a30719633cbdd109.1ba391a7e8ec.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.eb48a30719633cbdd109.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.ed790d4ffe31577e7ed8.200dbadfd8f1.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\css\app.ed790d4ffe31577e7ed8.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
-staticfiles\static\js\0.5a4b97355bca8e4b82ce.5d86ec5e2413.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.5a4b97355bca8e4b82ce.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.81f123d8dc4b7c28a381.1557e8fbabb0.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.81f123d8dc4b7c28a381.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.98c28884e67f65c121ab.b27246a533f5.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.98c28884e67f65c121ab.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.a5f288813d9dafeb8c1f.1116b31682bf.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.a5f288813d9dafeb8c1f.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.ca778293f1ae79836774.270a055a92a6.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.ca778293f1ae79836774.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.e9d2911e7b4566a50197.731597374109.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.e9d2911e7b4566a50197.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.f67a671ec87bd9746f12.d51c5405b672.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\0.f67a671ec87bd9746f12.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\2.a84929cfe742c10197ed.782f3f0a76fa.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 11, 0, 43
-staticfiles\static\js\2.a84929cfe742c10197ed.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 11, 0, 43
-staticfiles\static\js\2.bfd211a2ab6a4828ed32.9a558a2769c4.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 11, 0, 43
-staticfiles\static\js\2.bfd211a2ab6a4828ed32.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 11, 0, 43
-staticfiles\static\js\app.0604ba4ad8cfc07922b9.eb892ef5b601.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.0604ba4ad8cfc07922b9.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.14500be9e31e329555e7.de61d5db2b75.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.14500be9e31e329555e7.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.1bf3483820ac302630f8.e22ebac3e13c.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.1bf3483820ac302630f8.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.427969590fbf2595c894.e21056f37bc8.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.427969590fbf2595c894.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.57395e0b2e086a2d527c.cdd9084f906b.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.57395e0b2e086a2d527c.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.579d033e4f2fc647ac07.0a73b14de5e2.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.579d033e4f2fc647ac07.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.5d157c8d0b5792eb31f7.d3f67d0b47eb.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.5d157c8d0b5792eb31f7.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.80259b39de38f95a5a14.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.a3e5cc999b47d9a2d851.89a63c7fe5ef.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\app.a3e5cc999b47d9a2d851.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\manifest.2ae2e69a05c33dfc65f8.323055c248c0.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\manifest.2ae2e69a05c33dfc65f8.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\runtime.a2142094e45718454de0.03acd37b6d3c.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\runtime.a2142094e45718454de0.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 2
-staticfiles\static\js\vendor.0cfcccd6a39598e0f7fb.9c47647efac5.js, JavaScript, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 25, 0, 31
-staticfiles\static\js\vendor.0cfcccd6a39598e0f7fb.js, JavaScript, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 25, 0, 31
-staticfiles\static\js\vendor.bf22a0303550e9547a46.77079b1bcf54.js, JavaScript, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 36, 0, 44
-staticfiles\static\js\vendor.bf22a0303550e9547a46.js, JavaScript, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 36, 0, 44
-staticfiles\staticfiles.json, JSON, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1
-storage_backends.py, Python, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 9
-users\admin.py, Python, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 47
-users\migrations\0001_initial.py, Python, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 70
-users\migrations\0002_auto_20190601_1724.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-users\migrations\0003_notif_is_read.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-users\migrations\0004_auto_20190602_1531.py, Python, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 24
-users\migrations\0005_user_is_get_notif_email.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-users\migrations\0006_auto_20190608_0047.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-users\migrations\0007_notif_initiator.py, Python, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 22
-users\migrations\0008_remove_notif_initiator.py, Python, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 18
-users\migrations\0009_user_is_get_notif_expired_email.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-users\migrations\0010_notif_dateexpire.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-users\migrations\0011_auto_20190611_1927.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-users\migrations\0012_notif_is_notif_expire.py, Python, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
-users\migrations\__init__.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
-users\models.py, Python, 0, 59, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10, 70
-users\permissions.py, Python, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 69
-users\serializers.py, Python, 0, 204, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 234
-users\views.py, Python, 0, 363, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 35, 418
-Total, -, 4, 1775, 62, 135, 11, 8, 35416, 66, 11449, 3084, 1670, 15749, 1396, 8798, 11001, 90624
+filename, language, Python, Batch, Markdown, pip requirements, Properties, Ignore, JavaScript, HTML, JSON, Vue, CSS, Database, comment, blank, total
+DoPass.bat, Batch, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 4
+README.md, Markdown, 0, 0, 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 95
+Thumbs.db, Database, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1396, 0, 8, 1404
+aps.py, Python, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 10, 52
+django_auth\settings.py, Python, 120, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 20, 155
+django_auth\tests\__init__.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+django_auth\tests\tests_models.py, Python, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 11, 83
+django_auth\urls.py, Python, 87, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 12, 108
+django_auth\wsgi.py, Python, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 5, 17
+docs\__init__.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+docs\admin.py, Python, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 27
+docs\migrations\0001_initial.py, Python, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 37
+docs\migrations\0002_auto_20190607_2150.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+docs\migrations\0003_auto_20190608_0011.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+docs\migrations\0004_auto_20190608_0047.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+docs\migrations\0005_auto_20190609_0120.py, Python, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 29
+docs\migrations\0006_doc_signature_end.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+docs\migrations\0007_auto_20190613_2334.py, Python, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 20
+docs\migrations\0008_auto_20190614_0031.py, Python, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 25
+docs\migrations\0009_auto_20190615_0056.py, Python, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 30
+docs\migrations\0010_doc_signature_text.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+docs\migrations\0011_auto_20190615_1512.py, Python, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 23
+docs\migrations\0012_block.py, Python, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 23
+docs\migrations\0013_auto_20190616_1458.py, Python, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 32
+docs\migrations\0014_auto_20190616_1610.py, Python, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 20
+docs\migrations\__init__.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+docs\models.py, Python, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9, 53
+docs\permissions.py, Python, 77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 81
+docs\serializers.py, Python, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9, 75
+docs\views.py, Python, 333, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 44, 401
+edc\EDC.py, Python, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 24
+edc\init.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+frontend\.editorconfig, Properties, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10
+frontend\.gitignore, Ignore, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 2, 2, 15
+frontend\.postcssrc.js, JavaScript, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 2, 2, 11
+frontend\build\build.js, JavaScript, 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 7, 42
+frontend\build\check-versions.js, JavaScript, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 10, 55
+frontend\build\utils.js, JavaScript, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 5, 17, 102
+frontend\build\vue-loader.conf.js, JavaScript, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 2, 23
+frontend\build\webpack.base.conf.js, JavaScript, 0, 0, 0, 0, 0, 0, 74, 0, 0, 0, 0, 0, 4, 5, 83
+frontend\build\webpack.dev.conf.js, JavaScript, 0, 0, 0, 0, 0, 0, 82, 0, 0, 0, 0, 0, 7, 7, 96
+frontend\build\webpack.prod.conf.js, JavaScript, 0, 0, 0, 0, 0, 0, 108, 0, 0, 0, 0, 0, 17, 7, 132
+frontend\config\dev.env.js, JavaScript, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 2, 8
+frontend\config\index.js, JavaScript, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 25, 16, 70
+frontend\config\prod.env.js, JavaScript, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 5
+frontend\dist\index.html, HTML, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1, 5
+frontend\dist\registration\password_reset_email.html, HTML, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 3, 8
+frontend\dist\static\css\app.71291d1c07a2ce573b51.css, CSS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+frontend\dist\static\js\0.7db5be2bf3eb41bce680.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 2
+frontend\dist\static\js\2.bfd211a2ab6a4828ed32.js, JavaScript, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 11, 0, 43
+frontend\dist\static\js\runtime.a2142094e45718454de0.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 2
+frontend\index.html, HTML, 0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 2, 3, 27
+frontend\package-lock.json, JSON, 0, 0, 0, 0, 0, 0, 0, 0, 11392, 0, 0, 0, 0, 1, 11393
+frontend\package.json, JSON, 0, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 1, 81
+frontend\src\App.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 89, 0, 0, 6, 4, 99
+frontend\src\components\Auth.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 0, 0, 5, 5, 303
+frontend\src\components\Footer.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47, 0, 0, 1, 2, 50
+frontend\src\components\Header.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 231, 0, 0, 8, 5, 244
+frontend\src\components\Help.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 2, 68
+frontend\src\components\Main.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 4, 69
+frontend\src\components\Menu.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 169, 0, 0, 14, 3, 186
+frontend\src\components\NotFound.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 2, 22
+frontend\src\components\addit\Grid.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 348, 0, 0, 6, 4, 358
+frontend\src\components\addit\MaxInput.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 1, 29
+frontend\src\components\addit\Preview.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 0, 0, 0, 2, 72
+frontend\src\components\docs\AddDoc.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 303, 0, 0, 8, 3, 314
+frontend\src\components\docs\Document.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 590, 0, 0, 19, 6, 615
+frontend\src\components\docs\EditDocument.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 165, 0, 0, 5, 4, 174
+frontend\src\components\profile\Adm.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 484, 0, 0, 8, 5, 497
+frontend\src\components\profile\EditProfile.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 210, 0, 260
+frontend\src\components\profile\HeaderProfile.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 71, 0, 0, 0, 3, 74
+frontend\src\components\profile\Profile.vue, Vue, 0, 0, 0, 0, 0, 0, 0, 0, 0, 115, 0, 0, 3, 3, 121
+frontend\src\main.js, JavaScript, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 3, 4, 26
+frontend\src\otherFun.js, JavaScript, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 3, 17
+frontend\src\router\index.js, JavaScript, 0, 0, 0, 0, 0, 0, 153, 0, 0, 0, 0, 0, 7, 8, 168
+frontend\src\store\auth.js, JavaScript, 0, 0, 0, 0, 0, 0, 95, 0, 0, 0, 0, 0, 0, 5, 100
+frontend\src\store\doc.js, JavaScript, 0, 0, 0, 0, 0, 0, 613, 0, 0, 0, 0, 0, 6, 6, 625
+frontend\src\store\index.js, JavaScript, 0, 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 2, 19
+frontend\src\store\mutation-types.js, JavaScript, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 1, 4, 55
+frontend\src\store\user.js, JavaScript, 0, 0, 0, 0, 0, 0, 234, 0, 0, 0, 0, 0, 0, 5, 239
+ftp.py, Python, 243, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 35, 305
+manage.py, Python, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 16
+requirements.txt, pip requirements, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 63
+staticfiles\avatars\Thumbs.db, Database, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 794, 0, 8, 802
+users\admin.py, Python, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 47
+users\migrations\0001_initial.py, Python, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 70
+users\migrations\0002_auto_20190601_1724.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+users\migrations\0003_notif_is_read.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+users\migrations\0004_auto_20190602_1531.py, Python, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 24
+users\migrations\0005_user_is_get_notif_email.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+users\migrations\0006_auto_20190608_0047.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+users\migrations\0007_notif_initiator.py, Python, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 22
+users\migrations\0008_remove_notif_initiator.py, Python, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 18
+users\migrations\0009_user_is_get_notif_expired_email.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+users\migrations\0010_notif_dateexpire.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+users\migrations\0011_auto_20190611_1927.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+users\migrations\0012_notif_is_notif_expire.py, Python, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 19
+users\migrations\0013_auto_20190614_0031.py, Python, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 20
+users\migrations\0014_auto_20190615_0056.py, Python, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 20
+users\migrations\0015_user_block.py, Python, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 20
+users\migrations\0016_auto_20190615_2107.py, Python, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 20
+users\migrations\0017_auto_20190616_1605.py, Python, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 22
+users\migrations\__init__.py, Python, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+users\models.py, Python, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10, 72
+users\permissions.py, Python, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 69
+users\serializers.py, Python, 199, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 25, 231
+users\views.py, Python, 378, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 38, 437
+Total, -, 2330, 2, 67, 62, 8, 11, 1720, 31, 11472, 3204, 1, 2190, 590, 678, 22366

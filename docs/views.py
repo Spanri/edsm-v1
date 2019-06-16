@@ -99,18 +99,18 @@ class DownloadFile(generics.RetrieveAPIView):
 
     def get(self, request, pk):
         doc = Doc.objects.get(id=self.kwargs['pk'])
-        fsFile = FTPStorageFile('/'+str(doc.file), fs, 'rw')
-        f = open('staticfiles/'+str(doc.file), 'wb')
+        filename = str(doc.file)
+        try:
+            filename = re.sub('\\', '/', filename)
+        except:
+            pass
+        fsFile = FTPStorageFile('/'+filename, fs, 'rw')
+        f = open('staticfiles/'+filename, 'wb')
         file = fsFile.read()
         f.write(file)
 
         f.close()
         fsFile.close()
-
-        filename = str(doc.file)
-        try:
-            filename = re.sub('\\\\', '/', str(doc.file))
-        except: pass
 
         return Response({'file': filename})
 

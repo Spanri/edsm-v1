@@ -137,65 +137,18 @@ AUTH_USER_MODEL = 'users.User'
 import django_heroku
 django_heroku.settings(locals())
 
-# def create_bucket(bucket_name):
-#     """ Create an Amazon S3 bucket
-
-#     :param bucket_name: Unique string name
-#     :return: True if bucket is created, else False
-#     """
-
-#     # Let's use Amazon S3
-#     s3 = boto3.resource(
-#         's3',
-#         aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-#         aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-#     )
-#     for bucket in s3.buckets.all():
-#         print(bucket.name)
-#     try:
-#         data = open('media/Ф123.doc', 'rb')
-#         s3.Bucket(bucket_name).put_object(Key='Ф1234.doc', Body=data)
-#     except ClientError as e:
-#         logging.error(e)
-#         return False
-#     return True
-
-# create_bucket('edms-mtuci')
-
-# # Для статических файлов, Amazon S3
-# STATIC_URL = 'https://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
-# # для автоматического collectstatic
-# # для статики
-# STATICFILES_LOCATION = 'static'
-# # STATICFILES_STORAGE = 'storage_backends.StaticStorage'
-# # для медиа
-# MEDIAFILES_LOCATION = 'media'
-# DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
-# #
-# # from django_auth import storage_backends
-
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/dist/'),]
-# ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-# STATICFILES_FINDERS = (
-#     'django.contrib.staticfiles.finders.FileSystemFinder',
-#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-# )
-# AWS_DEFAULT_ACL = None
-
-# fs = FTPStorage()
-
 STATICFILES_STORAGE = 'ftp.FTPStorage'
-# STATIC_ROOT = 'ftp://91.238.69.56:21/'
+STATIC_URL = 'ftp://91.238.69.56:21/'
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'frontend/dist/'),
-)
-STATIC_URL = 'ftp://91.238.69.56:21/'
-MEDIA_ROOT = '/'
-MEDIA_URL = '/'
-STATICFILES_FINDERS = (
-    # 'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
 DEFAULT_FILE_STORAGE = 'ftp.FTPStorage'
 FTP_STORAGE_LOCATION = 'ftp://91.238.69.56:21/'
+
+MEDIA_ROOT = '/'
+MEDIA_URL = '/'

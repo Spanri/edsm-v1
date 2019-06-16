@@ -226,6 +226,7 @@ const mutations = {
         Vue.set(state, 'profile', resp)
     },
     [USER_PHOTO_SUCCESS]: (state, resp) => {
+        resp = resp.replace('\\','/')
         console.log(path + '/' + resp)
         Vue.set(state, 'photo', path + '/' + resp)
     },
