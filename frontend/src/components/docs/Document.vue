@@ -76,6 +76,14 @@
 							</tr>
 						</tbody>
 					</table>
+					<div v-if="checkSignature" class="checkSignature">
+						<p>{{checkSignatureResult}}</p>
+						<div class="confirmButtons">
+							<div></div>
+							<button @click="checkSignature=false;checkSignatureResult=''">ОК</button>
+							<div></div>
+						</div>
+					</div>
 					<div v-if="isConfirm" class="confirm">
 						<div style="display: grid;grid-template-columns: auto max-content;">
 							<div></div>
@@ -97,8 +105,8 @@
 							<button @click="isCancelSign = true;isPreConfirm = false;" style="background: rgb(243, 92, 92)">ОТКЛОНИТЬ</button>
 							<button @click="addSignature()">ПОСТАВИТЬ ПОДПИСЬ</button>
 							<br>
-							<p v-if="errorAddSign" style="color: red;text-align: center;padding: 5px">{{errorAddSign}}</p>
 						</div>
+						<p v-if="errorAddSign" style="color: red;text-align: center;padding: 5px;width:100%">{{errorAddSign}}</p>
 					</div>
 					<div v-if="isCancelSign" class="confirm" style="height:380px" @submit.prevent="cancelSign">
 						<div style="display: grid;grid-template-columns: auto max-content;">
@@ -172,7 +180,6 @@
 				</div>
 			</div>
 		</div>
-		
 	</div>
 </template>
 
@@ -183,7 +190,8 @@ import {
 	DOC_UPDATE, 
 	DOCS_REQUEST,
 	DOC_REQUEST,
-	DOC_SIGNATURE, 
+	DOC_SIGNATURE,
+	DOC_SIGNATURE_CHECK,
 	DOC_SIGNATURE_CANCEL,
 	DOC_SIGNATURE_AGAIN,
 	DOC_DELETE, 
@@ -236,6 +244,8 @@ export default {
 			isRepeatSign: false,
 			titleRepeatFile: '',
 			typeRepeatFile: '',
+			checkSignature: false,
+			checkSignatureResult: '',
 			confirm: '',
 			confirmFromApp: '',
 			cancelCause: '',
@@ -420,7 +430,13 @@ export default {
 			})
 		},
 		checkSign(){
-
+			this.error = 'Проверяем...'
+			this.$store.dispatch(DOC_SIGNATURE_CHECK, this.id)
+			.then(resp => {
+				this.checkSignatureResult = resp;
+				this.checkSignature = true;
+				this.error = ''
+			})
 		},
 		repeatSignatures(){
 			this.repeatP = 'Цепочка запускается...'
@@ -547,7 +563,7 @@ button:hover, .button:hover{
 	cursor: pointer;
 }
 /* Подтверждение */
-.confirm{
+.confirm, .checkSignature{
 	position: fixed;
 	top: 20%;
 	left: calc(50% - 200px);
@@ -562,7 +578,7 @@ button:hover, .button:hover{
 .addHeight{
 	height: 300px;
 }
-.confirm p{
+.confirm p, .checkSignature p{
 	padding: 20px;
 	padding-bottom: 10px;
 	text-align: justify;

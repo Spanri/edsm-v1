@@ -34,8 +34,6 @@ class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     is_get_notif_email = models.BooleanField(default=False)
-    is_get_notif_expired_email = models.BooleanField(default=False)
-    block = models.ManyToManyField(Block, related_name="user_block")
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 

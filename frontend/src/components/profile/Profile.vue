@@ -78,7 +78,7 @@ export default {
 }
 /**/
 .menuProfile{
-	font-family: 'El Messiri', sans-serif;
+	font-family: 'PT+Sans+Narrow', sans-serif;
 	font-weight: 300;
 	border: #e0e0e0 3px solid;
 	border-radius: 5px;

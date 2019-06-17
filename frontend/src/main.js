@@ -5,9 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 import axios from 'axios'
-import AsyncComputed from 'vue-async-computed'
 
-Vue.use(AsyncComputed)
 Vue.config.productionTip = false
 
 const token = localStorage.getItem('user-token')

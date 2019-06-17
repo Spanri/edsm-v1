@@ -14,6 +14,7 @@
 						<p>EMAIL</p>
 						<input
 							v-validate.immediate="'required_if:!newPassword'"
+							name="email"
 							v-model="email"
 							type="text"
 							placeholder="Введите логин"
@@ -24,6 +25,7 @@
 						<p>ПАРОЛЬ</p>
 						<input 
 							v-validate.immediate="'required_if:!newPassword'"
+							name="password"
 							v-model="password" 
 							:type="passwordFieldType"
 							placeholder="Введите пароль"
@@ -69,6 +71,7 @@
 					<p>EMAIL</p>
 					<input
 						v-validate.immediate="'required_if:!newPassword'"
+						name="email2"
 						v-model="emailForConfirm" 
 						type="email"
 						placeholder="Введите email"
@@ -95,6 +98,7 @@
 					<p>КОД ПОДТВЕРЖДЕНИЯ</p>
 					<input
 						v-validate.immediate="'required_if:!newPassword'"
+						name="code"
 						v-model="code" 
 						type="email"
 						placeholder="Введите email"
@@ -103,6 +107,7 @@
 					<p>НОВЫЙ ПАРОЛЬ</p>
 					<input
 						v-validate.immediate="'required_if:!newPassword'"
+						name="password1"
 						v-model="password1" 
 						type="password"
 						placeholder="Введите пароль"
@@ -111,6 +116,7 @@
 					<p>ПОДТВЕРЖДЕНИЕ ПАРОЛЯ</p>
 					<input
 						v-validate.immediate="'required_if:!newPassword'"
+						name="password2"
 						v-model="password2"
 						type="password"
 						placeholder="Подтвердите пароль"

@@ -40,7 +40,7 @@ const actions = {
             .then(response => {
                 commit(USER_SUCCESS, response.data[0])
                 dispatch(USER_PHOTO)
-                dispatch(DOCS_REQUEST)
+                resolve()
             })
             .catch(err => {
                 try {

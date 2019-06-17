@@ -124,7 +124,8 @@ class FTPStorage(Storage):
     def _put_file(self, name, content):
         # Connection must be open!
         try:
-            # print(os.path.basename(name))
+            print('1', os.path.basename(name))
+            print('2', self._connection)
             self._mkremdirs(os.path.dirname(name))
             pwd = self._connection.pwd()
             p = os.path.dirname(name).replace('\\','/')
@@ -142,8 +143,6 @@ class FTPStorage(Storage):
                     print('error', name)
                     raise FTPStorageException('Error writing file %s' % name)
                     self._connection.cwd(pwd)
-        # except Exception as e:
-        #     print(str(e))
         except ftplib.all_errors:
             print('error', name)
             raise FTPStorageException('Error writing file %s' % name)

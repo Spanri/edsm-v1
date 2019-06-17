@@ -55,10 +55,10 @@ export default {
             reload: '',
         }
     },
-    async created(){
+    created(){
         this.reload = true;
-        await this.$store.commit(DOC_RELOAD, true);
-        await this.$store.dispatch(DOCS_FILTER)
+        this.$store.commit(DOC_RELOAD, true);
+        this.$store.dispatch(DOCS_FILTER)
         let docs = this.$store.getters.getDocsOld;
         this.fileCabinets = this.$store.getters.getFileCabinets;
         let dfc = [];
@@ -75,7 +75,7 @@ export default {
             this.fileCabinet = this.fileCabinets[0];
         }
         this.reload = false;
-        await this.$store.commit(DOC_RELOAD, false);
+        this.$store.commit(DOC_RELOAD, false);
     },
     methods: {
         async onChange(){
@@ -101,9 +101,7 @@ export default {
 /* Основное */
 .menu{
     background-color: #ADE0FC;
-    font-family: 'El Messiri', sans-serif;
-    font-weight: 600;
-    /* padding-top: 40px; */
+    font-family: 'PT+Sans+Narrow', sans-serif;
 }
 /**/
 .menuOpen{

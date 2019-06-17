@@ -25,6 +25,7 @@ from docs.views import (
     FileCabinetViewSet,
     BlockViewSet,
     RegViewSet,
+    СheckSign,
     AddSignature,
     CancelSignature,
     SignatureAgain,
@@ -33,8 +34,6 @@ from docs.views import (
     DeleteFileFromLocal
 )
 
-# Создание пользователей, получение всего списка, получение 
-# одного пользователя, patch, put
 from rest_framework import routers
 router = routers.DefaultRouter(trailing_slash = False)
 router.register(r'^users/i', UserViewSet)
@@ -43,7 +42,6 @@ router.register(r'^docs/i', DocViewSet)
 router.register(r'^docs/fileCabinets', FileCabinetViewSet)
 router.register(r'^docs/regs', RegViewSet)
 router.register(r'^docs/blocks', BlockViewSet)
-# router.register(r'^docs2', DocViewSet2)
 
 urlpatterns = [
     url(r'^api/users/(?P<pk>.+)/photo/$', UserPhoto),
@@ -51,6 +49,7 @@ urlpatterns = [
     url(r'^api/users/(?P<pk1>.+)/notif/(?P<pk2>.+)/(?P<pk3>.+)/$',
         NotifIsReadOrStatus4.as_view()),
     url(r'^api/docs/add_signature/(?P<pk>.+)/(?P<first>.+)/$', AddSignature.as_view()),
+    url(r'^api/docs/(?P<pk>.+)/check_signature/$', СheckSign),
     url(r'^api/docs/cancel_signature/(?P<pk>.+)/$',
         CancelSignature.as_view({'post': 'cancel_signature'})),
     url(r'^api/docs/signature_again/(?P<pk>.+)/$', SignatureAgain.as_view()),
@@ -72,11 +71,6 @@ urlpatterns += [
 # Для сброса пароля
 urlpatterns += [
     url(r'^api/users/rest_auth/', include('rest_auth.urls')),
-]
-
-# Документы
-urlpatterns += [
-    
 ]
 
 # Для разработчика

@@ -158,11 +158,4 @@ router.beforeEach((to, from, next) => {
 	next()
 })
 
-// router.beforeEach((to, from, next) => {
-// 	console.log(router.app.$auth.isAuthenticated());
-// 	if(!sessionStorage.getItem('session')){
-// 		sessionStorage.setItem('session', router.app.$auth.isAuthenticated() ? true : false)
-// 	}
-// })
-
 export default router

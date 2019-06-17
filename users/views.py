@@ -46,7 +46,6 @@ import copy
 from ftp import FTPStorage, FTPStorageFile
 fs = FTPStorage()
 
-## Работает
 class Index(TemplateView):
     '''
     Шаблон, показывает vue приложение на сервере.
@@ -82,7 +81,6 @@ def UserPhoto(request, pk):
         print(str(e))
 
     return JsonResponse({'photo': str(uP.photo)}, status=200)
-
 
 class Notif2(generics.ListAPIView):
     '''
@@ -388,7 +386,6 @@ class SendInviteView(viewsets.ModelViewSet):
 
         return Response({'password':password})
 
-# проверить наличие почты в бд, потом отправить email
 class ConfirmUpdatePasswordView(viewsets.ModelViewSet):
     '''
     Отправить подтверждение смены пароля с кодом

@@ -27,7 +27,7 @@ class BlockSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'id',
             'data',
-            'hash',
+            'hash_field',
             'previous_hash'
         )
 
@@ -36,7 +36,8 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
     file_cabinet_id = serializers.IntegerField(write_only=True, required=False)
     reg = FileCabinetSerializer(required=False)
     reg_id = serializers.IntegerField(write_only=True, required=False)
-
+    hash = FileCabinetSerializer(required=False)
+    hash_id = serializers.IntegerField(write_only=True, required=False)
 
     class Meta:
         model = Doc
@@ -51,11 +52,13 @@ class DocSerializer(serializers.HyperlinkedModelSerializer):
             'description',
             'signature',
             'signature_end',
+            'hash',
             'cancel_description',
             'cancel_file',
             'file_cabinet',
             'file_cabinet_id',
             'reg_id',
+            'hash_id'
         )
     
     def create(self, validated_data):

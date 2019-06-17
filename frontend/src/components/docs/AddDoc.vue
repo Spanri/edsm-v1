@@ -82,7 +82,7 @@
                     ></textarea>
                     <p></p> Общий доступ <input type="checkbox" name="common" true-value="1"  false-value="0" v-model="common">
                     <div style="height:35px;"></div>
-                    <button type="submit" :class="{disabled: this.disable}">СОЗДАТЬ</button> <br>
+                    <button type="submit" :class="{disabled: this.disable}" style="margin-bottom:50px;">СОЗДАТЬ</button> <br>
                 </form>
                 <p v-if="error" style="color: red"> {{ error }} </p>
             </div>
@@ -229,6 +229,7 @@ export default {
     margin: 0 auto;
 	background: white;
     padding: 25px;
+    padding-bottom: 0;
 }
 .header{
     margin-top: 0;

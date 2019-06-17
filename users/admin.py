@@ -19,7 +19,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, 
             {'fields': ('email', 'password', 'username',
-                        'is_get_notif_expired_email')}
+            'is_get_notif_email')}
         ),
         (_('Permissions'),
             {'fields': 

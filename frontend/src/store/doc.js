@@ -17,6 +17,7 @@ import {
     DOC_DELETE,
     DOC_DELETE_FROM_LOCAL,
     DOC_SIGNATURE,
+    DOC_SIGNATURE_CHECK,
     DOC_SIGNATURE_CANCEL,
     DOC_SIGNATURE_AGAIN,
     DOC_SIGNATURE_QUEUE,
@@ -443,6 +444,24 @@ const actions = {
                 })
                 .then(resp => {
                     resolve(resp.data)
+                })
+                .catch(err => {
+                    try {
+                        reject(err.response.request.response)
+                    } catch (error) {
+                        reject(err)
+                    }
+                })
+        })
+    },
+    [DOC_SIGNATURE_CHECK]: ({ commit, dispatch, rootState }, id) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(path + '/api/docs/' + id + '/check_signature/', {
+                    headers: { Authorization: "Token " + rootState.auth.token }
+                })
+                .then(resp => {
+                    resolve(resp.data.check)
                 })
                 .catch(err => {
                     try {

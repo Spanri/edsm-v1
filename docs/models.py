@@ -22,9 +22,13 @@ def delete_doc(sender, **kwargs):
 class FileCabinet(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
 
-
 class Reg(models.Model):
     name = models.CharField(max_length=10, blank=True, null=True)
+
+class Block(models.Model):
+    data = models.CharField(max_length=500, blank=True, null=True)
+    hash = models.CharField(max_length=500, blank=True, null=True)
+    previous_hash = models.CharField(max_length=500, blank=True, null=True)
 
 class Doc(models.Model):
     reg = models.ForeignKey(Reg, related_name="doc_reg",
@@ -37,6 +41,8 @@ class Doc(models.Model):
     common = models.BooleanField(default=False)
     signature = models.CharField(max_length=500, blank=True, null=True)
     signature_end = models.BooleanField(default=False)
+    hash = models.ForeignKey(Block, related_name="doc_h",
+                             on_delete=models.CASCADE, blank=True, null=True)
     cancel_description = models.CharField(max_length=500, blank=True, null=True)
     cancel_file = models.FileField(
         upload_to='./cancel_docs/', storage=fs, blank=True, null=True)
@@ -44,9 +50,3 @@ class Doc(models.Model):
                                      on_delete=models.CASCADE, blank=True, null=True)
 
     post_delete.connect(receiver=delete_doc)
-
-
-class Block(models.Model):
-    data = models.CharField(max_length=500, blank=True, null=True)
-    hash = models.CharField(max_length=500, blank=True, null=True)
-    previous_hash = models.CharField(max_length=500, blank=True, null=True)

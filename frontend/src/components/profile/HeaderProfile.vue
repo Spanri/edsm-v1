@@ -47,7 +47,7 @@ export default {
 	color: white;
 	font-size: 16px;
 	margin-bottom: 20px;
-	max-width: 330px;
+	max-width: 350px;
 	border-radius: 5px;
 }
 .headerProfile{

@@ -8,6 +8,7 @@ from django.core import exceptions
 import hashlib
 import json
 from rest_framework.response import Response
+from django.http import JsonResponse
 from .serializers import (
     DocSerializer,
     FileCabinetSerializer,
@@ -128,14 +129,13 @@ class DownloadSign(generics.RetrieveAPIView):
         doc = Doc.objects.get(id=self.kwargs['pk'])
 
         filename = str(doc.file).split('\\')[1].split('.')[0]
-        filename = 'staticfiles/sign/' + filename + '.txt'
+        filename = 'sign/' + filename + '.txt'
 
-        ff = open(filename, 'w')
+        ff = open('staticfiles/'+filename, 'w')
         ff.write(doc.signature)
         ff.close()
 
         return Response({'file': filename})
-
 
 class DeleteFileFromLocal(generics.RetrieveAPIView):
     '''
@@ -171,7 +171,6 @@ class FileCabinetViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated4,)
 
-
 class RegViewSet(viewsets.ModelViewSet):
     '''
     Универсальное представление для работы с приставками к регистрационным номерам.
@@ -180,7 +179,6 @@ class RegViewSet(viewsets.ModelViewSet):
     queryset = Reg.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated4,)
-
 
 class BlockViewSet(viewsets.ModelViewSet):
     '''
@@ -191,6 +189,27 @@ class BlockViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (CustomIsAuthenticated4,)
 
+def СheckSign(request, pk):
+    doc = Doc.objects.get(id=pk)
+    block = Block.objects.get(id=doc.hash_id)
+    try:
+        previous_block = Block.objects.get(id=doc.hash_id-1)
+        temp = {
+            'id': block.id,
+            'data': doc.signature,
+            'previous_hash': previous_block.hash
+        }
+    except:
+        temp = {
+            'id': block.id,
+            'data': doc.signature
+        }
+    block_string = json.dumps(temp, sort_keys=True).encode()
+    hash = hashlib.sha256(block_string).hexdigest()
+    if block.hash != hash:
+        return JsonResponse({'check': 'Подпись НЕ достоверна!'}, status=200)
+    return JsonResponse({'check': 'Подпись достоверна.'}, status=200)
+    
 class AddSignature(generics.ListAPIView):
     '''
     Добавить подпись к документу. Принимает id документа.
@@ -246,7 +265,7 @@ class AddSignature(generics.ListAPIView):
                     doc_id=doc.id,
                     status=2
                 )
-                notif.status = 3
+                # notif.status = 3
                 notif.date = timezone.now()
                 notif.save()
             except: pass
@@ -263,7 +282,6 @@ class AddSignature(generics.ListAPIView):
                 notifNext.save()
             # Если следующего нотифа нет, значит подпись больше не нужна
             except:
-                print('0')
                 doc.signature_end = True
                 doc.save()
 
@@ -280,27 +298,32 @@ class AddSignature(generics.ListAPIView):
                 doc.signature_end = True
                 doc.save()
         
-        block = Block.objects.create(data=signature)
-        print(len(Block.objects.all()))
-        if len(Block.objects.all()) == 1:
+        if len(Block.objects.all()) == 0:
             temp = {
                 'id': block.id,
                 'data': block.data
             }
             block_string = json.dumps(temp, sort_keys=True).encode()
-            block.hash = hashlib.sha256(block_string).hexdigest()
-            block.save()
+            block = Block.objects.create(
+                data=signature,
+                hash = hashlib.sha256(block_string).hexdigest()
+            )
         else:
             last_block = Block.objects.last()
             temp = {
-                'id': block.id,
-                'data': block.data,
+                'id': last_block.id+1,
+                'data': signature,
                 'previous_hash': last_block.hash
             }
             block_string = json.dumps(temp, sort_keys=True).encode()
-            block.hash = hashlib.sha256(block_string).hexdigest()
-            block.save()
-            
+            block = Block.objects.create(
+                data=signature,
+                hash=hashlib.sha256(block_string).hexdigest(),
+                previous_hash=last_block.hash
+            )
+        doc.hash_id = block.id
+        doc.save()
+
         doc = Doc.objects.filter(id=self.kwargs['pk'])
         serializer = DocSerializer(doc)
         return doc

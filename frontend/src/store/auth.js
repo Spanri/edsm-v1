@@ -1,6 +1,7 @@
 import { 
     AUTH_REQUEST,
     AUTH_TOKEN,
+    AUTH_AUTH,
     USER_REQUEST,
     AUTH_LOGOUT,
     AUTH_SIGNUP,
@@ -13,10 +14,12 @@ import axios from 'axios'
 
 const state = {
     token: localStorage.getItem('user-token') || '',
+    auth: '',
 }
 
 const getters = {
     token: state => state.token,
+    auth: state => state.auth,
     isAuthenticated: state => !!state.token,
 }
 
@@ -51,16 +54,21 @@ const actions = {
                 "email": user.email,
                 "password": user.password
             })
-            .then(async response => {
+            .then(response => {
                 const token = response.data.token;
-                await commit(AUTH_TOKEN, response.data);
+                commit(AUTH_TOKEN, response.data);
                 localStorage.setItem('user-token', token);
                 axios.defaults.headers.common['Authorization'] = token;
-                await dispatch(USER_REQUEST);
-                await commit(DOCS_FILE_CABINET, '');
-                await commit(DOCS_SUCCESS, '');
-                await dispatch(DOCS_REQUEST);
-                resolve(response);
+                dispatch(USER_REQUEST)
+                .then(() => {
+                    commit(DOCS_FILE_CABINET, '');
+                    commit(DOCS_SUCCESS, '');
+                    dispatch(DOCS_REQUEST)
+                    .then(() => {
+                        commit(AUTH_AUTH, true);
+                        resolve(response);
+                    })
+                })
             })
             .catch(err => {
                 localStorage.removeItem('user-token')
@@ -86,9 +94,13 @@ const mutations = {
     [AUTH_TOKEN]: (state, resp) => {
         state.token = resp.token
     },
+    [AUTH_AUTH]: (state, resp) => {
+        state.auth = resp
+    },
     [AUTH_LOGOUT]: (state) => {
         state.token = ''
         state.profile = {}
+        state.auth = false
     },
 }
 
