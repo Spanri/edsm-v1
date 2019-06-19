@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<div v-if="!this.$store.getters.isAuthenticated">
+		<div v-if="!this.$store.getters.isAuthenticated && !this.$store.getters.auth">
 			<Auth></Auth>
 		</div>
 		<div v-else-if="!this.$store.getters.auth" class="load">

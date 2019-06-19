@@ -177,7 +177,7 @@ export default {
                     data
                 })
                 .then(resp => {
-                    this.error = 'Данные профиля изменены. Чтобы фотография профиля в шапке сайта обновилась, перезагрузите страницу.';
+                    this.error = 'Данные профиля изменены.';
                     this.password1 = '';
                     this.password2 = '';
                     this.first_name = '';

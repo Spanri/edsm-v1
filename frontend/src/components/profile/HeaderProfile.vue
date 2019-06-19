@@ -31,6 +31,7 @@ export default {
 	},
 	computed: {
 		photo(){
+			console.log(this.$store.getters.getPhoto)
             return this.$store.getters.getPhoto;
         },
 		profile() {

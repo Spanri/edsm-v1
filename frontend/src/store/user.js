@@ -25,8 +25,8 @@ const state = {
 
 const getters = {
     getProfile: state => state.profile,
-    getPhoto: tate => state.photo,
-    getUsers: tate => state.users,
+    getPhoto: state => state.photo,
+    getUsers: state => state.users,
     isProfileLoaded: state => !!state.profile.name,
 }
 
@@ -150,8 +150,8 @@ const actions = {
                 }
             })
             .then(resp => {
+                dispatch(USER_PHOTO)
                 resolve(resp)
-                commit(USER_SUCCESS, resp.data)
             })
             .catch(err => {
                 try {
@@ -227,7 +227,6 @@ const mutations = {
     },
     [USER_PHOTO_SUCCESS]: (state, resp) => {
         resp = resp.replace('\\','/')
-        console.log(path + '/' + resp)
         Vue.set(state, 'photo', path + '/' + resp)
     },
 }

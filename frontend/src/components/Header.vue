@@ -68,7 +68,7 @@ export default {
     created() {
         this.$store.dispatch(USER_PHOTO);
         this.$store.dispatch(DOCS_REQUEST);
-        console.log(this.$store.getters.getPhoto);
+        
     },
     computed: {
         ...mapGetters({
@@ -77,6 +77,7 @@ export default {
             getDocsOld: 'getDocsOld'
         }),
         photo(){
+            console.log(this.$store.getters.getPhoto);
             return this.getPhoto;
         },
         title(){

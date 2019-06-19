@@ -116,7 +116,6 @@ export default {
             error: null,
             file:'',
             disable: true,
-            regs: [],
             reg: '',
             fileCabinets: [],
             file_cabinet: '',
@@ -130,7 +129,11 @@ export default {
         this.fileCabinets = this.$store.getters.getFileCabinets;
         this.file_cabinet = this.$store.getters.getFileCabinet;
         this.$store.dispatch(DOCS_REGS)
-        this.regs = this.$store.getters.getRegs;
+    },
+    computed: {
+        regs(){
+            return this.$store.getters.getRegs;
+        },
     },
     methods: {
         onFileChange(e) {
