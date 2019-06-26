@@ -1,5 +1,5 @@
 <template>
-	<div class="addDoc">
+	<div id="addDoc">
 		<h3 class="header">ДОБАВЛЕНИЕ ДОКУМЕНТА</h3>
         <div class="addDoc2Colon">
             <div class="img">
@@ -225,7 +225,7 @@ export default {
 </script>
 
 <style scoped>
-.addDoc{
+#addDoc{
     height: 100%;
 	width: 100%;
     max-width: 900px;
@@ -278,21 +278,6 @@ select{
     padding: 0px;
     padding-left: 5px;
 }
-/* Кнопки ЗАГРУЗИТЬ и СОЗДАТЬ */
-button, input[type="submit"] [type]:not([type="checkbox"]), .fileContainer{
-	border: 0;
-	border-radius: 5px;
-	padding: 8px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-	color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-	background-color: #347090;
-}
-button:hover, a:hover{
-    cursor: pointer;
-}
 /**/
 form > p{
     margin-bottom: 5px;
@@ -307,9 +292,7 @@ img{
     width: 110px;
 }
 /**/
-input[type="checkbox"]{
-    height: 15px;
-}
+
 /**/
 .disabled{
     pointer-events: none;

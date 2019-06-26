@@ -1,5 +1,5 @@
 <template>
-	<div class="editProfile">
+	<div id="editProfile">
         <div>
             <img ref="img" :src="image || 'https://img.icons8.com/wired/512/000000/document.png'">
         </div>
@@ -201,7 +201,7 @@ export default {
 </script>
 
 <style scoped>
-.editProfile{
+#editProfile{
     height: 100%;
 	width: 100%;
     max-width: 900px;
@@ -221,21 +221,6 @@ textarea, [type]:not([type="button"]):not([type="checkbox"]):not([type="file"]){
 	padding-right: 15px;
     min-width: 350px;
     background: rgb(223, 243, 253);
-}
-/* Кнопки ЗАГРУЗИТЬ и СОЗДАТЬ */
-button, input[type="button"], .fileContainer{
-	border: 0;
-	border-radius: 5px;
-	padding: 8px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-	color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-	background-color: #347090;
-}
-button:hover, a:hover{
-    cursor: pointer;
 }
 /**/
 form > p{

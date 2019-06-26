@@ -1,5 +1,5 @@
 <template>
-	<div class="editDocument">
+	<div id="editDocument">
 		<div class="document2Colon">
 			<div>
 				<preview :typeFile="type"></preview>
@@ -108,7 +108,7 @@ export default {
 </script>
 
 <style scoped>
-.editDocument{
+#editDocument{
     height: 100%;
 	width: 100%;
     max-width: 900px;
@@ -125,26 +125,9 @@ export default {
     display: grid;
     grid-template-columns: max-content auto;
 }
-/**/
-button, .button{
-	width: auto;
-	border: 0;
-	border-radius: 5px;
-	padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-	color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-	background-color: #347090;
-	text-align: center;
-}
 a{
 	color: white;
 	text-decoration: none;
-}
-button:hover, .button:hover{
-	cursor: pointer;
 }
 /* Поля ввода */
 input[type="text"]{

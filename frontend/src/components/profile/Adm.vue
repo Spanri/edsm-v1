@@ -1,5 +1,5 @@
 <template>
-    <div class="adm">
+    <div id="adm">
         <p v-if="error" style="color:red">{{error}}</p>
         <h3>Управление приставками к регистрационным номерам</h3>
         <table>
@@ -395,7 +395,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 /* Основное */
-.adm{
+#adm{
     margin-left: 15px;
     padding: 45px;
     padding-top: 0;
@@ -410,18 +410,6 @@ input[type="email"], input[type="text"]{
 	padding-right: 15px;
     min-width: 350px;
     background: rgb(223, 243, 253);
-}
-/* Кнопка СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ */
-button{
-	border: 0;
-    margin-top: 15px;
-	border-radius: 5px;
-	padding: 8px;
-	color: white;
-	background-color: #347090;
-}
-button:hover{
-	cursor: pointer;
 }
 /**/
 input[type="checkbox"]{

@@ -1,5 +1,5 @@
 <template>
-	<div class="grid">
+	<div id="grid">
         <div v-if="disable && id == 'notif'" style="color: red;">Загрузка...</div>
         <div v-if="filteredHeroes.length == 0 && $route.params.id != 'common'">
             <p>Так грустно... Здесь ничего нет.</p>
@@ -76,7 +76,7 @@ import {
     DOCS_FILTER,
     DOC_EDIT_NOTIF,
     DOC_REQUEST,
-    DOC_RELOAD,
+    ADDIT_RELOAD,
 } from '../../store/mutation-types'
 
 export default {
@@ -116,7 +116,7 @@ export default {
                 return this.$store.getters.getReload;
             },
             set(newValue) {
-                this.$store.commit(DOC_RELOAD, !newValue);
+                this.$store.commit(ADDIT_RELOAD, !newValue);
             }
             
         },
@@ -267,11 +267,11 @@ export default {
 </script>
 
 <style scoped>
-.grid{
+#grid{
 	width: 100%;
 	background: white;
 }
-.grid > *{
+#grid > *{
 	margin: 50px;
     margin-top: 35px;
 }
@@ -314,27 +314,6 @@ input{
 /* Недоступность документов при обновлении данных */
 .disabled{
     display: none;
-    /* pointer-events: none;
-    background: #d6d6d6;
-    color: #4e4848; */
-}
-/* Кнопки в общих документах */
-button{
-	width: auto;
-	border: 0;
-	border-radius: 5px;
-	padding: 8px;
-    margin-top: -20px;
-    margin-bottom: 15px;
-    margin-right: 10px;
-	color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-	background-color: #77abc7;
-	text-align: center;
-}
-button:hover{
-    cursor: pointer;
 }
 .commonButton{
     background-color: #347090;

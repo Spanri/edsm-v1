@@ -1,5 +1,5 @@
 <template>
-	<div class="profile">
+	<div id="profile">
 		<div class="mainProfile">
 			<div v-if="closeMenu" style="background:#ADE0FC;height:300px" @click="closeMenu = false" class="openCloseMenuButton">
 				<svg class="openCloseMenuButton" fill="#347090" enable-background="new 0 0 96 96" height="26px" viewBox="0 0 96 96" width="26px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -63,11 +63,11 @@ export default {
 </script>
 
 <style scoped>
-.profile{
+#profile{
     height: 100%;
 	background: white;
 }
-.profile > *{
+#profile > *{
 	padding: 25px 50px;
 }
 .mainProfile{

@@ -24,7 +24,7 @@ import {
     DOC_EDIT,
     DOC_UPDATE,
     DOC_REQUEST,
-    DOC_RELOAD,
+    ADDIT_RELOAD,
     DOC_REQUEST_SUCCESS,
     DOCS_FILE_CABINETS,
     DOCS_FILE_CABINET,
@@ -41,7 +41,6 @@ const state = {
     fileCabinets: [],
     regs: [],
     fileCabinet: '',
-    reload: '',
 }
 
 const getters = {
@@ -53,7 +52,6 @@ const getters = {
     getFileCabinets: state => state.fileCabinets,
     getFileCabinet: state => state.fileCabinet,
     getRegs: state => state.regs,
-    getReload: state => state.reload,
 }
 
 const actions = {
@@ -631,7 +629,7 @@ const mutations = {
     [DOC_REQUEST_SUCCESS]: (state, resp) => { 
         state.doc.push(resp)
     },
-    [DOC_RELOAD]: (state, resp) => {
+    [ADDIT_RELOAD]: (state, resp) => {
         Vue.set(state, 'reload', resp)
     },
 }

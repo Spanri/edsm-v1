@@ -1,5 +1,5 @@
 <template>
-	<div class="document">
+	<div id="document">
 		<div v-if="refresh">
 			<h3>Загружается...</h3>
 			<svg id="Layer_1" width="80px" style="enable-background:new 0 0 30 30;" version="1.1" viewBox="0 0 30 30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -503,7 +503,7 @@ export default {
 </script>
 
 <style scoped>
-.document{
+#document{
     height: 100%;
 	width: 100%;
     max-width: 900px;
@@ -522,18 +522,9 @@ export default {
 	margin-top: 20px;
 }
 /**/
-button, .button{
-	width: auto;
-	border: 0;
-	border-radius: 5px;
-	padding: 8px;
+button{
     margin-top: 5px;
     margin-bottom: 5px;
-	color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-	background-color: #347090;
-	text-align: center;
 }
 .buttons{
 	max-width: 900px;
@@ -558,9 +549,6 @@ button, .button{
 a{
 	color: white;
 	text-decoration: none;
-}
-button:hover, .button:hover{
-	cursor: pointer;
 }
 /* Подтверждение */
 .confirm, .checkSignature{

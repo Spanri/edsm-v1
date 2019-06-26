@@ -32,11 +32,7 @@ export default {
 	components: { Header, Footer, Auth },
 	data () {
         return {
-			closeButtonSize: "300px auto",
-			menuSize: "300px auto",
-			marginLeft: 20,
-			close: false,
-			textClose: "X СВЕРНУТЬ МЕНЮ",
+
     	}
 	},
 	created: function () {
@@ -45,33 +41,10 @@ export default {
 				if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
 					this.$store.dispatch(AUTH_LOGOUT)
 				}
-			throw err;
+				throw err;
+			});
 		});
-});
 	},
-	computed: {
-		closeM: function () {
-			if(this.close){
-				this.menuSize = "100%";
-				this.closeButtonSize = "0 100%";
-				this.marginLeft = 50;
-				this.textClose = "!!!";
-				return true;
-			}
-			else{
-				this.menuSize = "300px auto";
-				this.closeButtonSize = this.menuSize;
-				this.marginLeft = 20;
-				this.textClose = "X СВЕРНУТЬ МЕНЮ";
-				return false;
-			}
-		}
-	},
-    methods: {
-        closeMenu() {
-			this.close = !this.close;
-		},
-    }
 }
 </script>
 
@@ -81,13 +54,14 @@ export default {
 	font-family: 'Roboto', serif;
 	font-weight: 500;
 }
+/* Окно, если авторизация успешна */
 .authenticated {
 	height: 100vh;
 	width: calc(100vw-15px);
 	display: grid;
 	grid-template-rows: max-content auto max-content;
 }
-/**/
+/* Окошко "Система загружается" после успешной авторизации*/
 .load{
 	height: 100vh;
 	width: 100vw;
@@ -104,7 +78,6 @@ export default {
 	padding: 0px;
 	text-align: center;
 }
-/**/
 .loadSvg{
     fill: white;
     enable-background: new 0 0 16 16;
@@ -131,5 +104,30 @@ router-view{
 	*{
 		font-size: 14px;
 	}
+}
+/* Для всего проекта */
+button, .button{
+	border: 0;
+	border-radius: 5px;
+	padding: 8px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+	color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+	background-color: #347090;
+}
+button:hover, a:hover{
+    cursor: pointer;
+}
+input[type="checkbox"]{
+    height: 15px;
+}
+input{
+	border: 0;
+	height: 30px;
+	margin: 0 auto;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 </style>

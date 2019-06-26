@@ -1,5 +1,5 @@
 <template>
-	<div class="notFound">
+	<div id="notFound">
 		<p>Не найдено.</p>
 	</div>
 </template>
@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style scoped>
-.notFound{
+#notFound{
     height: 100%;
 	width: 100%;
 	background: white;

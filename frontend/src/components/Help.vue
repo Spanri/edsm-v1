@@ -1,5 +1,5 @@
 <template>
-	<div class="help">
+	<div id="help">
 		<h2>Помощь</h2>
 		<h4>Переход на главную страницу</h4>
 		<p>
@@ -58,7 +58,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.help{
+#help{
     width: 100%;
 	max-width: 900px;
 	margin: auto;

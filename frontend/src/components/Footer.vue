@@ -1,6 +1,6 @@
 <template>
 	<div class="background">
-		<div class="footer">
+		<div id="footer">
 			<p>МТУСИ, 2019 | <label @click="toHelp()">Помощь</label></p>	
 		</div>
 	</div>
@@ -28,7 +28,7 @@ export default {
     background-color: #347090;
     height: 40px;
 }
-.footer{
+#footer{
     width: 100%;
     max-width: 1400px;
 	margin: auto;

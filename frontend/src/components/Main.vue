@@ -1,5 +1,5 @@
 <template>
-<div class="maing">
+<div id="maing">
 	<Menu></Menu>
 	<router-view></router-view>
 </div>
@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style scoped>
-.maing{
+#maing{
     height: 100%;
 	width: 100%;
 	background: white;

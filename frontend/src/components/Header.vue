@@ -1,6 +1,6 @@
 <template>
     <div class="background">
-        <div class="header">
+        <div id="header">
             <div class="logo" @click="toMain()" title="На главную">
                 <svg height="23pt" viewBox="0 0 80 80">
                     <g>
@@ -130,7 +130,7 @@ export default {
     font-weight: 700;
 }
 /* Основной стиль */
-.header{
+#header{
     width: auto;
     height: 60px;
     max-width: 1400px;

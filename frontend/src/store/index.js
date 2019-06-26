@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import user from './user'
 import auth from './auth'
 import doc from './doc'
+import addit from './addit'
 
 Vue.use(Vuex)
 import createPersistedState from 'vuex-persistedstate'
@@ -12,7 +13,8 @@ export default new Vuex.Store({
 	modules: {
 		user,
 		auth,
-		doc
+		doc,
+		addit
 	},
 	strict: debug,
 	plugins: [createPersistedState()],

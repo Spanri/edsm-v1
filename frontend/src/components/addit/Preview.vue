@@ -1,5 +1,5 @@
 <template>
-    <div class="preview">
+    <div id="preview">
         <div class="bb0"></div>
         <div class="bb1">
             <div class="bb2"></div>
@@ -20,7 +20,7 @@ export default {
 </script>
 
 <style scoped>
-.preview{
+#preview{
     border: 4px solid #5a95b4;
     border-radius: 10px;
     margin-right: 15px;

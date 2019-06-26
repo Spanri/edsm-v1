@@ -1,6 +1,6 @@
 <template>
-    <div class="headerProfileGradient">
-        <div class="headerProfile">
+    <div id="headerProfileGradient">
+        <div id="headerProfile">
             <img class="avatar" :src="photo">
             <div v-if="profile.profile.first_name" class="rightPart">
                 <p style="margin-top:0;padding-top:7px">
@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style scoped>
-.headerProfileGradient{
+#headerProfileGradient{
 	background: rgb(173,224,252);
 	background: linear-gradient(90deg, rgb(101, 189, 236) 0%, rgb(99, 138, 211) 50%, rgb(186, 125, 236) 100%);
 	color: white;
@@ -51,7 +51,7 @@ export default {
 	max-width: 350px;
 	border-radius: 5px;
 }
-.headerProfile{
+#headerProfile{
 	padding: 15px;
 	padding-bottom: 0;
 	display: grid;
