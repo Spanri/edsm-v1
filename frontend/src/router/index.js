@@ -61,9 +61,9 @@ const router = new Router({
 					props: {
 						columns: [
 							{ key: 'reg', title: '№' },
-							{ key: 'title', title: 'Название' },
-							{ key: 'full_name', title: 'Владелец' },
-							{ key: 'date_doc', title: 'Дата добавления' },
+							{ key: 'title', title: 'НАЗВАНИЕ' },
+							{ key: 'full_name', title: 'ВЛАДЕЛЕЦ' },
+							{ key: 'date_doc', title: 'ДАТА ДОБАВЛЕНИЯ' },
 						],
 					} 
 				},
@@ -119,11 +119,11 @@ const router = new Router({
 					props: {
 						id: "notif",
 						columns: [
-							{ key: 'initiator', title: 'Инициатор'},
-							{key: 'title', title: 'Документ' },
-							{key: 'message', title: 'Сообщение'},
-							{key: 'date_notif', title: 'Дата'},
-							{key: 'file_cabinet', title: 'Картотека' },
+							{ key: 'initiator', title: 'ИНИЦИАТОР'},
+							{key: 'title', title: 'ДОКУМЕНТ' },
+							{key: 'message', title: 'СООБЩЕНИЕ'},
+							{key: 'date_notif', title: 'ДАТА'},
+							{key: 'file_cabinet', title: 'КАРТОТЕКА' },
 						],
 					} 
 				},

@@ -25,40 +25,40 @@
             <select v-model="fileCabinet" @change="onChange()">
                 <option v-for="(fileC) in fileCabinets" :key="fileC.id" :value="fileC">{{fileC.name}}</option>
             </select>
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/all', }">ВСЕ ДОКУМЕНТЫ</router-link>
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/common', }">ОБЩИЙ ДОСТУП</router-link>
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/myDocs', }">МОИ ДОКУМЕНТЫ</router-link>
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/my-doc-signature-request', }">НА ПОДПИСИ</router-link> 
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/signature-request', }">НА ПОДПИСЬ</router-link>
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/signature-success', }">ПОДПИСАННОЕ</router-link>
-            <router-link @click.native="goToFolder" class="router-link" :to="{ path: '/documents/available-to-me', }">ДОСТУПНЫ МНЕ</router-link>
+            <MenuGoTo text="ВСЕ ДОКУМЕНТЫ" path="/documents/all" color="rgb(174, 0, 255)"></MenuGoTo>
+            <MenuGoTo text="МОИ ДОКУМЕНТЫ" path="/documents/myDocs" color="rgb(21, 103, 255)"></MenuGoTo>
+            <MenuGoTo text="ОБЩИЙ ДОСТУП" path="/documents/common" color="white"></MenuGoTo>
+            <MenuGoTo text="ДОСТУПНЫ МНЕ" path="/documents/available-to-me" color="white"></MenuGoTo>
+            <MenuGoTo text="НА ПОДПИСИ" path="/documents/my-doc-signature-request" color="rgb(0, 158, 8)"></MenuGoTo>
+            <MenuGoTo text="НА ПОДПИСЬ" path="/documents/signature-request" color="rgb(0, 158, 8)"></MenuGoTo>
+            <MenuGoTo text="ПОДПИСАННОЕ" path="/documents/signature-success" color="rgb(0, 158, 8)"></MenuGoTo>
+            
         </div>
     </div>
 </template>
 
 <script>
-import { } from '../store/mutation-types'
 import {
     DOCS_FILE_CABINET, 
     DOCS_REQUEST, 
     DOCS_FILTER, 
     ADDIT_RELOAD,
 } from '../store/mutation-types'
+import MenuGoTo from './addit/MenuGoTo';
 
 export default {
     name: 'Menu',
+    components: { MenuGoTo },
     data () {
         return {
             fileCabinets: [],
             fileCabinet: '',
             closeMenu: false,
-            reload: '',
         }
     },
     created(){
         this.reload = true;
-        this.$store.commit(ADDIT_RELOAD, true);
-        this.$store.dispatch(DOCS_FILTER)
+        this.$store.dispatch(DOCS_FILTER);
         let docs = this.$store.getters.getDocsOld;
         this.fileCabinets = this.$store.getters.getFileCabinets;
         let dfc = [];
@@ -75,24 +75,31 @@ export default {
             this.fileCabinet = this.fileCabinets[0];
         }
         this.reload = false;
-        this.$store.commit(ADDIT_RELOAD, false);
+    },
+    computed: {
+        reload: {
+            get(){
+                return this.$store.getters.getReload;
+            },
+            set(newValue){
+                this.$store.commit(ADDIT_RELOAD, newValue);
+            }
+        }
     },
     methods: {
         async onChange(){
             this.reload = true;
-            await this.$store.commit(DOCS_FILE_CABINET, this.fileCabinet)
-            await this.$store.dispatch(DOCS_REQUEST)
-            await this.$store.dispatch(DOCS_FILTER)
+            await this.$store.commit(DOCS_FILE_CABINET, this.fileCabinet);
+            await this.$store.dispatch(DOCS_REQUEST);
+            await this.$store.dispatch(DOCS_FILTER);
             this.reload = false;
         },
-        async goToFolder(){
-            this.reload = true;
-            await this.$store.commit(ADDIT_RELOAD, true);
-            await this.$store.dispatch(DOCS_REQUEST)
-            await this.$store.dispatch(DOCS_FILTER)
-            this.reload = false;
-            await this.$store.commit(ADDIT_RELOAD, false);
-        }
+        // async goToFolder(){
+        //     this.reload = true;
+        //     await this.$store.dispatch(DOCS_REQUEST)
+        //     await this.$store.dispatch(DOCS_FILTER)
+        //     this.reload = false;
+        // }
     },
 }
 </script>
@@ -113,34 +120,9 @@ export default {
 .openCloseMenuButton:hover, .openCloseMenuButton:hover *{
     cursor: pointer;
     fill:#7cb0c1;
+    stroke: #7cb0c1;
 }
-/**/
-a{
-    text-decoration: none;
-    color: #373737;
-}
-.router-link-exact-active{
-    background: #64b2db;
-    pointer-events: none;
-    cursor: default;
-}
-.router-link{
-    font-size: 16px;
-    color: #373737;
-    padding: 11px 20px;
-    padding-left: 40px;
-	margin-top: 3px;
-	margin-bottom: 3px;
-	text-decoration: none;
-	color: black;
-	width: calc(100% - 60px);
-	margin-left: 0;
-	margin-right: 0;
-	display: block;
-}
-.link > router-link:hover{
-    cursor: pointer;
-}
+/* Картотека */
 select{
     margin: 25px;
     margin-top: 5px;

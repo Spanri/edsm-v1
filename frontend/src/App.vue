@@ -108,17 +108,22 @@ router-view{
 /* Для всего проекта */
 button, .button{
 	border: 0;
-	border-radius: 5px;
+	/* border-radius: 5px; */
 	padding: 8px;
     margin-top: 15px;
     margin-bottom: 15px;
+	margin-right: 7px;
 	color: white;
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
 	background-color: #347090;
+	box-shadow: 3px 5px 0px 0px rgba(170,169,248,1);
 }
 button:hover, a:hover{
     cursor: pointer;
+}
+button:hover {
+	box-shadow: 3px 5px 0px 0px rgb(84, 84, 126);
 }
 input[type="checkbox"]{
     height: 15px;

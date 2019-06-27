@@ -133,7 +133,7 @@ export default {
 #header{
     width: auto;
     height: 60px;
-    max-width: 1400px;
+    /* max-width: 1400px; */
     min-width: 100px;
 	margin: auto;
     margin-top: 0;

@@ -17,7 +17,14 @@
 					<button style="margin-top:20px;margin-left:6px;background: rgb(243, 92, 92);" v-if="this.$store.getters.getProfile.is_staff || (doc.status == 0 && (doc.doc.common != true || doc.user.id == this.$store.getters.getProfile.id))" @click="deleteDoc()">УДАЛИТЬ</button>
 				</div>
 				<div style="margin-left:25px;margin-top:0px;">
-					<h3 class="header">{{title}}</h3>
+					<h3 class="header">
+						{{title}}
+						<svg v-if="doc.doc.common" width="20px" fill="#347090" style="margin-left:5px;" enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+							<title>Общий доступ</title>
+							<g><path d="M9,9c0-1.7,1.3-3,3-3s3,1.3,3,3c0,1.7-1.3,3-3,3S9,10.7,9,9z M12,14c-4.6,0-6,3.3-6,3.3V19h12v-1.7C18,17.3,16.6,14,12,14z   "/></g><g><g><circle cx="18.5" cy="8.5" r="2.5"/></g><g><path d="M18.5,13c-1.2,0-2.1,0.3-2.8,0.8c2.3,1.1,3.2,3,3.2,3.2l0,0.1H23v-1.3C23,15.7,21.9,13,18.5,13z"/></g></g><g><g><circle cx="18.5" cy="8.5" r="2.5"/></g><g><path d="M18.5,13c-1.2,0-2.1,0.3-2.8,0.8c2.3,1.1,3.2,3,3.2,3.2l0,0.1H23v-1.3C23,15.7,21.9,13,18.5,13z"/>
+							</g></g><g><g><circle cx="5.5" cy="8.5" r="2.5"/></g><g><path d="M5.5,13c1.2,0,2.1,0.3,2.8,0.8c-2.3,1.1-3.2,3-3.2,3.2l0,0.1H1v-1.3C1,15.7,2.1,13,5.5,13z"/></g></g>
+						</svg>
+					</h3>
 					<p v-if="doc.doc.cancel_description" style="color: red">
 						Ваш документ отказались подписывать. Посмотрите комментарий отказа и 
 						нажмите кнопку "Запустить цепочку подписей снова". Выберите в появившемся 
@@ -40,10 +47,6 @@
 							<tr>
 								<td>Картотека</td>
 								<td>{{doc.doc.file_cabinet.name}}</td>
-							</tr>
-							<tr>
-								<td>Общий доступ</td>
-								<td>{{doc.doc.common ? 'да' : 'нет'}}</td>
 							</tr>
 							<tr>
 								<td>Дата добавления</td>
@@ -504,7 +507,7 @@ export default {
 
 <style scoped>
 #document{
-    height: 100%;
+    height: calc(100% - 50px);
 	width: 100%;
     max-width: 900px;
     margin: 0 auto;
@@ -524,7 +527,7 @@ export default {
 /**/
 button{
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 .buttons{
 	max-width: 900px;
@@ -608,12 +611,13 @@ table {
 	word-wrap: break-word;
 }
 table, tr{
-    border: rgb(223, 243, 253) 2px solid;
+    border: white 7px solid;
 	border-left: 0;
 	border-right: 0;
     border-radius: 5px;
 }
 td{
     padding: 7px 15px;
+	background: #d5dbdf;
 }
 </style>
