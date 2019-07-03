@@ -17,7 +17,7 @@
                 <button :class="[commonActive == 2 ? 'commonButton' : '']" @click="commonActive=2">МОИ ДОКУМЕНТЫ</button>
                 <button :class="[commonActive == 3 ? 'commonButton' : '']" @click="commonActive=3">НЕ МОИ ДОКУМЕНТЫ</button>
             </div>
-            <p v-if="error" style="color: red;">{{error}}</p>
+            <p v-if="error" style="color: red;margin-left:35px;">{{error}}</p>
             <table>
                 <thead>
                     <tr>
