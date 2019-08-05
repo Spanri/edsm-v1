@@ -150,12 +150,12 @@ http://localhost:8000
 ### Интерфейс, другое
 
 Смена пароля 1
-<img src="./frontend/dist/img-git/Смена пароля.png" width="300px" alt="Смена пароля 1"/>
+<img src="frontend/dist/img-git/Смена пароля.png" width="300px" alt="Смена пароля 1"/>
 
 Смена пароля 2
-<img src="./frontend/dist/img-git/Смена пароля 2.png" width="300px" alt="Смена пароля 2"/>
+<img src="frontend/dist/img-git/Смена пароля 2.png" width="300px" alt="Смена пароля 2"/>
 
 Помощь (открывается по ссылке в футере)
-<img src="./frontend/dist/img-git/Помощь.png" width="700px" alt="Помощь"/>
+<img src="frontend/dist/img-git/Помощь.png" width="700px" alt="Помощь"/>
 
 <p style="text-align: center;margin:0;margin-top:35px;">Сделала Аня, 2019</p>
