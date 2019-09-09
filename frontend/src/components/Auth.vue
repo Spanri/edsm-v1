@@ -4,7 +4,7 @@
 		<div class="login">
 			<div></div>
 			<div>
-				<div class="auth" v-if="rememberPassword == false">	
+				<div class="auth" v-if="rememberPassword == false">
 					<p class="title">ВХОД</p>
 					<div>
 						<p>EMAIL</p>
@@ -19,34 +19,36 @@
 						/>
 						<div style="height:15px;"></div>
 						<p>ПАРОЛЬ</p>
-						<input 
-							v-validate.immediate="'required_if:!newPassword'"
-							name="password"
-							v-model="password" 
-							:type="passwordFieldType"
-							placeholder="Введите пароль"
-							class="search-box"
-							style="width:166px"
-						/>
-						<button type="password" style="padding:6px; margin:0" @click="switchVisibility()">
-							<svg 
-								width="16px"
-								stroke="white"
-								enable-background="new 0 0 10 12" 
-								id="Editable-line"
-								viewBox="0 0 30 30">
-								<path 
-									d="  M16,7C9.934,7,4.798,10.776,3,16c1.798,5.224,6.934,9,13,9s11.202-3.776,13-9C27.202,10.776,22.066,7,16,7z" 
-									fill="none"
-									id="XMLID_13_"
-									stroke-linecap="round"
-									stroke-linejoin="round" 
-									stroke-miterlimit="10" 
-									stroke-width="2"/>
-								<circle cx="16" cy="16" fill="none" id="XMLID_14_" r="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
-								<line v-if="passwordFieldType == 'text'" fill="none" id="XMLID_15_" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" x1="3" x2="29" y1="3" y2="29"/>
-							</svg>
-						</button>
+            <div style="background: white;margin: 0 auto; width: 230px;">
+              <input
+                v-validate.immediate="'required_if:!newPassword'"
+                name="password"
+                v-model="password"
+                :type="passwordFieldType"
+                placeholder="Введите пароль"
+                class="search-box"
+                style="width:166px"
+              />
+              <button class="showPassword" type="password" @click="switchVisibility()">
+                <svg
+                  width="16px"
+                  stroke="black"
+                  enable-background="new 0 0 10 12"
+                  id="Editable-line"
+                  viewBox="0 0 30 30">
+                  <path
+                    d="  M16,7C9.934,7,4.798,10.776,3,16c1.798,5.224,6.934,9,13,9s11.202-3.776,13-9C27.202,10.776,22.066,7,16,7z"
+                    fill="none"
+                    id="XMLID_13_"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-miterlimit="10"
+                    stroke-width="2"/>
+                  <circle cx="16" cy="16" fill="none" id="XMLID_14_" r="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+                  <line v-if="passwordFieldType == 'text'" fill="none" id="XMLID_15_" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" x1="3" x2="29" y1="3" y2="29"/>
+                </svg>
+              </button>
+            </div>
 						<div style="height:35px;"></div>
 						<button type="submit" @click="doLogin()">ВОЙТИ</button> <br>
 						<div @click="rememberPassword=true" class="rememberPassword">
@@ -62,8 +64,8 @@
 </template>
 
 <script>
-import { 
-	AUTH_REQUEST, 
+import {
+	AUTH_REQUEST,
 	ADDIT_REMEMBER_PASSWORD,
 	ADDIT_ERROR_AUTH
 } from '../store/mutation-types'
@@ -112,9 +114,9 @@ export default {
 		doLogin(e) {
 			const { email, password } = this;
 			this.$store.dispatch(
-				AUTH_REQUEST, { 
-					email, 
-					password 
+				AUTH_REQUEST, {
+					email,
+					password
 				}
 			)
 			.then(() => {
@@ -134,7 +136,7 @@ export default {
 				}
 			})
 		},
-		
+
 	}
 }
 </script>
@@ -181,5 +183,11 @@ button{
 }
 .rememberPassword:hover{
 	cursor: pointer;
+}
+.showPassword {
+  padding: 6px 0;
+  margin: 0;
+  background: 0;
+  border: 0;
 }
 </style>

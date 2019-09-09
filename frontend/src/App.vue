@@ -26,7 +26,7 @@ import Auth from './components/Auth';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import axios from 'axios'
-      
+
 export default {
 	name: 'App',
 	components: { Header, Footer, Auth },
@@ -89,7 +89,7 @@ export default {
 }
 @keyframes spin {
     100% {
-        transform: rotate(360deg); 
+        transform: rotate(360deg);
     }
 }
 /**/
@@ -106,7 +106,7 @@ router-view{
 	}
 }
 /* Для всего проекта */
-button, .button{
+button:not(.showPassword), .button{
 	border: 0;
 	/* border-radius: 5px; */
 	padding: 8px;
@@ -117,13 +117,17 @@ button, .button{
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
 	background-color: #347090;
-	box-shadow: 3px 5px 0px 0px rgba(170,169,248,1);
+  box-shadow: 0 3px rgba(170,169,248,1);
+  transform: translate(0, -3px);
+	box-shadow: 0 5px 0px 0px rgba(170,169,248,1);
 }
-button:hover, a:hover{
-    cursor: pointer;
+button:active, a:active{
+  box-shadow: none;
+  transform: translate(0px, 0px);
 }
 button:hover {
-	box-shadow: 3px 5px 0px 0px rgb(84, 84, 126);
+
+  cursor: pointer;
 }
 input[type="checkbox"]{
     height: 15px;

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Main from '@/components/Main'
+import Home from '@/components/Home'
 import Auth from '@/components/Auth'
 import Profile from '@/components/profile/Profile'
 import EditProfile from '@/components/profile/EditProfile'
@@ -24,7 +24,7 @@ const ifNotAuthenticated = (to, from, next) => {
 	}
 	next('/')
 }
-  
+
 const ifAuthenticated = (to, from, next) => {
 	if (store.getters.isAuthenticated) {
 		next()
@@ -47,8 +47,8 @@ const router = new Router({
 	routes: [
 		{
 			path: '/',
-			// name: 'main',
-			component: Main,
+			// name: 'home',
+			component: Home,
 			children: [
 				{
 					path: '',
@@ -56,7 +56,7 @@ const router = new Router({
 				},
 				{
 					path: 'documents/:id',
-					meta: { title: 'Главная, СЭД МТУСИ' }, 
+					meta: { title: 'Главная, СЭД МТУСИ' },
 					component: Grid,
 					props: {
 						columns: [
@@ -65,7 +65,7 @@ const router = new Router({
 							{ key: 'full_name', title: 'ВЛАДЕЛЕЦ' },
 							{ key: 'date_doc', title: 'ДАТА ДОБАВЛЕНИЯ' },
 						],
-					} 
+					}
 				},
 			],
 			beforeEnter: ifAuthenticated,
@@ -73,7 +73,7 @@ const router = new Router({
 		{
 			path: '/auth',
 			name: 'auth',
-			meta: { title: 'Вход, СЭД МТУСИ' }, 
+			meta: { title: 'Вход, СЭД МТУСИ' },
 			component: Auth,
 			beforeEnter: ifNotAuthenticated,
 		},
@@ -114,7 +114,7 @@ const router = new Router({
 				{
 					path: 'notif',
 					name: 'notif',
-					meta: { title: 'Уведомления, СЭД МТУСИ' }, 
+					meta: { title: 'Уведомления, СЭД МТУСИ' },
 					component: Grid,
 					props: {
 						id: "notif",
@@ -125,18 +125,18 @@ const router = new Router({
 							{key: 'date_notif', title: 'ДАТА'},
 							{key: 'file_cabinet', title: 'КАРТОТЕКА' },
 						],
-					} 
+					}
 				},
-				{ 
-					path: 'edit', 
-					meta: { title: 'Редактировать профиль, СЭД МТУСИ' }, 
-					component: EditProfile 
+				{
+					path: 'edit',
+					meta: { title: 'Редактировать профиль, СЭД МТУСИ' },
+					component: EditProfile
 				},
-				{ 
-					path: 'adm', 
-					meta: { title: 'Администрирование профилей, СЭД МТУСИ' }, 
-					component: Adm, 
-					beforeEnter: ifAdm, 
+				{
+					path: 'adm',
+					meta: { title: 'Администрирование профилей, СЭД МТУСИ' },
+					component: Adm,
+					beforeEnter: ifAdm,
 				},
 			],
 			beforeEnter: ifAuthenticated,
@@ -144,9 +144,9 @@ const router = new Router({
 		{
 			path: '/404',
 			meta: { title: 'Страница не найдена, СЭД МТУСИ' },
-			component: NotFound 
+			component: NotFound
 		},
-		{ 
+		{
 			path: '*',
 			redirect: '/404',
 		},
