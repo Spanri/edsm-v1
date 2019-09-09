@@ -45,7 +45,7 @@
                     stroke-miterlimit="10"
                     stroke-width="2"/>
                   <circle cx="16" cy="16" fill="none" id="XMLID_14_" r="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
-                  <line v-if="passwordFieldType == 'text'" fill="none" id="XMLID_15_" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" x1="3" x2="29" y1="3" y2="29"/>
+                  <line v-if="passwordFieldType == 'password'" fill="none" id="XMLID_15_" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" x1="3" x2="29" y1="3" y2="29"/>
                 </svg>
               </button>
             </div>
@@ -185,7 +185,7 @@ button{
 	cursor: pointer;
 }
 .showPassword {
-  padding: 6px 0;
+  padding: 8px 12px 6px 0;
   margin: 0;
   background: 0;
   border: 0;
