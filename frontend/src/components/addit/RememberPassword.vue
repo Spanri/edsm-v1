@@ -2,7 +2,7 @@
     <div id="rememberPassword">
         <div v-if="newPassword==1">
             <p class="title">СМЕНА ПАРОЛЯ - ШАГ 1</p>
-            <p class="text" style=""> 
+            <p class="text" style="">
                 Это страница смены пароля. Чтобы подтвердить свою почту, впишите ее в поле.
                 Вам придет код на почту, который следует ввести на следующем шаге.
             </p>
@@ -10,7 +10,7 @@
             <input
                 v-validate.immediate="'required_if:!newPassword'"
                 name="email2"
-                v-model="emailForConfirm" 
+                v-model="emailForConfirm"
                 type="email"
                 placeholder="Введите email"
                 class="search-box"
@@ -20,8 +20,8 @@
                 <button type="submit" @click="rememberP=false;error=''">ВЕРНУТЬСЯ</button>
                 <button type="submit" @click="rememberPassword()" style="margin-left:5px;">ОТПРАВИТЬ</button>
             </div>
-            <div v-if="processConfirm"> 
-                <p>Отправляется...</p>
+            <div v-if="processConfirm">
+                <p style="padding: 20px;">Отправляется...</p>
             </div>
         </div>
         <div v-if="newPassword==2">
@@ -33,7 +33,7 @@
             <input
                 v-validate.immediate="'required_if:!newPassword'"
                 name="code"
-                v-model="code" 
+                v-model="code"
                 type="email"
                 placeholder="Введите email"
                 class="search-box"
@@ -42,7 +42,7 @@
             <input
                 v-validate.immediate="'required_if:!newPassword'"
                 name="password1"
-                v-model="password1" 
+                v-model="password1"
                 type="password"
                 placeholder="Введите пароль"
                 class="search-box"
@@ -65,7 +65,7 @@
 
 <script>
 import {
-	USER_CONFIRM_UPDATE_PASSWORD, 
+	USER_CONFIRM_UPDATE_PASSWORD,
     USER_CHANGE_PASSWORD,
     ADDIT_REMEMBER_PASSWORD,
     ADDIT_ERROR_AUTH,
@@ -83,7 +83,7 @@ export default {
 			code: null, // поле для кода подтверждения
 			password1: null, // поле для нового пароля
 			password2: null, // поле для подтверждения нового пароля
-			newPassword: 2, // для смены пароля
+			newPassword: 1, // для смены пароля
 		}
     },
     computed: {
@@ -130,7 +130,7 @@ export default {
 				} else {
 					this.error = err;
 				}
-			})	
+			})
         },
         // шаг 2, смена пароля
 		updatePassword(){
