@@ -14,9 +14,9 @@
                 </svg>
                 <svg class="openCloseMenuButton" style="margin-bottom:0px;margin-top:15px;margin-right:15px;" @click="closeMenu = true" height="21px" viewBox="0 0 31 32" width="22px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="Cancel" stroke="#347090" stroke-width="1">
-                        <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z" 
+                        <path clip-rule="evenodd" d="M16,0C7.163,0,0,7.163,0,16c0,8.836,7.163,16,16,16   c8.836,0,16-7.163,16-16C32,7.163,24.836,0,16,0z M16,30C8.268,30,2,23.732,2,16C2,8.268,8.268,2,16,2s14,6.268,14,14   C30,23.732,23.732,30,16,30z"
                             fill="#121313" fill-rule="evenodd"/>
-                        <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z" 
+                        <path clip-rule="evenodd" d="M22.729,21.271l-5.268-5.269l5.238-5.195   c0.395-0.391,0.395-1.024,0-1.414c-0.394-0.39-1.034-0.39-1.428,0l-5.231,5.188l-5.309-5.31c-0.394-0.396-1.034-0.396-1.428,0   c-0.394,0.395-0.394,1.037,0,1.432l5.301,5.302l-5.331,5.287c-0.394,0.391-0.394,1.024,0,1.414c0.394,0.391,1.034,0.391,1.429,0   l5.324-5.28l5.276,5.276c0.394,0.396,1.034,0.396,1.428,0C23.123,22.308,23.123,21.667,22.729,21.271z"
                             fill="#121313" fill-rule="evenodd"/>
                     </g>
                 </svg>
@@ -25,30 +25,27 @@
             <select v-model="fileCabinet" @change="onChange()">
                 <option v-for="(fileC) in fileCabinets" :key="fileC.id" :value="fileC">{{fileC.name}}</option>
             </select>
-            <MenuGoTo text="ВСЕ ДОКУМЕНТЫ" path="/documents/all" color="rgb(174, 0, 255)"></MenuGoTo>
-            <MenuGoTo text="МОИ ДОКУМЕНТЫ" path="/documents/myDocs" color="rgb(21, 103, 255)"></MenuGoTo>
-            <MenuGoTo text="ОБЩИЙ ДОСТУП" path="/documents/common" color="white"></MenuGoTo>
-            <MenuGoTo text="ДОСТУПНЫ МНЕ" path="/documents/available-to-me" color="white"></MenuGoTo>
-            <MenuGoTo text="НА ПОДПИСИ" path="/documents/my-doc-signature-request" color="rgb(0, 158, 8)"></MenuGoTo>
-            <MenuGoTo text="НА ПОДПИСЬ" path="/documents/signature-request" color="rgb(0, 158, 8)"></MenuGoTo>
-            <MenuGoTo text="ПОДПИСАННОЕ" path="/documents/signature-success" color="rgb(0, 158, 8)"></MenuGoTo>
-            
+            <router-link @click.native="goToFolder" class="router-link" to="/documents/all">ВСЕ ДОКУМЕНТЫ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" to="/documents/myDocs">МОИ ДОКУМЕНТЫ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" to="/documents/common">ОБЩИЙ ДОСТУП</router-link>
+            <router-link @click.native="goToFolder" class="router-link" to="/documents/available-to-me">ДОСТУПНЫ МНЕ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" to="/documents/my-doc-signature-request">НА ПОДПИСИ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" to="/documents/signature-request">НА ПОДПИСЬ</router-link>
+            <router-link @click.native="goToFolder" class="router-link" to="/documents/signature-success">ПОДПИСАННОЕ</router-link>
         </div>
     </div>
 </template>
 
 <script>
 import {
-    DOCS_FILE_CABINET, 
-    DOCS_REQUEST, 
-    DOCS_FILTER, 
+    DOCS_FILE_CABINET,
+    DOCS_REQUEST,
+    DOCS_FILTER,
     ADDIT_RELOAD,
 } from '../store/mutation-types'
-import MenuGoTo from './addit/MenuGoTo';
 
 export default {
     name: 'Menu',
-    components: { MenuGoTo },
     data () {
         return {
             fileCabinets: [],
@@ -94,36 +91,40 @@ export default {
             await this.$store.dispatch(DOCS_FILTER);
             this.reload = false;
         },
-        // async goToFolder(){
-        //     this.reload = true;
-        //     await this.$store.dispatch(DOCS_REQUEST)
-        //     await this.$store.dispatch(DOCS_FILTER)
-        //     this.reload = false;
-        // }
+        async goToFolder(){
+            this.reload = true;
+            await this.$store.dispatch(DOCS_REQUEST)
+            await this.$store.dispatch(DOCS_FILTER)
+            this.reload = false;
+        }
     },
 }
 </script>
 
 <style scoped>
 /* Основное */
-#menu{
+#menu {
     background-color: #ADE0FC;
     font-family: 'PT+Sans+Narrow', sans-serif;
 }
+
 /**/
-.menuOpen{
+.menuOpen {
     min-width: 250px;
 }
-.openCloseMenuButton{
+
+.openCloseMenuButton {
     margin: 5px;
 }
+
 .openCloseMenuButton:hover, .openCloseMenuButton:hover *{
     cursor: pointer;
     fill:#7cb0c1;
     stroke: #7cb0c1;
 }
+
 /* Картотека */
-select{
+select {
     margin: 25px;
     margin-top: 5px;
     padding: 6px;
@@ -131,16 +132,19 @@ select{
     min-width: 230px;
     border: 1;
 }
-select button{
+
+select button {
     border: 10px solid black;
 }
-p{
+
+p {
     margin: 25px;
     margin-bottom: 0;
     font-weight: 500;
 }
+
 /**/
-.reload{
+.reload {
     fill: white;
     enable-background: new 0 0 16 16;
     padding: 15px;
@@ -149,9 +153,41 @@ p{
     width: 20px;
     animation: spin 2s linear infinite;
 }
+
 @keyframes spin {
     100% {
-        transform: rotate(360deg); 
+        transform: rotate(360deg);
     }
+}
+
+/**/
+a {
+    text-decoration: none;
+    color: #373737;
+}
+
+.router-link-exact-active {
+    background: #64b2db;
+    pointer-events: none;
+    cursor: default;
+}
+
+.router-link {
+  font-size: 16px;
+  color: #373737;
+  padding: 11px 20px;
+  padding-left: 40px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	text-decoration: none;
+	color: black;
+	width: calc(100% - 45px);
+	margin-left: 0;
+	margin-right: 0;
+	display: block;
+}
+
+.link > router-link:hover {
+    cursor: pointer;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div class="background">
 		<div id="footer">
-			<p>МТУСИ, 2019 | <label @click="toHelp()">Помощь</label></p>	
+			<p>МТУСИ, 2019 | <label @click="toHelp()">Помощь</label></p>
 		</div>
 	</div>
 </template>
@@ -42,6 +42,7 @@ p{
 label{
 	color: white;
 	text-decoration: none;
+  text-decoration: underline;
 }
 label:hover{
 	cursor: pointer;

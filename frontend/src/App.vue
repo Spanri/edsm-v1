@@ -111,7 +111,7 @@ button:not(.showPassword), .button{
 	/* border-radius: 5px; */
 	padding: 8px;
     margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 0px;
 	margin-right: 7px;
 	color: white;
     font-family: 'Courier New', Courier, monospace;
