@@ -340,6 +340,7 @@ class SendInviteView(viewsets.ModelViewSet):
         print(is_staff)
         photo = request.data['photo']
         password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        print(password)
         message_text = (
             'Вашу почту зарегистрировали на '
             + 'портале СЭД МТУСИ. Данные для '
