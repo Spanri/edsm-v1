@@ -2,20 +2,17 @@ node_modules/
 
 # Secret
 passwords.txt
-.VSCodeCounter
-upgradeAllPackages.py
+DoPass.bat
 bfg.jar
+config.json
+
+.VSCodeCounter
 
 # Editor directories and files
 .vscode
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
-
-# staticfiles/
-# staticfiles/static
-# staticfiles/rest_framework
-# staticfiles/admin
 
 # Django stuff:
 db.sqlite3
