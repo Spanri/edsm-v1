@@ -2,9 +2,8 @@ node_modules/
 
 # Secret
 passwords.txt
-DoPass.bat
 bfg.jar
-config.json
+config.bat
 
 .VSCodeCounter
 

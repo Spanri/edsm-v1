@@ -1,21 +1,9 @@
 import logging
 import os
-import json
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'klc=#bj7qm#iiz%1ru-6y3%guc5_e(hq+3hm3&65dg6%c%@(*y'
-
-from django.core.exceptions import ImproperlyConfigured
-
-with open(os.path.join(BASE_DIR, 'config.json')) as config_file:
-    config = json.load(config_file)
-
-def get_secret(setting, config=config):
-    """Get secret setting or fail with ImproperlyConfigured"""
-    try:
-        return config[setting]
-    except KeyError:
-        raise ImproperlyConfigured("Set the {} setting".format(setting))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -24,6 +12,7 @@ ALLOWED_HOSTS = [
     'localhost', 
     '127.0.0.1',
     'ftp://91.238.69.56'
+    #  'edms-mtuci.s3.amazonaws.com'
 ]
 
 from corsheaders.defaults import default_methods
@@ -54,7 +43,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -86,8 +74,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db8r9jops1rb5r',
-        'USER': get_secret('DB_USER'),
-        'PASSWORD': get_secret('DB_PASSWORD'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': 'ec2-54-75-238-138.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
         'CONN_MAX_AGE': 0,
@@ -140,7 +128,7 @@ REST_FRAMEWORK = {
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'edmsmtuci@gmail.com'
-EMAIL_HOST_PASSWORD = get_secret('EDMS_MAIL_PASSWORD')
+EMAIL_HOST_PASSWORD = os.environ.get("EDMS_MAIL_PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
