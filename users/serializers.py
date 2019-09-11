@@ -214,6 +214,8 @@ class PasswordResetSerializer(serializers.Serializer):
         if not self.reset_form.is_valid():
             raise serializers.ValidationError(_('Error'))
 
+        print(User.objects.filter())
+
         if not User.objects.filter(email=value).exists():
             raise serializers.ValidationError(_('Invalid e-mail address'))
         return value
