@@ -23,7 +23,7 @@ django-rest-auth==0.9.5
 django-rest-passwordreset==1.0.0
 django-six==1.0.4
 django-storages==1.7.1
-djangorestframework==3.9.4
+djangorestframework==3.11.2
 djangotoolbox==1.8.0
 docutils==0.14
 gunicorn==19.9.0
