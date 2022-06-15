@@ -1,0 +1,56 @@
+# version: '3'
+
+# services:
+#   web:
+#     build: .
+#     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+#     container_name: edms
+#     volumes:
+#       - .:/edms
+#     ports:
+# - "8000:8000"
+
+version: '3'
+    
+services:
+  # db:
+  #   image: postgres
+  #   environment:
+  #     - POSTGRES_DB=postgres
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+
+  # backend:
+  #   build: .
+  #   command: python manage.py runserver 0.0.0.0:8000
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     - db
+
+  # Для "просто посмотреть"
+  frontend-build:
+    container_name: edsm-v1_frontend-build
+    build:
+      context: ../frontend
+      dockerfile: ../docker/frontend-build/Dockerfile
+    ports:
+      - "8081:80"
+    volumes:
+      - ../frontend:/app
+      - app/node_modules
+
+  # Для разработки
+  frontend-dev:
+    container_name: edsm-v1_frontend-dev
+    build:
+      context: ../frontend
+      dockerfile: ../docker/frontend-dev/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+       - ../frontend:/app
+       - app/node_modules
+    

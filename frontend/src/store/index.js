@@ -1,21 +1,12 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import user from './user'
-import auth from './auth'
-import doc from './doc'
-import addit from './addit'
+import Vue from "vue";
+import Vuex from "vuex";
+import Addit from "./addit";
+import Auth from "./auth";
+import Doc from "./doc";
+import User from "./user";
 
-Vue.use(Vuex)
-import createPersistedState from 'vuex-persistedstate'
-const debug = process.env.NODE_ENV !== 'production'
+Vue.use(Vuex);
 
 export default new Vuex.Store({
-	modules: {
-		user,
-		auth,
-		doc,
-		addit
-	},
-	strict: debug,
-	plugins: [createPersistedState()],
-})
+  modules: { Addit, Auth, Doc, User },
+});
