@@ -91,8 +91,9 @@ urlpatterns += [
 favicon_view = RedirectView.as_view(url='/favicon.ico', permanent=True)
 
 urlpatterns += [
-    url(r'^$', RedirectView.as_view(url='/app')),
-    url(r'^app/*', Index.as_view(), name='index'),
+    url(r'^$', RedirectView.as_view(url='/')),
+    # url(r'^$', RedirectView.as_view(url='/app')),
+    # url(r'^app/*', Index.as_view(), name='index'),
     re_path(r'^favicon\.ico$', favicon_view),
 ]
 

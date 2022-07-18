@@ -55,5 +55,4 @@ export const ADDIT_RELOAD = "ADDIT_RELOAD";
 export const ADDIT_REMEMBER_PASSWORD = "ADDIT_REMEMBER_PASSWORD";
 export const ADDIT_ERROR_AUTH = "ADDIT_ERROR_AUTH";
 
-export const path = "http://localhost:8000";
-// export const path = 'https://edms-mtuci.herokuapp.com'
+

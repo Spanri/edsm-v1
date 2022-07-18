@@ -11,11 +11,10 @@ import {
   USER_UPDATE_IMAGE,
   USER_PHOTO,
   USER_PHOTO_SUCCESS,
-  path,
   DOCS_REQUEST,
 } from "./mutation-types";
 import Vue from "vue";
-import axios from "axios";
+import httpClient from "./_httpClient";
 
 const state = {
   profile: {},
@@ -33,10 +32,8 @@ const getters = {
 const actions = {
   [USER_REQUEST]: ({ commit, dispatch, rootState }) => {
     return new Promise((resolve, reject) => {
-      axios
-        .get(path + "/api/users/get_user_from_token/", {
-          headers: { Authorization: "Token " + rootState.auth.token }
-        })
+      httpClient
+        .get("api/users/get_user_from_token/")
         .then((response) => {
           commit(USER_SUCCESS, response.data[0]);
           dispatch(USER_PHOTO);
@@ -54,10 +51,8 @@ const actions = {
   },
   [USERS_REQUEST]: ({ commit, dispatch, rootState }) => {
     return new Promise((resolve, reject) => {
-      axios
-        .get(path + "/api/users/i", {
-          headers: { Authorization: "Token " + rootState.auth.token }
-        })
+      httpClient
+        .get("api/users/i")
         .then((response) => {
           response.data.forEach((r) => {
             r.full_name = r.profile.full_name;
@@ -75,8 +70,8 @@ const actions = {
   },
   [USERS_EMAILS]: ({ commit, dispatch, rootState }) => {
     return new Promise((resolve, reject) => {
-      axios
-        .get(path + "/api/users/emails/")
+      httpClient
+        .get("api/users/emails/")
         .then((response) => {
           resolve(response.data);
         })
@@ -91,15 +86,11 @@ const actions = {
   },
   [USER_UPDATE]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
-      axios
-        .get(path + "/api/users/get_user_from_token/", {
-          headers: { Authorization: "Token " + data.token }
-        })
+      httpClient
+        .get("api/users/get_user_from_token/")
         .then((response) => {
-          axios
-            .patch(path + "/api/users/i/" + response.data[0].id, data.data, {
-              headers: { Authorization: "Token " + data.token }
-            })
+          httpClient
+            .patch("api/users/i/" + response.data[0].id, data.data)
             .then((resp) => {
               commit(USER_SUCCESS, resp.data);
               resolve(resp);
@@ -123,10 +114,8 @@ const actions = {
   },
   [USER_PHOTO]: ({ commit, dispatch, rootState }) => {
     return new Promise((resolve, reject) => {
-      axios
-        .get(path + "/api/users/" + rootState.user.profile.id + "/photo/", {
-          headers: { Authorization: "Token " + rootState.auth.token }
-        })
+      httpClient
+        .get("api/users/" + rootState.user.profile.id + "/photo/")
         .then((resp) => {
           commit(USER_PHOTO_SUCCESS, resp.data.photo);
           resolve(resp.data.photo);
@@ -142,13 +131,8 @@ const actions = {
   },
   [USER_UPDATE_IMAGE]: ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
-      axios
-        .patch(path + "/api/users/i/" + state.profile.id, data.data, {
-          headers: {
-            Authorization: "Token " + data.token,
-            "Content-Type": "multipart/form-data"
-          }
-        })
+      httpClient
+        .patch("api/users/i/" + state.profile.id, data.data)
         .then((resp) => {
           dispatch(USER_PHOTO);
           resolve(resp);
@@ -166,10 +150,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       let id = data.id;
       delete data.id;
-      axios
-        .patch(path + "/api/users/i/" + id, data, {
-          headers: { Authorization: "Token " + rootState.auth.token }
-        })
+      httpClient
+        .patch("api/users/i/" + id, data)
         .catch((err) => {
           try {
             reject(err.response.request.response);
@@ -181,8 +163,8 @@ const actions = {
   },
   [USER_CONFIRM_UPDATE_PASSWORD]: ({ commit, dispatch }, email) => {
     return new Promise((resolve, reject) => {
-      axios
-        .post(path + "/api/users/rest_auth/password/reset/", {
+      httpClient
+        .post("api/users/rest_auth/password/reset/", {
           email: email
         })
         .then((resp) => {
@@ -200,8 +182,8 @@ const actions = {
   [USER_CHANGE_PASSWORD]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       console.log(data);
-      axios
-        .post(path + "/api/users/rest_auth/password/reset/confirm/", {
+      httpClient
+        .post("api/users/rest_auth/password/reset/confirm/", {
           uid: data.uid,
           token: data.token,
           new_password1: data.password1,
@@ -227,7 +209,7 @@ const mutations = {
   },
   [USER_PHOTO_SUCCESS]: (state, resp) => {
     resp = resp.replace("\\", "/");
-    Vue.set(state, "photo", path + "/" + resp);
+    Vue.set(state, "photo", process.env.VUE_APP_BACKEND_HOST + "/" + resp);
   },
 };
 

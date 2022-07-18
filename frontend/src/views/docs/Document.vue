@@ -365,7 +365,7 @@ import {
 } from "../../store/mutation-types";
 import Preview from "@/components/addit/Preview";
 
-import axios from "axios";
+
 
 export default {
   name: "document",
@@ -441,7 +441,7 @@ export default {
           .dispatch(DOC_DOWNLOAD, this.doc.doc.id)
           .then((response) => {
             let url = "";
-            let path2 = path + "/" + response.file;
+            let path2 = process.env.VUE_APP_BACKEND_HOST + "/" + response.file;
             if (
               this.type != "jpg" &&
               this.type != "jpeg" &&
@@ -474,7 +474,7 @@ export default {
         .dispatch(DOC_DOWNLOAD, this.doc.doc.id)
         .then((response) => {
           const link = document.createElement("a");
-          link.href = path + "/" + response.file;
+          link.href = process.env.VUE_APP_BACKEND_HOST + "/" + response.file;
           link.setAttribute("download", title);
           document.body.appendChild(link);
           link.click();
@@ -495,7 +495,7 @@ export default {
         .dispatch(DOC_DOWNLOAD_SIGN, this.doc.doc.id)
         .then((response) => {
           const link = document.createElement("a");
-          link.href = path + "/" + response.file;
+          link.href = process.env.VUE_APP_BACKEND_HOST + "/" + response.file;
           link.setAttribute("download", title);
           document.body.appendChild(link);
           link.click();

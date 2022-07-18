@@ -3,7 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.db.models.signals import post_save, post_delete
-from docs.models import Doc, Block
+from docs.models import Doc
+
 # Для FTP сервера
 from ftp import FTPStorage
 fs = FTPStorage()

@@ -10,7 +10,7 @@ import {
   DOCS_REQUEST,
   path,
 } from "./mutation-types";
-import axios from "axios";
+import httpClient from "./_httpClient";
 
 export default {
   state: {
@@ -27,12 +27,7 @@ export default {
   actions: {
     [AUTH_SIGNUP]: async ({ commit, dispatch, rootState }, data) => {
       try {
-        const resp = await axios.post(path + "/api/users/send_invite/", data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Token " + rootState.auth.token,
-          },
-        });
+        const resp = await httpClient.post("api/users/send_invite/", data);
 
         return resp.data.password;
       } catch (err) {
@@ -45,7 +40,7 @@ export default {
     },
     [AUTH_REQUEST]: async ({ commit, dispatch, rootState }, user) => {
       try {
-        const response = axios.post(path + "/api/users/get_auth_token/", {
+        const response = await httpClient.post("api/users/get_auth_token/", {
           email: user.email,
           password: user.password,
         });
@@ -54,7 +49,6 @@ export default {
         commit(AUTH_TOKEN, response.data);
 
         localStorage.setItem("user-token", token);
-        axios.defaults.headers.common["Authorization"] = token;
 
         await dispatch(USER_REQUEST);
         commit(DOCS_FILE_CABINET, "");
@@ -78,7 +72,6 @@ export default {
       commit(AUTH_LOGOUT);
 
       localStorage.removeItem("user-token");
-      delete axios.defaults.headers.common["Authorization"];
     },
   },
 

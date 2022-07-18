@@ -72,14 +72,20 @@ WSGI_APPLICATION = 'django_auth.wsgi.application'
 #Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db8r9jops1rb5r',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': 'ec2-54-75-238-138.eu-west-1.compute.amazonaws.com',
-        'PORT': '5432',
-        'CONN_MAX_AGE': 0,
-        'DEFAULT_CHARSET': 'utf-8'
+        'PASSWORD': os.environ.get('DB_PASS'),
+
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'db8r9jops1rb5r',
+        # 'USER': os.environ.get('DB_USER'),
+        # 'PASSWORD': os.environ.get('DB_PASSWORD'),
+        # 'HOST': 'ec2-54-75-238-138.eu-west-1.compute.amazonaws.com',
+        # 'PORT': '5432',
+        # 'CONN_MAX_AGE': 0,
+        # 'DEFAULT_CHARSET': 'utf-8'
     }
 }
 

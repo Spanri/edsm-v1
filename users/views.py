@@ -4,12 +4,9 @@ from django.http import JsonResponse
 from users.serializers import (
     UserSerializer, 
     AuthTokenSerializer, 
-    UserProfileSerializer,
     NotifSerializer,
 )
-from docs.serializers import (
-    DocSerializer,
-)
+
 from docs.permissions import (
     CustomIsAuthenticated as CustomIsAuthenticatedDoc,
 )
@@ -42,6 +39,7 @@ from rest_framework.decorators import api_view
 from rest_framework import parsers, renderers
 from itertools import chain
 import copy
+
 # Для FTP сервера
 from ftp import FTPStorage, FTPStorageFile
 fs = FTPStorage()

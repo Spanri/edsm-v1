@@ -37,7 +37,7 @@ import { mapState } from "vuex";
 import { DOC_EDIT, DOC_UPDATE, DOCS_REQUEST, DOCS_REGS } from "../../store/mutation-types";
 import Preview from "@/components/addit/Preview";
 
-import axios from "axios";
+
 
 export default {
   name: "editDocument",

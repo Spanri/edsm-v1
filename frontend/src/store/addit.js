@@ -2,11 +2,9 @@ import {
   ADDIT_RELOAD,
   ADDIT_REMEMBER_PASSWORD,
   ADDIT_ERROR_AUTH,
-  path,
 } from "./mutation-types";
 import { formatDate } from "../otherFun";
 import Vue from "vue";
-import axios from "axios";
 
 export default {
   state: {

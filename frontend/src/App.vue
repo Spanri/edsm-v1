@@ -31,9 +31,6 @@
 </template>
 
 <script>
-import { AUTH_LOGOUT } from "@/store/mutation-types";
-import axios from "axios";
-
 export default {
   name: "App",
 
@@ -57,18 +54,7 @@ export default {
     isSystemLoading() {
       return this.isAuthenticated && !this.$store.getters.auth;
     },
-  },
-
-  created: function () {
-    // Обработка ошибок с бэка
-    axios.interceptors.response.use(undefined, async (err) => {
-      if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-        this.$store.dispatch(AUTH_LOGOUT);
-      }
-
-      throw err;
-    });
-  },
+  }
 };
 </script>
 

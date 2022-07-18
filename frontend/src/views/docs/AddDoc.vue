@@ -138,7 +138,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import axios from "axios";
+
 import { DOC_UPLOAD, DOC_UPDATE, USERS_EMAILS, DOCS_REGS } from "../../store/mutation-types";
 import Preview from "@/components/addit/Preview";
 import draggable from "vuedraggable";

@@ -1,5 +1,3 @@
-# version: '3'
-
 # services:
 #   web:
 #     build: .
@@ -13,38 +11,9 @@
 version: '3'
     
 services:
-  # db:
-  #   image: postgres
-  #   environment:
-  #     - POSTGRES_DB=postgres
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=postgres
-
-  # backend:
-  #   build: .
-  #   command: python manage.py runserver 0.0.0.0:8000
-  #   volumes:
-  #     - .:/app
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - db
-
-  # Для "просто посмотреть"
-  frontend-build:
-    container_name: edsm-v1_frontend-build
-    build:
-      context: ../frontend
-      dockerfile: ../docker/frontend-build/Dockerfile
-    ports:
-      - "8081:80"
-    volumes:
-      - ../frontend:/app
-      - app/node_modules
-
   # Для разработки
-  frontend-dev:
-    container_name: edsm-v1_frontend-dev
+  edsm-v1-frontend-dev:
+    container_name: edsm_v1_frontend_dev
     build:
       context: ../frontend
       dockerfile: ../docker/frontend-dev/Dockerfile
@@ -53,4 +22,49 @@ services:
     volumes:
        - ../frontend:/app
        - app/node_modules
+    environment:
+      NODE_ENV: development
+
+  # Для "просто посмотреть"
+  edsm-v1-frontend-build:
+    container_name: edsm_v1_frontend_build
+    build:
+      context: ../frontend
+      dockerfile: ../docker/frontend-build/Dockerfile
+    ports:
+      - "8081:8000"
+    volumes:
+      - ../frontend:/app
+      - app/node_modules
+    environment:
+      NODE_ENV: production
+
+  edsm-v1-backend:
+    container_name: edsm_v1_backend
+    build:
+      context: ../.
+      dockerfile: ./docker/backend/Dockerfile
+    environment:
+      - DB_HOST=edsm_v1_db
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+    volumes:
+      - ..:/app
+    ports:
+      - "8082:8000"
+    depends_on:
+      - edsm-v1-db
+
+  edsm-v1-db:
+    container_name: edsm_v1_db
+    image: postgres:13.3
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - .:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
     
